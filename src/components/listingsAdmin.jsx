@@ -80,7 +80,7 @@ const ListingsAdmin = () => {
 
   useEffect(() => {
     axios
-      .get("https://rms-staging.eba-rupr98zx.us-west-1.elasticbeanstalk.com/listing")
+      .get("https://api.certifymyrent.com/listing")
       .then((response) => {
         const modifiedListings = response.data.map((item) => {
           const encodedKey = item.key.replace(/\\/g, "%5C");
@@ -106,7 +106,7 @@ const ListingsAdmin = () => {
 
     setListing(updatedListing);
     axios
-      .delete(`https://rms-staging.eba-rupr98zx.us-west-1.elasticbeanstalk.com/listing/${listingId}`, {
+      .delete(`https://api.certifymyrent.com/listing/${listingId}`, {
         headers: {
           "Content-Type": "application/json",
         },

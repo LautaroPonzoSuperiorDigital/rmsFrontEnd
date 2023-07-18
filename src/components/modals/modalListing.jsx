@@ -165,7 +165,7 @@ const EditModalListings = ({ renderSectionContent }) => {
     };
 
     axios
-      .post(`https://rms-staging.eba-rupr98zx.us-west-1.elasticbeanstalk.com/listing`, data, {
+      .post(`https://api.certifymyrent.com/listing`, data, {
         headers: { "Content-Type": "application/json" },
       })
       .then((response) => {
