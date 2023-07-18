@@ -18,7 +18,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        `http://rms-staging.eba-rupr98zx.us-west-1.elasticbeanstalk.com:3000/auth/local/signin`,
+        `http://https://api.certifymyrent.com/auth/local/signin`,
         {
           email,
           password,
