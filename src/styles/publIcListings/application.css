@@ -1,0 +1,802 @@
+/* applicantion section */
+.bodyApplication {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 100;
+}
+.ApplicationNavBar {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.533);
+  width: 100%;
+  height: 6rem;
+}
+.Application {
+  margin-left: 2rem;
+  margin-right: 3rem;
+  font-size: 1.2vw;
+}
+.LogoPublic1 {
+  width: 8%;
+  cursor: pointer;
+}
+.navBar1 {
+  height: 6rem;
+  width: 90%;
+  font-size: 0.75vw;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+.navBar1 ul {
+  list-style: none;
+  margin-top: 0.5rem;
+  margin-right: -1rem;
+  width: 60%;
+}
+.navBar1 li {
+  display: inline-block;
+  margin-top: 0.4rem;
+  color: rgba(0, 0, 0, 0.524);
+}
+.registration {
+  margin-right: -1rem;
+}
+.roommates {
+  margin-right: -2rem;
+}
+.rh {
+  margin-right: -0.2rem;
+}
+.income {
+  margin-right: -5rem;
+}
+.ec {
+  margin-right: 2.8rem;
+}
+.vehicles {
+  margin-right: -4rem;
+}
+.otherInfo {
+  margin-right: -3rem;
+}
+.registration,
+.agreement,
+.roommates,
+.rh,
+.income,
+.ec,
+.vehicles,
+.otherInfo {
+  cursor: pointer;
+}
+/* effect navbar */
+
+.custom-item1 {
+  position: relative;
+  display: inline-block;
+}
+.custom-item1:hover {
+  color: #31af9a;
+}
+.active.custom-item1 {
+  color: #197572;
+}
+.custom-item1::after {
+  content: "";
+  position: absolute;
+  bottom: -134.4%;
+  width: 0;
+  height: 3px;
+  background-color: transparent;
+}
+.custom-item1:hover::after {
+  display: none;
+}
+
+.custom-item1:hover::after {
+  background-color: #197572;
+  width: 100%;
+}
+
+.active.custom-item1::after {
+  background-color: #197572;
+  width: 100%;
+}
+
+.registration.custom-item1::after {
+  width: 75%;
+  left: -3%;
+}
+
+.roommates.custom-item1::after {
+  width: 68%;
+  left: -3.5%;
+}
+
+.rh.custom-item1::after {
+  width: 80%;
+  left: 0;
+}
+
+.income.custom-item1::after {
+  width: 40%;
+  left: 0;
+}
+
+.ec.custom-item1::after {
+  width: 111%;
+  left: -2%;
+}
+
+.vehicles.custom-item1::after {
+  width: 48%;
+  left: 0;
+}
+
+.otherInfo.custom-item1::after {
+  width: 62%;
+  left: 0;
+}
+
+.agreement.custom-item1::after {
+  width: 240%;
+  left: 0;
+}
+
+/* effect navbar*/
+
+/* applicantion section */
+/* property */
+.containerApplications {
+  height: 100%;
+  width: 100%;
+}
+.sidePropertyDescription {
+  position: fixed;
+  border-right: 1px solid rgba(128, 128, 128, 0.596);
+  height: 100%;
+  width: 19%;
+  margin-bottom: 20rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.sidePropertyDescription::-webkit-scrollbar {
+  display: none;
+}
+/* property */
+/* description side */
+.fakeImg {
+  margin-top: 10%;
+  height: 25%;
+  width: 80%;
+}
+.idPrice {
+  width: 100%;
+  margin-top: 1rem;
+}
+.ID1 {
+  width: 30%;
+  margin-left: 10%;
+}
+.ID1 p {
+  margin-bottom: -0.4rem;
+  color: #000000a5;
+  font-size: 0.8vw;
+}
+.ID1 span {
+  font-weight: 600;
+  font-size: 0.8vw;
+}
+.price1 {
+  margin-bottom: 2rem;
+  margin-left: 11%;
+  font-size: 1.5vw;
+}
+.city-hs-ls {
+  width: 100%;
+  height: 20%;
+}
+.orderApp {
+  margin-left: 10%;
+  width: 80%;
+  height: 100%;
+  white-space: nowrap;
+}
+.orderApp p {
+  margin-bottom: -0.4rem;
+  color: #000000a5;
+  font-size: 0.8vw;
+}
+.orderApp span {
+  font-weight: 600;
+  font-size: 0.8vw;
+}
+.div1 {
+  margin-bottom: 1rem;
+}
+.amenities {
+  color: #000000a5;
+  width: 100%;
+  font-size: 0.8vw;
+}
+.amenities {
+  font-size: 0.7vw;
+}
+
+.amenities ul {
+  list-style-type: none;
+  padding: 0;
+  font-weight: 600;
+}
+
+.amenities li::before {
+  content: "•";
+  margin-right: 0.5em;
+}
+.requirements {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+
+  word-wrap: break-word;
+}
+.orderReq {
+  margin-left: 1.5%;
+}
+.requirementsText {
+  display: flex;
+  color: #000000a5;
+  width: 100%;
+  font-size: 0.8vw;
+  margin-left: 9%;
+  margin-bottom: -0.1rem;
+  word-wrap: break-word;
+}
+
+.requirements ul {
+  word-wrap: break-word;
+  list-style-type: none;
+  font-size: 0.7vw;
+  font-weight: 600;
+  margin-bottom: 30%;
+  width: 90%;
+}
+.requirements li {
+  margin-bottom: 2rem;
+  width: 100%;
+}
+.requirements li::before {
+  content: "•";
+  margin-right: 0.5em;
+}
+
+/* description side */
+/* GLOBAL SECTIONS DIV STARTS*/
+.forms {
+  margin-left: 19%;
+  height: 90%;
+  width: 85%;
+}
+/* GLOBAL SECTIONS DIV ENDS */
+
+/* REGISTER FORM START */
+.formRegistrationOrder {
+  height: 100%;
+  width: 100%;
+}
+.registrationContainer {
+  height: 80%;
+  width: 80%;
+}
+.registrationText {
+  margin-bottom: 4rem;
+  width: 15%;
+  font-size: 1.8vw;
+  white-space: nowrap;
+}
+.resetForm {
+  width: 36.375rem;
+}
+.inputReset {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.34);
+  background: transparent;
+  border-radius: 0;
+  margin-bottom: 2rem;
+}
+.inputReset:focus {
+  border-bottom: 1px solid #197572;
+  outline: none;
+  box-shadow: none;
+}
+.submitBtn {
+  color: white;
+}
+.bgButton {
+  background-color: #197572;
+  width: 36.375rem;
+  height: 2.438rem;
+  margin-top: 3.5rem;
+}
+.bgButton:hover {
+  background-color: #31af9a;
+}
+
+/* REGISTER FORM END */
+
+/* ROOMMATES FORM START*/
+
+.roommatesContainer {
+  width: 100%;
+  height: 100%;
+}
+.formRoommatesOrder {
+  height: 100%;
+  width: 100%;
+  margin-top: 8rem;
+}
+.lineRoom {
+  color: grey;
+  height: 50%;
+  font-size: 0.85vw;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.204);
+}
+.roomOrderName {
+  margin-left: 8%;
+  margin-bottom: -1rem;
+}
+.roomOrderBirth {
+  margin-right: 11%;
+  margin-bottom: -1rem;
+}
+.roomOrderRela {
+  margin-right: 21%;
+  margin-bottom: -1rem;
+}
+
+.rmText {
+  margin-bottom: 5rem;
+  white-space: nowrap;
+  font-size: 1.8vw;
+  width: 15%;
+}
+.orderInputRoom {
+  width: 100%;
+  height: 100%;
+}
+.resetForm2 {
+  width: 45%;
+}
+.inputReset2 {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.34);
+  background: transparent;
+  border-radius: 0;
+  height: 30%;
+  margin-top: 1.5rem;
+  width: 20%;
+}
+.inputReset2:focus {
+  border-bottom: 1px solid #197572;
+  outline: none;
+  box-shadow: none;
+}
+.roomName {
+  margin-left: 8%;
+}
+.roomBirth {
+  margin-left: 10%;
+}
+.roomRela {
+  margin-left: 10%;
+}
+.addRoommate {
+  color: #197572;
+  font-size: 0.9vw;
+  margin-left: 8%;
+}
+.addRoommate:hover {
+  color: #31af9a;
+  cursor: pointer;
+}
+.submitBtn2 {
+  color: white;
+}
+.bgButton2 {
+  position: fixed;
+  bottom: 13%;
+  background-color: #197572;
+  width: 36.375rem;
+  height: 2.438rem;
+}
+.bgButton2:hover {
+  background-color: #31af9a;
+}
+/* ROOMMATES FORM END*/
+/* RENTAL HISTORY FORM START */
+.rentalContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+.rentalContainer::-webkit-scrollbar {
+  display: none;
+}
+.rentalText {
+  margin-top: 2rem;
+  font-size: 1.8vw;
+}
+.rentalP {
+  font-size: 0.9vw;
+  margin-top: 0.1rem;
+}
+.rentalOrder {
+  height: 80%;
+  width: 100%;
+}
+
+.leftRentalForm {
+  width: 50%;
+  height: 100%;
+  margin-left: 6rem;
+}
+.rightRentalForm {
+  width: 50%;
+  height: 100%;
+}
+.bottomRentalForm {
+  width: 50%;
+  height: 10%;
+}
+.cA {
+  font-size: 1.3vw;
+}
+.inputReset3 {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.34);
+  background: transparent;
+  border-radius: 0;
+  height: 30%;
+  margin-top: 2rem;
+  width: 90%;
+}
+.inputReset3:focus {
+  border-bottom: 1px solid #197572;
+  outline: none;
+  box-shadow: none;
+}
+.cA1 {
+  margin-top: 2rem;
+  font-size: 1.3vw;
+}
+.submitBtn3 {
+  color: white;
+}
+.bgButton3 {
+  background-color: #197572;
+  width: 36.375rem;
+  height: 2.438rem;
+}
+.bgButton3:hover {
+  background-color: #31af9a;
+}
+.rentalSeparation {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+/* RENTAL HISTORY FORM END */
+/* INCOME FORM */
+.incomeContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+.incomeContainer::-webkit-scrollbar {
+  display: none;
+}
+.incomeSeparation {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+/* INCOME FORM */
+/* EMERGENCY CONTACT START */
+
+.ECText {
+  margin-bottom: 7.5rem;
+}
+.submitBtn4 {
+  color: white;
+}
+.bgButton4 {
+  background-color: #197572;
+  width: 36.375rem;
+  height: 2.438rem;
+  margin-top: 9rem;
+}
+.bgButton4:hover {
+  background-color: #31af9a;
+}
+
+/* EMERGENCY CONTACT END*/
+/* VEHICLE START */
+.VehicleText {
+  margin-bottom: 3rem;
+}
+.Vtext {
+  margin-bottom: 2rem;
+}
+
+.addVehicle {
+  color: #197572;
+  font-size: 0.9vw;
+}
+.addVehicle:hover {
+  color: #31af9a;
+  cursor: pointer;
+}
+/* VEHICLE END*/
+/* OTHER INFO STARTS */
+.orderInfoPrimary {
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  margin-top: 10rem;
+}
+.orderInfo {
+  margin-top: 5rem;
+  height: 50%;
+  width: 100%;
+  flex-direction: row;
+}
+
+.otherInfo1 {
+  font-size: 1.8vw;
+  margin-top: 7rem;
+}
+.infoP {
+  font-size: 1.1vw;
+  white-space: nowrap;
+  margin-bottom: -0.5rem;
+}
+/* LEFT SIDE */
+.leftBox {
+  width: 50%;
+  height: 70%;
+  flex-direction: column;
+  margin-left: 8rem;
+  margin-top: -10rem;
+}
+.leftSideInfo {
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  margin-bottom: 1rem;
+  margin-top: 4rem;
+}
+.inputInfoH {
+  height: 2%;
+  width: 100%;
+}
+.inputReset4 {
+  border: none;
+  outline: none;
+  border-bottom: 2px solid rgba(190, 190, 190, 0.34);
+  background: transparent;
+  border-radius: 0;
+  margin-left: 0.2rem;
+  margin-top: 1rem;
+  width: 80%;
+}
+.inputReset4:focus {
+  border-bottom: 1px solid #197572;
+  outline: none;
+  box-shadow: none;
+}
+/* LEFT SIDE */
+/* GLOBAL */
+.toggle {
+  transition: opacity 0.5s ease;
+  transition-delay: 100s;
+  animation-duration: 0.5s;
+  cursor: pointer;
+}
+
+.toggle.inactive {
+  opacity: 1;
+}
+
+.toggle.active {
+  opacity: 1;
+}
+/* GLOBAL */
+/* RIGHTSIDE INFO */
+.rightBox {
+  width: 50%;
+  height: 40%;
+  flex-direction: column;
+  margin-top: -12.5rem;
+}
+.rightSideInfo {
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+}
+.rs {
+  margin-top: 6rem;
+}
+.pet {
+  margin-bottom: 2rem;
+}
+.pets {
+  color: rgba(82, 82, 82, 0.705);
+  font-size: 0.8vw;
+}
+.inputR {
+  width: 100%;
+  height: 10%;
+}
+.rightF {
+  margin-top: 5rem;
+  width: 80%;
+}
+/* RIGHTSIDE INFO */
+/* AGREEMENT AND CONSENT TO BACKGROUND CHECK STARTS */
+.AGContainer {
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  overflow: scroll;
+}
+.AGContainer::-webkit-scrollbar {
+  display: none;
+}
+.AGTitle {
+  font-size: 1.8vw;
+}
+.AGText {
+  width: 80%;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  font-size: 0.9vw;
+  height: 18%;
+}
+.AGOrder1 {
+  width: 100%;
+  height: 6%;
+  flex-direction: row;
+}
+.signatureText {
+  color: rgba(82, 82, 82, 0.705);
+  font-size: 0.9vw;
+  height: 50%;
+  width: 37.5%;
+  margin-left: 9.5rem;
+  margin-right: 5rem;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.398);
+  white-space: nowrap;
+}
+.signatureSpan {
+  margin-left: 60%;
+  color: #197572;
+}
+.signatureSpan:hover {
+  color: #31af9a;
+  cursor: pointer;
+}
+.input4 {
+  height: 50%;
+  width: 37.3%;
+  border: none;
+  outline: none;
+  background: transparent;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.398);
+}
+.input4:focus {
+  border-bottom: 1px solid #197572;
+}
+.AGOrder2 {
+  width: 80%;
+  height: 100%;
+  flex-direction: column;
+}
+.AGOrder2 p {
+  margin-bottom: 4.5rem;
+  font-size: 0.9vw;
+}
+.AGOrder2 h3 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.7vw;
+}
+.AGInputContainer {
+  height: 50%;
+  width: 100%;
+}
+.AGInputOrder {
+  width: 50%;
+  flex-direction: column;
+}
+.inputReset5:focus {
+  border-bottom: 1px solid #197572;
+}
+.inputReset5 {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  border: none;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.398);
+  outline: none;
+  background: transparent;
+}
+.AGInputOrder2 {
+  margin-left: 5rem;
+  width: 50%;
+  flex-direction: column;
+}
+.AGOrder3 {
+  width: 110%;
+}
+
+.divAGOrder {
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+.inputAG1 {
+  margin-right: 5rem;
+  width: 43%;
+}
+.inputAG2 {
+  width: 43%;
+}
+.signatureTextAg {
+  color: rgba(82, 82, 82, 0.705);
+  font-size: 0.9vw;
+  height: 50%;
+  width: 48%;
+  margin-right: 5rem;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.398);
+  white-space: nowrap;
+}
+.signatureSpan {
+  margin-left: 60%;
+  color: #197572;
+}
+.signatureSpan:hover {
+  color: #31af9a;
+  cursor: pointer;
+}
+.iag {
+  height: 50%;
+  width: 48%;
+  border: none;
+  outline: none;
+  background: transparent;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.398);
+}
+.AGOrder1end {
+  width: 102%;
+  height: 6%;
+  flex-direction: row;
+}
+.agBtn{
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* AGREEMENT AND CONSENT TO BACKGROUND CHECK ENDS*/

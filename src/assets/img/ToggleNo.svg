@@ -1,0 +1,8 @@
+<svg id="Toggle" xmlns="http://www.w3.org/2000/svg" width="84" height="39" viewBox="0 0 84 39">
+  <path id="Path_2383" data-name="Path 2383" d="M12.6,0V-13.34H10.94V-2.8L3.26-13.34H1.56V0H3.22V-10.76L11,0Zm7.28.24a4.756,4.756,0,0,0,4.78-5.08A4.739,4.739,0,0,0,19.88-9.9,4.739,4.739,0,0,0,15.1-4.84,4.756,4.756,0,0,0,19.88.24Zm0-1.34c-2.06,0-3.22-1.76-3.22-3.74,0-1.96,1.16-3.72,3.22-3.72s3.2,1.76,3.2,3.72C23.08-2.86,21.94-1.1,19.88-1.1Z" transform="translate(45.132 25.697)" fill="#272727"/>
+  <g id="Rectangle_868" data-name="Rectangle 868" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1">
+    <rect width="84" height="39" rx="19.5" stroke="none"/>
+    <rect x="0.5" y="0.5" width="83" height="38" rx="19" fill="none"/>
+  </g>
+  <circle id="Ellipse_142" data-name="Ellipse 142" cx="16.5" cy="16.5" r="16.5" transform="translate(3 3)" fill="rgba(0,0,0,0.15)"/>
+</svg>

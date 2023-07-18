@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;
+  font-family: "proxima-nova", sans-serif;
+}
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-family: "proxima-nova", sans-serif;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+::selection {
+  color: black;
+  background-color: #31af9a;
+}
+.search {
+  height: 2.49rem;
+}
+.table > :not(caption) > * > * {
+  background-color: transparent !important;
+  background: transparent !important;
+}

@@ -1,0 +1,148 @@
+.tdFix {
+    width: 20%;
+}
+
+.NAME2 {
+    margin-left: 1.4rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.location1 {
+    margin-left: 1.4rem;
+    white-space: nowrap;
+}
+
+.LISTING2 {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-left: 5rem;
+}
+
+.listingA {
+    margin-left: 5rem;
+}
+
+.TAG {
+    margin-left: 7rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.location2 {
+    margin-left: 7rem;
+}
+
+.DATE2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.date2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 3rem;
+}
+
+
+.ACTIONS2 {
+    display: flex;
+    align-items: center;
+    margin-left: 13rem;
+}
+
+.orderButtonContainer {
+    margin-left: 11rem;
+    width: 30%;
+
+}
+
+/* documentsfile */
+.modalContent4 {
+    background-color: white;
+    width: 45%;
+    height: 40%;
+}
+
+.closeContainer {
+    width: 100%;
+    margin-top: 1rem;
+    margin-right: 2rem;
+}
+.close22{
+    height: 0.7rem;
+}
+
+.closeContainer:hover {
+    cursor: pointer;
+}
+
+.ContainerButton {
+    margin-top: 2rem;
+    height: 3.5rem;
+    width: 50%;
+    border: 1px solid #197572;
+}
+
+.ContainerButton:hover {
+    border: 1px solid #31af9a;
+}
+
+.ContainerButton button {
+    font-weight: 800;
+    font-size: 0.9vw;
+}
+
+.inputDoc {
+    width: 50%;
+    border: none;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.34);
+    outline: none;
+    margin-top: 2rem;
+}
+
+.inputDoc:focus {
+    border-bottom: 1px solid #197572;
+}
+
+.buttonContainer4 {
+    border-top: 1px solid rgba(128, 128, 128, 0.34);
+    margin-top: 4rem;
+    width: 100%;
+}
+
+.orderContainerBtn {
+    margin-left: 5rem;
+    margin-top: 1rem;
+}
+
+.save1,
+.cancel1 {
+    margin-top: 3rem;
+    margin-right: 3rem;
+}
+
+.option1 {
+    margin-right: 2%;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: -1rem;
+    white-space: nowrap;
+}
+.UploadAFile{
+    font-size: .9vw;
+    font-weight: 600;
+    margin-top: 0.4rem;
+    font-family: "proxima-nova", sans-serif;
+}
+
+
+
+
+
+/* documentsfile */
