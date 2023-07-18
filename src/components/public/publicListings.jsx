@@ -70,7 +70,7 @@ const PublicListings = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:${backendPort}/listing`
+          `https://rms-staging.eba-rupr98zx.us-west-1.elasticbeanstalk.com/listing`
         );
         const modifiedListings = response.data.map((item) => {
           const encodedKey = item.key.replace(/\\/g, "%5C");

@@ -165,7 +165,7 @@ const EditModalListings = ({ renderSectionContent }) => {
     };
 
     axios
-      .post(`http://localhost:${backendPort}/listing`, data, {
+      .post(`https://rms-staging.eba-rupr98zx.us-west-1.elasticbeanstalk.com/listing`, data, {
         headers: { "Content-Type": "application/json" },
       })
       .then((response) => {
