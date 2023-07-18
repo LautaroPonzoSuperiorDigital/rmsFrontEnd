@@ -33,7 +33,14 @@ const Login = () => {
           title: "Invalid Credentials",
         });
       }
-
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "An error occurred during login.",
+      });
+    }
+  };
 
   const validateEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
