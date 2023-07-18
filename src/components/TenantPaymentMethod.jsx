@@ -9,7 +9,7 @@ import CreditCardIconHover from "../assets/img/CreditCardIconHover.svg";
 import BubbleChatIcon from "../assets/img/BubbleChatIcon.svg";
 import BubbleChatIconHover from "../assets/img/BubbleChatIconHover.svg";
 import QuitArrowTenants from "../assets/img/QuitArrowTenants.svg";
-import CreditCardOption from "../assets/img/CreditCardOption.svg";
+import CreditCardOption from "../assets/img/creditCardOption.svg";
 import AddPaymentMethod from "./AddPaymentMethod";
 
 const PaymentMethod = ({ onCloseModal }) => {
