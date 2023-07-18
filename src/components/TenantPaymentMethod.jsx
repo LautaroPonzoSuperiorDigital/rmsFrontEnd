@@ -24,7 +24,9 @@ const PaymentMethod = ({ onCloseModal }) => {
   const handleCloseModal = () => {
     onCloseModal();
   };
-
+  const handleOpenAddModal = () => {
+    setAddModalOpen(true);
+  };
   const handleCloseAddModal = () => {
     setAddModalOpen(false);
   };
