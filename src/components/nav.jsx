@@ -84,7 +84,7 @@ const Nav = () => {
             <NavLink className="nav-link user" to="/profile">
               <span className="username-text">John Smith</span>
             </NavLink>
-            <NavLink className="nav-link logout" to="/">
+            <NavLink className="nav-link logout" to="/login">
               <img className="Logout" src={Logout} alt="Logout" />
             </NavLink>
           </li>

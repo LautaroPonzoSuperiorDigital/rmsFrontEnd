@@ -45,7 +45,7 @@ const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://rms-staging.eba-rupr98zx.us-west-1.elasticbeanstalk.com:${backendPort}/listing`
+          `https://api.certifymyrent.com/listing`
         );
         const listingsWithId = response.data.map((listing) => ({
           ...listing,
@@ -87,10 +87,10 @@ const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
         >
           <img src={camera} alt="" /> <span className="camSpan">1/29</span>
         </button>
-        {currentImage && (
+        {selectedListing && (
           <img
             className="imgPublic1"
-            src={currentImage}
+            src={selectedListing.key}
             onClick={onCloseModal}
           />
         )}
@@ -187,7 +187,7 @@ const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
       {showApplicationModal && (
         <ApplicationModal
           onClose={handleModalClose}
-          selectedImage={selectedImage}
+          selectedImage={selectedListing.key}
           id={listingId}
           selectedListing={selectedListing}
           Amenities={Amenities}

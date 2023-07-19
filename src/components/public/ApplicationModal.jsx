@@ -57,7 +57,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://rms-staging.eba-rupr98zx.us-west-1.elasticbeanstalk.com:${backendPort}/listing`
+          `https://api.certifymyrent.com/listing`
         );
         const listingsWithId = response.data.map((listing) => ({
           ...listing,
