@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/img/Logo.svg";
 import "../app.css";
 import "../styles/login.css";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { useStateContext } from "../context/contextProvider";
 import { AppContext } from "../context/userContext";
 
 const Login = () => {

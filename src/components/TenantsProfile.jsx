@@ -13,7 +13,7 @@ const inputStyle = {
 
 const TenantsProfile = () => {
   const { currentUser } = useContext(AppContext);
-  console.log(currentUser);
+
   return (
     <div className="containerTicketRepair p-2">
       <TenantNavBar title="Profile" redirect="/tenants" />

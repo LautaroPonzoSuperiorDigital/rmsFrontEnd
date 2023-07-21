@@ -26,6 +26,7 @@ const Tenants = () => {
   const [isPaymentMethodOpen, setPaymentMethodOpen] = useState(false);
   const [isModalTicketRepair, setModalTicketRepair] = useState(false);
   const [isModalTicketComplaint, setModalTicketComplaint] = useState(false);
+  const [isModalDocuments, setModalDocuments] = useState(false);
   /* Screens */
 
   /* Functions */
@@ -37,6 +38,9 @@ const Tenants = () => {
   };
   const handleCloseTicketComplaint = () => {
     setModalTicketComplaint(false);
+  };
+  const handleCloseDocuments = () => {
+    setModalDocuments(false);
   };
   /* Functions */
   return (
@@ -50,7 +54,13 @@ const Tenants = () => {
       {isModalTicketComplaint && (
         <TenantComplaintTicket onCloseModal={handleCloseTicketComplaint} />
       )}
-      {currentUser.approvalStatus === "Pending" && <TenantDocuments />}
+      {currentUser.approvalStatus === "Pending" ? (
+        <TenantDocuments />
+      ) : (
+        isModalDocuments && (
+          <TenantDocuments onCloseModal={handleCloseDocuments} />
+        )
+      )}
       <div className="d-flex align-items-center justify-content-between profileBarMobile">
         <h1>
           {currentUser.approvalStatus === "Pending"
@@ -109,6 +119,7 @@ const Tenants = () => {
             className="DocumentIcon"
             onMouseEnter={() => setDocumentIconHovered(true)}
             onMouseLeave={() => setDocumentIconHovered(false)}
+            onClick={() => setModalDocuments(true)}
           />
           <p>Documents</p>
         </button>

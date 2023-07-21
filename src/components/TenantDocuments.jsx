@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import TenantNavBar from "./TenantNavBar";
+import { AppContext } from "../context/userContext";
 
-const TenantDocuments = () => {
+const TenantDocuments = ({ onCloseModal }) => {
+  const { currentUser } = useContext(AppContext);
+  const isApplicant = currentUser.approvalStatus === "Pending";
   return (
     <div className="containerTicketRepair p-2">
       {/* nav */}
-      <TenantNavBar title="Applicants Document" />
+      <TenantNavBar
+        title={isApplicant ? "Applicant Documents" : "Tenant Documents"}
+        onCloseModal={onCloseModal}
+      />
       <div>
         {/* create documents */}
         DOCUMENTS
