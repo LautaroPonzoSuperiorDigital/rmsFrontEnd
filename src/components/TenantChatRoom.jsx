@@ -1,21 +1,33 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import sendMessage from "../assets/img/send-email.svg";
 import io from "socket.io-client";
 
-// const socket = io.connect("http://localhost:81");
+const messageInfo = {
+  fontSize: "18px",
+  fontWeight: "bold",
+  height: "21px",
+};
+const messageTime = {
+  fontSize: "15px",
+  color: "#848484",
+  marginLeft: "8px",
+  fontWeight: "normal",
+};
+
+const messageList = {
+  listStyle: "none",
+  fontSize: "16px",
+};
 
 const TenantChatRoom = () => {
   const socket = useMemo(() => io.connect("http://localhost:81"), []);
+  const ulRef = useRef(null);
   const fakeCrentials = {
     listingId: 2,
   };
   const [messages, setMessages] = useState([]);
-  const [author, setAuthor] = useState("");
   const [incoming, setIncoming] = useState([]);
   const [notification, setNotification] = useState(true);
-
-  const handleAuthor = (e) => {
-    setAuthor(e.target.value);
-  };
 
   const handleMessageChange = useCallback(
     (e) => {
@@ -24,10 +36,11 @@ const TenantChatRoom = () => {
     },
     [messages]
   );
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
     const message = {
       rooomId: fakeCrentials.listingId,
-      author: author,
+      author: "John Doe",
       message: messages,
       time:
         new Date(Date.now()).getHours() +
@@ -44,6 +57,14 @@ const TenantChatRoom = () => {
       message,
     });
   };
+
+  const scrollToBottom = () => {
+    ulRef.current.scrollTop = ulRef.current.scrollHeight;
+  };
+  useEffect(() => {
+    // Scroll to the bottom on initial render and whenever incoming messages change
+    scrollToBottom();
+  }, [incoming]);
 
   useEffect(() => {
     // Join the room when the component mounts
@@ -68,26 +89,45 @@ const TenantChatRoom = () => {
   }, [socket]);
 
   return (
-    <div className="w-100 vh-100 d-flex flex-column ">
-      <div>
-        notification:{notification ? "no hay mensajes" : "hay mensajes nuevos"}
+    <div className="w-100 vh-100 d-flex flex-column p-2  ">
+      <div className="flex-grow-1" style={{ overflowY: "auto" }} ref={ulRef}>
+        <ul className="p-0">
+          {incoming?.map((message, index) => (
+            <>
+              <p className="m-0" style={messageInfo}>
+                {message.author}
+                <span style={messageTime}>{message.time}</span>
+              </p>
+              <li key={index + 1} style={messageList}>
+                {message.message}
+              </li>
+            </>
+          ))}
+        </ul>
       </div>
-      <ul>
-        {incoming?.map((message, index) => (
-          <>
-            <li key={index + 1}>{message.message}</li>
-            <p>
-              {message.author}-{message.time}
-            </p>
-          </>
-        ))}
-      </ul>
-      <input placeholder="Type your name here..." onChange={handleAuthor} />
-      <input
-        placeholder="Type your message here..."
-        onChange={handleMessageChange}
-      />
-      <button onClick={handleSendMessage}>Send</button>
+      <form onSubmit={handleSendMessage} className="d-flex">
+        <input
+          placeholder="Type your message here..."
+          onChange={handleMessageChange}
+          style={{ width: "100%" }}
+        />
+        <button
+          style={{
+            width: "35px",
+            height: "35px",
+            backgroundColor: "#31af9a",
+            borderRadius: "10px",
+          }}
+        >
+          <div style={{ width: "25px", height: "25px", marginLeft: "4px" }}>
+            <img
+              src={sendMessage}
+              alt="send icon"
+              style={{ width: "100%", height: "100%" }}
+            />
+          </div>
+        </button>
+      </form>
     </div>
   );
 };

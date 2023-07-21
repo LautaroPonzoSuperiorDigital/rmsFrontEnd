@@ -9,13 +9,12 @@ const inputStyle = {
 
 const ChatSendMessage = ({ socket, chatRoomId }) => {
   const [text, setText] = useState(null);
-  const fakeCrentials = {
-    listingId: 2,
-  };
+
+  console.log("chatId", chatRoomId);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const message = {
-      rooomId: fakeCrentials.listingId,
+      rooomId: chatRoomId,
       author: "admin",
       message: text,
       time:
@@ -25,7 +24,7 @@ const ChatSendMessage = ({ socket, chatRoomId }) => {
     };
     console.log("Sending message");
     let response = await socket.emit("event_message", {
-      room: `${fakeCrentials.listingId}`,
+      room: `${chatRoomId}`,
       message,
     });
   };
