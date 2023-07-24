@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/img/Logo.svg";
 import "../app.css";
 import "../styles/login.css";
 import Swal from "sweetalert2";
 import axios from "axios";
-import backendPort from "../config";
-import { useStateContext } from "../context/contextProvider";
+import { AppContext } from "../context/userContext";
 
 const Login = () => {
+  const { setCurrentUser, currentUser } = useContext(AppContext);
   const navigate = useNavigate();
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
@@ -24,9 +24,20 @@ const Login = () => {
           password,
         }
       );
+
       if (response.status === 200) {
-        setLoggedIn(true);
-        navigate("/listingsAdmin");
+        const { role } = response.data;
+        setCurrentUser(response.data);
+
+        if (role === "ADMIN") {
+          setLoggedIn(true);
+          navigate("/listingsAdmin");
+        }
+
+        if (role === "TENANT") {
+          setLoggedIn(true);
+          navigate("/tenants");
+        }
       } else {
         Swal.fire({
           icon: "error",

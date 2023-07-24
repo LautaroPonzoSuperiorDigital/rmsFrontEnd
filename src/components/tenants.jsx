@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../styles/Responsive/tenantsMobile.css";
 import Profile from "../assets/img/Profile.svg";
 import ProfileHover from "../assets/img/ProfileHover.svg";
@@ -11,8 +11,11 @@ import BubbleChatIconHover from "../assets/img/BubbleChatIconHover.svg";
 import PaymentMethod from "./TenantPaymentMethod";
 import TenantsRepairTicket from "./TenantsRepairTicket";
 import TenantComplaintTicket from "./TenantComplaintTicket";
+import { AppContext } from "../context/userContext";
+import TenantDocuments from "./TenantDocuments";
 
 const Tenants = () => {
+  const { currentUser } = useContext(AppContext);
   /* Hovers */
   const [isProfileHovered, setProfileHovered] = useState(false);
   const [isBubbleChatIconHovered, setBubbleChatIconHovered] = useState(false);
@@ -23,8 +26,9 @@ const Tenants = () => {
   const [isPaymentMethodOpen, setPaymentMethodOpen] = useState(false);
   const [isModalTicketRepair, setModalTicketRepair] = useState(false);
   const [isModalTicketComplaint, setModalTicketComplaint] = useState(false);
-
+  const [isModalDocuments, setModalDocuments] = useState(false);
   /* Screens */
+
   /* Functions */
   const handleCloseModal = () => {
     setPaymentMethodOpen(false);
@@ -34,6 +38,9 @@ const Tenants = () => {
   };
   const handleCloseTicketComplaint = () => {
     setModalTicketComplaint(false);
+  };
+  const handleCloseDocuments = () => {
+    setModalDocuments(false);
   };
   /* Functions */
   return (
@@ -47,8 +54,19 @@ const Tenants = () => {
       {isModalTicketComplaint && (
         <TenantComplaintTicket onCloseModal={handleCloseTicketComplaint} />
       )}
+      {currentUser.approvalStatus === "Pending" ? (
+        <TenantDocuments />
+      ) : (
+        isModalDocuments && (
+          <TenantDocuments onCloseModal={handleCloseDocuments} />
+        )
+      )}
       <div className="d-flex align-items-center justify-content-between profileBarMobile">
-        <h1>CONTACT US</h1>
+        <h1>
+          {currentUser.approvalStatus === "Pending"
+            ? "Applicant"
+            : "CONTACT US"}
+        </h1>
         <button>
           <img
             src={isProfileHovered ? ProfileHover : Profile}
@@ -101,6 +119,7 @@ const Tenants = () => {
             className="DocumentIcon"
             onMouseEnter={() => setDocumentIconHovered(true)}
             onMouseLeave={() => setDocumentIconHovered(false)}
+            onClick={() => setModalDocuments(true)}
           />
           <p>Documents</p>
         </button>
