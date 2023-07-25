@@ -80,7 +80,7 @@ const ListingsAdmin = () => {
 
   useEffect(() => {
     axios
-    .get(`http://localhost:${backendPort}/listing`)
+    .get(`https://api.certifymyrent.com/listing`)
       .then((response) => {
         const modifiedListings = response.data.map((item) => {
           const encodedKey = item.key.replace(/\\/g, "%5C");
@@ -106,7 +106,7 @@ const ListingsAdmin = () => {
 
     setListing(updatedListing);
     axios
-      .delete(`http://localhost:${backendPort}/listing/${listingId}`, {
+      .delete(`https://api.certifymyrent.com/listing/${listingId}`, {
         headers: {
           "Content-Type": "application/json",
         },

@@ -18,13 +18,15 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:${backendPort}/auth/local/signin`,
+        `https://api.certifymyrent.com/auth/local/signin`,
         {
           email,
           password,
         }
       );
       if (response.status === 200) {
+        const token = response.data.token;
+        localStorage.setItem("jwtToken", token);
         setLoggedIn(true);
         navigate("/listingsAdmin");
       } else {

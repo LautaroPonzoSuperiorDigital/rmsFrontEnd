@@ -165,7 +165,7 @@ const EditModalListings = ({ renderSectionContent }) => {
     };
 
     axios
-      .post(`http://localhost:${backendPort}/listing`, data, {
+      .post(`https://api.certifymyrent.com/listing`, data, {
         headers: { "Content-Type": "application/json" },
       })
       .then((response) => {
