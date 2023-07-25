@@ -19,10 +19,10 @@ const AdminChatRoomMessages = ({ message }) => {
       <div className="d-flex flex-column">
         <div className="d-flex gap-2 align-items-center">
           <p className="m-0" style={messageAuthor}>
-            {message.author}
+            {message.sender}
           </p>
           <p className="m-0 d-flex align-items-center" style={messageTime}>
-            {message.time}
+            {new Date(message.createdAt).toLocaleString()}
           </p>
         </div>
         <p className="m-0" style={messageText}>

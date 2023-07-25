@@ -10,6 +10,8 @@ const notificationMessageStyle = {
 
 const AdminChatRoom = ({ chatRooms, setTargetChatRoomId, socket }) => {
   const [notification, setNotification] = useState(true);
+  const timeStamp = chatRooms.Chats[0].createdAt;
+  const formattedTimeStamp = new Date(timeStamp).toLocaleString();
 
   useEffect(() => {
     socket.emit("event_join", `${chatRooms.listingId}`);
@@ -25,15 +27,23 @@ const AdminChatRoom = ({ chatRooms, setTargetChatRoomId, socket }) => {
 
   return (
     <div
-      className="d-flex "
+      className="d-flex  gap-3 p-2  "
       style={chatRoomsStyle}
       onClick={() => setTargetChatRoomId(chatRooms.listingId)}
     >
-      <div>
+      <div className="d-flex h-100 align-items-center justify-content-around w-100">
+        <div
+          style={{
+            height: "55px",
+            width: "57px",
+            border: "1px solid #197572",
+            borderRadius: "50%",
+          }}
+        />
         <div>
           <div className="d-flex gap-3 ">
             <p className="m-0" style={{ fontSize: "18px" }}>
-              Listing:{chatRooms.listingId} • {chatRooms.tenantName}
+              Listing:{chatRooms.listingId} • name
             </p>
             {!notification.state &&
               parseInt(notification.room) === chatRooms.listingId && (
@@ -47,13 +57,17 @@ const AdminChatRoom = ({ chatRooms, setTargetChatRoomId, socket }) => {
           </div>
 
           <p className="m-0" style={{ fontSize: "20px" }}>
-            {chatRooms.lastMessage}
+            {chatRooms && chatRooms.Chats.length > 0
+              ? chatRooms.Chats[chatRooms.Chats.length - 1].message
+              : "No messages"}
           </p>
           <p className="m-0" style={{ fontSize: "18px", color: "#848484" }}>
-            {chatRooms.dateAndTime}
+            {chatRooms && formattedTimeStamp}
           </p>
         </div>
-        {/* <div>Location:{chatRooms.location}</div> */}
+        <div>
+          <p>tickets</p>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import sendMessage from "../assets/img/send-email.svg";
 import io from "socket.io-client";
+import axios from "axios";
 
 const messageInfo = {
   fontSize: "18px",
@@ -23,7 +24,7 @@ const TenantChatRoom = () => {
   const socket = useMemo(() => io.connect("http://localhost:81"), []);
   const ulRef = useRef(null);
   const fakeCrentials = {
-    listingId: 2,
+    listingId: 1,
   };
   const [messages, setMessages] = useState([]);
   const [incoming, setIncoming] = useState([]);
@@ -39,13 +40,11 @@ const TenantChatRoom = () => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     const message = {
-      rooomId: fakeCrentials.listingId,
-      author: "John Doe",
+      roomChatId: fakeCrentials.listingId,
+      sender: "John Doe",
       message: messages,
-      time:
-        new Date(Date.now()).getHours() +
-        ":" +
-        new Date(Date.now()).getMinutes(),
+      createdAt: new Date().toISOString(),
+      id: new Date().toISOString(), // temporary id for the message
     };
     console.log("Sending message");
     let response = await socket.emit("event_message", {
@@ -65,6 +64,23 @@ const TenantChatRoom = () => {
     // Scroll to the bottom on initial render and whenever incoming messages change
     scrollToBottom();
   }, [incoming]);
+
+  useEffect(() => {
+    const getChatMessages = async () => {
+      try {
+        const messages = await axios.get(
+          "http://localhost:3000/chat/chat-room-by-id",
+          {
+            params: { id: fakeCrentials.listingId },
+          }
+        );
+        setIncoming(messages.data.Chats);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getChatMessages();
+  }, []);
 
   useEffect(() => {
     // Join the room when the component mounts
@@ -93,15 +109,15 @@ const TenantChatRoom = () => {
       <div className="flex-grow-1" style={{ overflowY: "auto" }} ref={ulRef}>
         <ul className="p-0">
           {incoming?.map((message, index) => (
-            <>
+            <div key={message.id}>
               <p className="m-0" style={messageInfo}>
-                {message.author}
-                <span style={messageTime}>{message.time}</span>
+                {message.sender}
+                <span style={messageTime}>
+                  {new Date(message.createdAt).toLocaleString()}
+                </span>
               </p>
-              <li key={index + 1} style={messageList}>
-                {message.message}
-              </li>
-            </>
+              <li style={messageList}>{message.message}</li>
+            </div>
           ))}
         </ul>
       </div>

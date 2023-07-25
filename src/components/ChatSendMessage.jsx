@@ -10,19 +10,16 @@ const inputStyle = {
 const ChatSendMessage = ({ socket, chatRoomId }) => {
   const [text, setText] = useState(null);
 
-  console.log("chatId", chatRoomId);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const message = {
-      rooomId: chatRoomId,
-      author: "admin",
+      roomChatId: chatRoomId,
+      sender: "admin",
       message: text,
-      time:
-        new Date(Date.now()).getHours() +
-        ":" +
-        new Date(Date.now()).getMinutes(),
+      createdAt: new Date().toISOString(),
+      id: new Date().toISOString(), // temporary id for the message
     };
-    console.log("Sending message");
+
     let response = await socket.emit("event_message", {
       room: `${chatRoomId}`,
       message,
