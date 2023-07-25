@@ -70,7 +70,7 @@ const PublicListings = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://api.certifymyrent.com/listing`
+          `http://localhost:${backendPort}/listing`
         );
         const modifiedListings = response.data.map((item) => {
           const encodedKey = item.key.replace(/\\/g, "%5C");

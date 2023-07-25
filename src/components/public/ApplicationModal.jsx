@@ -57,7 +57,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://api.certifymyrent.com/listing`
+          `http://localhost:${backendPort}/listing`
         );
         const listingsWithId = response.data.map((listing) => ({
           ...listing,
