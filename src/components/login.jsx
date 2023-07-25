@@ -36,7 +36,7 @@ const Login = () => {
 
         if (role === "TENANT") {
           setLoggedIn(true);
-          navigate("/tenants");
+          navigate("/listingsAdmin");
         }
       } else {
         Swal.fire({
