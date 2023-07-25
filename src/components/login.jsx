@@ -6,6 +6,7 @@ import "../styles/login.css";
 import Swal from "sweetalert2";
 import axios from "axios";
 import backendPort from "../config";
+import token from "../jwt"
 import { useStateContext } from "../context/contextProvider";
 
 const Login = () => {
