@@ -4,7 +4,6 @@ import "../../styles/publIcListings/application.css";
 import Logo from "../../assets/img/Logo.svg";
 import img1 from "../../assets/img/1.jpg";
 import axios from "axios";
-import backendPort from "../../config";
 import ToggleYes from "../../assets/img/ToggleYes.svg";
 import ToggleNo from "../../assets/img/ToggleNo.svg";
 
@@ -267,9 +266,9 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
         </div>
         <div className="forms redside d-flex justify-content-center align-items-center">
           {activeSection === "registration" && (
-            <div class="registrationContainer d-flex justify-content-center">
-              <div class="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
-                <h2 class="d-flex justify-content-center mt-3 registrationText">
+            <div className="registrationContainer d-flex justify-content-center">
+              <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
+                <h2 className="d-flex justify-content-center mt-3 registrationText">
                   Registration
                 </h2>
                 <form className="resetForm" action="submit">
@@ -313,9 +312,9 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
           {/* REGISTER END */}
 
           {activeSection === "roommates" && (
-            <div class="roommatesContainer d-flex justify-content-center">
-              <div class="formRoommatesOrder d-flex flex-column justify-content-start align-items-center">
-                <h2 class="rmText d-flex justify-content-center mt-3">
+            <div className="roommatesContainer d-flex justify-content-center">
+              <div className="formRoommatesOrder d-flex flex-column justify-content-start align-items-center">
+                <h2 className="rmText d-flex justify-content-center mt-3">
                   Roommates / Other Occupants
                 </h2>
                 <form
@@ -357,7 +356,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
           {/* ROOMMATES END */}
 
           {activeSection === "rentalHistory" && (
-            <div class="rentalContainer align-items-center">
+            <div className="rentalContainer align-items-center">
               <h2 className="rentalText align-items-center">Rental History</h2>
               <p className="rentalP">
                 Please list your three most recent addresses or from past five
@@ -464,7 +463,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
           {/* RENTAL HISTORY ENDS */}
 
           {activeSection === "income" && (
-            <div class="incomeContainer align-items-center">
+            <div className="incomeContainer align-items-center">
               <h2 className="rentalText align-items-center">Income</h2>
               <p className="rentalP">
                 Please list employment from past five years & other sources of
@@ -623,9 +622,9 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
           {/* INCOME ENDS */}
           {/* EMERGENCY CONTACT START */}
           {activeSection === "emergencyContact" && (
-            <div class="registrationContainer d-flex justify-content-center">
-              <div class="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
-                <h2 class="d-flex justify-content-center mt-3 ECText">
+            <div className="registrationContainer d-flex justify-content-center">
+              <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
+                <h2 className="d-flex justify-content-center mt-3 ECText">
                   Emergency Contact Information
                 </h2>
                 <form className="resetForm" action="submit">
@@ -658,9 +657,9 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
           )}
           {/* EMERGENCY CONTACT START */}
           {activeSection === "vehicles" && (
-            <div class="registrationContainer d-flex justify-content-center">
-              <div class="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
-                <h2 class="d-flex justify-content-center mt-3 VehicleText">
+            <div className="registrationContainer d-flex justify-content-center">
+              <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
+                <h2 className="d-flex justify-content-center mt-3 VehicleText">
                   Vehicles
                 </h2>
                 <form className="resetForm" action="submit">

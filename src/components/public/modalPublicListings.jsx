@@ -4,7 +4,6 @@ import "../../styles/publIcListings/publicListings.css";
 import camera from "../../assets/img/camera.svg";
 import publicListingsData from "./publicListingsData";
 import ApplicationModal from "./ApplicationModal";
-import backendPort from "../../config";
 import picture1 from "../../assets/img/picture.jpg";
 import axios from "axios";
 

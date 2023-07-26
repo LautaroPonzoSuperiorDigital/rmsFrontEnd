@@ -13,7 +13,6 @@ import picture4 from "../../assets/img/picture4.jpg";
 import picture5 from "../../assets/img/picture5.jpg";
 import picture6 from "../../assets/img/picture6.jpg";
 import ModalPublicListings from "./modalPublicListings";
-import backendPort from "../../config";
 import axios from "axios";
 
 const PublicListings = () => {

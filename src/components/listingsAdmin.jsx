@@ -14,7 +14,6 @@ import DeleteIconHover from "../assets/img/deleteIconHover.svg";
 import Pagination from "./paginations";
 import AddListings from "./addListing";
 import EditModalListings from "./modals/modalListing";
-import backendPort from "../config";
 
 const ListingsAdmin = () => {
   const [listing, setListing] = useState([]);
