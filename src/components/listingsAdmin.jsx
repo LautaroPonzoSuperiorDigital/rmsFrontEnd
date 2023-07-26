@@ -80,7 +80,7 @@ const ListingsAdmin = () => {
 
   useEffect(() => {
     axios
-      .get("https://api.certifymyrent.com/listing")
+    .get(`https://api.certifymyrent.com/listing`)
       .then((response) => {
         const modifiedListings = response.data.map((item) => {
           const encodedKey = item.key.replace(/\\/g, "%5C");

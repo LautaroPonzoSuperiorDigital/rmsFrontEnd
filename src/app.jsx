@@ -21,12 +21,12 @@ function App() {
         <AppProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="listingsAdmin" element={<ListingsAdmin />} />
-            <Route path="tenantsAdmin" element={<TenantsAdmin />} />
-            <Route path="applicantsAdmin" element={<Applicants />} />
-            <Route path="chatsAdmin" element={<Chats />} />
-            <Route path="documentsAdmin" element={<Documents />} />
-            <Route path="subAdminsAdmin" element={<SubAdmins />} />
+            <Route path="/listingsAdmin" element={<ListingsAdmin />} />
+            <Route path="/tenantsAdmin" element={<TenantsAdmin />} />
+            <Route path="/applicantsAdmin" element={<Applicants />} />
+            <Route path="/chatsAdmin" element={<Chats />} />
+            <Route path="/documentsAdmin" element={<Documents />} />
+            <Route path="/subAdminsAdmin" element={<SubAdmins />} />
             <Route path="/" element={<PublicListings />} />
             <Route path="/application" element={<ApplicationModal />} />
             <Route path="/tenants" element={<Tenants />} />
