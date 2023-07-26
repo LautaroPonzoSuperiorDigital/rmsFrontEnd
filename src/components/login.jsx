@@ -6,6 +6,7 @@ import "../styles/login.css";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AppContext } from "../context/userContext";
+import { api } from "../services/api";
 
 const Login = () => {
   const { setCurrentUser, currentUser } = useContext(AppContext);
@@ -17,13 +18,17 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        `https://api.certifymyrent.com/auth/local/signin`,
-        {
-          email,
-          password,
-        }
-      );
+      const response = await api.post('/auth/local/signin', {
+        email,
+        password
+      })
+      // axios.post(
+      //   `https://api.certifymyrent.com/auth/local/signin`,
+      //   {
+      //     email,
+      //     password,
+      //   }
+      // );
 
       if (response.status === 200) {
         const { role } = response.data;
