@@ -11,13 +11,13 @@ import TenantsAdmin from "./components/tenantsAdmin";
 import Tenants from "./components/tenants";
 import { ImageProvider } from "./context/imageContext";
 import TenantsProfile from "./components/TenantsProfile";
-import { AppProvider } from "./context/userContext";
+import { AuthProvider } from "./context/authContext";
 
 function App() {
   return (
     <BrowserRouter>
       <ImageProvider>
-        <AppProvider>
+        <AuthProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="listingsAdmin" element={<ListingsAdmin />} />
@@ -34,7 +34,7 @@ function App() {
               element={<TenantsProfile />}
             />
           </Routes>
-        </AppProvider>
+        </AuthProvider>
       </ImageProvider>
     </BrowserRouter>
   );

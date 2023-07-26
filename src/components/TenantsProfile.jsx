@@ -1,8 +1,7 @@
 import TenantNavBar from "./TenantNavBar";
 import "../styles/Responsive/tenantsMobile.css";
 import logOut from "./../assets/img/logOutTentant.svg";
-import { AppContext } from "../context/userContext";
-import { useContext } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 const inputStyle = {
   border: "none",
@@ -12,7 +11,7 @@ const inputStyle = {
 };
 
 const TenantsProfile = () => {
-  const { currentUser } = useContext(AppContext);
+  const { user } = useAuth()
 
   return (
     <div className="containerTicketRepair p-2">
@@ -30,7 +29,7 @@ const TenantsProfile = () => {
               className="form-control  w-75 border-bottom"
               id="legalName"
               name="legalName"
-              placeholder={currentUser.name}
+              placeholder={user.name}
               style={inputStyle}
               required
             />
@@ -46,7 +45,7 @@ const TenantsProfile = () => {
               className="form-control  w-75 border-bottom"
               id="email"
               name="email"
-              placeholder={currentUser.email}
+              placeholder={user.email}
               style={inputStyle}
               required
             />
@@ -78,7 +77,7 @@ const TenantsProfile = () => {
               className="form-control  w-75 border-bottom"
               id="phone"
               name="phone"
-              placeholder={currentUser.phoneNumber}
+              placeholder={user.phoneNumber}
               style={inputStyle}
               required
             />
