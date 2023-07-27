@@ -13,9 +13,11 @@ import TenantsRepairTicket from "./TenantsRepairTicket";
 import TenantComplaintTicket from "./TenantComplaintTicket";
 import TenantDocuments from "./TenantDocuments";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Tenants = () => {
-  const { user } = useAuth()
+  const { user } = useAuth();
+  const navigate = useNavigate();
   /* Hovers */
   const [isProfileHovered, setProfileHovered] = useState(false);
   const [isBubbleChatIconHovered, setBubbleChatIconHovered] = useState(false);
@@ -63,9 +65,7 @@ const Tenants = () => {
       )}
       <div className="d-flex align-items-center justify-content-between profileBarMobile">
         <h1>
-          {user.approvalStatus === "Pending"
-            ? "Applicant"
-            : "CONTACT US"}
+          {user.approvalStatus === "Pending" ? "Applicant" : "CONTACT US"}
         </h1>
         <button>
           <img
@@ -95,7 +95,10 @@ const Tenants = () => {
             </p>
           </div>
         </div>
-        <div className="divisionButtonContainer">
+        <div
+          className="divisionButtonContainer"
+          onClick={() => navigate("/tenants/tenant-chat")}
+        >
           <div className="d-flex align-items-center justify-content-center w-100">
             <p className="pOrderMobile m-2">Chat With The Manager</p>
           </div>

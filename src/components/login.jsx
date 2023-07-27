@@ -13,7 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isAuthenticated, user, onSignedIn } = useAuth()
+  const { isAuthenticated, user, onSignedIn } = useAuth();
 
   const navigate = useNavigate();
 
@@ -32,15 +32,16 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const { data } = await api.post('/auth/local/signin', {
+      const { data } = await api.post("/auth/local/signin", {
         email,
-        password
-      })
+        password,
+      });
 
-      onSignedIn({ loggedUser: data.user, accessToken: data.accessToken })
-      
-      navigateUser(data.user.role)
+      onSignedIn({ loggedUser: data.user, accessToken: data.accessToken });
+
+      navigateUser(data.user.role);
     } catch (error) {
+      console.log(error);
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -51,9 +52,9 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigateUser(user.role)
+      navigateUser(user.role);
     }
-  }, [isAuthenticated, user, navigateUser])
+  }, [isAuthenticated, user, navigateUser]);
 
   return (
     <div className="loginBgContainer">
