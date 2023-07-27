@@ -8,7 +8,7 @@ import {
 } from "react";
 import sendMessage from "../assets/img/send-email.svg";
 import io from "socket.io-client";
-import axios from "axios";
+import { socket } from "./socketManajer/socket";
 import { useAuth } from "../hooks/useAuth";
 import { api } from "../services/api";
 
@@ -32,7 +32,6 @@ const messageList = {
 const TenantChatRoom = () => {
   const { user } = useAuth();
 
-  const socket = useMemo(() => io.connect("http://localhost:81"), []);
   const ulRef = useRef(null);
   const fakeCrentials = {
     listingId: 1,
