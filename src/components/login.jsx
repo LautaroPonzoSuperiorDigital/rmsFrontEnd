@@ -20,7 +20,7 @@ const Login = () => {
   const navigateUser = useCallback((userRole) => {
     switch (userRole) {
       case 'ADMIN':
-        navigate('/listingsAdmin')
+        navigate('/admin/listings')
         break
       case 'TENANT':
         navigate('/tenants')
