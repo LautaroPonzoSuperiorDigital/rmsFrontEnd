@@ -1,3 +1,4 @@
+import { createBrowserRouter } from "react-router-dom"
 import TenantChatRoom from "../components/TenantChatRoom"
 import TenantsProfile from "../components/TenantsProfile"
 import Tenants from "../components/tenants"
@@ -17,4 +18,8 @@ const tenantsRoutes = [
   }
 ]
 
-export default tenantsRoutes
+const tenantsRouter = createBrowserRouter([
+  { path: '/tenants', children: tenantsRoutes }
+])
+
+export default tenantsRouter
