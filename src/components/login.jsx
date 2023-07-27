@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -13,9 +13,22 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { onSignedIn } = useAuth()
+  const { isAuthenticated, user, onSignedIn } = useAuth()
 
   const navigate = useNavigate();
+
+  const navigateUser = (userRole) => {
+    switch (userRole) {
+      case 'ADMIN':
+        navigate('/listingsAdmin')
+        break
+      case 'TENANT':
+        navigate('/tenants')
+        break
+      default:
+        break
+    }
+  }
 
   const handleLogin = async () => {
     try {
@@ -26,20 +39,7 @@ const Login = () => {
 
       onSignedIn({ loggedUser: data.user, accessToken: data.accessToken })
       
-      switch (data.user.role) {
-        case 'ADMIN':
-          navigate('/listingsAdmin')
-          break
-        case 'TENANT':
-          navigate('/tenants')
-          break
-        default:
-          break
-      }
-
-      if (data.user.role === "ADMIN") {
-        navigate("/listingsAdmin")
-      }
+      navigateUser(data.user.role)
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -48,6 +48,12 @@ const Login = () => {
       });
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigateUser(user.role)
+    }
+  }, [isAuthenticated, user, navigateUser])
 
   return (
     <div className="loginBgContainer">
