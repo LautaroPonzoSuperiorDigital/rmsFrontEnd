@@ -97,7 +97,7 @@ const Tenants = () => {
         </div>
         <div
           className="divisionButtonContainer"
-          onClick={() => navigate("/tenants/tenant-chat")}
+          onClick={() => navigate("/tenants/chat")}
         >
           <div className="d-flex align-items-center justify-content-center w-100">
             <p className="pOrderMobile m-2">Chat With The Manager</p>
