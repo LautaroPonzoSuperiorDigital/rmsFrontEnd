@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -17,7 +17,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const navigateUser = (userRole) => {
+  const navigateUser = useCallback((userRole) => {
     switch (userRole) {
       case 'ADMIN':
         navigate('/listingsAdmin')
@@ -28,7 +28,7 @@ const Login = () => {
       default:
         break
     }
-  }
+  }, [navigate])
 
   const handleLogin = async () => {
     try {
