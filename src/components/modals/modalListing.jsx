@@ -115,7 +115,7 @@ const EditModalListings = ({ renderSectionContent }) => {
   };
   const handleCloseModal = () => {
     closeModal();
-    navigate("/listingsAdmin");
+    navigate("/admin/listings");
   };
 
   const addNewLine = () => {
@@ -142,7 +142,7 @@ const EditModalListings = ({ renderSectionContent }) => {
     setIsImageHovered(false);
   };
   const handleCancel = () => {
-    window.location.href = "/listingsAdmin";
+    window.location.href = "/admin/listings";
   };
 
   const handleImageClick = () => {

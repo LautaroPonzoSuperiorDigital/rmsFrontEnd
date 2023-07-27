@@ -106,10 +106,10 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
   };
   const handleCloseModal = () => {
     closeModal();
-    navigate("/listingsAdmin");
+    navigate("/admin/listings");
   };
   const handleCloseTotal = () => {
-    navigate("/listingsAdmin");
+    navigate("/admin/listings");
   };
   useEffect(() => {
     setIsModalOpen(false);

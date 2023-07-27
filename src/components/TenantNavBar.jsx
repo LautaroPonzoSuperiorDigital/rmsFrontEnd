@@ -9,7 +9,7 @@ const TenantNavBar = ({ title, onCloseModal, redirect }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isProfileHovered, setProfileHovered] = useState(false);
-  const isTenantProfilePage = location.pathname === "/tenants/tenant-profile";
+  const isTenantProfilePage = location.pathname === "/tenants/profile";
   return (
     <div className="d-flex align-items-center justify-content-between w-100 mb-2">
       <div>
@@ -25,7 +25,7 @@ const TenantNavBar = ({ title, onCloseModal, redirect }) => {
       </div>
       <div>
         <img
-          onClick={() => navigate("/tenants/tenant-profile")}
+          onClick={() => navigate("/tenants/profile")}
           src={isProfileHovered || isTenantProfilePage ? ProfileHover : Profile}
           alt="ProfileImg"
           onMouseEnter={() => setProfileHovered(true)}
