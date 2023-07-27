@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 const chatRoomsStyle = {
@@ -7,20 +7,51 @@ const chatRoomsStyle = {
 const notificationMessageStyle = {
   color: "#31af9a",
 };
+const newNotificationStyle = {
+  fontSize: "20px",
+  fontWeight: "bold",
+  padding: 0,
+  margin: 0,
+};
+const notificationStyle = {
+  fontSize: "20px",
+  fontWeight: "normal",
+  margin: 0,
+};
 
-const AdminChatRoom = ({ chatRooms, setTargetChatRoomId, socket }) => {
+const AdminChatRoom = ({
+  chatRooms,
+  filterMessages,
+  setTargetChatRoomId,
+  socket,
+}) => {
   const [notification, setNotification] = useState(true);
-  const timeStamp = chatRooms.Chats[0].createdAt;
+  const timeStamp = chatRooms.Chats[chatRooms.Chats.length - 1].createdAt;
   const formattedTimeStamp = new Date(timeStamp).toLocaleString();
+  const foramttedFilterTimeStamp = new Date(
+    filterMessages[filterMessages.length - 1]?.createdAt
+  ).toLocaleString();
+  const newNotification =
+    chatRooms.Chats[chatRooms.Chats.length - 1]?.role !== "ADMIN" &&
+    !chatRooms.Chats[chatRooms.Chats.length - 1]?.isRead;
+
+  const filterNewnotification =
+    filterMessages[filterMessages.length - 1]?.role !== "ADMIN" &&
+    !filterMessages[filterMessages.length - 1]?.isRead;
+
+  console.log("here", chatRooms.Chats[chatRooms.Chats.length - 1].createdAt);
 
   useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     socket.emit("event_join", `${chatRooms.listingId}`);
+    // eslint-disable-next-line react/prop-types
     socket.on("notification", (data) => {
       setNotification(data);
       console.log("notification", data);
     });
 
     return () => {
+      // eslint-disable-next-line react/prop-types
       socket.disconnect();
     };
   }, [socket, chatRooms.listingId]);
@@ -56,13 +87,29 @@ const AdminChatRoom = ({ chatRooms, setTargetChatRoomId, socket }) => {
               )}
           </div>
 
-          <p className="m-0" style={{ fontSize: "20px" }}>
-            {chatRooms && chatRooms.Chats.length > 0
-              ? chatRooms.Chats[chatRooms.Chats.length - 1].message
-              : "No messages"}
-          </p>
-          <p className="m-0" style={{ fontSize: "18px", color: "#848484" }}>
-            {chatRooms && formattedTimeStamp}
+          {filterMessages && filterMessages.length > 0 ? (
+            <p
+              style={
+                filterNewnotification ? newNotificationStyle : notificationStyle
+              }
+            >
+              {filterMessages[filterMessages.length - 1].message.slice(0, 10)}
+            </p>
+          ) : (
+            <p
+              style={newNotification ? newNotificationStyle : notificationStyle}
+            >
+              {chatRooms.Chats[chatRooms.Chats.length - 1]?.message.slice(
+                0,
+                10
+              )}
+            </p>
+          )}
+
+          <p style={{ fontSize: "18px", color: "#848484" }}>
+            {filterMessages && filterMessages.length > 0
+              ? foramttedFilterTimeStamp
+              : formattedTimeStamp}
           </p>
         </div>
         <div>
@@ -76,11 +123,34 @@ const AdminChatRoom = ({ chatRooms, setTargetChatRoomId, socket }) => {
 AdminChatRoom.propTypes = {
   chatRooms: PropTypes.shape({
     listingId: PropTypes.number.isRequired,
+    Chats: PropTypes.arrayOf(
+      PropTypes.shape({
+        createdAt: PropTypes.string.isRequired,
+        deletedAt: PropTypes.string,
+        id: PropTypes.number.isRequired,
+        message: PropTypes.string.isRequired,
+        roomChatId: PropTypes.number.isRequired,
+        sender: PropTypes.string.isRequired,
+        updatedAt: PropTypes.string.isRequired,
+        role: PropTypes.string.isRequired,
+        isRead: PropTypes.bool.isRequired,
+      })
+    ).isRequired,
   }).isRequired,
-  socket: PropTypes.shape({
-    emit: PropTypes.func.isRequired,
-    on: PropTypes.func.isRequired,
-  }).isRequired,
+  filterMessages: PropTypes.arrayOf(
+    PropTypes.shape({
+      createdAt: PropTypes.string.isRequired,
+      deletedAt: PropTypes.string,
+      id: PropTypes.number.isRequired,
+      message: PropTypes.string.isRequired,
+      roomChatId: PropTypes.number.isRequired,
+      sender: PropTypes.string.isRequired,
+      updatedAt: PropTypes.string.isRequired,
+      role: PropTypes.string.isRequired,
+      isRead: PropTypes.bool.isRequired,
+    })
+  ),
+  setTargetChatRoomId: PropTypes.func.isRequired, // add setTargetChatRoomId
+  socket: PropTypes.object.isRequired,
 };
-
 export default AdminChatRoom;

@@ -73,7 +73,6 @@ const Chats = () => {
         const chatRoomsMessage = response.data.map(
           (chatRoom) => chatRoom.Chats
         );
-        console.log(response.data);
         setChatRooms(response.data);
         setMessages(chatRoomsMessage.flat());
       } catch (err) {
@@ -93,6 +92,7 @@ const Chats = () => {
               <AdminChatRoom
                 key={chatRoom.listingId}
                 chatRooms={chatRoom}
+                filterMessages={filterMessages}
                 setTargetChatRoomId={setTargetChatRoomId}
                 socket={socket}
               />

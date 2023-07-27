@@ -1,7 +1,15 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import sendMessage from "../assets/img/send-email.svg";
 import io from "socket.io-client";
 import axios from "axios";
+import { AppContext } from "../context/userContext";
 
 const messageInfo = {
   fontSize: "18px",
@@ -21,6 +29,8 @@ const messageList = {
 };
 
 const TenantChatRoom = () => {
+  const { currentUser } = useContext(AppContext);
+  console.log(currentUser);
   const socket = useMemo(() => io.connect("http://localhost:81"), []);
   const ulRef = useRef(null);
   const fakeCrentials = {
@@ -41,8 +51,9 @@ const TenantChatRoom = () => {
     e.preventDefault();
     const message = {
       roomChatId: fakeCrentials.listingId,
-      sender: "John Doe",
+      sender: currentUser.name,
       message: messages,
+      role: currentUser.role,
       createdAt: new Date().toISOString(),
       id: new Date().toISOString(), // temporary id for the message
     };
@@ -121,6 +132,7 @@ const TenantChatRoom = () => {
           ))}
         </ul>
       </div>
+
       <form onSubmit={handleSendMessage} className="d-flex">
         <input
           placeholder="Type your message here..."

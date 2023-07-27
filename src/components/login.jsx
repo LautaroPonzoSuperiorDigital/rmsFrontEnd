@@ -26,6 +26,7 @@ const Login = () => {
       );
 
       if (response.status === 200) {
+        console.log(response.data);
         const { role } = response.data;
         setCurrentUser(response.data);
 
@@ -36,7 +37,7 @@ const Login = () => {
 
         if (role === "TENANT") {
           setLoggedIn(true);
-          navigate("/listingsAdmin");
+          navigate("/tenants");
         }
       } else {
         Swal.fire({

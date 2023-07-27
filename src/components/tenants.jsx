@@ -13,9 +13,11 @@ import TenantsRepairTicket from "./TenantsRepairTicket";
 import TenantComplaintTicket from "./TenantComplaintTicket";
 import { AppContext } from "../context/userContext";
 import TenantDocuments from "./TenantDocuments";
+import { useNavigate } from "react-router-dom";
 
 const Tenants = () => {
   const { currentUser } = useContext(AppContext);
+  const navigate = useNavigate();
   /* Hovers */
   const [isProfileHovered, setProfileHovered] = useState(false);
   const [isBubbleChatIconHovered, setBubbleChatIconHovered] = useState(false);
@@ -95,7 +97,10 @@ const Tenants = () => {
             </p>
           </div>
         </div>
-        <div className="divisionButtonContainer">
+        <div
+          className="divisionButtonContainer"
+          onClick={() => navigate("/tenants/tenant-chat")}
+        >
           <div className="d-flex align-items-center justify-content-center w-100">
             <p className="pOrderMobile m-2">Chat With The Manager</p>
           </div>

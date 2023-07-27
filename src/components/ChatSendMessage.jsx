@@ -16,6 +16,7 @@ const ChatSendMessage = ({ socket, chatRoomId }) => {
       roomChatId: chatRoomId,
       sender: "admin",
       message: text,
+      role: "ADMIN",
       createdAt: new Date().toISOString(),
       id: new Date().toISOString(), // temporary id for the message
     };

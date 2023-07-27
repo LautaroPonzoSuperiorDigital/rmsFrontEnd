@@ -30,16 +30,11 @@ function App() {
             <Route path="/" element={<PublicListings />} />
             <Route path="/application" element={<ApplicationModal />} />
             <Route path="/tenants" element={<Tenants />} />
-            <Route path="/tenants" element={<Tenants />} />
             <Route
               path="/tenants/tenant-profile"
               element={<TenantsProfile />}
             />
             <Route path="/tenants/tenant-chat" element={<TenantChatRoom />} />
-            <Route
-              path="/tenants/tenant-profile"
-              element={<TenantsProfile />}
-            />
           </Routes>
         </AppProvider>
       </ImageProvider>
