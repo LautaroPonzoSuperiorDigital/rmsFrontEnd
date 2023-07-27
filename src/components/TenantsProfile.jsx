@@ -1,6 +1,7 @@
 import TenantNavBar from "./TenantNavBar";
 import "../styles/Responsive/tenantsMobile.css";
 import logOut from "./../assets/img/logOutTentant.svg";
+import { useAuth } from "../hooks/useAuth";
 
 const inputStyle = {
   border: "none",
@@ -10,9 +11,11 @@ const inputStyle = {
 };
 
 const TenantsProfile = () => {
+  const { user } = useAuth()
+
   return (
     <div className="containerTicketRepair p-2">
-      <TenantNavBar title="EDIT PAYMENT METHOD" redirect="/tenants" />
+      <TenantNavBar title="Profile" redirect="/tenants" />
       <form className="d-flex flex-column h-100 justify-content-between w-100  ">
         <div>
           <div className="form-group d-flex justify-content-between align-items-center">
@@ -26,7 +29,7 @@ const TenantsProfile = () => {
               className="form-control  w-75 border-bottom"
               id="legalName"
               name="legalName"
-              placeholder="Legal Name"
+              placeholder={user.name}
               style={inputStyle}
               required
             />
@@ -42,7 +45,7 @@ const TenantsProfile = () => {
               className="form-control  w-75 border-bottom"
               id="email"
               name="email"
-              placeholder="Email"
+              placeholder={user.email}
               style={inputStyle}
               required
             />
@@ -74,7 +77,7 @@ const TenantsProfile = () => {
               className="form-control  w-75 border-bottom"
               id="phone"
               name="phone"
-              placeholder="Phone"
+              placeholder={user.phoneNumber}
               style={inputStyle}
               required
             />

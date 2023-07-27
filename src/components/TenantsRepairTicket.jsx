@@ -4,6 +4,7 @@ import CheckBoxLog from "./checkBox";
 import { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { api } from "../services/api";
 const TenantsRepairTicket = ({ onCloseModal }) => {
   const [formData, setFormData] = useState({});
   const [checked, setChecked] = useState(false);
@@ -21,10 +22,7 @@ const TenantsRepairTicket = ({ onCloseModal }) => {
     };
     console.log(updatedFormData);
     try {
-      const response = await axios.post(
-        "http://localhost:3000/tenant/ticket-repair",
-        updatedFormData
-      );
+      const response = await api.post("/tenant/ticket-repair", updatedFormData);
       console.log(response);
       setMessage("Your ticket has been submitted");
       setChecked(false);

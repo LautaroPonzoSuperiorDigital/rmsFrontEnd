@@ -11,8 +11,13 @@ import BubbleChatIconHover from "../assets/img/BubbleChatIconHover.svg";
 import PaymentMethod from "./TenantPaymentMethod";
 import TenantsRepairTicket from "./TenantsRepairTicket";
 import TenantComplaintTicket from "./TenantComplaintTicket";
+import TenantDocuments from "./TenantDocuments";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Tenants = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   /* Hovers */
   const [isProfileHovered, setProfileHovered] = useState(false);
   const [isBubbleChatIconHovered, setBubbleChatIconHovered] = useState(false);
@@ -23,8 +28,9 @@ const Tenants = () => {
   const [isPaymentMethodOpen, setPaymentMethodOpen] = useState(false);
   const [isModalTicketRepair, setModalTicketRepair] = useState(false);
   const [isModalTicketComplaint, setModalTicketComplaint] = useState(false);
-
+  const [isModalDocuments, setModalDocuments] = useState(false);
   /* Screens */
+
   /* Functions */
   const handleCloseModal = () => {
     setPaymentMethodOpen(false);
@@ -34,6 +40,9 @@ const Tenants = () => {
   };
   const handleCloseTicketComplaint = () => {
     setModalTicketComplaint(false);
+  };
+  const handleCloseDocuments = () => {
+    setModalDocuments(false);
   };
   /* Functions */
   return (
@@ -47,8 +56,17 @@ const Tenants = () => {
       {isModalTicketComplaint && (
         <TenantComplaintTicket onCloseModal={handleCloseTicketComplaint} />
       )}
+      {user.approvalStatus === "Pending" ? (
+        <TenantDocuments />
+      ) : (
+        isModalDocuments && (
+          <TenantDocuments onCloseModal={handleCloseDocuments} />
+        )
+      )}
       <div className="d-flex align-items-center justify-content-between profileBarMobile">
-        <h1>CONTACT US</h1>
+        <h1>
+          {user.approvalStatus === "Pending" ? "Applicant" : "CONTACT US"}
+        </h1>
         <button>
           <img
             src={isProfileHovered ? ProfileHover : Profile}
@@ -77,7 +95,10 @@ const Tenants = () => {
             </p>
           </div>
         </div>
-        <div className="divisionButtonContainer">
+        <div
+          className="divisionButtonContainer"
+          onClick={() => navigate("/tenants/tenant-chat")}
+        >
           <div className="d-flex align-items-center justify-content-center w-100">
             <p className="pOrderMobile m-2">Chat With The Manager</p>
           </div>
@@ -101,6 +122,7 @@ const Tenants = () => {
             className="DocumentIcon"
             onMouseEnter={() => setDocumentIconHovered(true)}
             onMouseLeave={() => setDocumentIconHovered(false)}
+            onClick={() => setModalDocuments(true)}
           />
           <p>Documents</p>
         </button>

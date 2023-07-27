@@ -14,7 +14,6 @@ import DeleteIconHover from "../assets/img/deleteIconHover.svg";
 import Pagination from "./paginations";
 import AddListings from "./addListing";
 import EditModalListings from "./modals/modalListing";
-import backendPort from "../config";
 
 const ListingsAdmin = () => {
   const [listing, setListing] = useState([]);
@@ -80,7 +79,7 @@ const ListingsAdmin = () => {
 
   useEffect(() => {
     axios
-      .get("https://api.certifymyrent.com/listing")
+    .get(`https://api.certifymyrent.com/listing`)
       .then((response) => {
         const modifiedListings = response.data.map((item) => {
           const encodedKey = item.key.replace(/\\/g, "%5C");
