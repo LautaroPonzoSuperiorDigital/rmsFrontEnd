@@ -4,7 +4,6 @@ import Nav from "./nav";
 import AdminChatRoomMessages from "./AdminChatRoomMessages";
 import ChatSendMessage from "./ChatSendMessage";
 import { socket } from "./socketManajer/socket";
-import axios from "axios";
 import { api } from "../services/api";
 
 const chatRoomStyle = {
