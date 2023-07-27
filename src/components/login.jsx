@@ -17,21 +17,18 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const navigateUser = useCallback(
-    (userRole) => {
-      switch (userRole) {
-        case "ADMIN":
-          navigate("/listingsAdmin");
-          break;
-        case "TENANT":
-          navigate("/tenants");
-          break;
-        default:
-          break;
-      }
-    },
-    [navigate]
-  );
+  const navigateUser = useCallback((userRole) => {
+    switch (userRole) {
+      case 'ADMIN':
+        navigate('/admin/listings')
+        break
+      case 'TENANT':
+        navigate('/tenants')
+        break
+      default:
+        break
+    }
+  }, [navigate])
 
   const handleLogin = async () => {
     try {

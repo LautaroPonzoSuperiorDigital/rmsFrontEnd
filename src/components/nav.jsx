@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/img/Logo.svg";
 import Logout from "../assets/img/Logout.svg";
@@ -8,14 +8,14 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "../styles/nav.css";
 
 const Nav = () => {
-  const location = useLocation();
   const navigate = useNavigate();
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white">
       <div className="container-fluid">
         <div
           className="navbar-brand"
-          onClick={() => navigate("/listingsAdmin")}
+          onClick={() => navigate("/admin/listings")}
         >
           <img className="logoNav" src={Logo} alt="Logo" />
         </div>
@@ -25,7 +25,7 @@ const Nav = () => {
             <li className="nav-item">
               <NavLink
                 className="nav-link custom-item"
-                to="/listingsAdmin"
+                to="/admin/listings"
                 activeClassName="active"
               >
                 LISTINGS
@@ -34,7 +34,7 @@ const Nav = () => {
             <li className="nav-item">
               <NavLink
                 className="nav-link custom-item"
-                to="/tenantsAdmin"
+                to="/admin/tenants"
                 activeClassName="active"
               >
                 TENANTS
@@ -43,7 +43,7 @@ const Nav = () => {
             <li className="nav-item">
               <NavLink
                 className="nav-link custom-item"
-                to="/applicantsAdmin"
+                to="/admin/applicants"
                 activeClassName="active"
               >
                 APPLICANTS
@@ -52,7 +52,7 @@ const Nav = () => {
             <li className="nav-item">
               <NavLink
                 className="nav-link custom-item"
-                to="/documentsAdmin"
+                to="/admin/documents"
                 activeClassName="active"
               >
                 DOCUMENTS
@@ -61,7 +61,7 @@ const Nav = () => {
             <li className="nav-item">
               <NavLink
                 className="nav-link custom-item"
-                to="/subAdminsAdmin"
+                to="/admin/sub-admins"
                 activeClassName="active"
               >
                 SUB ADMINS
@@ -70,7 +70,7 @@ const Nav = () => {
             <li className="nav-item">
               <NavLink
                 className="nav-link chat"
-                to="/chatsAdmin"
+                to="/admin/chats"
                 activeClassName="active"
               >
                 CHATS

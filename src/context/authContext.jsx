@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { createContext, useCallback, useEffect, useMemo, useState } from "react"
-import { useNavigate } from "react-router-dom"
 
 import { api } from "../services/api"
 
@@ -11,8 +10,6 @@ export const AuthContext = createContext(undefined)
 export function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState(null)
-
-  const navigate = useNavigate()
 
   const onSignedIn = useCallback(({ loggedUser, accessToken }) => {
     setUser(loggedUser)
@@ -25,14 +22,14 @@ export function AuthProvider({ children }) {
         const { data } = await api.get('/auth/local/session')
         setUser(data)
       } catch (err) {
-        navigate('/login')
+        setUser(null)
       }
 
       setIsLoading(false)
     }
 
     loadUserSession()
-  }, [navigate])
+  }, [])
 
   const value = useMemo(
     () => ({
