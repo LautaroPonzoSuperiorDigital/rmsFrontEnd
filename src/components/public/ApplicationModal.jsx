@@ -6,6 +6,7 @@ import img1 from "../../assets/img/1.jpg";
 import axios from "axios";
 import ToggleYes from "../../assets/img/ToggleYes.svg";
 import ToggleNo from "../../assets/img/ToggleNo.svg";
+import { api } from "../../services/api";
 
 const ApplicationModal = ({ selectedImage, onClose, id }) => {
   const [activeSection, setActiveSection] = useState("registration");
@@ -55,9 +56,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://api.certifymyrent.com/listing`
-        );
+        const response = await api.get('/listing')
         const listingsWithId = response.data.map((listing) => ({
           ...listing,
         }));

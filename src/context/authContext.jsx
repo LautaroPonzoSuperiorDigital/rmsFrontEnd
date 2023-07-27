@@ -32,7 +32,7 @@ export function AuthProvider({ children }) {
     }
 
     loadUserSession()
-  }, [])
+  }, [navigate])
 
   const value = useMemo(
     () => ({
