@@ -12,7 +12,7 @@ import Tenants from "./components/tenants";
 import { ImageProvider } from "./context/imageContext";
 import TenantsProfile from "./components/TenantsProfile";
 import { AuthProvider } from "./context/authContext";
-
+import TenantChatRoom from "./components/TenantChatRoom";
 function App() {
   return (
     <BrowserRouter>
@@ -33,6 +33,7 @@ function App() {
               path="/tenants/tenant-profile"
               element={<TenantsProfile />}
             />
+            <Route path="/tenants/tenant-chat" element={<TenantChatRoom />} />
           </Routes>
         </AuthProvider>
       </ImageProvider>
