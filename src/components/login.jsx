@@ -1,50 +1,48 @@
-import { useContext, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
 import Logo from "../assets/img/Logo.svg";
+import { useAuth } from "../hooks/useAuth";
+import { api } from "../services/api";
+
 import "../app.css";
 import "../styles/login.css";
-import Swal from "sweetalert2";
-import axios from "axios";
-import { AppContext } from "../context/userContext";
 
 const Login = () => {
-  const { setCurrentUser, currentUser } = useContext(AppContext);
-  const navigate = useNavigate();
-  const [isLoggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+
+  const { isAuthenticated, user, onSignedIn } = useAuth();
+
+  const navigate = useNavigate();
+
+  const navigateUser = useCallback(
+    (userRole) => {
+      switch (userRole) {
+        case "ADMIN":
+          navigate("/listingsAdmin");
+          break;
+        case "TENANT":
+          navigate("/tenants");
+          break;
+        default:
+          break;
+      }
+    },
+    [navigate]
+  );
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        `https://api.certifymyrent.com/auth/local/signin`,
-        {
-          email,
-          password,
-        }
-      );
+      const { data } = await api.post("/auth/local/signin", {
+        email,
+        password,
+      });
 
-      if (response.status === 200) {
-        console.log(response.data);
-        const { role } = response.data;
-        setCurrentUser(response.data);
+      onSignedIn({ loggedUser: data.user, accessToken: data.accessToken });
 
-        if (role === "ADMIN") {
-          setLoggedIn(true);
-          navigate("/listingsAdmin");
-        }
-
-        if (role === "TENANT") {
-          setLoggedIn(true);
-          navigate("/tenants");
-        }
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Invalid Credentials",
-        });
-      }
+      navigateUser(data.user.role);
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -54,10 +52,12 @@ const Login = () => {
     }
   };
 
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    return regex.test(email);
-  };
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigateUser(user.role);
+    }
+  }, [isAuthenticated, user, navigateUser]);
+
   return (
     <div className="loginBgContainer">
       <div className="LoginContainer">

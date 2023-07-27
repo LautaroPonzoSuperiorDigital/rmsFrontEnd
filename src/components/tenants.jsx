@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import "../styles/Responsive/tenantsMobile.css";
 import Profile from "../assets/img/Profile.svg";
 import ProfileHover from "../assets/img/ProfileHover.svg";
@@ -11,13 +11,11 @@ import BubbleChatIconHover from "../assets/img/BubbleChatIconHover.svg";
 import PaymentMethod from "./TenantPaymentMethod";
 import TenantsRepairTicket from "./TenantsRepairTicket";
 import TenantComplaintTicket from "./TenantComplaintTicket";
-import { AppContext } from "../context/userContext";
 import TenantDocuments from "./TenantDocuments";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const Tenants = () => {
-  const { currentUser } = useContext(AppContext);
-  const navigate = useNavigate();
+  const { user } = useAuth();
   /* Hovers */
   const [isProfileHovered, setProfileHovered] = useState(false);
   const [isBubbleChatIconHovered, setBubbleChatIconHovered] = useState(false);
@@ -56,7 +54,7 @@ const Tenants = () => {
       {isModalTicketComplaint && (
         <TenantComplaintTicket onCloseModal={handleCloseTicketComplaint} />
       )}
-      {currentUser.approvalStatus === "Pending" ? (
+      {user.approvalStatus === "Pending" ? (
         <TenantDocuments />
       ) : (
         isModalDocuments && (
@@ -65,9 +63,7 @@ const Tenants = () => {
       )}
       <div className="d-flex align-items-center justify-content-between profileBarMobile">
         <h1>
-          {currentUser.approvalStatus === "Pending"
-            ? "Applicant"
-            : "CONTACT US"}
+          {user.approvalStatus === "Pending" ? "Applicant" : "CONTACT US"}
         </h1>
         <button>
           <img

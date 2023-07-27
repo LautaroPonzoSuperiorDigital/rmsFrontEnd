@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import TenantNavBar from "./TenantNavBar";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { api } from "../services/api";
 
 const TenantComplaintTicket = ({ onCloseModal }) => {
   const [formData, setFormData] = useState({});
@@ -15,10 +16,8 @@ const TenantComplaintTicket = ({ onCloseModal }) => {
     const updateFormData = { ...formData, tenantId: 1, listingId: 1 };
     console.log(updateFormData);
     try {
-      const response = await axios.post(
-        "http://localhost:3000/tenant/ticket-complaint",
-        updateFormData
-      );
+      const response = await api.post('/tenant/ticket-complaint', updateFormData)
+
       console.log(response);
       formRef.current.reset();
       setMessage("Your complain has been submitted");

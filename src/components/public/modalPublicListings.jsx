@@ -4,9 +4,9 @@ import "../../styles/publIcListings/publicListings.css";
 import camera from "../../assets/img/camera.svg";
 import publicListingsData from "./publicListingsData";
 import ApplicationModal from "./ApplicationModal";
-import backendPort from "../../config";
 import picture1 from "../../assets/img/picture.jpg";
 import axios from "axios";
+import { api } from "../../services/api";
 
 const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
   const [showModal, setShowModal] = useState(false);
@@ -44,9 +44,7 @@ const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://api.certifymyrent.com/listing`
-        );
+        const response = await api.get('/listing');
         const listingsWithId = response.data.map((listing) => ({
           ...listing,
           key: `https://rms-staging.s3.us-west-1.amazonaws.com/${listing.key.replace(/\\/g, "%5C")}`,

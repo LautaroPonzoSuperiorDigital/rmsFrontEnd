@@ -13,8 +13,8 @@ import picture4 from "../../assets/img/picture4.jpg";
 import picture5 from "../../assets/img/picture5.jpg";
 import picture6 from "../../assets/img/picture6.jpg";
 import ModalPublicListings from "./modalPublicListings";
-import backendPort from "../../config";
 import axios from "axios";
+import { api } from "../../services/api";
 
 const PublicListings = () => {
   const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);
@@ -69,9 +69,7 @@ const PublicListings = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://api.certifymyrent.com/listing`
-        );
+        const response = await api.get('/listing');
         const modifiedListings = response.data.map((item) => {
           const encodedKey = item.key.replace(/\\/g, "%5C");
           const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;

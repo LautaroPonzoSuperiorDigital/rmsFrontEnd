@@ -11,14 +11,13 @@ import TenantsAdmin from "./components/tenantsAdmin";
 import Tenants from "./components/tenants";
 import { ImageProvider } from "./context/imageContext";
 import TenantsProfile from "./components/TenantsProfile";
-import { AppProvider } from "./context/userContext";
+import { AuthProvider } from "./context/authContext";
 import TenantChatRoom from "./components/TenantChatRoom";
-
 function App() {
   return (
     <BrowserRouter>
       <ImageProvider>
-        <AppProvider>
+        <AuthProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/listingsAdmin" element={<ListingsAdmin />} />
@@ -36,7 +35,7 @@ function App() {
             />
             <Route path="/tenants/tenant-chat" element={<TenantChatRoom />} />
           </Routes>
-        </AppProvider>
+        </AuthProvider>
       </ImageProvider>
     </BrowserRouter>
   );

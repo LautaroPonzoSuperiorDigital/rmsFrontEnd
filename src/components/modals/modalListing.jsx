@@ -6,7 +6,6 @@ import bg from "../../assets/img/BG.svg";
 import closeListing from "../../assets/img/close.svg";
 import closeHover from "../../assets/img/closeHover.svg";
 import ModalListingsImgs from "./modalListingsImgs";
-import backendPort from "../../config";
 import axios from "axios";
 
 const EditModalListings = ({ renderSectionContent }) => {
