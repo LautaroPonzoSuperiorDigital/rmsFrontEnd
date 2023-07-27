@@ -44,6 +44,7 @@ const Login = () => {
 
       navigateUser(data.user.role);
     } catch (error) {
+      console.log(error);
       Swal.fire({
         icon: "error",
         title: "Error",

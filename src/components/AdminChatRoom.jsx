@@ -26,7 +26,7 @@ const AdminChatRoom = ({
   socket,
 }) => {
   const [notification, setNotification] = useState(true);
-  const timeStamp = chatRooms.Chats[chatRooms.Chats.length - 1].createdAt;
+  const timeStamp = chatRooms.Chats[chatRooms.Chats.length - 1]?.createdAt;
   const formattedTimeStamp = new Date(timeStamp).toLocaleString();
   const foramttedFilterTimeStamp = new Date(
     filterMessages[filterMessages.length - 1]?.createdAt
@@ -39,15 +39,12 @@ const AdminChatRoom = ({
     filterMessages[filterMessages.length - 1]?.role !== "ADMIN" &&
     !filterMessages[filterMessages.length - 1]?.isRead;
 
-  console.log("here", chatRooms.Chats[chatRooms.Chats.length - 1].createdAt);
-
   useEffect(() => {
     // eslint-disable-next-line react/prop-types
     socket.emit("event_join", `${chatRooms.listingId}`);
     // eslint-disable-next-line react/prop-types
     socket.on("notification", (data) => {
       setNotification(data);
-      console.log("notification", data);
     });
 
     return () => {
@@ -87,13 +84,19 @@ const AdminChatRoom = ({
               )}
           </div>
 
-          {filterMessages && filterMessages.length > 0 ? (
+          {filterMessages &&
+          filterMessages.length > 0 &&
+          setTargetChatRoomId === chatRooms.listingId ? (
             <p
               style={
                 filterNewnotification ? newNotificationStyle : notificationStyle
               }
             >
-              {filterMessages[filterMessages.length - 1].message.slice(0, 10)}
+              {filterMessages
+                .filter(
+                  (message) => message.roomChatId === chatRooms.listingId
+                )[0]
+                ?.message.slice(0, 10)}
             </p>
           ) : (
             <p

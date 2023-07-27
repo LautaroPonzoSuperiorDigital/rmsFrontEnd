@@ -5,6 +5,7 @@ import AdminChatRoomMessages from "./AdminChatRoomMessages";
 import ChatSendMessage from "./ChatSendMessage";
 import { socket } from "./socketManajer/socket";
 import axios from "axios";
+import { api } from "../services/api";
 
 const chatRoomStyle = {
   width: "100%",
@@ -55,8 +56,7 @@ const Chats = () => {
   //filter by chat room id
   useEffect(() => {
     //filter by chat room id
-    console.log("message", messages);
-    console.log("targetChatRoomId", targetChatRoomId);
+
     const filterMessage = messages.filter(
       (message) => message.roomChatId === targetChatRoomId
     );
@@ -66,14 +66,11 @@ const Chats = () => {
   useEffect(() => {
     const getChatRooms = async () => {
       try {
-        const response = await axios.get(
-          `https://api.certifymyrent.com/chat/chat-rooms`
-        );
+        const { data } = await api.get("/chat/chat-rooms");
 
-        const chatRoomsMessage = response.data.map(
-          (chatRoom) => chatRoom.Chats
-        );
-        setChatRooms(response.data);
+        const chatRoomsMessage = data.map((chatRoom) => chatRoom.Chats);
+
+        setChatRooms(data);
         setMessages(chatRoomsMessage.flat());
       } catch (err) {
         console.log(err);

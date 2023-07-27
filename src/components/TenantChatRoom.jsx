@@ -9,7 +9,8 @@ import {
 import sendMessage from "../assets/img/send-email.svg";
 import io from "socket.io-client";
 import axios from "axios";
-import { AppContext } from "../context/userContext";
+import { useAuth } from "../hooks/useAuth";
+import { api } from "../services/api";
 
 const messageInfo = {
   fontSize: "18px",
@@ -29,8 +30,8 @@ const messageList = {
 };
 
 const TenantChatRoom = () => {
-  const { currentUser } = useContext(AppContext);
-  console.log(currentUser);
+  const { user } = useAuth();
+
   const socket = useMemo(() => io.connect("http://localhost:81"), []);
   const ulRef = useRef(null);
   const fakeCrentials = {
@@ -51,9 +52,9 @@ const TenantChatRoom = () => {
     e.preventDefault();
     const message = {
       roomChatId: fakeCrentials.listingId,
-      sender: currentUser.name,
+      sender: user.name,
       message: messages,
-      role: currentUser.role,
+      role: user.role,
       createdAt: new Date().toISOString(),
       id: new Date().toISOString(), // temporary id for the message
     };
@@ -79,13 +80,11 @@ const TenantChatRoom = () => {
   useEffect(() => {
     const getChatMessages = async () => {
       try {
-        const messages = await axios.get(
-          "http://localhost:3000/chat/chat-room-by-id",
-          {
-            params: { id: fakeCrentials.listingId },
-          }
-        );
-        setIncoming(messages.data.Chats);
+        const { data } = await api.get("chat/chat-room-by-id", {
+          params: { id: fakeCrentials.listingId },
+        });
+        console.log(data);
+        setIncoming(data.Chats);
       } catch (err) {
         console.log(err);
       }
