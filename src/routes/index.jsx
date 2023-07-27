@@ -8,8 +8,6 @@ import { useAuth } from "../hooks/useAuth";
 export default function AppRoutes() {
   const { user } = useAuth()
 
-  console.log('logged in: ', user)
-
   if (user?.role === 'ADMIN') {
     return (
       <RouterProvider router={adminRouter} />

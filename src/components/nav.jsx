@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/img/Logo.svg";
 import Logout from "../assets/img/Logout.svg";
@@ -8,8 +8,8 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "../styles/nav.css";
 
 const Nav = () => {
-  const location = useLocation();
   const navigate = useNavigate();
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white">
       <div className="container-fluid">
