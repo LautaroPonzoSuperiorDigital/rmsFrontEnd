@@ -67,7 +67,7 @@ const Chats = () => {
     const getChatRooms = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/chat/chat-rooms`
+          `https://api.certifymyrent.com/chat/chat-rooms`
         );
 
         const chatRoomsMessage = response.data.map(

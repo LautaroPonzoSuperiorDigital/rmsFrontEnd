@@ -18,7 +18,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/auth/local/signin`,
+        `https://api.certifymyrent.com/auth/local/signin`,
         {
           email,
           password,
