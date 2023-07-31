@@ -223,6 +223,7 @@ button {
 
 .tr-hover:hover {
     background-color: #19757223;
+    cursor:pointer;
 }
 
 
