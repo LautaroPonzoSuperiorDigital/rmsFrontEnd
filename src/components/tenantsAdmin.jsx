@@ -14,6 +14,7 @@ import CheckBoxLog from "./checkBox";
 import Search from "./search";
 import Pagination from "./paginations";
 import "../styles/modal.css";
+import TenantModal from "./modals/tenantsPopUp";
 
 const TenantsAdmin = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -39,6 +40,11 @@ const TenantsAdmin = () => {
     currentPage * PAGE_SIZE
   );
 
+  /* popUp */
+  const handleRowClick = (tenant) => {
+    setSelectedTenant(tenant);
+  };
+  /* popUp */
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -97,6 +103,13 @@ const TenantsAdmin = () => {
     <>
       <Nav />
       <div className="container-fluid">
+        {selectedTenant && (
+          <TenantModal
+            isOpen={true}
+            onClose={() => setSelectedTenant(null)}
+            tenant={selectedTenant}
+          />
+        )}
         <div className="d-flex w-100">
           <div className="container tenantsContainer">
             <div className="d-flex align-items-center justify-content-start">
@@ -161,7 +174,11 @@ const TenantsAdmin = () => {
                       return null;
                     }
                     return (
-                      <tr key={tenant.listings} className="tr-hover">
+                      <tr
+                        key={tenant.listings}
+                        className="tr-hover"
+                        onClick={() => handleRowClick(tenant)}
+                      >
                         <td>
                           <p className="p1 h">{tenant.name}</p>
                         </td>
