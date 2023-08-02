@@ -23,6 +23,8 @@ const TenantsAdmin = () => {
   const [showMissedPayment, setShowMissedPayment] = useState(false);
   const [selectedTenant, setSelectedTenant] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedTenantId, setSelectedTenantId] = useState(null);
+  const [selectedField, setSelectedField] = useState(null);
 
   const PAGE_SIZE = 10;
   const totalTenants = tenants.length;
@@ -41,8 +43,11 @@ const TenantsAdmin = () => {
   );
 
   /* popUp */
-  const handleRowClick = (tenant) => {
-    setSelectedTenant(tenant);
+  const handleCellClick = (tenant, field, event) => {
+    if (!event.currentTarget.classList.contains("buttonsNoMod")) {
+      setSelectedTenant(tenant);
+      setSelectedField(field);
+    }
   };
   /* popUp */
   const handlePageChange = (pageNumber) => {
@@ -107,7 +112,8 @@ const TenantsAdmin = () => {
           <TenantModal
             isOpen={true}
             onClose={() => setSelectedTenant(null)}
-            tenant={selectedTenant}
+            selectedTenant={selectedTenant}
+            selectedField={selectedField}
           />
         )}
         <div className="d-flex w-100">
@@ -174,18 +180,26 @@ const TenantsAdmin = () => {
                       return null;
                     }
                     return (
-                      <tr
-                        key={tenant.listings}
-                        className="tr-hover"
-                        onClick={() => handleRowClick(tenant)}
-                      >
-                        <td>
+                      <tr key={tenant.id} className="tr-hover">
+                        <td
+                          onClick={(event) =>
+                            handleCellClick(tenant, "name", event)
+                          }
+                        >
                           <p className="p1 h">{tenant.name}</p>
                         </td>
-                        <td>
+                        <td
+                          onClick={(event) =>
+                            handleCellClick(tenant, "listings", event)
+                          }
+                        >
                           <p className="p1 h">{tenant.listings}</p>
                         </td>
-                        <td>
+                        <td
+                          onClick={(event) =>
+                            handleCellClick(tenant, "status", event)
+                          }
+                        >
                           <p
                             className={`p1 h ${
                               tenant.status.includes("Missed Payment")
@@ -196,16 +210,32 @@ const TenantsAdmin = () => {
                             {tenant.status}
                           </p>
                         </td>
-                        <td>
+                        <td
+                          onClick={(event) =>
+                            handleCellClick(tenant, "status", event)
+                          }
+                        >
                           <p className="p1 h">{tenant.email}</p>
                         </td>
-                        <td>
+                        <td
+                          onClick={(event) =>
+                            handleCellClick(tenant, "status", event)
+                          }
+                        >
                           <p className="p1 h">{tenant.phone}</p>
                         </td>
-                        <td>
+                        <td
+                          onClick={(event) =>
+                            handleCellClick(tenant, "status", event)
+                          }
+                        >
                           <p className="p1 h">{tenant.contract}</p>
                         </td>
-                        <td>
+                        <td
+                          onClick={(event) =>
+                            handleCellClick(tenant, "status", event)
+                          }
+                        >
                           {tenant.backgroundCheck === "check" ? (
                             <img
                               className="checkMark"
@@ -214,7 +244,7 @@ const TenantsAdmin = () => {
                             />
                           ) : null}
                         </td>
-                        <td>
+                        <td className="buttonsNoMod">
                           <EditButton
                             defaultImage={<img src={Edit} alt="Edit" />}
                             hoverImage={<img src={EditHover} alt="EditHover" />}
@@ -248,12 +278,14 @@ const TenantsAdmin = () => {
           onClose={handleCloseEditModal}
         />
       )}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        totalEntries={totalTenants}
-        onPageChange={handlePageChange}
-      />
+      {!isEditOpen && !selectedTenant && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalEntries={totalTenants}
+          onPageChange={handlePageChange}
+        />
+      )}
     </>
   );
 };

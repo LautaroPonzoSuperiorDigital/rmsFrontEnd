@@ -230,30 +230,67 @@
 }
 
 .renderPopUpSection {
-    border: 1px solid red;
     height: 92%;
 }
 
 /* NavegableSect */
 /* RenderSect */
 .renderBoxsOrder {
-    flex-direction: column;
+    height: 100%;
+}
+
+.boxInfoOrderCreate {
+
+    width: 25%;
+    height: 100%;
 }
 
 .boxInfo {
-    border: 1px solid #00000026;
-    width: 347px;
+    width: 75%;
     height: 84px;
-    margin-top: 3rem;
-    margin-left: 3%;
+    margin-top: 6%;
+    margin-left: 9%;
+    flex-direction: row;
 }
 
 .boxInfoOrder {
-    flex-direction: column;
+    border: 1px solid #00000026;
+    width: 100%;
 }
 
 .boxInfoOrder p {
     color: black;
+    font-size: 1vw;
+    white-space: noWrap;
+}
+
+.boxInfoOrder span {
+    color: #000000A5;
+    margin-left: 1rem;
+    white-space: noWrap;
+}
+
+.firstBoxDoc {
+    width: 50%;
+}
+
+.secondBoxDoc {
+    width: 45%;
+    height: 100%;
+}
+
+.imgBtnDocs {
+    height: 19%;
+    margin-top: 10%;
+    margin-left: 6%;
+}
+
+.delBox {
+    height: 20%;
+}
+
+.imgBtnDocs:hover {
+    cursor: pointer;
 }
 
 /* RenderSect */

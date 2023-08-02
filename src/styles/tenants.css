@@ -179,6 +179,7 @@ button {
 .imageContainer {
     display: inline-block;
     vertical-align: middle;
+    z-index: 100;
 }
 
 .confirmationBox {

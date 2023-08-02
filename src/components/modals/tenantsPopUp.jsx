@@ -9,7 +9,8 @@ import Delete from "../../assets/img/deletePopUp.svg";
 import DeleteIconHover from "../../assets/img/deletePopUpHover.svg";
 import AddDocs from "./addDocumentsModal";
 
-const TenantModal = ({ tenant, onClose }) => {
+const TenantModal = ({ selectedTenant, onClose }) => {
+  const [hoverStates, setHoverStates] = useState({});
   const [isHovered, setIsHovered] = useState(false);
   const [isHoveredDelete, setIsHoveredDelete] = useState(false);
   const [isHoveredEdit, setIsHoveredEdit] = useState(false);
@@ -29,31 +30,345 @@ const TenantModal = ({ tenant, onClose }) => {
       case "DOCUMENTS":
         return (
           <div className="renderBoxsOrder d-flex align-items-start justify-content-start ">
-            <div className="boxInfo d-flex">
-              <div className="boxInfoOrder">
-                <p>Contract</p>
+            <div className="boxInfoOrderCreate">
+              <div className="boxInfo d-flex">
+                <div className="boxInfoOrder d-flex">
+                  <div className="firstBoxDoc">
+                    <p className="ms-3 mt-2 mb-0">Contract</p>
+                    <span>MAR 7, 2022</span>
+                  </div>
+                  <div className="secondBoxDoc d-flex justify-content-end">
+                    {isHoveredEdit ? (
+                      <img
+                        className="imgBtnDocs"
+                        src={EditHover}
+                        alt="Edit"
+                        onMouseLeave={() => setIsHoveredEdit(false)}
+                      />
+                    ) : (
+                      <img
+                        className="imgBtnDocs"
+                        src={Edit}
+                        alt="EditHover"
+                        onMouseEnter={() => setIsHoveredEdit(true)}
+                      />
+                    )}
+                    {isHoveredDelete ? (
+                      <img
+                        src={DeleteIconHover}
+                        alt="DeleteIconHover"
+                        className="imgBtnDocs delBox"
+                        onMouseLeave={() => setIsHoveredDelete(false)}
+                      />
+                    ) : (
+                      <img
+                        src={Delete}
+                        alt="Delete"
+                        className="imgBtnDocs delBox"
+                        onMouseEnter={() => setIsHoveredDelete(true)}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="boxInfo d-flex">
+                <div className="boxInfoOrder d-flex">
+                  <div className="firstBoxDoc">
+                    <p className="ms-3 mt-2 mb-0">Driver License</p>
+                    <span>MAR 7, 2022</span>
+                  </div>
+                  <div className="secondBoxDoc d-flex justify-content-end">
+                    {isHoveredEdit ? (
+                      <img
+                        className="imgBtnDocs"
+                        src={EditHover}
+                        alt="Edit"
+                        onMouseLeave={() => setIsHoveredEdit(false)}
+                      />
+                    ) : (
+                      <img
+                        className="imgBtnDocs"
+                        src={Edit}
+                        alt="EditHover"
+                        onMouseEnter={() => setIsHoveredEdit(true)}
+                      />
+                    )}
+                    {isHoveredDelete ? (
+                      <img
+                        src={DeleteIconHover}
+                        alt="DeleteIconHover"
+                        className="imgBtnDocs delBox"
+                        onMouseLeave={() => setIsHoveredDelete(false)}
+                      />
+                    ) : (
+                      <img
+                        src={Delete}
+                        alt="Delete"
+                        className="imgBtnDocs delBox"
+                        onMouseEnter={() => setIsHoveredDelete(true)}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="boxInfo d-flex">
+                <div className="boxInfoOrder d-flex">
+                  <div className="firstBoxDoc">
+                    <p className="ms-3 mt-2 mb-0">12 Rt Form</p>
+                    <span>MAR 7, 2022</span>
+                  </div>
+                  <div className="secondBoxDoc d-flex justify-content-end">
+                    {isHoveredEdit ? (
+                      <img
+                        className="imgBtnDocs"
+                        src={EditHover}
+                        alt="Edit"
+                        onMouseLeave={() => setIsHoveredEdit(false)}
+                      />
+                    ) : (
+                      <img
+                        className="imgBtnDocs"
+                        src={Edit}
+                        alt="EditHover"
+                        onMouseEnter={() => setIsHoveredEdit(true)}
+                      />
+                    )}
+                    {isHoveredDelete ? (
+                      <img
+                        src={DeleteIconHover}
+                        alt="DeleteIconHover"
+                        className="imgBtnDocs delBox"
+                        onMouseLeave={() => setIsHoveredDelete(false)}
+                      />
+                    ) : (
+                      <img
+                        src={Delete}
+                        alt="Delete"
+                        className="imgBtnDocs delBox"
+                        onMouseEnter={() => setIsHoveredDelete(true)}
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="boxInfo"></div>
-            <div className="boxInfo"></div>
           </div>
         );
       case "PAYMENT HISTORY":
-        return (
-          <div>
-            {/* Add your content for the "PAYMENT HISTORY" section here */}
-          </div>
-        );
+        return <div></div>;
       case "INSPECTION HISTORY":
         return (
-          <div>
-            {/* Add your content for the "INSPECTION HISTORY" section here */}
+          <div className="renderBoxsOrder d-flex align-items-start justify-content-start ">
+            <div className="boxInfoOrderCreate">
+              <div className="boxInfo d-flex">
+                <div className="boxInfoOrder d-flex">
+                  <div className="firstBoxDoc">
+                    <p className="ms-3 mt-2 mb-0">Regular Inspection</p>
+                    <span>JAN 12, 2023</span>
+                  </div>
+                  <div className="secondBoxDoc d-flex justify-content-end">
+                    {isHoveredEdit ? (
+                      <img
+                        className="imgBtnDocs"
+                        src={EditHover}
+                        alt="Edit"
+                        onMouseLeave={() => setIsHoveredEdit(false)}
+                      />
+                    ) : (
+                      <img
+                        className="imgBtnDocs"
+                        src={Edit}
+                        alt="EditHover"
+                        onMouseEnter={() => setIsHoveredEdit(true)}
+                      />
+                    )}
+                    {isHoveredDelete ? (
+                      <img
+                        src={DeleteIconHover}
+                        alt="DeleteIconHover"
+                        className="imgBtnDocs delBox"
+                        onMouseLeave={() => setIsHoveredDelete(false)}
+                      />
+                    ) : (
+                      <img
+                        src={Delete}
+                        alt="Delete"
+                        className="imgBtnDocs delBox"
+                        onMouseEnter={() => setIsHoveredDelete(true)}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="boxInfo d-flex">
+                <div className="boxInfoOrder d-flex">
+                  <div className="firstBoxDoc">
+                    <p className="ms-3 mt-2 mb-0">Preliminary Inspection</p>
+                    <span>MAY 12, 2022</span>
+                  </div>
+                  <div className="secondBoxDoc d-flex justify-content-end">
+                    {isHoveredEdit ? (
+                      <img
+                        className="imgBtnDocs"
+                        src={EditHover}
+                        alt="Edit"
+                        onMouseLeave={() => setIsHoveredEdit(false)}
+                      />
+                    ) : (
+                      <img
+                        className="imgBtnDocs"
+                        src={Edit}
+                        alt="EditHover"
+                        onMouseEnter={() => setIsHoveredEdit(true)}
+                      />
+                    )}
+                    {isHoveredDelete ? (
+                      <img
+                        src={DeleteIconHover}
+                        alt="DeleteIconHover"
+                        className="imgBtnDocs delBox"
+                        onMouseLeave={() => setIsHoveredDelete(false)}
+                      />
+                    ) : (
+                      <img
+                        src={Delete}
+                        alt="Delete"
+                        className="imgBtnDocs delBox"
+                        onMouseEnter={() => setIsHoveredDelete(true)}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         );
       case "APPLICATION FORM":
         return (
-          <div>
-            {/* Add your content for the "APPLICATION FORM" section here */}
+          <div className="renderBoxsOrder d-flex align-items-start justify-content-start ">
+            <div className="boxInfoOrderCreate">
+              <div className="boxInfo d-flex">
+                <div className="boxInfoOrder d-flex">
+                  <div className="firstBoxDoc">
+                    <p className="ms-3 mt-2 mb-0">Regular Inspection</p>
+                    <span>JAN 12, 2023</span>
+                  </div>
+                  <div className="secondBoxDoc d-flex justify-content-end">
+                    {isHoveredEdit ? (
+                      <img
+                        className="imgBtnDocs"
+                        src={EditHover}
+                        alt="Edit"
+                        onMouseLeave={() => setIsHoveredEdit(false)}
+                      />
+                    ) : (
+                      <img
+                        className="imgBtnDocs"
+                        src={Edit}
+                        alt="EditHover"
+                        onMouseEnter={() => setIsHoveredEdit(true)}
+                      />
+                    )}
+                    {isHoveredDelete ? (
+                      <img
+                        src={DeleteIconHover}
+                        alt="DeleteIconHover"
+                        className="imgBtnDocs delBox"
+                        onMouseLeave={() => setIsHoveredDelete(false)}
+                      />
+                    ) : (
+                      <img
+                        src={Delete}
+                        alt="Delete"
+                        className="imgBtnDocs delBox"
+                        onMouseEnter={() => setIsHoveredDelete(true)}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="boxInfo d-flex">
+                <div className="boxInfoOrder d-flex">
+                  <div className="firstBoxDoc">
+                    <p className="ms-3 mt-2 mb-0"></p>
+                    <span>MAR 12, 2022</span>
+                  </div>
+                  <div className="secondBoxDoc d-flex justify-content-end">
+                    {isHoveredEdit ? (
+                      <img
+                        className="imgBtnDocs"
+                        src={EditHover}
+                        alt="Edit"
+                        onMouseLeave={() => setIsHoveredEdit(false)}
+                      />
+                    ) : (
+                      <img
+                        className="imgBtnDocs"
+                        src={Edit}
+                        alt="EditHover"
+                        onMouseEnter={() => setIsHoveredEdit(true)}
+                      />
+                    )}
+                    {isHoveredDelete ? (
+                      <img
+                        src={DeleteIconHover}
+                        alt="DeleteIconHover"
+                        className="imgBtnDocs delBox"
+                        onMouseLeave={() => setIsHoveredDelete(false)}
+                      />
+                    ) : (
+                      <img
+                        src={Delete}
+                        alt="Delete"
+                        className="imgBtnDocs delBox"
+                        onMouseEnter={() => setIsHoveredDelete(true)}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="boxInfo d-flex">
+                <div className="boxInfoOrder d-flex">
+                  <div className="firstBoxDoc">
+                    <p className="ms-3 mt-2 mb-0">12 Rt Form</p>
+                    <span>MAR 7, 2022</span>
+                  </div>
+                  <div className="secondBoxDoc d-flex justify-content-end">
+                    {isHoveredEdit ? (
+                      <img
+                        className="imgBtnDocs"
+                        src={EditHover}
+                        alt="Edit"
+                        onMouseLeave={() => setIsHoveredEdit(false)}
+                      />
+                    ) : (
+                      <img
+                        className="imgBtnDocs"
+                        src={Edit}
+                        alt="EditHover"
+                        onMouseEnter={() => setIsHoveredEdit(true)}
+                      />
+                    )}
+                    {isHoveredDelete ? (
+                      <img
+                        src={DeleteIconHover}
+                        alt="DeleteIconHover"
+                        className="imgBtnDocs delBox"
+                        onMouseLeave={() => setIsHoveredDelete(false)}
+                      />
+                    ) : (
+                      <img
+                        src={Delete}
+                        alt="Delete"
+                        className="imgBtnDocs delBox"
+                        onMouseEnter={() => setIsHoveredDelete(true)}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         );
       default:
@@ -84,7 +399,7 @@ const TenantModal = ({ tenant, onClose }) => {
           <div className="tenantInfo d-flex flex-column">
             <div className="popUpOrderFirstCol FullLName d-flex">
               <p>FULL LEGAL NAME</p>
-              <span>Maria Kramer</span>
+              <span>{selectedTenant.name}</span>
             </div>
             <div className="popUpOrderFirstCol DriverLicense d-flex">
               <p>DRIVER LICENSE # / STATE</p>
@@ -96,7 +411,7 @@ const TenantModal = ({ tenant, onClose }) => {
             </div>
             <div className="popUpOrderFirstCol pNo d-flex">
               <p>PHONE NO.</p>
-              <span>530-521-7450</span>
+              <span>{selectedTenant.phone}</span>
             </div>
             <div className="popUpOrderFirstCol SSImg d-flex">
               <p>SOCIAL SECURITY</p>
@@ -107,11 +422,11 @@ const TenantModal = ({ tenant, onClose }) => {
             </div>
             <div className="popUpOrderFirstCol emailpopUp d-flex">
               <p>EMAIL</p>
-              <span>mariakramer@gmail.com</span>
+              <span>{selectedTenant.email}</span>
             </div>
             <div className="popUpOrderFirstCol contractDatesPopUp d-flex">
               <p>CONTRACT DATES</p>
-              <span>Mar 12, 2022 - Mar 12, 2023</span>
+              <span>{selectedTenant.contract}</span>
             </div>
           </div>
           <div className="listingInfo d-flex">
