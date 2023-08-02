@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 
 import CheckMarkListing from "../../../assets/img/checkMark.svg"
 import Edit from "../../../assets/img/Edit.svg"
@@ -22,12 +22,24 @@ export default function AdminListings() {
   const [listings, setListings] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false)
-  const [showModal, setShowModal] = useState(false)
+  const [showCreateModal, setShowCreateModal] = useState(false)
   const [searchId, setSearchId] = useState("")
   const [searchResults, setSearchResults] = useState([])
   
   const totalListings = listings.length
   const totalPages = Math.ceil(totalListings / PAGE_SIZE)
+
+  const filteredListings = useMemo(() => {
+    if (searchId) {
+      return searchResults
+    }
+
+    if (showOnlyPublicListings) {
+      return listings.filter(listing => listing.isPublic)
+    }
+
+    return listings
+  }, [searchId, searchResults, listings, showOnlyPublicListings])
 
   const handleSearch = (searchValue) => {
     setSearchId(searchValue)
@@ -49,50 +61,34 @@ export default function AdminListings() {
   }
 
   const handleAddListing = () => {
-    // const newItem = {
-    //   id: totalListings + 1,
-    // }
-
-    // setListing((prevListing) => [...prevListing, newItem])
-    // setCurrentId((prevId) => prevId + 1)
-
-    setShowModal(true)
+    setShowCreateModal(true)
   }
 
   const handleModalClose = () => {
-    setShowModal(false)
+    setShowCreateModal(false)
   }
   
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber)
   }
 
-  const handleEdit = (index) => {
-    console.log("Edit listing:", index)
-  }
-
-  const deleteListing = (listingId) => {
-    const updatedListing = listings.filter(
-      (listing) => listing.id !== listingId
-    )
-    setListings(updatedListing)
+  const handleDeleteListing = async (listingId) => {
+    const shouldRemove = confirm('Are you sure you want to remove this listing? This action cannot be undone.')
     
+    if (!shouldRemove) {
+      return
+    }
 
-    setListings(updatedListing)
-    api
-      .delete(`/listing/${listingId}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to delete listing")
-        }
-        return response.data
-      })
-      .then((data) => {
-        console.log(data.message)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+    try {
+      await api.delete(`/listing/${listingId}`)
+
+      const updatedListing = listings.filter(
+        (listing) => listing.id !== listingId
+      )
+      setListings(updatedListing)
+    }catch(err) {
+      alert('Failed to delete listing')
+    }
   }
 
   const handleCheckBoxChange = () => {
@@ -100,30 +96,29 @@ export default function AdminListings() {
   }
 
   useEffect(() => {
-    api.get('/listing').then((response) => {
-      const modifiedListings = response.data.map((item) => {
-        const encodedKey = item.key?.replace(/\\/g, "%5C")
+    async function loadListings() {
+      try {
+        const { data } = await api.get('/listing')
 
-        if (encodedKey) {
-          const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`
-          return {
-            ...item,
-            key: imageUrl,
+        setListings(data.map(listing => {
+          if (!listing.key) {
+            return listing
           }
-        }
 
-        return item
-      })
-      setListings(modifiedListings)
-    })
-    .catch((error) => {
-      console.error("Error fetching listings:", error)
-    })
+          const encodedKey = listing.key.replace(/\\/g, "%5C")
+
+          return {
+            ...listing,
+            key: `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`
+          }
+        }))
+      } catch (err) {
+        alert('Error loading listings: ', err)
+      }
+    }
+
+    loadListings()
   }, [])
-
-  const filteredListings = showOnlyPublicListings
-    ? listings.filter((listing) => listing.isPublic)
-    : listings
 
   return (
     <>
@@ -182,95 +177,87 @@ export default function AdminListings() {
                   </tr>
                 </thead>
                 <tbody>
-                  {(searchId !== "" ? searchResults : filteredListings).map(
-                    (listing, index) => (
-                      <tr key={listing.id} className="tr-hover">
-                        <td className="imgId">
-                          <p className="alignText d-flex align-items-center h p1">
+                  {filteredListings.map((listing) => (
+                    <tr key={listing.id} className="tr-hover">
+                      <td className="imgId">
+                        <p className="alignText d-flex align-items-center h p1">
+                          <img
+                            className="testImg"
+                            src={listing.key}
+                            alt="Imagen de Amazon S3"
+                          />
+                          {listing.id.toString().padStart(6, "0")}
+                        </p>
+                      </td>
+                      <td className="h p1 td td2">
+                        <p className="alignText d-flex align-items-center">
+                          {listing.location}
+                        </p>
+                      </td>
+                      <td className="h p1 td td2">
+                        <p className="alignText d-flex align-items-center">
+                          {listing.lotSize
+                            ? listing.lotSize.toLocaleString("EN", {
+                                maximumFractionDigits: 0,
+                              })
+                            : ""}
+                          &nbspSq. Ft. Per County
+                        </p>
+                      </td>
+                      <td className="h p1 td td2">
+                        <p className="alignText d-flex align-items-center">
+                          {listing.houseSize
+                            ? listing.houseSize.toLocaleString("EN", {
+                                maximumFractionDigits: 0,
+                              })
+                            : ""}
+                          &nbspSq. Ft. Per County
+                        </p>
+                      </td>
+                      <td className="h p1 td td2">
+                        <p className="alignText d-flex align-items-center">
+                          $&nbsp
+                          {listing.price
+                            ? parseFloat(listing.price).toLocaleString("en", {
+                                useGrouping: true,
+                              })
+                            : ""}
+                          &nbsp / mo
+                        </p>
+                      </td>
+                      <td className="h p1 td td2"></td>
+                      <td className="h p1 td td2">
+                        <p className="alignText d-flex align-items-center">
+                          {listing.isPublic && (
                             <img
-                              className="testImg"
-                              src={listing.key}
-                              alt="Imagen de Amazon S3"
+                              className="checkMarkListing"
+                              src={CheckMarkListing}
+                              alt="CheckMark"
                             />
-                            {listing.id.toString().padStart(6, "0")}
-                          </p>
-                        </td>
-                        <td className="h p1 td td2">
-                          <p className="alignText d-flex align-items-center">
-                            {listing.location}
-                          </p>
-                        </td>
-                        <td className="h p1 td td2">
-                          <p className="alignText d-flex align-items-center">
-                            {listing.lotSize
-                              ? listing.lotSize.toLocaleString("EN", {
-                                  maximumFractionDigits: 0,
-                                })
-                              : ""}
-                            &nbspSq. Ft. Per County
-                          </p>
-                        </td>
-                        <td className="h p1 td td2">
-                          <p className="alignText d-flex align-items-center">
-                            {listing.houseSize
-                              ? listing.houseSize.toLocaleString("EN", {
-                                  maximumFractionDigits: 0,
-                                })
-                              : ""}
-                            &nbspSq. Ft. Per County
-                          </p>
-                        </td>
-                        <td className="h p1 td td2">
-                          <p className="alignText d-flex align-items-center">
-                            $&nbsp
-                            {listing.price
-                              ? parseFloat(listing.price).toLocaleString("en", {
-                                  useGrouping: true,
-                                })
-                              : ""}
-                            &nbsp / mo
-                          </p>
-                        </td>
-                        <td className="h p1 td td2"></td>
-                        <td className="h p1 td td2">
-                          <p className="alignText d-flex align-items-center">
-                            {listing.isPublic && (
-                              <img
-                                className="checkMarkListing"
-                                src={CheckMarkListing}
-                                alt="CheckMark"
-                              />
-                            )}
-                          </p>
-                        </td>
-                        <td>
-                          <EditButton
-                            defaultImage={<img src={Edit} alt="Edit" />}
-                            hoverImage={<img src={EditHover} alt="EditHover" />}
-                            onClick={() => handleEdit(index)}
-                          />
-                          <DeleteButton
-                            className="delete"
-                            defaultImage={<img src={Delete} alt="Delete" />}
-                            hoverImage={
-                              <img
-                                src={DeleteIconHover}
-                                alt="DeleteIconHover"
-                              />
-                            }
-                            onClick={() => deleteListing(listing.id)}
-                          />
-                        </td>
-                      </tr>
-                    )
-                  )}
+                          )}
+                        </p>
+                      </td>
+                      <td>
+                        <EditButton
+                          defaultImage={<img src={Edit} alt="Edit" />}
+                          hoverImage={<img src={EditHover} alt="EditHover" />}
+                        />
+                        <DeleteButton
+                          className="delete"
+                          onClick={() => handleDeleteListing(listing.id)}
+                          defaultImage={<img src={Delete} alt="Delete" />}
+                          hoverImage={<img src={DeleteIconHover} alt="DeleteIconHover" />}
+                        />
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-      {showModal && (
+      {showCreateModal && (
         <EditModalListings onClose={handleModalClose}></EditModalListings>
       )}
       <Pagination
