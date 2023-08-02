@@ -1,15 +1,15 @@
-import ListingsAdmin from "../components/listingsAdmin";
 import TenantsAdmin from "../components/tenantsAdmin";
 import Applicants from "../components/applicants";
 import Chats from "../components/chats";
 import Documents from "../components/documents";
 import SubAdmins from "../components/subAdmins";
 import { Navigate, createBrowserRouter } from "react-router-dom";
+import AdminListings from "../pages/admin/listings";
 
 const adminRoutes = [
   {
     path: 'listings',
-    element: <ListingsAdmin />
+    element: <AdminListings />
   },
   {
     path: 'tenants',

@@ -1,140 +1,129 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Nav from "./nav";
-import CheckBoxLog from "./checkBox";
-import SearchListings from "./searchListings";
-import testImg from "../assets/img/testImg.jpg";
-import CheckMarkListing from "../assets/img/checkMark.svg";
-import "../styles/tenants.css";
-import { EditButton, DeleteButton } from "./buttonListings";
-import Edit from "../assets/img/Edit.svg";
-import EditHover from "../assets/img/EditHover.svg";
-import Delete from "../assets/img/delete.svg";
-import DeleteIconHover from "../assets/img/deleteIconHover.svg";
-import Pagination from "./paginations";
-import AddListings from "./addListing";
-import EditModalListings from "./modals/modalListing";
-import { api } from "../services/api";
+import { useState, useEffect } from "react"
 
-const ListingsAdmin = () => {
-  const [listing, setListing] = useState([]);
-  const [currentId, setCurrentId] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [searchId, setSearchId] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+import CheckMarkListing from "../../../assets/img/checkMark.svg"
+import Edit from "../../../assets/img/Edit.svg"
+import EditHover from "../../../assets/img/EditHover.svg"
+import Delete from "../../../assets/img/delete.svg"
+import DeleteIconHover from "../../../assets/img/deleteIconHover.svg"
+
+import { api } from "../../../services/api"
+
+import Nav from "../../../components/nav"
+import CheckBoxLog from "../../../components/checkBox"
+import SearchListings from "../../../components/searchListings"
+import { EditButton, DeleteButton } from "../../../components/buttonListings"
+import Pagination from "../../../components/paginations"
+import AddListings from "../../../components/addListing"
+import EditModalListings from "../../../components/modals/modalListing"
+
+const PAGE_SIZE = 10
+
+export default function AdminListings() {
+  const [listings, setListings] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [searchId, setSearchId] = useState("")
+  const [searchResults, setSearchResults] = useState([])
+  
+  const totalListings = listings.length
+  const totalPages = Math.ceil(totalListings / PAGE_SIZE)
 
   const handleSearch = (searchValue) => {
-    setSearchId(searchValue);
+    setSearchId(searchValue)
 
     if (searchValue === "") {
-      setSearchResults([]);
-      return;
+      setSearchResults([])
+      return
     }
 
-    const filteredListings = listing.filter((listing) => {
-      const paddedId = listing.id.toString().padStart(6, "0");
+    const filteredListings = listings.filter((listing) => {
+      const paddedId = listing.id.toString().padStart(6, "0")
       return (
         paddedId === searchValue ||
         listing.location.toLowerCase().includes(searchValue.toLowerCase())
-      );
-    });
+      )
+    })
 
-    setSearchResults(filteredListings);
-  };
+    setSearchResults(filteredListings)
+  }
+
   const handleAddListing = () => {
-    const newItem = {
-      id: totalListings + 1,
-    };
+    // const newItem = {
+    //   id: totalListings + 1,
+    // }
 
-    setListing((prevListing) => [...prevListing, newItem]);
-    setCurrentId((prevId) => prevId + 1);
+    // setListing((prevListing) => [...prevListing, newItem])
+    // setCurrentId((prevId) => prevId + 1)
 
-    setShowModal(true);
-  };
+    setShowModal(true)
+  }
+
   const handleModalClose = () => {
-    setShowModal(false);
-  };
-  const PAGE_SIZE = 10;
-  const totalListings = listing.length;
-  const totalPages = Math.ceil(totalListings / PAGE_SIZE);
-
-  const listingsPerPage = listing.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  );
-
+    setShowModal(false)
+  }
+  
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+    setCurrentPage(pageNumber)
+  }
 
-  const toggleDropdown = (dropdownId) => {
-    const dropdown = document.getElementById(dropdownId);
-    dropdown.style.display =
-      dropdown.style.display === "none" ? "block" : "none";
-  };
   const handleEdit = (index) => {
-    console.log("Edit listing:", index);
-  };
+    console.log("Edit listing:", index)
+  }
+
+  const deleteListing = (listingId) => {
+    const updatedListing = listings.filter(
+      (listing) => listing.id !== listingId
+    )
+    setListings(updatedListing)
+    
+
+    setListings(updatedListing)
+    api
+      .delete(`/listing/${listingId}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to delete listing")
+        }
+        return response.data
+      })
+      .then((data) => {
+        console.log(data.message)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
+  const handleCheckBoxChange = () => {
+    setShowOnlyPublicListings(!showOnlyPublicListings)
+  }
 
   useEffect(() => {
     api.get('/listing').then((response) => {
       const modifiedListings = response.data.map((item) => {
-        const encodedKey = item.key?.replace(/\\/g, "%5C");
+        const encodedKey = item.key?.replace(/\\/g, "%5C")
 
         if (encodedKey) {
-          const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
+          const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`
           return {
             ...item,
             key: imageUrl,
-          };
+          }
         }
 
         return item
-      });
-      setListing(modifiedListings);
+      })
+      setListings(modifiedListings)
     })
     .catch((error) => {
-      console.error("Error fetching listings:", error);
-    });
-  }, []);
-
-  const deleteListing = (listingId) => {
-    const updatedListing = listing.filter(
-      (listing) => listing.id !== listingId
-    );
-    setListing(updatedListing);
-    
-
-    setListing(updatedListing);
-    axios
-      .delete(`https://api.certifymyrent.com/listing/${listingId}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to delete listing");
-        }
-        return response.data;
-      })
-      .then((data) => {
-        console.log(data.message);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  const handleCheckBoxChange = () => {
-    setShowOnlyPublicListings(!showOnlyPublicListings);
-  };
+      console.error("Error fetching listings:", error)
+    })
+  }, [])
 
   const filteredListings = showOnlyPublicListings
-    ? listing.filter((listing) => listing.isPublic)
-    : listing;
+    ? listings.filter((listing) => listing.isPublic)
+    : listings
 
   return (
     <>
@@ -218,7 +207,7 @@ const ListingsAdmin = () => {
                                   maximumFractionDigits: 0,
                                 })
                               : ""}
-                            &nbsp;Sq. Ft. Per County
+                            &nbspSq. Ft. Per County
                           </p>
                         </td>
                         <td className="h p1 td td2">
@@ -228,18 +217,18 @@ const ListingsAdmin = () => {
                                   maximumFractionDigits: 0,
                                 })
                               : ""}
-                            &nbsp;Sq. Ft. Per County
+                            &nbspSq. Ft. Per County
                           </p>
                         </td>
                         <td className="h p1 td td2">
                           <p className="alignText d-flex align-items-center">
-                            $&nbsp;
+                            $&nbsp
                             {listing.price
                               ? parseFloat(listing.price).toLocaleString("en", {
                                   useGrouping: true,
                                 })
                               : ""}
-                            &nbsp; / mo
+                            &nbsp / mo
                           </p>
                         </td>
                         <td className="h p1 td td2"></td>
@@ -291,7 +280,5 @@ const ListingsAdmin = () => {
         onPageChange={handlePageChange}
       />
     </>
-  );
-};
-
-export default ListingsAdmin;
+  )
+}
