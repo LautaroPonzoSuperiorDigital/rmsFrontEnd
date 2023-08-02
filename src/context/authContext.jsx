@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
         setUser(data)
       } catch (err) {
         setUser(null)
+        localStorage.removeItem(ACCESS_TOKEN_KEY)
       }
 
       setIsLoading(false)
