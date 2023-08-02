@@ -4,6 +4,7 @@ import React from "react";
 
 const tenantsData = [
   {
+    id: 1,
     name: "Maria Kramer",
     listings: "46780",
     status: "Paid Feb 1, 2023",
@@ -13,6 +14,7 @@ const tenantsData = [
     backgroundCheck: null,
   },
   {
+    id: 2,
     name: "Hamish Mago",
     listings: "57478",
     status: "Paid Feb 1, 2023",
@@ -22,6 +24,7 @@ const tenantsData = [
     backgroundCheck: "check",
   },
   {
+    id: 3,
     name: "Alessia Beelzebub",
     listings: "47474",
     status: "Paid Feb 1, 2023",
@@ -31,6 +34,7 @@ const tenantsData = [
     backgroundCheck: null,
   },
   {
+    id: 4,
     name: "Monroe Ally",
     listings: "67926",
     status: "Paid Feb 1, 2023",
@@ -40,6 +44,7 @@ const tenantsData = [
     backgroundCheck: "check",
   },
   {
+    id: 5,
     name: "Nellie Velda",
     listings: "13425",
     status: "Paid Feb 1, 2023",
@@ -49,6 +54,7 @@ const tenantsData = [
     backgroundCheck: "check",
   },
   {
+    id: 6,
     name: "Freda Katherine",
     listings: "24235",
     status: "Missed Payment Feb 1, 2023",
@@ -58,6 +64,7 @@ const tenantsData = [
     backgroundCheck: "check",
   },
   {
+    id: 7,
     name: "Maryan Deitra",
     listings: "09432",
     status: "Paid Feb 1, 2023",
@@ -67,6 +74,7 @@ const tenantsData = [
     backgroundCheck: "check",
   },
   {
+    id: 8,
     name: "Blue Regena",
     listings: "07466",
     status: "Paid Feb 1, 2023",
@@ -76,6 +84,7 @@ const tenantsData = [
     backgroundCheck: "check",
   },
   {
+    id: 9,
     name: "Averie Elise",
     listings: "32441",
     status: "Paid Feb 1, 2023",
@@ -85,6 +94,7 @@ const tenantsData = [
     backgroundCheck: "check",
   },
   {
+    id: 10,
     name: "Evonne Jodene",
     listings: "35347",
     status: "Paid Feb 1, 2023",
