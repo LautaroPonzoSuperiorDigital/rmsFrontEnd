@@ -179,6 +179,7 @@ button {
 .imageContainer {
     display: inline-block;
     vertical-align: middle;
+    z-index: 100;
 }
 
 .confirmationBox {
@@ -223,6 +224,7 @@ button {
 
 .tr-hover:hover {
     background-color: #19757223;
+    cursor: pointer;
 }
 
 
