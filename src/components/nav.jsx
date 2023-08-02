@@ -32,7 +32,6 @@ const Nav = () => {
               <NavLink
                 className="nav-link custom-item"
                 to="/admin/listings"
-                activeClassName="active"
               >
                 LISTINGS
               </NavLink>
@@ -41,7 +40,6 @@ const Nav = () => {
               <NavLink
                 className="nav-link custom-item"
                 to="/admin/tenants"
-                activeClassName="active"
               >
                 TENANTS
               </NavLink>
@@ -50,7 +48,6 @@ const Nav = () => {
               <NavLink
                 className="nav-link custom-item"
                 to="/admin/applicants"
-                activeClassName="active"
               >
                 APPLICANTS
               </NavLink>
@@ -59,7 +56,6 @@ const Nav = () => {
               <NavLink
                 className="nav-link custom-item"
                 to="/admin/documents"
-                activeClassName="active"
               >
                 DOCUMENTS
               </NavLink>
@@ -68,7 +64,6 @@ const Nav = () => {
               <NavLink
                 className="nav-link custom-item"
                 to="/admin/sub-admins"
-                activeClassName="active"
               >
                 SUB ADMINS
               </NavLink>
@@ -77,7 +72,6 @@ const Nav = () => {
               <NavLink
                 className="nav-link chat"
                 to="/admin/chats"
-                activeClassName="active"
               >
                 CHATS
                 <img className="Search" src={SearchIcon} alt="Search" />
