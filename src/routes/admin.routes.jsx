@@ -4,7 +4,7 @@ import Applicants from "../components/applicants";
 import Chats from "../components/chats";
 import Documents from "../components/documents";
 import SubAdmins from "../components/subAdmins";
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 
 const adminRoutes = [
   {
@@ -37,6 +37,10 @@ const adminRouter = createBrowserRouter([
   {
     path: '/admin',
     children: adminRoutes
+  },
+  {
+    path: '*',
+    element: <Navigate to="/admin/listings" replace /> 
   }
 ])
 
