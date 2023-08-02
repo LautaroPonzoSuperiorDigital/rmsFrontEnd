@@ -6,9 +6,15 @@ import SearchIcon from "../assets/img/SearchIcon.svg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "../styles/nav.css";
+import { useAuth } from "../hooks/useAuth";
 
 const Nav = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const { onSignedOut } = useAuth()
+
+  const handleSignOut = () => [
+    onSignedOut()
+  ]
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white">
@@ -84,9 +90,9 @@ const Nav = () => {
             <NavLink className="nav-link user" to="/profile">
               <span className="username-text">John Smith</span>
             </NavLink>
-            <NavLink className="nav-link logout" to="/login">
+            <button className="nav-link logout" onClick={handleSignOut}>
               <img className="Logout" src={Logout} alt="Logout" />
-            </NavLink>
+            </button>
           </li>
         </ul>
       </div>
