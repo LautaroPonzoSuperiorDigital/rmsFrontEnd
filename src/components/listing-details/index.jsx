@@ -1,6 +1,10 @@
 /* eslint-disable react/prop-types */
+import { Tabs } from 'react-tabs'
+
 import CheckBoxLog from "../checkBox"
 import { Edit, Trash } from "../icons"
+import { ListingPaymentHistory } from '../listing-payment-history'
+
 import {
   Album,
   DetailsBox,
@@ -14,10 +18,15 @@ import {
   ProfitAndLossBox,
   ExtraDetailsTop,
   Action,
+  HistoryTabs,
+  HistoryTab,
+  HistoryTabContent,
 } from "./styles"
+import { formatPrice } from '../../services/price'
 
 export function ListingDetails({ listing }) {
   console.log(listing)
+
   return (
     <ListingDetailsContainer>
       <DetailsBox>
@@ -48,7 +57,7 @@ export function ListingDetails({ listing }) {
 
           <MainDetail>
             <span>PRICE</span>
-            <span>{listing.location}</span>
+            <span>{formatPrice(listing.price)}</span>
           </MainDetail>
 
           <ProfitAndLossBox>
@@ -113,6 +122,29 @@ export function ListingDetails({ listing }) {
           </ExtraDetail>
         </ExtraDetailsBox>
       </DetailsBox>
+
+      <Tabs
+        selectedTabClassName="active"
+        selectedTabPanelClassName="active"
+      >
+        <HistoryTabs>
+          <HistoryTab>Tenant History</HistoryTab>
+          <HistoryTab>Inspection History</HistoryTab>
+          <HistoryTab>Document History</HistoryTab>
+          <HistoryTab>Payment History</HistoryTab>
+          <HistoryTab>Expense History</HistoryTab>
+          <HistoryTab>Applicants</HistoryTab>
+        </HistoryTabs>
+
+        <HistoryTabContent>Tenant History Not Implemented Yet 😬</HistoryTabContent>
+        <HistoryTabContent>Inspection History Not Implemented Yet 😬</HistoryTabContent>
+        <HistoryTabContent>Document History Not Implemented Yet 😬</HistoryTabContent>
+        <HistoryTabContent>
+          <ListingPaymentHistory listingId={listing.id} />
+        </HistoryTabContent>
+        <HistoryTabContent>Expense History Not Implemented Yet 😬</HistoryTabContent>
+        <HistoryTabContent>Applicants Not Implemented Yet 😬</HistoryTabContent>
+      </Tabs>
     </ListingDetailsContainer>
   )
 }

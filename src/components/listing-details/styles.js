@@ -1,3 +1,4 @@
+import { Tab, TabList, TabPanel } from "react-tabs"
 import { styled } from "styled-components"
 
 export const ListingDetailsContainer = styled.div`
@@ -9,6 +10,8 @@ export const DetailsBox = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 7rem;
+
+  padding: 1rem;
 `
 
 export const Album = styled.div`
@@ -133,4 +136,64 @@ export const Requirements = styled.ul`
 
   padding-left: 1.25rem;
   margin: 0;
+`
+
+export const HistoryTabs = styled(TabList)`
+  margin-top: 2.5rem;
+  margin-bottom: 0;
+  padding-left: 0;
+  /* padding: 0 4rem; */
+
+  list-style: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2.5rem;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+`
+
+export const HistoryTab = styled(Tab)`
+  position: relative;
+
+  font-size: 1rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.65);
+
+  cursor: pointer;
+
+  padding-bottom: 1rem;
+
+  &.active {
+    color: #197572;
+
+    &::before {
+      content: "";
+
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+
+      height: 2px;
+      width: 100%;
+
+      background: #197572;
+    }
+  }
+
+  &:first-child {
+    margin-left: 3rem;
+  }
+
+  &:last-child {
+    margin-right: 3rem;
+  }
+`
+
+export const HistoryTabContent = styled(TabPanel)`
+  &.active {
+    padding: 2rem 3rem;
+  }
 `
