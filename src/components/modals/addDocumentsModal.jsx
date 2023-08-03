@@ -5,6 +5,19 @@ import React, { useState, useEffect } from "react";
 
 const AddDocs = ({ onClose }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  /* pdf */
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const fileObject = { data: file.name, file: file };
+      let documents = JSON.parse(localStorage.getItem("documents") || "[]");
+      documents.push(fileObject);
+      localStorage.setItem("files", JSON.stringify(documents));
+    }
+  };
+  /* pdf */
   const handleMouseEnterClose = () => {
     setIsCloseHovered(true);
   };
@@ -40,7 +53,12 @@ const AddDocs = ({ onClose }) => {
             >
               <p className="UploadAFile">Upload A File</p>
             </label>
-            <input type="file" id="fileInput" name="image" />
+            <input
+              type="file"
+              id="fileInput"
+              name="pdf"
+              onChange={handleFileChange}
+            />
           </div>
 
           <input

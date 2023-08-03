@@ -10,7 +10,6 @@ import DeleteIconHover from "../../assets/img/deletePopUpHover.svg";
 import AddDocs from "./addDocumentsModal";
 
 const TenantModal = ({ selectedTenant, onClose }) => {
-  const [hoverStates, setHoverStates] = useState({});
   const [isHovered, setIsHovered] = useState(false);
   const [isHoveredDelete, setIsHoveredDelete] = useState(false);
   const [isHoveredEdit, setIsHoveredEdit] = useState(false);
