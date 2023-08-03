@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/tenants.css";
 
-const CheckBoxLog = ({ checked, onChange }) => {
+const CheckBoxLog = ({ checked, onChange, disabled }) => {
   const handleCheckBoxChange = () => {
     onChange(!checked);
   };
@@ -12,6 +12,7 @@ const CheckBoxLog = ({ checked, onChange }) => {
       className="form-check-input mb-1 checkbox"
       checked={checked}
       onChange={handleCheckBoxChange}
+      disabled={disabled}
     />
   );
 };

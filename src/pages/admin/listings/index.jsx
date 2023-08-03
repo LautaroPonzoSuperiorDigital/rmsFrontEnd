@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 
 import CheckMarkListing from "../../../assets/img/checkMark.svg"
 import Edit from "../../../assets/img/Edit.svg"
@@ -15,6 +15,8 @@ import { EditButton, DeleteButton } from "../../../components/buttonListings"
 import Pagination from "../../../components/paginations"
 import AddListings from "../../../components/addListing"
 import EditModalListings from "../../../components/modals/modalListing"
+import { Modal } from "../../../components/modal"
+import { ListingDetails } from "../../../components/listing-details"
 
 const PAGE_SIZE = 10
 
@@ -25,6 +27,9 @@ export default function AdminListings() {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [searchId, setSearchId] = useState("")
   const [searchResults, setSearchResults] = useState([])
+  const [listingDetails, setListingDetails] = useState(null)
+
+  const listingDetailsModalRef = useRef(null)
   
   const totalListings = listings.length
   const totalPages = Math.ceil(totalListings / PAGE_SIZE)
@@ -93,6 +98,12 @@ export default function AdminListings() {
 
   const handleCheckBoxChange = () => {
     setShowOnlyPublicListings(!showOnlyPublicListings)
+  }
+
+  const handleOpenListingDetails = (listing) => {
+    setListingDetails(listing)
+
+    listingDetailsModalRef.current.open()
   }
 
   useEffect(() => {
@@ -178,7 +189,11 @@ export default function AdminListings() {
                 </thead>
                 <tbody>
                   {filteredListings.map((listing) => (
-                    <tr key={listing.id} className="tr-hover">
+                    <tr
+                      key={listing.id}
+                      className="tr-hover"
+                      onClick={() => handleOpenListingDetails(listing)}
+                    >
                       <td className="imgId">
                         <p className="alignText d-flex align-items-center h p1">
                           <img
@@ -260,6 +275,18 @@ export default function AdminListings() {
       {showCreateModal && (
         <EditModalListings onClose={handleModalClose}></EditModalListings>
       )}
+
+      <Modal.Root ref={listingDetailsModalRef}>
+        <Modal.Body width="90%">
+          <Modal.Header showCloseIcon />
+          <Modal.Content>
+            {listingDetails && (
+              <ListingDetails listing={listingDetails} />
+            )}
+          </Modal.Content>
+        </Modal.Body>
+      </Modal.Root>
+
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
