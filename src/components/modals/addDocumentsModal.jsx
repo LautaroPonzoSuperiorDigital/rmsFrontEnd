@@ -11,10 +11,21 @@ const AddDocs = ({ onClose }) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const fileObject = { data: file.name, file: file };
-      let documents = JSON.parse(localStorage.getItem("documents") || "[]");
-      documents.push(fileObject);
-      localStorage.setItem("files", JSON.stringify(documents));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const fileContentBase64 = reader.result.split(",")[1];
+
+        const fileObject = {
+          data: file.name,
+          Base64: fileContentBase64,
+        };
+
+        let filesArray = JSON.parse(localStorage.getItem("filesArray") || "[]");
+        filesArray.push(fileObject);
+        localStorage.setItem("documents", JSON.stringify(filesArray));
+      };
+
+      reader.readAsDataURL(file);
     }
   };
   /* pdf */
