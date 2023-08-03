@@ -14,6 +14,7 @@ import DeleteIconHover from "../assets/img/deleteIconHover.svg";
 import Pagination from "./paginations";
 import AddListings from "./addListing";
 import EditModalListings from "./modals/modalListing";
+import { api } from "../services/api";
 
 const ListingsAdmin = () => {
   const [listing, setListing] = useState([]);
@@ -78,22 +79,25 @@ const ListingsAdmin = () => {
   };
 
   useEffect(() => {
-    axios
-    .get(`https://api.certifymyrent.com/listing`)
-      .then((response) => {
-        const modifiedListings = response.data.map((item) => {
-          const encodedKey = item.key.replace(/\\/g, "%5C");
+    api.get('/listing').then((response) => {
+      const modifiedListings = response.data.map((item) => {
+        const encodedKey = item.key?.replace(/\\/g, "%5C");
+
+        if (encodedKey) {
           const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
           return {
             ...item,
             key: imageUrl,
           };
-        });
-        setListing(modifiedListings);
-      })
-      .catch((error) => {
-        console.error("Error fetching listings:", error);
+        }
+
+        return item
       });
+      setListing(modifiedListings);
+    })
+    .catch((error) => {
+      console.error("Error fetching listings:", error);
+    });
   }, []);
 
   const deleteListing = (listingId) => {
