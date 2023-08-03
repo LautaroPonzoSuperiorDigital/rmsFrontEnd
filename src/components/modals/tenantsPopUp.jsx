@@ -7,7 +7,9 @@ import Edit from "../../assets/img/EditPopUp.svg";
 import EditHover from "../../assets/img/EditPopUpHover.svg";
 import Delete from "../../assets/img/deletePopUp.svg";
 import DeleteIconHover from "../../assets/img/deletePopUpHover.svg";
+import testImg from "../../assets/img/testImg.jpg"
 import AddDocs from "./addDocumentsModal";
+
 
 const TenantModal = ({ selectedTenant, onClose }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -429,7 +431,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
             </div>
           </div>
           <div className="listingInfo d-flex">
-            <div className="imgTestPopUp"></div>
+            <div className="imgTestPopUp"> <img className="imgTestPopUpInsert" src={testImg} alt="" /></div>
             <div className="listingInfoOrder d-flex flex-column">
               <div className="popUpOrderListings">
                 <div className="popUpOrderFirstCol idPopUp d-flex">
