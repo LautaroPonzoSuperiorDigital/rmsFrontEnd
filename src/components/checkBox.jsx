@@ -3,7 +3,7 @@ import "../styles/tenants.css";
 
 const CheckBoxLog = ({ checked, onChange, disabled }) => {
   const handleCheckBoxChange = () => {
-    onChange(!checked);
+    onChange?.(!checked);
   };
 
   return (
