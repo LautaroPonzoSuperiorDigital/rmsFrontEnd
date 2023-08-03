@@ -5,7 +5,7 @@ import closeHover from "../../assets/img/closeHover.svg";
 import Eye from "../../assets/img/Eye.svg";
 import Edit from "../../assets/img/EditPopUp.svg";
 import EditHover from "../../assets/img/EditPopUpHover.svg";
-import Delete from "../../assets/img/deletePopUp.svg";
+import Delete from "../../assets/img/DeletePopUp.svg";
 import DeleteIconHover from "../../assets/img/deletePopUpHover.svg";
 import testImg from "../../assets/img/testImg.jpg"
 import AddDocs from "./addDocumentsModal";
