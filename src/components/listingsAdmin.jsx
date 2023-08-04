@@ -79,25 +79,27 @@ const ListingsAdmin = () => {
   };
 
   useEffect(() => {
-    api.get('/listing').then((response) => {
-      const modifiedListings = response.data.map((item) => {
-        const encodedKey = item.key?.replace(/\\/g, "%5C");
+    api
+      .get("/listing")
+      .then((response) => {
+        const modifiedListings = response.data.map((item) => {
+          const encodedKey = item.key?.replace(/\\/g, "%5C");
 
-        if (encodedKey) {
-          const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
-          return {
-            ...item,
-            key: imageUrl,
-          };
-        }
+          if (encodedKey) {
+            const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
+            return {
+              ...item,
+              key: imageUrl,
+            };
+          }
 
-        return item
+          return item;
+        });
+        setListing(modifiedListings);
+      })
+      .catch((error) => {
+        console.error("Error fetching listings:", error);
       });
-      setListing(modifiedListings);
-    })
-    .catch((error) => {
-      console.error("Error fetching listings:", error);
-    });
   }, []);
 
   const deleteListing = (listingId) => {
@@ -105,7 +107,6 @@ const ListingsAdmin = () => {
       (listing) => listing.id !== listingId
     );
     setListing(updatedListing);
-    
 
     setListing(updatedListing);
     axios
@@ -223,23 +224,19 @@ const ListingsAdmin = () => {
                         </td>
                         <td className="h p1 td td2">
                           <p className="alignText d-flex align-items-center">
-                            {listing.houseSize
-                              ? listing.houseSize.toLocaleString("EN", {
-                                  maximumFractionDigits: 0,
-                                })
-                              : ""}
+                            {listing.houseSize}
                             &nbsp;Sq. Ft. Per County
                           </p>
                         </td>
                         <td className="h p1 td td2">
                           <p className="alignText d-flex align-items-center">
-                            $&nbsp;
+                            $
                             {listing.price
                               ? parseFloat(listing.price).toLocaleString("en", {
                                   useGrouping: true,
                                 })
                               : ""}
-                            &nbsp; / mo
+                            / mo
                           </p>
                         </td>
                         <td className="h p1 td td2"></td>
