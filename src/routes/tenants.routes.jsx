@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom"
+import { Navigate, createBrowserRouter } from "react-router-dom"
 import TenantChatRoom from "../components/TenantChatRoom"
 import TenantsProfile from "../components/TenantsProfile"
 import Tenants from "../components/tenants"
@@ -19,7 +19,11 @@ const tenantsRoutes = [
 ]
 
 const tenantsRouter = createBrowserRouter([
-  { path: '/tenants', children: tenantsRoutes }
+  { path: '/tenants', children: tenantsRoutes },
+  {
+    path: '*',
+    element: <Navigate to="/tenants" replace /> 
+  }
 ])
 
 export default tenantsRouter
