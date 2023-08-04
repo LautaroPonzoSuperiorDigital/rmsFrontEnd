@@ -2,10 +2,12 @@ import { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 
 import { api } from "../../services/api"
-
-import { ListingPaymentHistoryTable } from "./styles"
 import { formatPrice } from "../../services/price"
 import { formatDate } from "../../services/date"
+
+import { Edit, Trash } from "../icons"
+
+import { ListingPaymentHistoryTable } from "./styles"
 
 export function ListingPaymentHistory({ listingId }) {
   const [payments, setPayments] = useState([])
@@ -16,7 +18,6 @@ export function ListingPaymentHistory({ listingId }) {
         const { data } = await api.get(`/listing/${listingId}/payments`)
 
         setPayments(data)
-        console.log('payments: ', data)
       } catch (err) {
         alert('Error loading listing payments.')
       }
@@ -43,8 +44,12 @@ export function ListingPaymentHistory({ listingId }) {
             <td>{formatPrice(payment.amount)}</td>
             <td>{formatDate(payment.madeAt)}</td>
             <td>
-              <span>Edit</span>
-              <span>Delete</span>
+              <button type="button">
+                <Edit />
+              </button>
+              <button type="button">
+                <Trash />
+              </button>
             </td>
           </tr>
         ))}
@@ -54,5 +59,5 @@ export function ListingPaymentHistory({ listingId }) {
 }
 
 ListingPaymentHistory.propTypes = {
-  listingId: PropTypes.string.isRequired
+  listingId: PropTypes.number.isRequired
 }

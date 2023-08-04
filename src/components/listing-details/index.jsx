@@ -1,8 +1,14 @@
-/* eslint-disable react/prop-types */
+import { useRef, useState } from 'react'
 import { Tabs } from 'react-tabs'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
+import { formatPrice } from '../../services/price'
+import { useListingDetails } from '../../hooks/useListingDetails'
+
+import { ListingExpenseHistory } from '../listing-expense-history'
 import CheckBoxLog from "../checkBox"
-import { Edit, Trash } from "../icons"
+import { Edit, Export, Trash } from "../icons"
 import { ListingPaymentHistory } from '../listing-payment-history'
 
 import {
@@ -21,11 +27,29 @@ import {
   HistoryTabs,
   HistoryTab,
   HistoryTabContent,
+  ExpensesActionsBox,
+  ExpenseAction,
 } from "./styles"
-import { formatPrice } from '../../services/price'
 
-export function ListingDetails({ listing }) {
-  console.log(listing)
+const ListingDetailsTabs = Object.freeze({
+  TENANT_HISTORY: 0,
+  INSPECTION_HISTORY: 1,
+  DOCUMENT_HISTORY: 2,
+  PAYMENT_HISTORY: 3,
+  EXPENSE_HISTORY: 4,
+  APPLICANTS: 5,
+})
+
+export function ListingDetails() {
+  const [activeTab, setActiveTab] = useState(ListingDetailsTabs.TENANT_HISTORY)
+
+  const expensesRef = useRef(null)
+
+  const { listing, isLoadingPNL } = useListingDetails()
+
+  const showExpensesActions = activeTab === ListingDetailsTabs.EXPENSE_HISTORY
+
+  const openExpenseForm = () => expensesRef.current?.openForm()
 
   return (
     <ListingDetailsContainer>
@@ -63,12 +87,20 @@ export function ListingDetails({ listing }) {
           <ProfitAndLossBox>
             <MainDetail>
               <span>TOTAL PROFIT</span>
-              <span>$ 364,675</span>
+              {isLoadingPNL ? (
+                <Skeleton height="1rem" width={100} />
+              ) : (
+                <span>{listing.totalProfit}</span>
+              )}
             </MainDetail>
 
             <MainDetail>
               <span>TOTAL LOSS</span>
-              <span>$ 54,000</span>
+              {isLoadingPNL ? (
+                <Skeleton height="1rem" width={100} />
+              ) : (
+                <span>{listing.totalLoss}</span>
+              )}
             </MainDetail>
           </ProfitAndLossBox>
         </MainDetails>
@@ -126,6 +158,8 @@ export function ListingDetails({ listing }) {
       <Tabs
         selectedTabClassName="active"
         selectedTabPanelClassName="active"
+        tabIndex={activeTab}
+        onSelect={setActiveTab}
       >
         <HistoryTabs>
           <HistoryTab>Tenant History</HistoryTab>
@@ -134,15 +168,36 @@ export function ListingDetails({ listing }) {
           <HistoryTab>Payment History</HistoryTab>
           <HistoryTab>Expense History</HistoryTab>
           <HistoryTab>Applicants</HistoryTab>
+
+          {showExpensesActions && (
+            <ExpensesActionsBox>
+              <ExpenseAction type="button" onClick={openExpenseForm}>
+                + Add Expense
+              </ExpenseAction>
+
+              <ExpenseAction type="button">
+                <Export />
+                Export
+              </ExpenseAction>
+            </ExpensesActionsBox>
+          )}
         </HistoryTabs>
 
         <HistoryTabContent>Tenant History Not Implemented Yet 😬</HistoryTabContent>
         <HistoryTabContent>Inspection History Not Implemented Yet 😬</HistoryTabContent>
         <HistoryTabContent>Document History Not Implemented Yet 😬</HistoryTabContent>
+
         <HistoryTabContent>
           <ListingPaymentHistory listingId={listing.id} />
         </HistoryTabContent>
-        <HistoryTabContent>Expense History Not Implemented Yet 😬</HistoryTabContent>
+
+        <HistoryTabContent>
+          <ListingExpenseHistory
+            ref={expensesRef}
+            listingId={listing.id}
+          />
+        </HistoryTabContent>
+
         <HistoryTabContent>Applicants Not Implemented Yet 😬</HistoryTabContent>
       </Tabs>
     </ListingDetailsContainer>

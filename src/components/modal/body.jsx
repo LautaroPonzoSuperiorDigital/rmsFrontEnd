@@ -8,6 +8,9 @@ const BodyContainer = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
 
+  max-height: 90vh;
+  overflow-y: auto;
+
   /* width: 100% */
   border-radius: 4px;
 

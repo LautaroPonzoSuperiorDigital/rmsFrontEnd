@@ -14,6 +14,7 @@ function ModalRootWithRef({ onModalOpened, onModalClosed, children }, modalRef) 
   const [isShown, setIsShown] = useState(false)
 
   const open = useCallback(() => {
+
     setIsShown(true)
     onModalOpened?.()
   }, [onModalOpened])

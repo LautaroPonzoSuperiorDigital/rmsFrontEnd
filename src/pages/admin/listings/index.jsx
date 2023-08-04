@@ -17,6 +17,7 @@ import AddListings from "../../../components/addListing"
 import EditModalListings from "../../../components/modals/modalListing"
 import { Modal } from "../../../components/modal"
 import { ListingDetails } from "../../../components/listing-details"
+import { ListingDetailsProvider } from "../../../context/listingDetailsContext"
 
 const PAGE_SIZE = 10
 
@@ -281,7 +282,9 @@ export default function AdminListings() {
           <Modal.Header showCloseIcon />
           <Modal.Content>
             {listingDetails && (
-              <ListingDetails listing={listingDetails} />
+              <ListingDetailsProvider listing={listingDetails}>
+                <ListingDetails />
+              </ListingDetailsProvider>
             )}
           </Modal.Content>
         </Modal.Body>

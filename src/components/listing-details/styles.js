@@ -197,3 +197,34 @@ export const HistoryTabContent = styled(TabPanel)`
     padding: 2rem 3rem;
   }
 `
+
+export const ExpensesActionsBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2rem;
+
+  margin-left: auto;
+  margin-right: 3rem;
+`
+
+export const ExpenseAction = styled.button`
+  color: #197572;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+
+  padding-bottom: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  >svg {
+    margin-bottom: 1px;
+
+    path {
+      fill: #197572;
+    }
+  }
+`

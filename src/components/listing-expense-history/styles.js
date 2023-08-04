@@ -1,6 +1,6 @@
-import { styled } from "styled-components";
+import { styled } from "styled-components"
 
-export const ListingPaymentHistoryTable = styled.table`
+export const ListingExpenseHistoryTable = styled.table`
   width: 100%;
 
   tbody {

@@ -1,11 +1,6 @@
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
-// const defaultDateFormat = 'DD [de] MMMM [de] YYYY'
-
-export const formatDate = (date, dateFormat = null) => {
-  if (typeof date === 'string') {
-    return formatDate(new Date(date), dateFormat)
-  }
-
-  return moment(date).format()
-}
+export const formatDate = (date, dateZone) =>
+  date instanceof DateTime
+    ? date.toLocaleString(DateTime.DATE_FULL)
+    : formatDate(DateTime.fromISO(date, { zone: dateZone || 'utc' }))
