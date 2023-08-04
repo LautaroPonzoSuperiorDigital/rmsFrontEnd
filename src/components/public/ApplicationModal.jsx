@@ -21,6 +21,36 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
   const [toggleOn3, setToggleOn3] = useState(false);
   const [toggleOn4, setToggleOn4] = useState(false);
   const [toggleOn5, setToggleOn5] = useState(false);
+  const [formData, setFormData] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "phoneNumber") {
+      const formattedValue = value
+        .replace(/\D/g, "") // Remove non-numeric characters
+        .replace(/^(\d{3})(\d{1,3})?(\d{1,4})?/, "$1-$2-$3"); // Insert hyphens
+      setFormData({ ...formData, [name]: formattedValue });
+      // if (name === "driverLicense") {
+      //   setFormData({ ...formData, [name]: value.toString() });
+      // }
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const submitRegistration = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+    try {
+      const response = await api.post("/user/tenant", {
+        ...formData,
+        approvalStatus: "Pending",
+      });
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleClickToggle1 = () => {
     setToggleOn1(!toggleOn1);
@@ -56,7 +86,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/listing')
+        const response = await api.get("/listing");
         const listingsWithId = response.data.map((listing) => ({
           ...listing,
         }));
@@ -66,6 +96,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
         setSelectedListing(selectedListingData);
         setAmenities(selectedListingData?.Amenities || []);
         setRequirements(selectedListingData?.Requirements || []);
+        console.log("applicationModal", selectedListing);
       } catch (error) {
         console.error("Error fetching listings:", error);
       }
@@ -79,7 +110,6 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
       setListingId(selectedListing.id);
       setAmenities(selectedListing.Amenities);
       setRequirements(selectedListing.Requirements);
-      console.log(selectedListing);
     }
   }, [selectedListing]);
 
@@ -104,8 +134,8 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
             alt="Logo"
             onClick={handleLogoClick}
           />
-          <h2 className="Application">Application</h2>
-          <nav className="navBar1 d-flex align-items-center">
+          {/* <h2 className="Application">Application</h2> */}
+          {/* <nav className="navBar1 d-flex align-items-center">
             <ul>
               <li
                 className={`registration custom-item1 nav-item ${
@@ -172,7 +202,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
                 AGREEMENT & CONSENT TO BACKGROUND CHECK
               </li>
             </ul>
-          </nav>
+          </nav> */}
         </div>
       </div>
       <div className="d-flex containerApplications">
@@ -270,47 +300,66 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
                 <h2 className="d-flex justify-content-center mt-3 registrationText">
                   Registration
                 </h2>
-                <form className="resetForm" action="submit">
+                <form className="resetForm" onSubmit={submitRegistration}>
                   <input
                     className="form-control inputReset"
                     type="text"
-                    placeholder="FULL LEGAL NAME                                                                               Maria Kramer"
+                    placeholder="FULL LEGAL NAME"
+                    name="name"
+                    required
+                    onChange={handleChange}
                   />
                   <input
                     className="form-control inputReset"
                     type="text"
-                    placeholder="DRIVER LICENSE # / STATE                                                                A0002144, Ca"
+                    placeholder="DRIVER LICENSE # / STATE"
+                    name="driverLicense"
+                    required
+                    onChange={handleChange}
+                  />
+                  <input
+                    className="form-control inputReset"
+                    type="date"
+                    placeholder="BIRTH DATE"
+                    name="birthDay"
+                    required
+                    onChange={handleChange}
                   />
                   <input
                     className="form-control inputReset"
                     type="text"
-                    placeholder="BIRTH DATE                                                                                                 11/10/1986"
+                    placeholder="PHONE NO 123-456-7890 "
+                    name="phoneNumber"
+                    required
+                    onChange={handleChange}
+                    value={formData.phoneNumber || ""}
                   />
                   <input
                     className="form-control inputReset"
-                    type="text"
-                    placeholder="PHONE NO.                                                                                           530-521-7450"
-                  />
-                  <input
-                    className="form-control inputReset"
-                    type="text"
-                    placeholder="SOCIAL SECURITY                                                                                                235"
+                    type="password"
+                    placeholder="PASSWORD"
+                    name="password"
+                    required
+                    onChange={handleChange}
                   />
                   <input
                     className="form-control inputReset"
                     type="email"
-                    placeholder="EMAIL                                                                                  mariakramer@gmail.com"
+                    placeholder="EMAIL"
+                    name="email"
+                    required
+                    onChange={handleChange}
                   />
+                  <button className="bgButton d-flex align-items-center justify-content-center">
+                    <span className="submitBtn">Submit</span>
+                  </button>
                 </form>
-                <button className="bgButton d-flex align-items-center justify-content-center">
-                  <span className="submitBtn">Submit</span>
-                </button>
               </div>
             </div>
           )}
           {/* REGISTER END */}
 
-          {activeSection === "roommates" && (
+          {/* {activeSection === "roommates" && (
             <div className="roommatesContainer d-flex justify-content-center">
               <div className="formRoommatesOrder d-flex flex-column justify-content-start align-items-center">
                 <h2 className="rmText d-flex justify-content-center mt-3">
@@ -351,10 +400,10 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
           {/* ROOMMATES END */}
 
-          {activeSection === "rentalHistory" && (
+          {/* {activeSection === "rentalHistory" && (
             <div className="rentalContainer align-items-center">
               <h2 className="rentalText align-items-center">Rental History</h2>
               <p className="rentalP">
@@ -458,10 +507,10 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
           {/* RENTAL HISTORY ENDS */}
 
-          {activeSection === "income" && (
+          {/* {activeSection === "income" && (
             <div className="incomeContainer align-items-center">
               <h2 className="rentalText align-items-center">Income</h2>
               <p className="rentalP">
@@ -617,10 +666,10 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
           {/* INCOME ENDS */}
           {/* EMERGENCY CONTACT START */}
-          {activeSection === "emergencyContact" && (
+          {/* {activeSection === "emergencyContact" && (
             <div className="registrationContainer d-flex justify-content-center">
               <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
                 <h2 className="d-flex justify-content-center mt-3 ECText">
@@ -653,9 +702,9 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
           {/* EMERGENCY CONTACT START */}
-          {activeSection === "vehicles" && (
+          {/* {activeSection === "vehicles" && (
             <div className="registrationContainer d-flex justify-content-center">
               <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
                 <h2 className="d-flex justify-content-center mt-3 VehicleText">
@@ -922,10 +971,10 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
                 </div>
               </div>
               <button className="bgButton3 agBtn d-flex align-items-center justify-content-center">
-                  <span className="submitBtn3 agBtn">Submit</span>
-                </button>
+                <span className="submitBtn3 agBtn">Submit</span>
+              </button>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>
