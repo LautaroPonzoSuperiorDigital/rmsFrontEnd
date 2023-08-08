@@ -143,7 +143,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
           <div className="tenantInfo d-flex flex-column">
             <div className="popUpOrderFirstCol FullLName d-flex">
               <p>FULL LEGAL NAME</p>
-              <span>{selectedTenant.first_name}{selectedTenant.first_name}</span>
+              <span>{selectedTenant.first_name} {selectedTenant.last_name}</span> 
             </div>
             <div className="popUpOrderFirstCol DriverLicense d-flex">
               <p>DRIVER LICENSE # / STATE</p>
