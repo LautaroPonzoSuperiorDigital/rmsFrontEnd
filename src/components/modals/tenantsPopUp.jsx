@@ -138,7 +138,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
               onClick={onClose}
             />
           )}
-        </div>
+        </div> 
         <div className="orderGlobalPopUp d-flex">
           <div className="tenantInfo d-flex flex-column">
             <div className="popUpOrderFirstCol FullLName d-flex">
