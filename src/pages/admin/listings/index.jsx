@@ -1,136 +1,140 @@
-import { useState, useEffect, useMemo, useRef } from "react"
+import { useState, useEffect, useMemo, useRef } from "react";
 
-import CheckMarkListing from "../../../assets/img/checkMark.svg"
-import Edit from "../../../assets/img/Edit.svg"
-import EditHover from "../../../assets/img/EditHover.svg"
-import Delete from "../../../assets/img/delete.svg"
-import DeleteIconHover from "../../../assets/img/deleteIconHover.svg"
+import CheckMarkListing from "../../../assets/img/checkMark.svg";
+import Edit from "../../../assets/img/Edit.svg";
+import EditHover from "../../../assets/img/EditHover.svg";
+import Delete from "../../../assets/img/delete.svg";
+import DeleteIconHover from "../../../assets/img/deleteIconHover.svg";
 
-import { api } from "../../../services/api"
+import { api } from "../../../services/api";
 
-import Nav from "../../../components/nav"
-import CheckBoxLog from "../../../components/checkBox"
-import SearchListings from "../../../components/searchListings"
-import { EditButton, DeleteButton } from "../../../components/buttonListings"
-import Pagination from "../../../components/paginations"
-import AddListings from "../../../components/addListing"
-import EditModalListings from "../../../components/modals/modalListing"
-import { Modal } from "../../../components/modal"
-import { ListingDetails } from "../../../components/listing-details"
-import { ListingDetailsProvider } from "../../../context/listingDetailsContext"
+import Nav from "../../../components/nav";
+import CheckBoxLog from "../../../components/checkBox";
+import SearchListings from "../../../components/searchListings";
+import { EditButton, DeleteButton } from "../../../components/buttonListings";
+import Pagination from "../../../components/paginations";
+import AddListings from "../../../components/addListing";
+import EditModalListings from "../../../components/modals/modalListing";
+import { Modal } from "../../../components/modal";
+import { ListingDetails } from "../../../components/listing-details";
+import { ListingDetailsProvider } from "../../../context/listingDetailsContext";
 
-const PAGE_SIZE = 10
+const PAGE_SIZE = 10;
 
 export default function AdminListings() {
-  const [listings, setListings] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false)
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const [searchId, setSearchId] = useState("")
-  const [searchResults, setSearchResults] = useState([])
-  const [listingDetails, setListingDetails] = useState(null)
+  const [listings, setListings] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [searchId, setSearchId] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [listingDetails, setListingDetails] = useState(null);
 
-  const listingDetailsModalRef = useRef(null)
-  
-  const totalListings = listings.length
-  const totalPages = Math.ceil(totalListings / PAGE_SIZE)
+  const listingDetailsModalRef = useRef(null);
+
+  const totalListings = listings.length;
+  const totalPages = Math.ceil(totalListings / PAGE_SIZE);
 
   const filteredListings = useMemo(() => {
     if (searchId) {
-      return searchResults
+      return searchResults;
     }
 
     if (showOnlyPublicListings) {
-      return listings.filter(listing => listing.isPublic)
+      return listings.filter((listing) => listing.isPublic);
     }
 
-    return listings
-  }, [searchId, searchResults, listings, showOnlyPublicListings])
+    return listings;
+  }, [searchId, searchResults, listings, showOnlyPublicListings]);
 
   const handleSearch = (searchValue) => {
-    setSearchId(searchValue)
+    setSearchId(searchValue);
 
     if (searchValue === "") {
-      setSearchResults([])
-      return
+      setSearchResults([]);
+      return;
     }
 
     const filteredListings = listings.filter((listing) => {
-      const paddedId = listing.id.toString().padStart(6, "0")
+      const paddedId = listing.id.toString().padStart(6, "0");
       return (
         paddedId === searchValue ||
         listing.location.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    })
+      );
+    });
 
-    setSearchResults(filteredListings)
-  }
+    setSearchResults(filteredListings);
+  };
 
   const handleAddListing = () => {
-    setShowCreateModal(true)
-  }
+    setShowCreateModal(true);
+  };
 
   const handleModalClose = () => {
-    setShowCreateModal(false)
-  }
-  
+    setShowCreateModal(false);
+  };
+
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber)
-  }
+    setCurrentPage(pageNumber);
+  };
 
   const handleDeleteListing = async (listingId) => {
-    const shouldRemove = confirm('Are you sure you want to remove this listing? This action cannot be undone.')
-    
+    const shouldRemove = confirm(
+      "Are you sure you want to remove this listing? This action cannot be undone."
+    );
+
     if (!shouldRemove) {
-      return
+      return;
     }
 
     try {
-      await api.delete(`/listing/${listingId}`)
+      await api.delete(`/listing/${listingId}`);
 
       const updatedListing = listings.filter(
         (listing) => listing.id !== listingId
-      )
-      setListings(updatedListing)
-    }catch(err) {
-      alert('Failed to delete listing')
+      );
+      setListings(updatedListing);
+    } catch (err) {
+      alert("Failed to delete listing");
     }
-  }
+  };
 
   const handleCheckBoxChange = () => {
-    setShowOnlyPublicListings(!showOnlyPublicListings)
-  }
+    setShowOnlyPublicListings(!showOnlyPublicListings);
+  };
 
   const handleOpenListingDetails = (listing) => {
-    setListingDetails(listing)
+    setListingDetails(listing);
 
-    listingDetailsModalRef.current.open()
-  }
+    listingDetailsModalRef.current.open();
+  };
 
   useEffect(() => {
     async function loadListings() {
       try {
-        const { data } = await api.get('/listing')
+        const { data } = await api.get("/listing");
 
-        setListings(data.map(listing => {
-          if (!listing.key) {
-            return listing
-          }
+        setListings(
+          data.map((listing) => {
+            if (!listing.key) {
+              return listing;
+            }
 
-          const encodedKey = listing.key.replace(/\\/g, "%5C")
+            const encodedKey = listing.key.replace(/\\/g, "%5C");
 
-          return {
-            ...listing,
-            key: `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`
-          }
-        }))
+            return {
+              ...listing,
+              key: `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`,
+            };
+          })
+        );
       } catch (err) {
-        alert('Error loading listings: ', err)
+        alert("Error loading listings: ", err);
       }
     }
 
-    loadListings()
-  }, [])
+    loadListings();
+  }, []);
 
   return (
     <>
@@ -262,7 +266,9 @@ export default function AdminListings() {
                           className="delete"
                           onClick={() => handleDeleteListing(listing.id)}
                           defaultImage={<img src={Delete} alt="Delete" />}
-                          hoverImage={<img src={DeleteIconHover} alt="DeleteIconHover" />}
+                          hoverImage={
+                            <img src={DeleteIconHover} alt="DeleteIconHover" />
+                          }
                         />
                       </td>
                     </tr>
@@ -297,5 +303,5 @@ export default function AdminListings() {
         onPageChange={handlePageChange}
       />
     </>
-  )
+  );
 }

@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from "react";
 import "../../styles/publIcListings/application.css";
 import Logo from "../../assets/img/Logo.svg";
-import img1 from "../../assets/img/1.jpg";
-import axios from "axios";
-import ToggleYes from "../../assets/img/ToggleYes.svg";
-import ToggleNo from "../../assets/img/ToggleNo.svg";
 import { api } from "../../services/api";
 
 const ApplicationModal = ({ selectedImage, onClose, id }) => {
@@ -15,13 +11,10 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
   const [selectedListing, setSelectedListing] = useState(null); // Define selectedListing state variable
   const [Amenities, setAmenities] = useState([""]);
   const [Requirements, setRequirements] = useState([""]);
-  const [toggleOn, setToggleOn] = useState(false);
-  const [toggleOn1, setToggleOn1] = useState(false);
-  const [toggleOn2, setToggleOn2] = useState(false);
-  const [toggleOn3, setToggleOn3] = useState(false);
-  const [toggleOn4, setToggleOn4] = useState(false);
-  const [toggleOn5, setToggleOn5] = useState(false);
   const [formData, setFormData] = useState({});
+  const [message, setMessage] = useState("");
+  const [isStartScreening, setIsStartScreening] = useState(false);
+  const [userId, setUserId] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,43 +33,33 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
 
   const submitRegistration = async (e) => {
     e.preventDefault();
-    console.log(formData);
     try {
       const response = await api.post("/user/tenant", {
         ...formData,
         approvalStatus: "Pending",
       });
       console.log(response);
+      setUserId(response.data.id);
+      setMessage("Registration successful!");
+      setIsStartScreening(true);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
+      setMessage(err.response.data.message);
     }
   };
-
-  const handleClickToggle1 = () => {
-    setToggleOn1(!toggleOn1);
+  const handleStartScreening = async () => {
+    const applicatioData = {
+      user: userId,
+      listingId: selectedListing.id,
+      status: "PENDING",
+    };
+    try {
+      const response = await api.post("/application-screening", applicatioData);
+      // window.open("https://apply.link/43NlfsW", "_blank");
+    } catch (err) {
+      console.log(err.response);
+    }
   };
-
-  const handleClickToggle2 = () => {
-    setToggleOn2(!toggleOn2);
-  };
-
-  const handleClickToggle3 = () => {
-    setToggleOn3(!toggleOn3);
-  };
-  const handleClickToggle4 = () => {
-    setToggleOn4(!toggleOn4);
-  };
-  const handleClickToggle5 = () => {
-    setToggleOn5(!toggleOn5);
-  };
-  const handleClickToggle6 = () => {
-    setToggleOn6(!toggleOn6);
-  };
-  const handleSectionClick = (section) => {
-    setActiveSection(section);
-  };
-
-  const navigate = useNavigate();
 
   const handleLogoClick = () => {
     onClose();
@@ -96,7 +79,6 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
         setSelectedListing(selectedListingData);
         setAmenities(selectedListingData?.Amenities || []);
         setRequirements(selectedListingData?.Requirements || []);
-        console.log("applicationModal", selectedListing);
       } catch (error) {
         console.error("Error fetching listings:", error);
       }
@@ -134,7 +116,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
             alt="Logo"
             onClick={handleLogoClick}
           />
-          {/* <h2 className="Application">Application</h2> */}
+          <h2 className="Application">Application</h2>
           {/* <nav className="navBar1 d-flex align-items-center">
             <ul>
               <li
@@ -312,35 +294,11 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
                   <input
                     className="form-control inputReset"
                     type="text"
-                    placeholder="DRIVER LICENSE # / STATE"
-                    name="driverLicense"
-                    required
-                    onChange={handleChange}
-                  />
-                  <input
-                    className="form-control inputReset"
-                    type="date"
-                    placeholder="BIRTH DATE"
-                    name="birthDay"
-                    required
-                    onChange={handleChange}
-                  />
-                  <input
-                    className="form-control inputReset"
-                    type="text"
                     placeholder="PHONE NO 123-456-7890 "
                     name="phoneNumber"
                     required
                     onChange={handleChange}
                     value={formData.phoneNumber || ""}
-                  />
-                  <input
-                    className="form-control inputReset"
-                    type="password"
-                    placeholder="PASSWORD"
-                    name="password"
-                    required
-                    onChange={handleChange}
                   />
                   <input
                     className="form-control inputReset"
@@ -350,10 +308,28 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
                     required
                     onChange={handleChange}
                   />
+                  <input
+                    className="form-control inputReset"
+                    type="password"
+                    placeholder="PASSWORD"
+                    name="password"
+                    required
+                    onChange={handleChange}
+                  />
+
                   <button className="bgButton d-flex align-items-center justify-content-center">
                     <span className="submitBtn">Submit</span>
                   </button>
+                  <p style={{ color: "#31af9a" }}>{message}</p>
                 </form>
+                {isStartScreening && (
+                  <button
+                    className="bgButton d-flex align-items-center justify-content-center"
+                    onClick={handleStartScreening}
+                  >
+                    <span className="submitBtn">Start Screening</span>
+                  </button>
+                )}
               </div>
             </div>
           )}
