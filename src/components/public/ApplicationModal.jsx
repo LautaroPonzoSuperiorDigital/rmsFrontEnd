@@ -48,14 +48,17 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
     }
   };
   const handleStartScreening = async () => {
-    const applicatioData = {
-      user: userId,
+    const applicationData = {
+      userId: userId,
       listingId: selectedListing.id,
       status: "PENDING",
     };
     try {
-      const response = await api.post("/application-screening", applicatioData);
-      // window.open("https://apply.link/43NlfsW", "_blank");
+      const response = await api.post(
+        "/application-screening",
+        applicationData
+      );
+      window.open("https://apply.link/43NlfsW", "_blank");
     } catch (err) {
       console.log(err.response);
     }
