@@ -5,7 +5,8 @@ import React from "react";
 const tenantsData = [
   {
     id: 1,
-    name: "Maria Kramer",
+    first_name: "Maria",
+    last_name: "Kramer",
     listings: "46780",
     status: "Paid Feb 1, 2023",
     email: "marianie@gmail.com",
@@ -15,7 +16,8 @@ const tenantsData = [
   },
   {
     id: 2,
-    name: "Hamish Mago",
+    first_name: "Hamish",
+    last_name:"Mago",
     listings: "57478",
     status: "Paid Feb 1, 2023",
     email: "hamishmago@gmail.com",
@@ -25,7 +27,8 @@ const tenantsData = [
   },
   {
     id: 3,
-    name: "Alessia Beelzebub",
+    first_name: "Alessia",
+    last_name: "Beelzebub",
     listings: "47474",
     status: "Paid Feb 1, 2023",
     email: "alessiabeelzebub@gmail.com",
@@ -35,7 +38,8 @@ const tenantsData = [
   },
   {
     id: 4,
-    name: "Monroe Ally",
+    first_name: "Monroe",
+    last_name: "Ally",
     listings: "67926",
     status: "Paid Feb 1, 2023",
     email: "monroeally@gmail.com",
@@ -45,7 +49,8 @@ const tenantsData = [
   },
   {
     id: 5,
-    name: "Nellie Velda",
+    first_name: "Nellie",
+    last_name: "Velda",
     listings: "13425",
     status: "Paid Feb 1, 2023",
     email: "nellievelda@gmail.com",
@@ -55,7 +60,8 @@ const tenantsData = [
   },
   {
     id: 6,
-    name: "Freda Katherine",
+    first_name: "Freda",
+    last_name: "Katherine",
     listings: "24235",
     status: "Missed Payment Feb 1, 2023",
     email: "fredaka@gmail.com",
@@ -65,7 +71,8 @@ const tenantsData = [
   },
   {
     id: 7,
-    name: "Maryan Deitra",
+    first_name: "Maryan",
+    last_name: "Deitra",
     listings: "09432",
     status: "Paid Feb 1, 2023",
     email: "marymary@gmail.com",
@@ -75,7 +82,8 @@ const tenantsData = [
   },
   {
     id: 8,
-    name: "Blue Regena",
+    first_name: "Blue",
+    last_name: "Regena",
     listings: "07466",
     status: "Paid Feb 1, 2023",
     email: "blueregena@gmail.com",
@@ -85,7 +93,8 @@ const tenantsData = [
   },
   {
     id: 9,
-    name: "Averie Elise",
+    first_name: "Averie",
+    last_name: "Elise",
     listings: "32441",
     status: "Paid Feb 1, 2023",
     email: "averieelise@gmail.com",
@@ -95,7 +104,8 @@ const tenantsData = [
   },
   {
     id: 10,
-    name: "Evonne Jodene",
+    first_name: "Evonne",
+    last_name: "Jodene",
     listings: "35347",
     status: "Paid Feb 1, 2023",
     email: "evonnejodene@gmail.com",
