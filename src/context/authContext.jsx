@@ -16,6 +16,11 @@ export function AuthProvider({ children }) {
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
   }, [])
 
+  const onSignedOut = useCallback(() => {
+    setUser(null)
+    localStorage.removeItem(ACCESS_TOKEN_KEY)
+  }, [])
+
   useEffect(() => {
     async function loadUserSession() {
       try {
@@ -23,6 +28,7 @@ export function AuthProvider({ children }) {
         setUser(data)
       } catch (err) {
         setUser(null)
+        localStorage.removeItem(ACCESS_TOKEN_KEY)
       }
 
       setIsLoading(false)
@@ -36,8 +42,9 @@ export function AuthProvider({ children }) {
       user,
       isAuthenticated: !!user,
       onSignedIn,
+      onSignedOut,
     }),
-    [user, onSignedIn]
+    [user, onSignedIn, onSignedOut]
   )
 
   if (isLoading) {

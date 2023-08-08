@@ -30,7 +30,9 @@ const Login = () => {
     }
   }, [navigate])
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
+    event.preventDefault()
+
     try {
       const { data } = await api.post("/auth/local/signin", {
         email,
@@ -60,7 +62,7 @@ const Login = () => {
     <div className="loginBgContainer">
       <div className="LoginContainer">
         <img className="logo" src={Logo} alt="Logo" />
-        <div className="form">
+        <form className="form" onSubmit={handleLogin}>
           <input
             className="inputs"
             type="email"
@@ -79,16 +81,10 @@ const Login = () => {
           <a href="forgotPassword" className="forgot">
             Forgot password?
           </a>
-          <button
-            className="button"
-            onClick={(e) => {
-              e.preventDefault();
-              handleLogin();
-            }}
-          >
+          <button className="button" type="submit">
             Log In
           </button>
-        </div>
+        </form>
       </div>
       {/* Responsive */}
       <div className="responsiveOrderLogin d-flex align-items-center justify-content-center">
@@ -96,6 +92,7 @@ const Login = () => {
           <form
             className="responsiveForm d-flex justify-content-center align-items-center"
             action="submit"
+            onSubmit={handleLogin}
           >
             <div className="containerLogoResponsive">
               <img className="logoResponsive" src={Logo} alt="Logo" />
@@ -112,19 +109,13 @@ const Login = () => {
               placeholder="PASSWORD"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              type="text"
+              type="password"
             />
             <div className="d-flex w-100 justify-content-end">
               <p className="fpResponsive ">Forgot Password?</p>
             </div>
             <div className="responsiveLoginBtnContainer d-flex align-items-center justify-content-center">
-              <button
-                className="loginBtnTextResponsive"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLogin();
-                }}
-              >
+              <button className="loginBtnTextResponsive" type="submit">
                 Log In
               </button>
             </div>

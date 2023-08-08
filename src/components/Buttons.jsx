@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/tenants.css";
 
-export const EditButton = ({ defaultImage, hoverImage, onClick, index }) => {
+export const EditButton = ({ defaultImage, hoverImage, onClick, index, tenant, onSave, onClose }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isDeletingHovered, setIsDeletingHovered] = useState(false);
 
@@ -25,7 +25,9 @@ export const EditButton = ({ defaultImage, hoverImage, onClick, index }) => {
       <span className="imageContainer">
         {isHovered ? hoverImage : defaultImage}
       </span>
-      {isDeletingHovered && <div className="confirmationBox">Edit This Tenant</div>}
+      {isDeletingHovered && (
+        <div className="confirmationBox">Edit This Tenant</div>
+      )}
     </button>
   );
 };

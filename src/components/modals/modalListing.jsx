@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/modal.css";
-import testImg from "../../assets/img/testImg.jpg";
 import bg from "../../assets/img/BG.svg";
 import closeListing from "../../assets/img/close.svg";
 import closeHover from "../../assets/img/closeHover.svg";
 import ModalListingsImgs from "./modalListingsImgs";
 import axios from "axios";
+import { api } from "../../services/api"
 
 const EditModalListings = ({ renderSectionContent }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false);
@@ -163,23 +163,22 @@ const EditModalListings = ({ renderSectionContent }) => {
       image: selectedImage,
     };
 
-    axios
-      .post(`https://api.certifymyrent.com/listing`, data, {
-        headers: { "Content-Type": "application/json" },
-      })
-      .then((response) => {
-        console.log(response.data);
+    delete data.id
 
-        // Eliminar las imágenes del localStorage y del estado
-        localStorage.removeItem("images");
-        setSelectedImage(null);
+    api.post('/listing', data)
+    .then((response) => {
+      console.log(response.data);
 
-        // Recargar la página
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      // Eliminar las imágenes del localStorage y del estado
+      localStorage.removeItem("images");
+      setSelectedImage(null);
+
+      // Recargar la página
+      window.location.reload();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   };
   let hasNoImages =
     !renderSectionContent || renderSectionContent.images.length === 0;

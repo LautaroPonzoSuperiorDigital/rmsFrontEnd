@@ -69,7 +69,7 @@ const PublicListings = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/listing');
+        const response = await api.get("/listing");
         const modifiedListings = response.data.map((item) => {
           const encodedKey = item.key.replace(/\\/g, "%5C");
           const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
@@ -197,7 +197,8 @@ const PublicListings = () => {
                   </div>
                   <div className="spects2">
                     <p className="spectText d-flex justify-content-end location mt-3">
-                      {listing.location.split(",")[2].trim()},{" "}
+                      {listing.location}
+                      {/* {listing.location.split(",")[2].trim()},{" "}
                       {listing.location
                         .split(",")[3]
                         .trim()
@@ -207,7 +208,7 @@ const PublicListings = () => {
                         .split(",")[3]
                         .trim()
                         .substring(1, 2)
-                        .toLowerCase()}
+                        .toLowerCase()} */}
                     </p>
                     <div className="icons1 d-flex justify-content-end">
                       <span className="nbedbath">{listing.bedrooms}</span>
