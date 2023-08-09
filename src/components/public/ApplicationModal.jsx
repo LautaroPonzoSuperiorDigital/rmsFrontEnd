@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import "../../styles/publIcListings/application.css";
 import Logo from "../../assets/img/Logo.svg";
 import { api } from "../../services/api";
+import { env } from "../../config/env";
 
 const ApplicationModal = ({ selectedImage, onClose, id }) => {
   const [activeSection, setActiveSection] = useState("registration");
@@ -58,7 +59,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
         "/application-screening",
         applicationData
       );
-      window.open("https://apply.link/43NlfsW", "_blank");
+      window.open(env.rentSpreeLink, "_blank");
     } catch (err) {
       console.log(err.response);
     }
