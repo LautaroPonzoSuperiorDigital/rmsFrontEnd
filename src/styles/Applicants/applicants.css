@@ -1,81 +1,78 @@
 .tables {
-    width: 100%;
-    height: 10%;
-    border-bottom: 1px solid rgba(128, 128, 128, 0.267);
-    font-family: "proxima-nova", sans-serif;
+  width: 100%;
+
+  border-bottom: 1px solid rgba(128, 128, 128, 0.267);
+  font-family: "proxima-nova", sans-serif;
 }
-.tables p{
-    color: #000000a5;
+.tables p {
+  color: #000000a5;
 }
 
 .NAME1 {
-    width: 15%;
+  width: 15%;
 }
 
 .NAME1 p {
-    margin-left: 3rem;
+  margin-left: 3rem;
 }
 
 .Person {
-    margin-left: 3rem;
+  margin-left: 3rem;
 }
 
 .LISTING1 {
-    width: 5%;
+  width: 5%;
 }
 
 .EMAIL1 {
-    width: 20%;
+  width: 20%;
 }
 
 .deleteText {
-    margin-left: 22%;
+  margin-left: 22%;
 }
 
 .deleteBtn1 {
-    margin-left: 25%;
-    margin-top: 0.7rem;
+  margin-left: 25%;
+  margin-top: 0.7rem;
 }
 
 .whiteSpace {
-    width: 15%;
+  width: 15%;
 }
 
 .bor {
-    color: #000000a5;
+  color: #000000a5;
 }
 .bor1 {
-    border-bottom: 1px solid rgba(128, 128, 128, 0.267);
-    font-family: "proxima-nova", sans-serif;
-    color: black;
-    white-space: nowrap;
-    opacity: 1;
-    font-size: 16px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.267);
+  font-family: "proxima-nova", sans-serif;
+  color: black;
+  white-space: nowrap;
+  opacity: 1;
+  font-size: 16px;
 }
 
-
 .mtt {
-    height: 10rem;
-    margin-left: 3rem;
-    margin-top: 0.6rem;
+  margin-left: 3rem;
+  margin-top: 0.6rem;
 }
 
 .mttContainer {
-    color: red;
-    border: 1px solid red;
-    height: 2.5rem;
-    width: 10rem;
+  color: red;
+  border: 1px solid red;
+  height: 2.5rem;
+  width: 10rem;
 }
 
 .mttContainer:hover {
-    border: 1px solid #197572;
+  border: 1px solid #197572;
 }
 
 .mttContainer:hover {
-    color: #197572;
+  color: #197572;
 }
 
 .animation-container {
-    height: 2.3rem;
-    margin-right: 4rem;
+  margin-right: 4rem;
 }

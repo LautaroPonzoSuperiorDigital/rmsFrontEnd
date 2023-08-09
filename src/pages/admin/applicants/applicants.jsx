@@ -2,18 +2,16 @@ import { useState, useEffect, useRef } from "react";
 import Nav from "../../../components/nav";
 import "../../../styles/Applicants/applicants.css";
 import SearchListings from "../../../components/searchListings";
-
 import Pagination from "../../../components/paginations";
-
 import Animation from "../../../assets/img//animation.json";
 import lottie from "lottie-web";
-
 import { api } from "../../../services/api";
 import Table from "./Table";
 
 const Applicants = () => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [applicants, setApplicants] = useState([]);
+  const [newTanant, setNewTanant] = useState(false);
   const animationContainerRef = useRef(null);
 
   useEffect(() => {
@@ -21,13 +19,12 @@ const Applicants = () => {
       try {
         const applicants = await api.get("/application-screening/get-all");
         setApplicants(applicants.data);
-        console.log(applicants.data);
       } catch (err) {
         console.log(err);
       }
     };
     fetchApplicants();
-  }, []);
+  }, [newTanant]);
 
   useEffect(() => {
     if (showAnimation) {
@@ -62,7 +59,11 @@ const Applicants = () => {
             <SearchListings className="searchApplicants" />
           </div>
         </div>
-        <Table applicants={applicants} />
+        <Table
+          applicants={applicants}
+          setNewTanant={setNewTanant}
+          setApplicants={setApplicants}
+        />
       </div>
 
       <Pagination />
