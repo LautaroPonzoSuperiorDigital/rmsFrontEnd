@@ -7,10 +7,10 @@ import Edit from "../../assets/img/EditPopUp.svg";
 import EditHover from "../../assets/img/EditPopUpHover.svg";
 import Delete from "../../assets/img/DeletePopUp.svg";
 import DeleteIconHover from "../../assets/img/DeletePopUpHover.svg";
-import testImg from "../../assets/img/testImg.jpg"
+import testImg from "../../assets/img/testImg.jpg";
 import AddDocs from "./addDocumentsModal";
 import { api } from "../../services/api";
-
+import jwtDecode from "jwt-decode";
 
 const TenantModal = ({ selectedTenant, onClose }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -18,6 +18,11 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   const [isHoveredEdit, setIsHoveredEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hoveredDocuments, setHoveredDocuments] = useState({});
+
+  const [token, setToken] = useState("");
+  const [decodedToken, setDecodedToken] = useState(null);
+  const [adminData, setAdminData] = useState({});
+  const [tenantData, setTenantData] = useState({});
 
   const [documentsData, setDocumentsData] = useState([]);
   const [activeSection, setActiveSection] = useState("DOCUMENTS");
@@ -34,6 +39,55 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     setIsModalOpen(true);
   };
 
+  const handleDeleteClick = async (documentId) => {
+    try {
+      const createDocument = await api.post(
+        "/tenant/1/pandadoc/template/create-document",
+        {
+          templateUuid: documentId,
+          name: `California S. R. L. Agreement - ${adminData.name} and ${tenantData.User.name}`,
+          recipients: [
+            {
+              email: adminData.email,
+              first_name: String(adminData.name).split(" ")[0],
+              last_name: String(tenantData.name).split(" ")[1] || null,
+              role: "ADMIN",
+            },
+            {
+              email: tenantData.User.email,
+              first_name: String(tenantData.User.name).split(" ")[0],
+              last_name: String(tenantData.User.name).split(" ")[1] || null,
+              role: "TENANT",
+            },
+          ],
+          tags: ["rms-api"],
+        }
+      );
+
+      if (createDocument.status > 201) {
+        throw new Error("Could not create document");
+      }
+
+      // The document creation process may take some time => https://developers.pandadoc.com/reference/new-document
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+
+      const sendDocument = await api.post(
+        `/tenant/1/pandadoc/document/${createDocument.data.id}/send`,
+        {
+          subject: "Listing document sign",
+          message: "You were invited to sign the following document:",
+          silent: false,
+        }
+      );
+
+      if (sendDocument.status > 201) {
+        throw new Error("Could not create document");
+      }
+    } catch (error) {
+      console.error("Error fetching documents data:", error);
+    }
+  };
+
   useEffect(() => {
     async function loadDocuments() {
       try {
@@ -48,7 +102,44 @@ const TenantModal = ({ selectedTenant, onClose }) => {
       }
     }
 
+    async function getTokenFromLocalStorage() {
+      try {
+        const storedToken = localStorage.getItem("certifymyrent.token");
+
+        if (!storedToken) throw new Error("Could not get token");
+
+        setToken(storedToken);
+        setDecodedToken(jwtDecode(storedToken));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    async function getAdminData() {
+      try {
+        const { sub } = decodedToken;
+        const { data } = await api.get(`/user/${sub}`);
+
+        setAdminData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    async function getTenantData() {
+      try {
+        // TODO: update to tenant id
+        const { data } = await api.get(`/tenant/1`);
+        setTenantData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     loadDocuments();
+    getTokenFromLocalStorage();
+    getAdminData();
+    getTenantData();
   }, []);
 
   const renderSectionContent = (section) => {
@@ -67,13 +158,18 @@ const TenantModal = ({ selectedTenant, onClose }) => {
         return (
           <div className="renderBoxsOrder d-flex align-items-start justify-content-start">
             {documentChunks.map((documentSubset, index) => (
-              <div key={`boxInfoOrderCreate_${index}`} className="boxInfoOrderCreate">
+              <div
+                key={`boxInfoOrderCreate_${index}`}
+                className="boxInfoOrderCreate"
+              >
                 {documentSubset.map((document) => (
                   <div className="boxInfo d-flex" key={document.id}>
                     <div className="boxInfoOrder d-flex">
                       <div className="firstBoxDoc">
                         <p className="ms-3 mt-2 mb-0">{document.name}</p>
-                        <span>{new Date(document.dateCreated).toDateString()}</span>
+                        <span>
+                          {new Date(document.dateCreated).toDateString()}
+                        </span>
                       </div>
                       <div className="secondBoxDoc d-flex justify-content-end">
                         {hoveredDocuments[document.id] ? (
@@ -81,14 +177,26 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                             src={DeleteIconHover}
                             alt="DeleteIconHover"
                             className="imgBtnDocs delBox"
-                            onMouseLeave={() => setHoveredDocuments({ ...hoveredDocuments, [document.id]: false })}
+                            onMouseLeave={() =>
+                              setHoveredDocuments({
+                                ...hoveredDocuments,
+                                [document.id]: false,
+                              })
+                            }
+                            onClick={() => handleDeleteClick(document.id)}
                           />
                         ) : (
                           <img
                             src={Delete}
                             alt="Delete"
                             className="imgBtnDocs delBox"
-                            onMouseEnter={() => setHoveredDocuments({ ...hoveredDocuments, [document.id]: true })}
+                            onMouseEnter={() =>
+                              setHoveredDocuments({
+                                ...hoveredDocuments,
+                                [document.id]: true,
+                              })
+                            }
+                            onClick={() => handleDeleteClick(document.id)}
                           />
                         )}
                       </div>
@@ -101,19 +209,14 @@ const TenantModal = ({ selectedTenant, onClose }) => {
         );
 
       case "PAYMENT HISTORY":
-
         return <div></div>;
       case "INSPECTION HISTORY":
         return (
-          <div className="renderBoxsOrder d-flex align-items-start justify-content-start ">
-
-          </div>
+          <div className="renderBoxsOrder d-flex align-items-start justify-content-start "></div>
         );
       case "APPLICATION FORM":
         return (
-          <div className="renderBoxsOrder d-flex align-items-start justify-content-start ">
-
-          </div>
+          <div className="renderBoxsOrder d-flex align-items-start justify-content-start "></div>
         );
       default:
         return null;
@@ -138,12 +241,14 @@ const TenantModal = ({ selectedTenant, onClose }) => {
               onClick={onClose}
             />
           )}
-        </div> 
+        </div>
         <div className="orderGlobalPopUp d-flex">
           <div className="tenantInfo d-flex flex-column">
             <div className="popUpOrderFirstCol FullLName d-flex">
               <p>FULL LEGAL NAME</p>
-              <span>{selectedTenant.first_name} {selectedTenant.last_name}</span> 
+              <span>
+                {selectedTenant.first_name} {selectedTenant.last_name}
+              </span>
             </div>
             <div className="popUpOrderFirstCol DriverLicense d-flex">
               <p>DRIVER LICENSE # / STATE</p>
@@ -174,7 +279,10 @@ const TenantModal = ({ selectedTenant, onClose }) => {
             </div>
           </div>
           <div className="listingInfo d-flex">
-            <div className="imgTestPopUp"> <img className="imgTestPopUpInsert" src={testImg} alt="" /></div>
+            <div className="imgTestPopUp">
+              {" "}
+              <img className="imgTestPopUpInsert" src={testImg} alt="" />
+            </div>
             <div className="listingInfoOrder d-flex flex-column">
               <div className="popUpOrderListings">
                 <div className="popUpOrderFirstCol idPopUp d-flex">
