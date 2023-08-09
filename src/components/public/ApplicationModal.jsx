@@ -36,7 +36,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
     try {
       const response = await api.post("/user/tenant", {
         ...formData,
-        approvalStatus: "Pending",
+        approvalStatus: "SCREENING_IN_PROCESS",
       });
       console.log(response);
       setUserId(response.data.id);

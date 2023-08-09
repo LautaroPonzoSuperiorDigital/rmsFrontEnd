@@ -1,19 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DeleteButton } from "../../../components/buttonApplicants";
 import Delete from "../../../assets/img/delete.svg";
 import DeleteIconHover from "../../../assets/img/deleteIconHover.svg";
 import TableSelect from "./TableSelect";
+import ButtonTenant from "./ButtonTenant";
 
-const Table = ({ applicants }) => {
-  const [showMoveButton, setShowMoveButton] = useState(true);
-  const [showAnimation, setShowAnimation] = useState(false);
-  const animationContainerRef = useRef(null);
-
-  const handleMoveToTenants = () => {
-    setShowMoveButton(false);
-    setShowAnimation(true);
-  };
+const Table = ({ applicants, setNewTanant }) => {
+  const [moveToTenant, setMoveToTenant] = useState(false);
 
   return (
     <table className="table table-responsive-lg">
@@ -26,9 +20,6 @@ const Table = ({ applicants }) => {
         </td>
         <td className="bor">
           <p className="mb-2 ms-5 g">APPROVAL STATUS</p>
-        </td>
-        <td className="bor">
-          <p className="mb-2 ms-5 g">APPROVAL BACKGROUND</p>
         </td>
         <td className="bor EMAIL1">
           <p className="mb-2 g">EMAIL</p>
@@ -58,14 +49,12 @@ const Table = ({ applicants }) => {
             </td>
             <td className="bor1">
               <div className="mt-3 ms-5">
-                <p>{item.approvalStatus}</p>
-              </div>
-            </td>
-            <td className="bor1">
-              <div className="mt-3 ms-5">
-                {item.User.ApplicationScreening.map((application) => (
-                  <TableSelect application={application} key={application.id} />
-                ))}
+                <TableSelect
+                  approbalStatus={item.approvalStatus}
+                  key={item.id}
+                  tenantId={item.id}
+                  setMoveToTenant={setMoveToTenant}
+                />
               </div>
             </td>
             <td className="bor1">
@@ -81,21 +70,12 @@ const Table = ({ applicants }) => {
             <td className="bor1">
               <div className="mtt">
                 {item.User.ApplicationScreening.map((item) => (
-                  <div key={item.id} className="mb-1 ">
-                    {showMoveButton ? (
-                      <button
-                        className="mttContainer"
-                        onClick={handleMoveToTenants}
-                      >
-                        Move To Tenants
-                      </button>
-                    ) : (
-                      <div
-                        className="animation-container"
-                        ref={animationContainerRef}
-                      ></div>
-                    )}
-                  </div>
+                  <ButtonTenant
+                    moveToTenant={moveToTenant}
+                    key={item.id}
+                    tenantId={item.id}
+                    setNewTanant={setNewTanant}
+                  />
                 ))}
               </div>
             </td>
