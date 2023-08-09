@@ -1,13 +1,17 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { DeleteButton } from "../../../components/buttonApplicants";
 import Delete from "../../../assets/img/delete.svg";
 import DeleteIconHover from "../../../assets/img/deleteIconHover.svg";
 import TableSelect from "./TableSelect";
 import ButtonTenant from "./ButtonTenant";
 
-const Table = ({ applicants, setNewTanant }) => {
-  const [moveToTenant, setMoveToTenant] = useState(false);
+const tBodyStyle = {
+  height: "50px",
+};
+
+const Table = ({ applicants, setNewTanant, setApplicants }) => {
+  const [moveToTenant, setMoveToTenant] = useState([]);
 
   return (
     <table className="table table-responsive-lg">
@@ -32,7 +36,7 @@ const Table = ({ applicants, setNewTanant }) => {
           <p className="deleteText g">DELETE</p>
         </td>
       </thead>
-      <tbody>
+      <tbody style={tBodyStyle}>
         {applicants.map((item) => (
           <tr className="tr-hover" key={item.id}>
             <td className="bor1">
@@ -54,6 +58,7 @@ const Table = ({ applicants, setNewTanant }) => {
                   key={item.id}
                   tenantId={item.id}
                   setMoveToTenant={setMoveToTenant}
+                  setApplicants={setApplicants}
                 />
               </div>
             </td>
@@ -69,14 +74,14 @@ const Table = ({ applicants, setNewTanant }) => {
             </td>
             <td className="bor1">
               <div className="mtt">
-                {item.User.ApplicationScreening.map((item) => (
+                {item.approvalStatus === "LEASE_AGREEMENT_SIGNED" && (
                   <ButtonTenant
-                    moveToTenant={moveToTenant}
                     key={item.id}
                     tenantId={item.id}
+                    approvalStatus={item.approvalStatus}
                     setNewTanant={setNewTanant}
                   />
-                ))}
+                )}
               </div>
             </td>
             <td className="bor1">

@@ -1,8 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../../services/api";
 
-const TableSelect = ({ approbalStatus, tenantId, setMoveToTenant }) => {
+const TableSelect = ({
+  approbalStatus,
+  tenantId,
+  setMoveToTenant,
+  setApplicants,
+}) => {
   const [statusValue, setStatusValue] = useState(approbalStatus);
 
   const handleStatuChange = async (value) => {
@@ -11,9 +16,13 @@ const TableSelect = ({ approbalStatus, tenantId, setMoveToTenant }) => {
         approvalStatus: value,
       });
       setStatusValue(value);
-      value === "LEASE_AGREEMENT_SIGNED"
-        ? setMoveToTenant(true)
-        : setMoveToTenant(false);
+      setApplicants((prevApplicants) =>
+        prevApplicants.map((applicant) =>
+          applicant.id === tenantId
+            ? { ...applicant, approvalStatus: value }
+            : applicant
+        )
+      );
     } catch (err) {
       console.log(err);
     }

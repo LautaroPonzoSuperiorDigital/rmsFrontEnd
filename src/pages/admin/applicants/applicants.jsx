@@ -59,7 +59,11 @@ const Applicants = () => {
             <SearchListings className="searchApplicants" />
           </div>
         </div>
-        <Table applicants={applicants} setNewTanant={setNewTanant} />
+        <Table
+          applicants={applicants}
+          setNewTanant={setNewTanant}
+          setApplicants={setApplicants}
+        />
       </div>
 
       <Pagination />

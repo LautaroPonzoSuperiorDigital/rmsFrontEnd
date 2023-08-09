@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef } from "react";
 import { api } from "../../../services/api";
 
@@ -20,13 +21,9 @@ const ButtonTenant = ({ moveToTenant, tenantId, setNewTanant }) => {
 
   return (
     <div className="mb-1 ">
-      {moveToTenant ? (
-        <button className="mttContainer" onClick={handleMoveToTenant}>
-          Move To Tenants
-        </button>
-      ) : (
-        <div className="animation-container" ref={animationContainerRef}></div>
-      )}
+      <button className="mttContainer" onClick={handleMoveToTenant}>
+        Move To Tenants
+      </button>
     </div>
   );
 };
