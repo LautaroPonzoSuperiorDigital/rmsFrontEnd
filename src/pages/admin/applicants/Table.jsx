@@ -1,19 +1,17 @@
 /* eslint-disable react/prop-types */
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { DeleteButton } from "../../../components/buttonApplicants";
 import Delete from "../../../assets/img/delete.svg";
 import DeleteIconHover from "../../../assets/img/deleteIconHover.svg";
 import TableSelect from "./TableSelect";
+import ButtonTenant from "./ButtonTenant";
 
-const Table = ({ applicants }) => {
-  const [showMoveButton, setShowMoveButton] = useState(true);
-  const [showAnimation, setShowAnimation] = useState(false);
-  const animationContainerRef = useRef(null);
+const tBodyStyle = {
+  height: "50px",
+};
 
-  const handleMoveToTenants = () => {
-    setShowMoveButton(false);
-    setShowAnimation(true);
-  };
+const Table = ({ applicants, setNewTanant, setApplicants }) => {
+  const [moveToTenant, setMoveToTenant] = useState([]);
 
   return (
     <table className="table table-responsive-lg">
@@ -27,9 +25,6 @@ const Table = ({ applicants }) => {
         <td className="bor">
           <p className="mb-2 ms-5 g">APPROVAL STATUS</p>
         </td>
-        <td className="bor">
-          <p className="mb-2 ms-5 g">APPROVAL BACKGROUND</p>
-        </td>
         <td className="bor EMAIL1">
           <p className="mb-2 g">EMAIL</p>
         </td>
@@ -41,7 +36,7 @@ const Table = ({ applicants }) => {
           <p className="deleteText g">DELETE</p>
         </td>
       </thead>
-      <tbody>
+      <tbody style={tBodyStyle}>
         {applicants.map((item) => (
           <tr className="tr-hover" key={item.id}>
             <td className="bor1">
@@ -58,14 +53,13 @@ const Table = ({ applicants }) => {
             </td>
             <td className="bor1">
               <div className="mt-3 ms-5">
-                <p>{item.approvalStatus}</p>
-              </div>
-            </td>
-            <td className="bor1">
-              <div className="mt-3 ms-5">
-                {item.User.ApplicationScreening.map((application) => (
-                  <TableSelect application={application} key={application.id} />
-                ))}
+                <TableSelect
+                  approbalStatus={item.approvalStatus}
+                  key={item.id}
+                  tenantId={item.id}
+                  setMoveToTenant={setMoveToTenant}
+                  setApplicants={setApplicants}
+                />
               </div>
             </td>
             <td className="bor1">
@@ -80,23 +74,14 @@ const Table = ({ applicants }) => {
             </td>
             <td className="bor1">
               <div className="mtt">
-                {item.User.ApplicationScreening.map((item) => (
-                  <div key={item.id} className="mb-1 ">
-                    {showMoveButton ? (
-                      <button
-                        className="mttContainer"
-                        onClick={handleMoveToTenants}
-                      >
-                        Move To Tenants
-                      </button>
-                    ) : (
-                      <div
-                        className="animation-container"
-                        ref={animationContainerRef}
-                      ></div>
-                    )}
-                  </div>
-                ))}
+                {item.approvalStatus === "LEASE_AGREEMENT_SIGNED" && (
+                  <ButtonTenant
+                    key={item.id}
+                    tenantId={item.id}
+                    approvalStatus={item.approvalStatus}
+                    setNewTanant={setNewTanant}
+                  />
+                )}
               </div>
             </td>
             <td className="bor1">
