@@ -91,7 +91,9 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   useEffect(() => {
     async function loadDocuments() {
       try {
-        const { data } = await api.get("/tenant/1/pandadoc/template");
+        const { data } = await api.get(
+          `/tenant/${tenantData.id}/pandadoc/template`
+        );
         if (!data || !data.results) {
           throw new Error("Network data was not ok");
         }
@@ -117,8 +119,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
     async function getAdminData() {
       try {
-        const { sub } = decodedToken;
-        const { data } = await api.get(`/user/${sub}`);
+        const { data } = await api.get(`/user/${decodedToken.sub}`);
 
         setAdminData(data);
       } catch (error) {
