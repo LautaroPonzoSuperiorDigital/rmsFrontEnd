@@ -21,6 +21,7 @@ const Applicants = () => {
         const applicants = await api.get("/application-screening/get-all");
         setApplicants(applicants.data);
         setTableApplicants(applicants.data);
+        setNewTanant(false);
       } catch (err) {
         console.log(err);
       }
@@ -69,6 +70,7 @@ const Applicants = () => {
           applicants={tabelApplicants}
           setNewTanant={setNewTanant}
           setApplicants={setApplicants}
+          setTableApplicants={setTableApplicants}
         />
       </div>
 

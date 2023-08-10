@@ -17,7 +17,6 @@ function SearchListings({ applicants, setTableApplicants }) {
         applicant.User.email.toLowerCase().includes(searchQuery) ||
         applicant.User.name.toLowerCase().includes(searchQuery)
     );
-    console.log(filteredApplicants);
     setTableApplicants(filteredApplicants);
   };
 

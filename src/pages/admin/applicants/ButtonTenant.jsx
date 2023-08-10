@@ -2,15 +2,23 @@
 import { useEffect, useRef } from "react";
 import { api } from "../../../services/api";
 
-const ButtonTenant = ({ moveToTenant, tenantId, setNewTanant }) => {
+const ButtonTenant = ({
+  moveToTenant,
+  tenantId,
+  setNewTanant,
+  applicantionScreening,
+}) => {
+  const listingId = applicantionScreening[0].listingId;
   const animationContainerRef = useRef(null);
 
   const handleMoveToTenant = async () => {
     try {
+      console.log("click");
       const tenant = await api.patch(`/tenant/${tenantId}`, {
         approvalStatus: "APPROVED",
+        listingId: `${listingId}`,
+        tenantId: `${tenantId}`,
       });
-      console.log(tenant);
       setNewTanant(true);
     } catch (err) {
       console.log(err);
