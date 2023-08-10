@@ -1,4 +1,5 @@
 import { RouterProvider } from "react-router-dom";
+
 import adminRouter from "./admin.routes";
 import publicRouter from "./public.routes";
 import tenantsRouter from "./tenants.routes";

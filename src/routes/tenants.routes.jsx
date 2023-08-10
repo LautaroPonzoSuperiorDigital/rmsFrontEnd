@@ -1,11 +1,14 @@
 import { Navigate, createBrowserRouter } from "react-router-dom"
+
 import TenantChatRoom from "../components/TenantChatRoom"
 import TenantsProfile from "../components/TenantsProfile"
 import Tenants from "../components/tenants"
 
+import { TenantsLayout } from "../layouts/tenants"
+
 const tenantsRoutes = [
   {
-    path: '',
+    path: 'contact-us',
     element: <Tenants />
   },
   {
@@ -18,12 +21,18 @@ const tenantsRoutes = [
   }
 ]
 
-const tenantsRouter = createBrowserRouter([
-  { path: '/tenants', children: tenantsRoutes },
+const tenantsRouter = createBrowserRouter(
+  [
+  {
+    element: <TenantsLayout />,
+    children: tenantsRoutes
+  },
   {
     path: '*',
-    element: <Navigate to="/tenants" replace /> 
+    element: <Navigate to="/" replace /> 
   }
-])
+  ],
+  { basename: '/tenants' },
+)
 
 export default tenantsRouter

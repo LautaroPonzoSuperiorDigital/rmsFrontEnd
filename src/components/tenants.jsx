@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/Responsive/tenantsMobile.css";
 import Profile from "../assets/img/Profile.svg";
 import ProfileHover from "../assets/img/ProfileHover.svg";
@@ -13,11 +13,13 @@ import TenantsRepairTicket from "./TenantsRepairTicket";
 import TenantComplaintTicket from "./TenantComplaintTicket";
 import TenantDocuments from "./TenantDocuments";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { api } from "../services/api";
 
 const Tenants = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+
   /* Hovers */
   const [isProfileHovered, setProfileHovered] = useState(false);
   const [isBubbleChatIconHovered, setBubbleChatIconHovered] = useState(false);
@@ -44,6 +46,16 @@ const Tenants = () => {
   const handleCloseDocuments = () => {
     setModalDocuments(false);
   };
+
+  useEffect(() => {
+    async function loadDocuments() {
+      const { data } = await api.get(`/tenant/${user.tenantId}/document`)
+      console.log(data)
+    }
+
+    loadDocuments()
+  }, [user])
+
   /* Functions */
   return (
     /* TENANTS MOBILE */
@@ -63,19 +75,19 @@ const Tenants = () => {
           <TenantDocuments onCloseModal={handleCloseDocuments} />
         )
       )}
-      <div className="d-flex align-items-center justify-content-between profileBarMobile">
+      {/* <div className="d-flex align-items-center justify-content-between profileBarMobile">
         <h1>
           {user.approvalStatus === "Pending" ? "Applicant" : "CONTACT US"}
         </h1>
-        <button>
+        <Link to="/profile" className="profileLink">
           <img
             src={isProfileHovered ? ProfileHover : Profile}
             alt="ProfileImg"
             onMouseEnter={() => setProfileHovered(true)}
             onMouseLeave={() => setProfileHovered(false)}
           />
-        </button>
-      </div>
+        </Link>
+      </div> */}
       <div className="tenantsContainerMobileButtons d-flex align-items-center justify-content-center">
         <div className="divisionButtonContainer">
           <div
@@ -104,7 +116,8 @@ const Tenants = () => {
           </div>
         </div>
       </div>
-      <div className="mobileFooterMainMenu d-flex align-items-center justify-content-between">
+
+      {/* <div className="mobileFooterMainMenu d-flex align-items-center justify-content-between">
         <button className="iconOrderMobile d-flex justify-items-center align-items-center ChatIcon">
           <img
             src={isBubbleChatIconHovered ? BubbleChatIconHover : BubbleChatIcon}
@@ -140,7 +153,7 @@ const Tenants = () => {
           />
           <p>Payments</p>
         </button>
-      </div>
+      </div> */}
     </div>
     /* TENANTS MOBILE */
   );
