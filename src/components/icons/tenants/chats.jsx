@@ -36,5 +36,5 @@ export function Chats({ filled = false }) {
 }
 
 Chats.propTypes = {
-  filled: PropTypes.boolean
+  filled: PropTypes.bool
 }

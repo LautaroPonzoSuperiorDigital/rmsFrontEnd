@@ -6,11 +6,18 @@ import TenantsProfile from "../components/TenantsProfile"
 import ContactUs from "../pages/tenants/contact-us"
 
 import { TenantsLayout } from "../layouts/tenants"
+import Documents from "../pages/tenants/documents"
+import documentsLoader from "../pages/tenants/documents/loader"
 
 const tenantsRoutes = [
   {
     path: 'contact-us',
     element: <ContactUs />
+  },
+  {
+    path: 'documents',
+    element: <Documents />,
+    loader: documentsLoader,
   },
   {
     path: 'profile',
@@ -25,7 +32,7 @@ const tenantsRoutes = [
 const applicantsRoutes = [
   {
     path: 'documents',
-    element: <h1>Documents</h1>
+    element: <Documents />
   },
   {
     path: 'profile',

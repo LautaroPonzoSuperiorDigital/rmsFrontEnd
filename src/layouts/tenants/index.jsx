@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 
 import { BottomNavbar } from './bottom-navbar'
 
-import { TenantsLayoutWrapper } from "./styles"
+import { PageContent, TenantsLayoutWrapper } from "./styles"
 import { TenanstHeader } from './header'
 
 export function TenantsLayout() {
@@ -10,7 +10,9 @@ export function TenantsLayout() {
     <TenantsLayoutWrapper>
       <TenanstHeader />
       
-      <Outlet />
+      <PageContent>
+        <Outlet />
+      </PageContent>
 
       <BottomNavbar />
     </TenantsLayoutWrapper>

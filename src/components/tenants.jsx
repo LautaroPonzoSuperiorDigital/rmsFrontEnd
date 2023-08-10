@@ -47,15 +47,6 @@ const Tenants = () => {
     setModalDocuments(false);
   };
 
-  useEffect(() => {
-    async function loadDocuments() {
-      const { data } = await api.get(`/tenant/${user.tenantId}/document`)
-      console.log(data)
-    }
-
-    loadDocuments()
-  }, [user])
-
   /* Functions */
   return (
     /* TENANTS MOBILE */

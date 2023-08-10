@@ -36,5 +36,5 @@ export function Documents({ filled = false }) {
 }
 
 Documents.propTypes = {
-  filled: PropTypes.boolean
+  filled: PropTypes.bool
 }

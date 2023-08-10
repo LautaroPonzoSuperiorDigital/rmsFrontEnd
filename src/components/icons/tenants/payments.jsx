@@ -36,5 +36,5 @@ export function Payments({ filled = false }) {
 }
 
 Payments.propTypes = {
-  filled: PropTypes.boolean
+  filled: PropTypes.bool
 }

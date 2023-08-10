@@ -1,6 +1,10 @@
 import { DateTime } from 'luxon'
 
-export const formatDate = (date, dateZone) =>
+export const formatDate = (date, dateZone, formatOptions) =>
   date instanceof DateTime
-    ? date.toLocaleString(DateTime.DATE_FULL)
-    : formatDate(DateTime.fromISO(date, { zone: dateZone || 'utc' }))
+    ? date.toLocaleString(formatOptions || DateTime.DATE_FULL)
+    : formatDate(
+      DateTime.fromISO(date, { zone: dateZone || 'utc' }),
+      dateZone,
+      formatOptions,
+    )

@@ -36,5 +36,5 @@ export function Profile({ filled = false }) {
 }
 
 Profile.propTypes = {
-  filled: PropTypes.boolean
+  filled: PropTypes.bool
 }
