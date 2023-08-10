@@ -10,7 +10,12 @@ const tBodyStyle = {
   height: "50px",
 };
 
-const Table = ({ applicants, setNewTanant, setApplicants }) => {
+const Table = ({
+  applicants,
+  setNewTanant,
+  setApplicants,
+  setTableApplicants,
+}) => {
   const [moveToTenant, setMoveToTenant] = useState([]);
 
   return (
@@ -58,7 +63,7 @@ const Table = ({ applicants, setNewTanant, setApplicants }) => {
                   key={item.id}
                   tenantId={item.id}
                   setMoveToTenant={setMoveToTenant}
-                  setApplicants={setApplicants}
+                  setApplicants={setTableApplicants}
                 />
               </div>
             </td>
@@ -77,6 +82,7 @@ const Table = ({ applicants, setNewTanant, setApplicants }) => {
                 {item.approvalStatus === "LEASE_AGREEMENT_SIGNED" && (
                   <ButtonTenant
                     key={item.id}
+                    applicantionScreening={item.User.ApplicationScreening}
                     tenantId={item.id}
                     approvalStatus={item.approvalStatus}
                     setNewTanant={setNewTanant}
