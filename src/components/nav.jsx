@@ -10,7 +10,7 @@ import { useAuth } from "../hooks/useAuth";
 
 const Nav = () => {
   const navigate = useNavigate()
-  const { onSignedOut } = useAuth()
+  const { user, onSignedOut } = useAuth()
 
   const handleSignOut = () => [
     onSignedOut()
@@ -82,7 +82,7 @@ const Nav = () => {
         <ul className="navbar-nav ms-auto username">
           <li className="nav-item d-flex align-items-center">
             <NavLink className="nav-link user" to="/profile">
-              <span className="username-text">John Smith</span>
+              <span className="username-text">{user?.name}</span>
             </NavLink>
             <button className="nav-link logout" onClick={handleSignOut}>
               <img className="Logout" src={Logout} alt="Logout" />

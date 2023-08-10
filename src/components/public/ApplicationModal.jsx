@@ -53,6 +53,10 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
       userId: userId,
       listingId: selectedListing.id,
       status: "PENDING",
+      location: selectedListing.location,
+      name: formData.name,
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
     };
     try {
       const response = await api.post(

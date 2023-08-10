@@ -221,7 +221,7 @@ export default function AdminListings() {
                                 maximumFractionDigits: 0,
                               })
                             : ""}
-                          &nbspSq. Ft. Per County
+                          &nbsp;&nbsp;Sq. Ft. Per County
                         </p>
                       </td>
                       <td className="h p1 td td2">
@@ -231,18 +231,18 @@ export default function AdminListings() {
                                 maximumFractionDigits: 0,
                               })
                             : ""}
-                          &nbspSq. Ft. Per County
+                          &nbsp;&nbsp;Sq. Ft. Per County
                         </p>
                       </td>
                       <td className="h p1 td td2">
                         <p className="alignText d-flex align-items-center">
-                          $&nbsp
+                          $
                           {listing.price
                             ? parseFloat(listing.price).toLocaleString("en", {
                                 useGrouping: true,
                               })
                             : ""}
-                          &nbsp / mo
+                          / mo
                         </p>
                       </td>
                       <td className="h p1 td td2"></td>

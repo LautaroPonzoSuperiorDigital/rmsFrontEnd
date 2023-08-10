@@ -244,7 +244,6 @@
 }
 
 .boxInfoOrderCreate {
-
     width: 25%;
     height: 100%;
 }
@@ -252,7 +251,7 @@
 .boxInfo {
     width: 75%;
     height: 84px;
-    margin-top: 6%;
+    margin-top: 5%;
     margin-left: 9%;
     flex-direction: row;
 }
@@ -260,6 +259,7 @@
 .boxInfoOrder {
     border: 1px solid #00000026;
     width: 100%;
+    height: 95%;
 }
 
 .boxInfoOrder p {

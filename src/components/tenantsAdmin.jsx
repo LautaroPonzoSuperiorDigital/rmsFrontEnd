@@ -186,7 +186,7 @@ const TenantsAdmin = () => {
                             handleCellClick(tenant, "name", event)
                           }
                         >
-                          <p className="p1 h">{tenant.name}</p>
+                          <p className="p1 h">{tenant.first_name} {tenant.last_name}</p>
                         </td>
                         <td
                           onClick={(event) =>

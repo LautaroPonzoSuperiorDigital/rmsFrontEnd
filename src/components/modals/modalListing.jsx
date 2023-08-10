@@ -166,20 +166,17 @@ const EditModalListings = ({ renderSectionContent }) => {
     delete data.id
 
     api.post('/listing', data)
-    .then((response) => {
-      console.log(response.data);
-
-      // Eliminar las imágenes del localStorage y del estado
-      localStorage.removeItem("images");
-      setSelectedImage(null);
-
-      // Recargar la página
-      window.location.reload();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+      .then((response) => {
+        console.log(response.data);
+        localStorage.removeItem("images");
+        setSelectedImage(null);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
+
   let hasNoImages =
     !renderSectionContent || renderSectionContent.images.length === 0;
   /* IMAGES */
