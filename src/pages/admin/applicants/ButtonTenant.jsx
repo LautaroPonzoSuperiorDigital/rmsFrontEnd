@@ -8,7 +8,7 @@ const ButtonTenant = ({
   setNewTanant,
   applicantionScreening,
 }) => {
-  const listingId = applicantionScreening[0].listingId;
+  const listingId = applicantionScreening[0]?.listingId;
   const animationContainerRef = useRef(null);
 
   const handleMoveToTenant = async () => {
