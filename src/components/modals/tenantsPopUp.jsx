@@ -247,7 +247,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
             <div className="popUpOrderFirstCol FullLName d-flex">
               <p>FULL LEGAL NAME</p>
               <span>
-                {selectedTenant.User.name} {selectedTenant.last_name}
+                {selectedTenant.User.name}
               </span>
             </div>
             <div className="popUpOrderFirstCol pNo d-flex">
@@ -257,7 +257,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
             <div className="popUpOrderFirstCol emailpopUp d-flex">
               <p>EMAIL</p>
-              <span>{selectedTenant.email}</span>
+              <span>{selectedTenant.User.email}</span>
             </div>
             <div className="popUpOrderFirstCol contractDatesPopUp d-flex">
               <p>CONTRACT DATES</p>
