@@ -15,6 +15,7 @@ const TableSelect = ({
       const response = await api.patch(`/tenant/${tenantId}`, {
         approvalStatus: value,
       });
+      console.log(response);
       setStatusValue(value);
       setApplicants((prevApplicants) =>
         prevApplicants.map((applicant) =>

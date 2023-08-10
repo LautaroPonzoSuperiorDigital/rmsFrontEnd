@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import SearchIcon from "../assets/img/SearchIcon.svg";
 import SearchIconHover from "../assets/img/SearchIconHover.svg";
 import "../styles/tenants.css";
 
-function SearchListings({ onSearch }) {
+function SearchListings({ applicants, setTableApplicants }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(null);
 
   const handleSearchChange = (event) => {
-    onSearch(event.target.value);
+    const searchQuery = event.target.value.trim().toLowerCase();
+    setSearchValue(searchQuery);
+
+    const filteredApplicants = applicants.filter(
+      (applicant) =>
+        applicant.User.email.toLowerCase().includes(searchQuery) ||
+        applicant.User.name.toLowerCase().includes(searchQuery)
+    );
+    setTableApplicants(filteredApplicants);
   };
+
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -26,6 +36,7 @@ function SearchListings({ onSearch }) {
         placeholder="Search"
         aria-label="Search"
         aria-describedby="button-addon2"
+        value={searchValue}
         onChange={handleSearchChange}
       />
 
