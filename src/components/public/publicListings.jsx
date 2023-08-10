@@ -101,9 +101,8 @@ const PublicListings = () => {
           />
           <form method="GET">
             <input
-              className={`inputPublic ms-5 ${
-                isInputHovered ? "inputHovered" : ""
-              }`}
+              className={`inputPublic ms-5 ${isInputHovered ? "inputHovered" : ""
+                }`}
               type="text"
               placeholder="     Keyword Or City"
               required
@@ -112,9 +111,8 @@ const PublicListings = () => {
             />
             <button type="submit">
               <img
-                className={`SearchIconListings justify-content-start ${
-                  isInputHovered || isSearchIconHovered ? "SearchIconHover" : ""
-                }`}
+                className={`SearchIconListings justify-content-start ${isInputHovered || isSearchIconHovered ? "SearchIconHover" : ""
+                  }`}
                 src={
                   isInputHovered || isSearchIconHovered
                     ? SearchIconHover
@@ -165,8 +163,8 @@ const PublicListings = () => {
                       $&nbsp;
                       {listing.price
                         ? parseFloat(listing.price).toLocaleString("en", {
-                            useGrouping: true,
-                          })
+                          useGrouping: true,
+                        })
                         : ""}
                       &nbsp;
                       <span className="strong"> per month</span>
@@ -176,8 +174,8 @@ const PublicListings = () => {
                       <span className="strong">
                         {listing.houseSize
                           ? listing.houseSize.toLocaleString("EN", {
-                              maximumFractionDigits: 0,
-                            })
+                            maximumFractionDigits: 0,
+                          })
                           : ""}
                         &nbsp;SQ. FT.
                       </span>
@@ -188,8 +186,8 @@ const PublicListings = () => {
                       <span className="strong">
                         {listing.lotSize
                           ? listing.lotSize.toLocaleString("EN", {
-                              maximumFractionDigits: 0,
-                            })
+                            maximumFractionDigits: 0,
+                          })
                           : ""}{" "}
                         &nbsp;SQ. FT.
                       </span>
@@ -197,8 +195,7 @@ const PublicListings = () => {
                   </div>
                   <div className="spects2">
                     <p className="spectText d-flex justify-content-end location mt-3">
-                      {listing.location}
-                      {/* {listing.location.split(",")[2].trim()},{" "}
+                      {listing.location.split(",")[2].trim()},{" "}
                       {listing.location
                         .split(",")[3]
                         .trim()
@@ -208,7 +205,7 @@ const PublicListings = () => {
                         .split(",")[3]
                         .trim()
                         .substring(1, 2)
-                        .toLowerCase()} */}
+                        .toLowerCase()}
                     </p>
                     <div className="icons1 d-flex justify-content-end">
                       <span className="nbedbath">{listing.bedrooms}</span>
