@@ -1,5 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
+import { useAuth } from "../../../hooks/useAuth"
+
 import { HeaderGoBack, Profile } from "../../../components/icons/tenants"
 
 import { GoBackButton, HeaderContainer, Title } from "./styles"
@@ -7,10 +9,16 @@ import { GoBackButton, HeaderContainer, Title } from "./styles"
 export function TenanstHeader() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   const goBack = () => navigate(-1)
 
-  const hideGoBackButton = pathname === '/contact-us'
+  const hideGoBackButton = user.isApplicant ? pathname === '/documents' : pathname === '/contact-us'
+
+  const title = pathname
+    .replace(/-/g, ' ')
+    .replace(/\//g, ' ')
+    .toUpperCase()
 
   return (
     <HeaderContainer>
@@ -23,7 +31,7 @@ export function TenanstHeader() {
         <HeaderGoBack />
       </GoBackButton>
 
-      <Title>Contact Us</Title>
+      <Title>{title}</Title>
 
       <Link to="/profile">
         <Profile />

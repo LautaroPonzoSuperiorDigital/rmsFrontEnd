@@ -22,20 +22,43 @@ const tenantsRoutes = [
   }
 ]
 
-const tenantsRouter = createBrowserRouter(
-  [
+const applicantsRoutes = [
   {
-    element: <TenantsLayout />,
-    children: tenantsRoutes
+    path: 'documents',
+    element: <h1>Documents</h1>
   },
   {
-    path: '*',
-    element: <Navigate to="/contact-us" replace /> 
-  }
-  ],
-  { basename: '/tenants' },
-)
+    path: 'profile',
+    element: <TenantsProfile />
+  },
+]
 
-export const createTenantsRouter = () => {
-  return tenantsRouter
+export const createTenantsRouter = (user) => {
+  let routes
+
+  if (user.isApplicant) {
+    routes = [
+      {
+        element: <TenantsLayout />,
+        children: applicantsRoutes
+      },
+      {
+        path: '*',
+        element: <Navigate to="/documents" replace /> 
+      }
+    ]
+  } else {
+    routes = [
+      {
+        element: <TenantsLayout />,
+        children: tenantsRoutes
+      },
+      {
+        path: '*',
+        element: <Navigate to="/contact-us" replace /> 
+      }
+    ]
+  }
+
+  return createBrowserRouter(routes, { basename: '/tenants' })
 }

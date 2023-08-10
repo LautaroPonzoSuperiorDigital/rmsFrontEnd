@@ -18,7 +18,7 @@ export default function AppRoutes() {
   }
 
   if (user?.role === 'TENANT') {
-    const tenantsRouter = createTenantsRouter()
+    const tenantsRouter = createTenantsRouter(user)
 
     return (
       <RouterProvider router={tenantsRouter} />
