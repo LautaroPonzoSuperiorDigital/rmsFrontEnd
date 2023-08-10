@@ -7,11 +7,11 @@ export default function ContactUs() {
         create a repair ticket
       </ChatLink>
 
-      <ChatLink>
+      <ChatLink to="/create-complaint-ticket">
         create a complaint ticket
       </ChatLink>
 
-      <ChatLink>
+      <ChatLink to="/chat">
         chat with the manager
       </ChatLink>
     </ContactUsContainer>

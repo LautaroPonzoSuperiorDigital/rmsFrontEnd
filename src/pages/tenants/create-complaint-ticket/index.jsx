@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react"
 
 import { useTenantsLayout } from "../../../layouts/tenants/context"
-
-import { CheckBoxContainer, CreateRepairTicketContainer, FormInput, Message, SubmitButton } from "./styles"
-import CheckBoxLog from "../../../components/checkBox"
 import { useAuth } from "../../../hooks/useAuth"
 import { api } from "../../../services/api"
 
-export default function CreateRepairTicket() {
+import { CreateComplaintTicketContainer, FormInput, Message, SubmitButton } from "./styles"
+
+export default function CreateComplaintTicket() {
   const [message, setMessage] = useState('')
   
   const { showNavbar, hideNavbar } = useTenantsLayout()
@@ -17,17 +16,14 @@ export default function CreateRepairTicket() {
     e.preventDefault()
 
     const formData = {
-      name: e.target.name.value,
-      description: e.target.description.value,
-      location: e.target.location.value,
+      cause: e.target.cause.value,
       additionalNotes: e.target.additionalNotes.value,
-      visitAnytime: e.target.visitAnyTime.checked,
       tenantId: user.tenantId,
       listingId: 1,
     }
 
     try {
-      const { data } = await api.post("/tenant/ticket-repair", formData);
+      const { data } = await api.post("/tenant/ticket-complaint", formData);
       
       setMessage("Your ticket has been submitted");
       
@@ -47,20 +43,10 @@ export default function CreateRepairTicket() {
   }, [hideNavbar, showNavbar])
 
   return (
-    <CreateRepairTicketContainer onSubmit={handleSubmit}>
+    <CreateComplaintTicketContainer onSubmit={handleSubmit}>
       <FormInput
-        placeholder="NAME OF THE ISSUE"
-        name="name"
-      />
-
-      <FormInput
-        placeholder="DESCRIPTION"
-        name="description"
-      />
-
-      <FormInput
-        placeholder="LOCATION"
-        name="location"
+        placeholder="CAUSE"
+        name="cause"
       />
 
       <FormInput
@@ -68,19 +54,11 @@ export default function CreateRepairTicket() {
         name="additionalNotes"
       />
 
-      <CheckBoxContainer>
-        <CheckBoxLog name="visitAnyTime" />
-
-        <label>
-          VISIT THE PROPERTY ANYTIME
-        </label>
-      </CheckBoxContainer>
-
       <Message>{message}</Message>
 
       <SubmitButton>
         Submit
       </SubmitButton>
-    </CreateRepairTicketContainer>
+    </CreateComplaintTicketContainer>
   )
 }

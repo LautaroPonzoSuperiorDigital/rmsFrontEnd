@@ -9,6 +9,7 @@ import ContactUs from "../pages/tenants/contact-us"
 import CreateRepairTicket from "../pages/tenants/create-repair-ticket"
 import Documents from "../pages/tenants/documents"
 import documentsLoader from "../pages/tenants/documents/loader"
+import CreateComplaintTicket from "../pages/tenants/create-complaint-ticket"
 
 const tenantsRoutes = [
   {
@@ -18,6 +19,10 @@ const tenantsRoutes = [
   {
     path: 'create-repair-ticket',
     element: <CreateRepairTicket />,
+  },
+  {
+    path: 'create-complaint-ticket',
+    element: <CreateComplaintTicket />,
   },
   {
     path: 'documents',
