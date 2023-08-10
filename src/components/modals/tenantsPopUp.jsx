@@ -128,8 +128,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
     async function getTenantData() {
       try {
-        // TODO: update to tenant id
-        const { data } = await api.get(`/tenant/1`);
+        const { data } = await api.get(`/tenant/${selectedTenant.id}`);
         setTenantData(data);
       } catch (error) {
         console.error(error);
