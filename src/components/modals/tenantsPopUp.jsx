@@ -125,6 +125,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
     async function getAdminData() {
       try {
+        console.log(setAdminData)
         const { data } = await api.get(`/user/${decodedToken.sub}`);
 
         setAdminData(data);
