@@ -5,6 +5,8 @@ import { BottomNavBarContainer, NavItem, NavItemText } from "./styles"
 export function BottomNavbar() {
   const { pathname } = useLocation()
 
+  console.log(pathname=== '/contact-us')
+
   return (
     <BottomNavBarContainer>
       <NavItem to="/contact-us" active={pathname === '/contact-us'}>

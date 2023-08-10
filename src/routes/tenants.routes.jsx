@@ -2,14 +2,15 @@ import { Navigate, createBrowserRouter } from "react-router-dom"
 
 import TenantChatRoom from "../components/TenantChatRoom"
 import TenantsProfile from "../components/TenantsProfile"
-import Tenants from "../components/tenants"
+
+import ContactUs from "../pages/tenants/contact-us"
 
 import { TenantsLayout } from "../layouts/tenants"
 
 const tenantsRoutes = [
   {
     path: 'contact-us',
-    element: <Tenants />
+    element: <ContactUs />
   },
   {
     path: 'profile',
@@ -29,7 +30,7 @@ const tenantsRouter = createBrowserRouter(
   },
   {
     path: '*',
-    element: <Navigate to="/" replace /> 
+    element: <Navigate to="/contact-us" replace /> 
   }
   ],
   { basename: '/tenants' },

@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const BottomNavBarContainer = styled.nav`
+  height: 3.125rem;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,7 +16,7 @@ export const BottomNavBarContainer = styled.nav`
 
 export const NavItemText = styled.span`
   font-size: 0.875rem;
-  color: ${({ active }) => active ? '#197572' : '#272727'};
+  color: #272727;
 
   transition: color 200ms ease;
 `
@@ -26,6 +28,12 @@ export const NavItem = styled(Link)`
   gap: 0.5rem;
 
   text-decoration: none;
+
+  ${({ active }) => active && css`
+    ${NavItemText} {
+      color: #197572;
+    }
+  `};
 
   &:hover ${NavItemText} {
     color: #197572;

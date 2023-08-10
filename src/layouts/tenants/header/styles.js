@@ -1,11 +1,16 @@
 import { css, styled } from "styled-components";
 
 export const HeaderContainer = styled.header`
+  position: fixed;
+  inset: 0;
+  bottom: unset;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  padding: 1rem;
+  padding: 0 1rem;
+  height: 3.5rem;
 `
 
 export const GoBackButton = styled.button`
