@@ -13,11 +13,12 @@ import { api } from "../../services/api";
 import jwtDecode from "jwt-decode";
 
 const TenantModal = ({ selectedTenant, onClose }) => {
+
   const [isHovered, setIsHovered] = useState(false);
-  const [isHoveredDelete, setIsHoveredDelete] = useState(false);
   const [isHoveredEdit, setIsHoveredEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hoveredDocuments, setHoveredDocuments] = useState({});
+  const [hoveredDocumentIndex, setHoveredDocumentIndex] = useState(null);
 
   const [token, setToken] = useState("");
   const [decodedToken, setDecodedToken] = useState(null);
@@ -31,16 +32,21 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     setIsHovered(isHovered);
     setActiveSection(sectionName);
   };
-  const handleDocumentHover = (documentIndex) => {
-    setHoveredDocumentIndex(documentIndex);
+  const handleDocumentHover = (documentId, isHovered) => {
+    setHoveredDocuments(prevHoveredDocuments => ({
+      ...prevHoveredDocuments,
+      [documentId]: isHovered
+    }));
   };
+
 
   const handleAddDocsClick = () => {
     setIsModalOpen(true);
   };
 
-  const handleSendPandadocClick = async (documentId) => {
+  const handleSendPandadocClick = async (documentId, isHovered) => {
     try {
+      console.log(adminData);
       const createDocument = await api.post(
         "/tenant/1/pandadoc/template/create-document",
         {
@@ -92,15 +98,15 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     async function loadDocuments() {
       try {
         const { data } = await api.get(
-          `/tenant/${tenantData.id}/pandadoc/template`
+          `/tenant/${selectedTenant.id}/pandadoc/template`
         );
-        if (!data || !data.results) {
+        if (!data) {
           throw new Error("Network data was not ok");
         }
         console.log("API Response:", data.results);
         setDocumentsData(data.results);
       } catch (err) {
-        console.error("Error fetching documents data:", err);
+        alert("Error fetching documents data:", err);
       }
     }
 
@@ -141,6 +147,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     getAdminData();
     getTenantData();
   }, []);
+  
 
   const renderSectionContent = (section) => {
     switch (section) {
@@ -162,7 +169,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 key={`boxInfoOrderCreate_${index}`}
                 className="boxInfoOrderCreate"
               >
-                {documentSubset.map((document) => (
+                {documentSubset.map((document, documentIndex) => (
                   <div className="boxInfo d-flex" key={document.id}>
                     <div className="boxInfoOrder d-flex">
                       <div className="firstBoxDoc">
@@ -172,31 +179,21 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                         </span>
                       </div>
                       <div className="secondBoxDoc d-flex justify-content-end">
-                        {hoveredDocuments[document.id] ? (
+                        {hoveredDocumentIndex === documentIndex ? (
                           <img
                             src={SendTemplateIconHover}
-                            alt="DeleteIconHover"
+                            alt="SendTemplateIconHover"
                             className="imgBtnDocs delBox"
-                            onMouseLeave={() =>
-                              setHoveredDocuments({
-                                ...hoveredDocuments,
-                                [document.id]: false,
-                              })
-                            }
-                            onClick={() => handleSendPandadocClick(document.id)}
+                            onMouseLeave={() => handleDocumentHover(null)}
+                            onClick={() => handleSendPandadocClick(document.id, false)}
                           />
                         ) : (
                           <img
                             src={SendTemplateIcon}
-                            alt="Delete"
+                            alt="SendTemplateIcon"
                             className="imgBtnDocs delBox"
-                            onMouseEnter={() =>
-                              setHoveredDocuments({
-                                ...hoveredDocuments,
-                                [document.id]: true,
-                              })
-                            }
-                            onClick={() => handleSendPandadocClick(document.id)}
+                            onMouseEnter={() => handleDocumentHover(documentIndex)}
+                            onClick={() => handleSendPandadocClick(document.id, true)}
                           />
                         )}
                       </div>
