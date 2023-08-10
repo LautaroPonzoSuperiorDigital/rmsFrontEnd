@@ -1,5 +1,13 @@
 import { styled } from "styled-components"
 
+const calcMaxHeight = ({ navbarIsShown }) => {
+  if (navbarIsShown) {
+    return 'calc(100vh - 3.5rem - 3.125rem)' 
+  }
+
+  return 'calc(100vh - 3.5rem)'
+}
+
 export const TenantsLayoutWrapper = styled.div`
   position: relative;
 
@@ -11,6 +19,6 @@ export const PageContent = styled.div`
   margin-top: 3.5rem;
   
   height: 100%;
-  max-height: calc(100vh - 3.5rem - 3.125rem);
+  max-height: ${calcMaxHeight};
   overflow-y: auto;
 `

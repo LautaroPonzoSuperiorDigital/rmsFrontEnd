@@ -1,20 +1,27 @@
 import { Outlet } from 'react-router-dom'
 
 import { BottomNavbar } from './bottom-navbar'
+import { TenanstHeader } from './header'
 
 import { PageContent, TenantsLayoutWrapper } from "./styles"
-import { TenanstHeader } from './header'
+import { TenantsLayoutContext, TenantsLayoutProvider } from './context'
 
 export function TenantsLayout() {
   return (
-    <TenantsLayoutWrapper>
-      <TenanstHeader />
-      
-      <PageContent>
-        <Outlet />
-      </PageContent>
+    <TenantsLayoutProvider>
+      <TenantsLayoutContext.Consumer>
+        {({ navbarIsShown }) => (
+          <TenantsLayoutWrapper>
+            <TenanstHeader />
 
-      <BottomNavbar />
-    </TenantsLayoutWrapper>
+            <PageContent navbarIsShown={navbarIsShown}>
+              <Outlet />
+            </PageContent>
+
+            <BottomNavbar />
+          </TenantsLayoutWrapper>
+        )}
+      </TenantsLayoutContext.Consumer>
+    </TenantsLayoutProvider>
   )
 }

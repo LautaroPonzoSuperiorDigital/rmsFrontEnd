@@ -3,9 +3,10 @@ import { Navigate, createBrowserRouter } from "react-router-dom"
 import TenantChatRoom from "../components/TenantChatRoom"
 import TenantsProfile from "../components/TenantsProfile"
 
-import ContactUs from "../pages/tenants/contact-us"
-
 import { TenantsLayout } from "../layouts/tenants"
+
+import ContactUs from "../pages/tenants/contact-us"
+import CreateRepairTicket from "../pages/tenants/create-repair-ticket"
 import Documents from "../pages/tenants/documents"
 import documentsLoader from "../pages/tenants/documents/loader"
 
@@ -13,6 +14,10 @@ const tenantsRoutes = [
   {
     path: 'contact-us',
     element: <ContactUs />
+  },
+  {
+    path: 'create-repair-ticket',
+    element: <CreateRepairTicket />,
   },
   {
     path: 'documents',

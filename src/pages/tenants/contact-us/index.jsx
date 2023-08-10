@@ -3,7 +3,7 @@ import { ChatLink, ContactUsContainer } from "./styles"
 export default function ContactUs() {
   return (
     <ContactUsContainer>
-      <ChatLink>
+      <ChatLink to="/create-repair-ticket">
         create a repair ticket
       </ChatLink>
 

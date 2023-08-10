@@ -2,13 +2,15 @@ import { useLocation } from "react-router-dom"
 import { Chats, Documents, Payments } from "../../../components/icons/tenants"
 import { BottomNavBarContainer, NavItem, NavItemText } from "./styles"
 import { useAuth } from "../../../hooks/useAuth"
+import { useTenantsNavbar } from "../context"
 
 export function BottomNavbar() {
   const { pathname } = useLocation()
   const { user } = useAuth()
+  const { navbarIsShown } = useTenantsNavbar()
 
-  if (!user) {
-    return null
+  if (!user || !navbarIsShown) {
+  return null
   }
 
   return (

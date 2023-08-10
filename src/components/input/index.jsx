@@ -3,7 +3,16 @@ import { forwardRef } from 'react'
 
 import { InputContainer, StyledInput } from './styles'
 
-const InputWithRef = ({ type, label, defaultValue, placeholder, onChange }, ref) => {
+const InputWithRef = ({
+  type,
+  label,
+  defaultValue,
+  placeholder,
+  onChange,
+  className,
+  name,
+},
+  ref) => {
   return (
     <InputContainer>
       {label}
@@ -14,6 +23,8 @@ const InputWithRef = ({ type, label, defaultValue, placeholder, onChange }, ref)
         defaultValue={defaultValue}
         placeholder={placeholder}
         onChange={onChange}
+        className={className}
+        name={name}
       />
     </InputContainer>
   )
@@ -25,6 +36,8 @@ InputWithRef.propTypes = {
   defaultValue: PropTypes.string,
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
+  className: PropTypes.string,
+  name: PropTypes.string,
 }
 
 export const Input = forwardRef(InputWithRef)
