@@ -36,4 +36,6 @@ const tenantsRouter = createBrowserRouter(
   { basename: '/tenants' },
 )
 
-export default tenantsRouter
+export const createTenantsRouter = () => {
+  return tenantsRouter
+}
