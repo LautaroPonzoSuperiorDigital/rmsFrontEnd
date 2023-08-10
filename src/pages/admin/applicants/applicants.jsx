@@ -11,6 +11,7 @@ import Table from "./Table";
 const Applicants = () => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [applicants, setApplicants] = useState([]);
+  const [tabelApplicants, setTableApplicants] = useState([]);
   const [newTanant, setNewTanant] = useState(false);
   const animationContainerRef = useRef(null);
 
@@ -19,6 +20,7 @@ const Applicants = () => {
       try {
         const applicants = await api.get("/application-screening/get-all");
         setApplicants(applicants.data);
+        setTableApplicants(applicants.data);
       } catch (err) {
         console.log(err);
       }
@@ -56,11 +58,15 @@ const Applicants = () => {
             </div>
           </div>
           <div className="container-fluid ListingContainer d-flex justify-content-end bttonContainer">
-            <SearchListings className="searchApplicants" />
+            <SearchListings
+              className="searchApplicants"
+              applicants={applicants}
+              setTableApplicants={setTableApplicants}
+            />
           </div>
         </div>
         <Table
-          applicants={applicants}
+          applicants={tabelApplicants}
           setNewTanant={setNewTanant}
           setApplicants={setApplicants}
         />
