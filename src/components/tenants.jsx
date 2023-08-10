@@ -68,7 +68,7 @@ const Tenants = () => {
       {isModalTicketComplaint && (
         <TenantComplaintTicket onCloseModal={handleCloseTicketComplaint} />
       )}
-      {user.approvalStatus === "Pending" ? (
+      {user.approvalStatus !== "APPROVED" ? (
         <TenantDocuments />
       ) : (
         isModalDocuments && (

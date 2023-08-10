@@ -1,23 +1,28 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../../services/api";
 
-const TableSelect = ({ application }) => {
-  const [statusValue, setStatusValue] = useState(application.status);
+const TableSelect = ({
+  approbalStatus,
+  tenantId,
+  setMoveToTenant,
+  setApplicants,
+}) => {
+  const [statusValue, setStatusValue] = useState(approbalStatus);
 
-  const handleStatuChange = async (id, value) => {
-    const applicationUpdate = {
-      applicationScreeningId: id,
-      status: value,
-    };
-    console.log(id, value);
+  const handleStatuChange = async (value) => {
     try {
-      const response = await api.patch(
-        "/application-screening",
-        applicationUpdate
-      );
-      console.log(response);
+      const response = await api.patch(`/tenant/${tenantId}`, {
+        approvalStatus: value,
+      });
       setStatusValue(value);
+      setApplicants((prevApplicants) =>
+        prevApplicants.map((applicant) =>
+          applicant.id === tenantId
+            ? { ...applicant, approvalStatus: value }
+            : applicant
+        )
+      );
     } catch (err) {
       console.log(err);
     }
@@ -28,11 +33,11 @@ const TableSelect = ({ application }) => {
       className="form-select"
       aria-label="status selecet"
       value={statusValue}
-      onChange={(e) => handleStatuChange(application.id, e.target.value)}
+      onChange={(e) => handleStatuChange(e.target.value)}
     >
-      <option value="PENDING">PENDING</option>
-      <option value="APPROVED">APPROVED</option>
-      <option value="REJECTED">REJECTED</option>
+      <option value="SCREENING_IN_PROCESS">Screening in progress</option>
+      <option value="LEASE_AGREEMENT">Lease agreement</option>
+      <option value="LEASE_AGREEMENT_SIGNED">Agreement signed</option>
     </select>
   );
 };
