@@ -13,16 +13,17 @@ import { api } from "../../services/api";
 import jwtDecode from "jwt-decode";
 
 const TenantModal = ({ selectedTenant, onClose }) => {
+
   const [isHovered, setIsHovered] = useState(false);
-  const [isHoveredDelete, setIsHoveredDelete] = useState(false);
   const [isHoveredEdit, setIsHoveredEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hoveredDocuments, setHoveredDocuments] = useState({});
+  const [hoveredDocumentIndex, setHoveredDocumentIndex] = useState(null);
+  const [adminData, setAdminData] = useState({});
+  const [tenantData, setTenantData] = useState({});
 
   const [token, setToken] = useState("");
   const [decodedToken, setDecodedToken] = useState(null);
-  const [adminData, setAdminData] = useState({});
-  const [tenantData, setTenantData] = useState({});
 
   const [documentsData, setDocumentsData] = useState([]);
   const [activeSection, setActiveSection] = useState("DOCUMENTS");
@@ -31,122 +32,141 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     setIsHovered(isHovered);
     setActiveSection(sectionName);
   };
-  const handleDocumentHover = (documentIndex) => {
-    setHoveredDocumentIndex(documentIndex);
+
+  const handleDocumentHover = (documentId, isHovered) => {
+    setHoveredDocuments(prevHoveredDocuments => ({
+      ...prevHoveredDocuments,
+      [documentId]: isHovered
+    }));
   };
+
+  function getTokenFromLocalStorage() {
+    const v = localStorage.getItem("certifymyrent.token")
+    if (!v) throw new Error("Could not get token");
+    setToken(v);
+    setDecodedToken(jwtDecode(v));
+  }
 
   const handleAddDocsClick = () => {
     setIsModalOpen(true);
   };
 
-  const handleSendPandadocClick = async (documentId) => {
+  async function getAdminData() {
+    console.log(decodedToken)
+    await api.get(`/user/${decodedToken.sub}`)
+      .then(request => {
+        setAdminData(request.data);
+        return request.data
+      })
+      .catch(e => {
+        console.error(e)
+      });
+  }
+
+  async function getTenantData() {
+    await api.get(`/tenant/${selectedTenant.id}`)
+      .then(response => {
+        setTenantData(response.data);
+        return response.data
+      })
+      .catch(e => {
+        console.error(e)
+      });
+  }
+
+  async function handleSendPandadocClick(documentId, isHovered, localAdminData) {
+    let responseDocumentId;
+    let name_split = String(localAdminData.name).split(" ");
+    let f_name = name_split[0];
+    let l_name = name_split.slice(1).join(" ");
+    let requestCreateData = {
+      templateUuid: documentId,
+      name: `California S. R. L. Agreement - ${localAdminData.name} and ${tenantData.User.name}`,
+      recipients: [
+        {
+          email: localAdminData.email,
+          first_name: f_name,
+          last_name: l_name,
+          role: "ADMIN",
+        },
+        {
+          email: tenantData.User.email,
+          first_name: String(tenantData.User.name).split(" ")[0],
+          last_name: String(tenantData.User.name).split(" ")[1] || null,
+          role: "TENANT",
+        },
+      ],
+      tags: ["rms-api"],
+    };
+    if (!requestCreateData.recipients[0].email) {
+      console.log(requestCreateData);
+      throw new Error("Bad Admin Data.");
+    }
+
+    await api
+      .post(
+        `/tenant/${selectedTenant.id}/pandadoc/template/create-document`,
+        requestCreateData
+      )
+      .then((response) => {
+        if (response.status > 201) throw new Error("Could not create document");
+        responseDocumentId = response.data.id;
+      })
+      .catch((e) => {
+        throw new Error(e);
+      });
+
+    // Temporizador de 5 segundos
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+
+    const requestSendData = {
+      subject: "Listing document sign",
+      message: "You were invited to sign the following document:",
+      silent: false,
+    };
+    await api
+      .post(
+        `/tenant/${selectedTenant.id}/pandadoc/document/${responseDocumentId}/send`,
+        requestSendData
+      )
+      .then((response) => {
+        if (response.status > 201) throw new Error("Could not create document");
+      })
+      .catch((e) => {
+        throw new Error(e);
+      });
+  }
+
+  async function loadDocuments() {
     try {
-      const createDocument = await api.post(
-        "/tenant/1/pandadoc/template/create-document",
-        {
-          templateUuid: documentId,
-          name: `California S. R. L. Agreement - ${adminData.name} and ${tenantData.User.name}`,
-          recipients: [
-            {
-              email: adminData.email,
-              first_name: String(adminData.name).split(" ")[0],
-              last_name: String(tenantData.name).split(" ")[1] || null,
-              role: "ADMIN",
-            },
-            {
-              email: tenantData.User.email,
-              first_name: String(tenantData.User.name).split(" ")[0],
-              last_name: String(tenantData.User.name).split(" ")[1] || null,
-              role: "TENANT",
-            },
-          ],
-          tags: ["rms-api"],
-        }
+      const { data } = await api.get(
+        `/tenant/${selectedTenant.id}/pandadoc/template`
       );
-
-      if (createDocument.status > 201) {
-        throw new Error("Could not create document");
+      if (!data) {
+        throw new Error("Network data was not ok");
       }
-
-      // The document creation process may take some time => https://developers.pandadoc.com/reference/new-document
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-
-      const sendDocument = await api.post(
-        `/tenant/1/pandadoc/document/${createDocument.data.id}/send`,
-        {
-          subject: "Listing document sign",
-          message: "You were invited to sign the following document:",
-          silent: false,
-        }
-      );
-
-      if (sendDocument.status > 201) {
-        throw new Error("Could not create document");
-      }
-    } catch (error) {
-      console.error("Error fetching documents data:", error);
+      setDocumentsData(data.results);
+    } catch (err) {
+      alert("Error fetching documents data:", err);
     }
   };
 
   useEffect(() => {
-    async function loadDocuments() {
-      try {
-        const { data } = await api.get(
-          `/tenant/${tenantData.id}/pandadoc/template`
-        );
-        if (!data || !data.results) {
-          throw new Error("Network data was not ok");
-        }
-        console.log("API Response:", data.results);
-        setDocumentsData(data.results);
-      } catch (err) {
-        console.error("Error fetching documents data:", err);
-      }
+    if (!decodedToken)
+      getTokenFromLocalStorage();
+    if (decodedToken) {
+      getAdminData();
+      getTenantData();
+      loadDocuments();
     }
-
-    async function getTokenFromLocalStorage() {
-      try {
-        const storedToken = localStorage.getItem("certifymyrent.token");
-
-        if (!storedToken) throw new Error("Could not get token");
-
-        setToken(storedToken);
-        setDecodedToken(jwtDecode(storedToken));
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    async function getAdminData() {
-      try {
-        const { data } = await api.get(`/user/${decodedToken.sub}`);
-
-        setAdminData(data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    async function getTenantData() {
-      try {
-        const { data } = await api.get(`/tenant/${selectedTenant.id}`);
-        setTenantData(data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    loadDocuments();
-    getTokenFromLocalStorage();
-    getAdminData();
-    getTenantData();
-  }, []);
+  }, [decodedToken]);
 
   const renderSectionContent = (section) => {
     switch (section) {
       case "DOCUMENTS":
         function chunkArray(array, chunkSize) {
           const chunks = [];
+          if (array.length < 1) return chunks;
           for (let i = 0; i < array.length; i += chunkSize) {
             chunks.push(array.slice(i, i + chunkSize));
           }
@@ -162,7 +182,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 key={`boxInfoOrderCreate_${index}`}
                 className="boxInfoOrderCreate"
               >
-                {documentSubset.map((document) => (
+                {documentSubset.map((document, documentIndex) => (
                   <div className="boxInfo d-flex" key={document.id}>
                     <div className="boxInfoOrder d-flex">
                       <div className="firstBoxDoc">
@@ -172,31 +192,21 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                         </span>
                       </div>
                       <div className="secondBoxDoc d-flex justify-content-end">
-                        {hoveredDocuments[document.id] ? (
+                        {hoveredDocumentIndex === documentIndex ? (
                           <img
                             src={SendTemplateIconHover}
-                            alt="DeleteIconHover"
+                            alt="SendTemplateIconHover"
                             className="imgBtnDocs delBox"
-                            onMouseLeave={() =>
-                              setHoveredDocuments({
-                                ...hoveredDocuments,
-                                [document.id]: false,
-                              })
-                            }
-                            onClick={() => handleSendPandadocClick(document.id)}
+                            onMouseLeave={() => handleDocumentHover(null)}
+                            onClick={() => handleSendPandadocClick(document.id, false, adminData)}
                           />
                         ) : (
                           <img
                             src={SendTemplateIcon}
-                            alt="Delete"
+                            alt="SendTemplateIcon"
                             className="imgBtnDocs delBox"
-                            onMouseEnter={() =>
-                              setHoveredDocuments({
-                                ...hoveredDocuments,
-                                [document.id]: true,
-                              })
-                            }
-                            onClick={() => handleSendPandadocClick(document.id)}
+                            onMouseEnter={() => handleDocumentHover(documentIndex)}
+                            onClick={() => handleSendPandadocClick(document.id, true, adminData)}
                           />
                         )}
                       </div>
@@ -247,7 +257,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
             <div className="popUpOrderFirstCol FullLName d-flex">
               <p>FULL LEGAL NAME</p>
               <span>
-                {selectedTenant.User.name} {selectedTenant.last_name}
+                {selectedTenant.User.name}
               </span>
             </div>
             <div className="popUpOrderFirstCol pNo d-flex">
@@ -257,7 +267,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
             <div className="popUpOrderFirstCol emailpopUp d-flex">
               <p>EMAIL</p>
-              <span>{selectedTenant.email}</span>
+              <span>{selectedTenant.User.email}</span>
             </div>
             <div className="popUpOrderFirstCol contractDatesPopUp d-flex">
               <p>CONTRACT DATES</p>
