@@ -5,19 +5,20 @@ import closeHover from "../../assets/img/closeHover.svg";
 import Eye from "../../assets/img/Eye.svg";
 import Edit from "../../assets/img/EditPopUp.svg";
 import EditHover from "../../assets/img/EditPopUpHover.svg";
-import Delete from "../../assets/img/DeletePopUp.svg";
-import DeleteIconHover from "../../assets/img/DeletePopUpHover.svg";
+import SendTemplateIcon from "../../assets/img/SendTemplateIconHover.svg";
+import SendTemplateIconHover from "../../assets/img/SendTemplateIconHover.svg";
 import testImg from "../../assets/img/testImg.jpg";
 import AddDocs from "./addDocumentsModal";
 import { api } from "../../services/api";
 import jwtDecode from "jwt-decode";
 
 const TenantModal = ({ selectedTenant, onClose }) => {
+
   const [isHovered, setIsHovered] = useState(false);
-  const [isHoveredDelete, setIsHoveredDelete] = useState(false);
   const [isHoveredEdit, setIsHoveredEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hoveredDocuments, setHoveredDocuments] = useState({});
+  const [hoveredDocumentIndex, setHoveredDocumentIndex] = useState(null);
 
   const [token, setToken] = useState("");
   const [decodedToken, setDecodedToken] = useState(null);
@@ -31,16 +32,21 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     setIsHovered(isHovered);
     setActiveSection(sectionName);
   };
-  const handleDocumentHover = (documentIndex) => {
-    setHoveredDocumentIndex(documentIndex);
+  const handleDocumentHover = (documentId, isHovered) => {
+    setHoveredDocuments(prevHoveredDocuments => ({
+      ...prevHoveredDocuments,
+      [documentId]: isHovered
+    }));
   };
+
 
   const handleAddDocsClick = () => {
     setIsModalOpen(true);
   };
 
-  const handleDeleteClick = async (documentId) => {
+  const handleSendPandadocClick = async (documentId, isHovered) => {
     try {
+      console.log(adminData);
       const createDocument = await api.post(
         "/tenant/1/pandadoc/template/create-document",
         {
@@ -92,15 +98,15 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     async function loadDocuments() {
       try {
         const { data } = await api.get(
-          `/tenant/${tenantData.id}/pandadoc/template`
+          `/tenant/${selectedTenant.id}/pandadoc/template`
         );
-        if (!data || !data.results) {
+        if (!data) {
           throw new Error("Network data was not ok");
         }
         console.log("API Response:", data.results);
         setDocumentsData(data.results);
       } catch (err) {
-        console.error("Error fetching documents data:", err);
+        alert("Error fetching documents data:", err);
       }
     }
 
@@ -119,6 +125,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
     async function getAdminData() {
       try {
+        console.log(setAdminData)
         const { data } = await api.get(`/user/${decodedToken.sub}`);
 
         setAdminData(data);
@@ -141,6 +148,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     getAdminData();
     getTenantData();
   }, []);
+  
 
   const renderSectionContent = (section) => {
     switch (section) {
@@ -162,7 +170,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 key={`boxInfoOrderCreate_${index}`}
                 className="boxInfoOrderCreate"
               >
-                {documentSubset.map((document) => (
+                {documentSubset.map((document, documentIndex) => (
                   <div className="boxInfo d-flex" key={document.id}>
                     <div className="boxInfoOrder d-flex">
                       <div className="firstBoxDoc">
@@ -172,31 +180,21 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                         </span>
                       </div>
                       <div className="secondBoxDoc d-flex justify-content-end">
-                        {hoveredDocuments[document.id] ? (
+                        {hoveredDocumentIndex === documentIndex ? (
                           <img
-                            src={DeleteIconHover}
-                            alt="DeleteIconHover"
+                            src={SendTemplateIconHover}
+                            alt="SendTemplateIconHover"
                             className="imgBtnDocs delBox"
-                            onMouseLeave={() =>
-                              setHoveredDocuments({
-                                ...hoveredDocuments,
-                                [document.id]: false,
-                              })
-                            }
-                            onClick={() => handleDeleteClick(document.id)}
+                            onMouseLeave={() => handleDocumentHover(null)}
+                            onClick={() => handleSendPandadocClick(document.id, false)}
                           />
                         ) : (
                           <img
-                            src={Delete}
-                            alt="Delete"
+                            src={SendTemplateIcon}
+                            alt="SendTemplateIcon"
                             className="imgBtnDocs delBox"
-                            onMouseEnter={() =>
-                              setHoveredDocuments({
-                                ...hoveredDocuments,
-                                [document.id]: true,
-                              })
-                            }
-                            onClick={() => handleDeleteClick(document.id)}
+                            onMouseEnter={() => handleDocumentHover(documentIndex)}
+                            onClick={() => handleSendPandadocClick(document.id, true)}
                           />
                         )}
                       </div>
@@ -247,31 +245,17 @@ const TenantModal = ({ selectedTenant, onClose }) => {
             <div className="popUpOrderFirstCol FullLName d-flex">
               <p>FULL LEGAL NAME</p>
               <span>
-                {selectedTenant.first_name} {selectedTenant.last_name}
+                {selectedTenant.User.name}
               </span>
-            </div>
-            <div className="popUpOrderFirstCol DriverLicense d-flex">
-              <p>DRIVER LICENSE # / STATE</p>
-              <span>A0002144, CA</span>
-            </div>
-            <div className="popUpOrderFirstCol BirthDay d-flex">
-              <p>BIRTH DATE</p>
-              <span>11/10/1986</span>
             </div>
             <div className="popUpOrderFirstCol pNo d-flex">
               <p>PHONE NO.</p>
-              <span>{selectedTenant.phone}</span>
+              <span>{selectedTenant.phoneNumber}</span>
             </div>
-            <div className="popUpOrderFirstCol SSImg d-flex">
-              <p>SOCIAL SECURITY</p>
-              <span>
-                *** <img src={Eye} alt="Eye" className="eyeIconPopUp" />
-                <div className="buttonContainer"></div>
-              </span>
-            </div>
+
             <div className="popUpOrderFirstCol emailpopUp d-flex">
               <p>EMAIL</p>
-              <span>{selectedTenant.email}</span>
+              <span>{selectedTenant.User.email}</span>
             </div>
             <div className="popUpOrderFirstCol contractDatesPopUp d-flex">
               <p>CONTRACT DATES</p>
@@ -339,29 +323,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                   Edit Tenant
                 </span>
               </div>
-              <div className="DeleteButtonPopUpOrder d-flex">
-                {isHoveredDelete ? (
-                  <img
-                    src={DeleteIconHover}
-                    alt="DeleteIconHover"
-                    className="DeleteButtonPopUp"
-                    onMouseLeave={() => setIsHoveredDelete(false)}
-                  />
-                ) : (
-                  <img
-                    src={Delete}
-                    alt="Delete"
-                    className="DeleteButtonPopUp"
-                    onMouseEnter={() => setIsHoveredDelete(true)}
-                  />
-                )}
-                <span
-                  onMouseLeave={() => setIsHoveredDelete(false)}
-                  onMouseEnter={() => setIsHoveredDelete(true)}
-                >
-                  Delete Tenant
-                </span>
-              </div>
+
             </div>
           </div>
         </div>
@@ -406,7 +368,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
           <div className="renderPopUpSection">
             {renderSectionContent(activeSection)}
           </div>
-          ;{/* Navegable */}
+          ;{/* Navigable */}
         </div>
       </div>
       {isModalOpen && <AddDocs onClose={() => setIsModalOpen(false)} />}

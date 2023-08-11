@@ -1,6 +1,6 @@
 import React from "react";
 import Nav from "./nav";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/tenants.css";
 import Edit from "../assets/img/Edit.svg";
 import EditHover from "../assets/img/EditHover.svg";
@@ -15,11 +15,12 @@ import Search from "./search";
 import Pagination from "./paginations";
 import "../styles/modal.css";
 import TenantModal from "./modals/tenantsPopUp";
+import { api } from "../services/api";
 
 const TenantsAdmin = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editTenant, setEditTenant] = useState(null);
-  const [tenants, setTenants] = useState(tenantsData);
+  const [tenants, setTenants] = useState([]);
   const [showMissedPayment, setShowMissedPayment] = useState(false);
   const [selectedTenant, setSelectedTenant] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,6 +43,19 @@ const TenantsAdmin = () => {
     currentPage * PAGE_SIZE
   );
 
+  useEffect(() => {
+    // Fetch tenant data from the API endpoint
+    api.get('/tenant')
+      .then(response => {
+        console.log('Fetched tenant data:', response.data);
+        setTenants(response.data); // Assuming the response data is an array of tenants
+      })
+      .catch(error => {
+        console.error('Error fetching tenant data:', error);
+      });
+  }, []);
+
+
   /* popUp */
   const handleCellClick = (tenant, field, event) => {
     if (!event.currentTarget.classList.contains("buttonsNoMod")) {
@@ -54,11 +68,17 @@ const TenantsAdmin = () => {
     setCurrentPage(pageNumber);
   };
 
-  const handleDelete = (listings) => {
-    const updatedTenants = tenants.filter(
-      (tenant) => tenant.listings !== listings
-    );
+  const handleDeleteTenant = (tenantId) => {
+    const updatedTenants = tenants.filter(tenant => tenant.id !== tenantId);
     setTenants(updatedTenants);
+    api.delete(`/tenant/${tenantId}`)
+      .then(response => {
+        console.log('Tenant deleted:', response.data);
+      })
+      .catch(error => {
+        console.error('Error deleting tenant:', error);
+        setTenants(tenants);
+      });
   };
 
   const handleCheckBoxChange = (value) => {
@@ -137,7 +157,7 @@ const TenantsAdmin = () => {
               </div>
             </div>
           </div>
-          <Search onSearch={handleSearch} tenantsData={tenantsData} />
+          <Search onSearch={handleSearch} tenants={tenants} />
         </div>
         <div className="container-fluid d-flex justify-content-start">
           <div className="row container-fluid">
@@ -186,7 +206,7 @@ const TenantsAdmin = () => {
                             handleCellClick(tenant, "name", event)
                           }
                         >
-                          <p className="p1 h">{tenant.first_name} {tenant.last_name}</p>
+                          <p className="p1 h">{tenant.User.name}</p>
                         </td>
                         <td
                           onClick={(event) =>
@@ -201,13 +221,12 @@ const TenantsAdmin = () => {
                           }
                         >
                           <p
-                            className={`p1 h ${
-                              tenant.status.includes("Missed Payment")
-                                ? "missed"
-                                : ""
-                            }`}
+                            className={`p1 h ${tenant && tenant.status && tenant.status.includes("Missed Payment")
+                              ? "missed"
+                              : ""
+                              }`}
                           >
-                            {tenant.status}
+                            {tenant && tenant.status}
                           </p>
                         </td>
                         <td
@@ -215,14 +234,14 @@ const TenantsAdmin = () => {
                             handleCellClick(tenant, "status", event)
                           }
                         >
-                          <p className="p1 h">{tenant.email}</p>
+                          <p className="p1 h">{tenant.User.email}</p>
                         </td>
                         <td
                           onClick={(event) =>
                             handleCellClick(tenant, "status", event)
                           }
                         >
-                          <p className="p1 h">{tenant.phone}</p>
+                          <p className="p1 h">{tenant.phoneNumber}</p>
                         </td>
                         <td
                           onClick={(event) =>
@@ -253,13 +272,8 @@ const TenantsAdmin = () => {
                           <DeleteButton
                             className="delete"
                             defaultImage={<img src={Delete} alt="Delete" />}
-                            hoverImage={
-                              <img
-                                src={DeleteIconHover}
-                                alt="DeleteIconHover"
-                              />
-                            }
-                            onClick={() => handleDelete(tenant.listings)}
+                            hoverImage={<img src={DeleteIconHover} alt="DeleteIconHover" />}
+                            onClick={() => handleDeleteTenant(tenant.id)} // Pass the tenant's ID
                           />
                         </td>
                       </tr>
