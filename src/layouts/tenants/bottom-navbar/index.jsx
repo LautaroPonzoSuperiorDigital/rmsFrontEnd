@@ -16,8 +16,8 @@ export function BottomNavbar() {
   return (
     <BottomNavBarContainer>
       {!user.isApplicant && (
-        <NavItem to="/contact-us" active={pathname === '/contact-us'}>
-          <Chats filled={pathname === '/contact-us'} />
+        <NavItem to="/contact-us" active={pathname === '/contact-us' || pathname === '/chat'}>
+          <Chats filled={pathname === '/contact-us' || pathname === '/chat'} />
           <NavItemText>Contact Us</NavItemText>
         </NavItem>
       )}
