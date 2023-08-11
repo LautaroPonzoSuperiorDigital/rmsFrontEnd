@@ -17,7 +17,7 @@ const Table = ({
   setTableApplicants,
 }) => {
   const [moveToTenant, setMoveToTenant] = useState([]);
-
+  console.log(applicants);
   return (
     <table className="table table-responsive-lg">
       <thead className="tables">
@@ -58,13 +58,15 @@ const Table = ({
             </td>
             <td className="bor1">
               <div className="mt-3 ms-5">
-                <TableSelect
-                  approbalStatus={item.approvalStatus}
-                  key={item.id}
-                  tenantId={item.id}
-                  setMoveToTenant={setMoveToTenant}
-                  setApplicants={setTableApplicants}
-                />
+                {item.User.ApplicationScreening.length !== 0 && (
+                  <TableSelect
+                    approbalStatus={item.approvalStatus}
+                    key={item.id}
+                    tenantId={item.id}
+                    setMoveToTenant={setMoveToTenant}
+                    setApplicants={setTableApplicants}
+                  />
+                )}
               </div>
             </td>
             <td className="bor1">
