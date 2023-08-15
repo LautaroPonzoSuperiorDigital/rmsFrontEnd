@@ -7,7 +7,7 @@ import { createTenantsRouter } from "./tenants.routes";
 import { useAuth } from "../hooks/useAuth";
 
 export default function AppRoutes() {
-  const { user } = useAuth()
+  const { user, onSignedOut } = useAuth()
 
   if (user?.role === 'ADMIN') {
     const adminRouter = createAdminRouter()
@@ -18,7 +18,7 @@ export default function AppRoutes() {
   }
 
   if (user?.role === 'TENANT') {
-    const tenantsRouter = createTenantsRouter(user)
+    const tenantsRouter = createTenantsRouter(user, onSignedOut)
 
     return (
       <RouterProvider router={tenantsRouter} />

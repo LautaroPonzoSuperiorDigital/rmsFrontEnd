@@ -8,3 +8,5 @@ export const formatDate = (date, dateZone, formatOptions) =>
       dateZone,
       formatOptions,
     )
+
+export const createDateFromISO = (date, dateZone) => DateTime.fromISO(date, { zone: dateZone || 'utc' })

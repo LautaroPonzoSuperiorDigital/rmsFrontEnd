@@ -6,6 +6,7 @@ export const TenantsLayoutContext = createContext(undefined)
 
 export function TenantsLayoutProvider({ children }) {
   const [navbarIsShown, setNavbarIsShown] = useState(true)
+  const [headerTitle, setHeaderTitle] = useState(null)
 
   const hideNavbar = useCallback(() => setNavbarIsShown(false), [])
 
@@ -14,10 +15,12 @@ export function TenantsLayoutProvider({ children }) {
   const value = useMemo(
     () => ({
       navbarIsShown,
+      headerTitle,
+      setHeaderTitle,
       hideNavbar,
       showNavbar,
     }),
-    [navbarIsShown, hideNavbar, showNavbar]
+    [navbarIsShown, headerTitle, hideNavbar, showNavbar, setHeaderTitle]
   )
 
   return (
@@ -53,5 +56,18 @@ export function useTenantsNavbar() {
 
   return {
     navbarIsShown: context.navbarIsShown,
+  }
+}
+
+export function useTenantsHeader() {
+  const context = useContext(TenantsLayoutContext)
+
+  if (!context) {
+    throw new Error('TenantsProvider was not found.')
+  }
+
+  return {
+    headerTitle: context.headerTitle,
+    setHeaderTitle: context.setHeaderTitle,
   }
 }

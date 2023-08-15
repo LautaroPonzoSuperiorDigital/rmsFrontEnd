@@ -14,7 +14,7 @@ export const FormInput = styled(Input)`
   text-align: left;
 `
 
-export const CheckBoxContainer = styled.div`
+export const CheckBoxContainer = styled.label`
   display: flex;
   align-items: center;
   justify-content: flex-start;

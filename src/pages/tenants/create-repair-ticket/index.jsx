@@ -71,9 +71,7 @@ export default function CreateRepairTicket() {
       <CheckBoxContainer>
         <CheckBoxLog name="visitAnyTime" />
 
-        <label>
-          VISIT THE PROPERTY ANYTIME
-        </label>
+        <span>VISIT THE PROPERTY ANYTIME</span>
       </CheckBoxContainer>
 
       <Message>{message}</Message>

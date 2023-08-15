@@ -8,10 +8,17 @@ import { TenantsLayout } from "../layouts/tenants"
 import ContactUs from "../pages/tenants/contact-us"
 import CreateRepairTicket from "../pages/tenants/create-repair-ticket"
 import Documents from "../pages/tenants/documents"
-import documentsLoader from "../pages/tenants/documents/loader"
+import createDocumentsLoader from "../pages/tenants/documents/loader"
 import CreateComplaintTicket from "../pages/tenants/create-complaint-ticket"
+import Payments from "../pages/tenants/payments"
+import createPaymentsLoader from "../pages/tenants/payments/loader"
+import NewPaymentMethod from "../pages/tenants/payment-methods/new"
+import EditPaymentMethod from "../pages/tenants/payment-methods/edit"
+import createEditPaymentMethodLoader from "../pages/tenants/payment-methods/edit/loader"
+import LatePayments from "../pages/tenants/payments/late"
+import createLatePaymentsLoader from "../pages/tenants/payments/late/loader"
 
-const tenantsRoutes = [
+const createTenantsRoutes = (signOut) => [
   {
     path: 'contact-us',
     element: <ContactUs />
@@ -27,7 +34,36 @@ const tenantsRoutes = [
   {
     path: 'documents',
     element: <Documents />,
-    loader: documentsLoader,
+    loader: createDocumentsLoader(signOut),
+  },
+  {
+    path: 'payments',
+    children: [
+      {
+        index: true,
+        element: <Payments />,
+        loader: createPaymentsLoader(signOut),
+      },
+      {
+        path: 'late',
+        element: <LatePayments />,
+        loader: createLatePaymentsLoader(signOut)
+      }
+    ]
+  },
+  {
+    path: 'payment-methods',
+    children: [
+      {
+        path: 'new',
+        element: <NewPaymentMethod />,
+      },
+      {
+        path: ':paymentMethodId/edit',
+        element: <EditPaymentMethod />,
+        loader: createEditPaymentMethodLoader(signOut),
+      },
+    ],
   },
   {
     path: 'profile',
@@ -39,10 +75,11 @@ const tenantsRoutes = [
   }
 ]
 
-const applicantsRoutes = [
+const createApplicantsRoutes = (signOut) => [
   {
     path: 'documents',
-    element: <Documents />
+    element: <Documents />,
+    loader: createDocumentsLoader(signOut),
   },
   {
     path: 'profile',
@@ -50,10 +87,12 @@ const applicantsRoutes = [
   },
 ]
 
-export const createTenantsRouter = (user) => {
+export const createTenantsRouter = (user, signOut) => {
   let routes
 
   if (user.isApplicant) {
+    const applicantsRoutes = createApplicantsRoutes(signOut)
+
     routes = [
       {
         element: <TenantsLayout />,
@@ -65,6 +104,8 @@ export const createTenantsRouter = (user) => {
       }
     ]
   } else {
+    const tenantsRoutes = createTenantsRoutes(signOut)
+
     routes = [
       {
         element: <TenantsLayout />,

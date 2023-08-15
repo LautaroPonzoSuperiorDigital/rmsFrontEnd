@@ -3,8 +3,9 @@ import { DateTime } from "luxon"
 
 import { api } from "../../../services/api"
 import { formatDate } from "../../../services/date"
+import { redirect } from "react-router-dom"
 
-const documentsLoader = async () => {
+const createDocumentsLoader = (signOut) => async () => {
   let tenantId
 
   try {
@@ -12,7 +13,8 @@ const documentsLoader = async () => {
 
     tenantId = loggedUser.tenantId
   } catch (err) {
-    return []
+    signOut()
+    return redirect('/')
   }
 
   const { data } = await api.get(`/tenant/${tenantId}/document`)
@@ -25,4 +27,4 @@ const documentsLoader = async () => {
   return tenantDocuments
 }
 
-export default documentsLoader
+export default createDocumentsLoader
