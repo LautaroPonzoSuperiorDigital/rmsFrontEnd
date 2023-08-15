@@ -19,7 +19,7 @@
     color: #000000a5;
   }
 
-  .profileBarMobile button {
+  .profileBarMobile .profileLink {
     width: 6vw;
     margin-right: 3%;
   }

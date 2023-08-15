@@ -1,16 +1,14 @@
 import {
   useCallback,
-  useContext,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 import sendMessage from "../assets/img/send-email.svg";
-import io from "socket.io-client";
 import { socket } from "./socketManajer/socket";
 import { useAuth } from "../hooks/useAuth";
 import { api } from "../services/api";
+import { styled } from "styled-components";
 
 const messageInfo = {
   fontSize: "18px",
@@ -29,15 +27,27 @@ const messageList = {
   fontSize: "16px",
 };
 
+const fakeCrentials = {
+  listingId: 1,
+};
+
+const TenantChatRoomContainer = styled.div`
+  height: 100%;
+
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+`
+
 const TenantChatRoom = () => {
   const { user } = useAuth();
 
   const ulRef = useRef(null);
-  const fakeCrentials = {
-    listingId: 1,
-  };
+  
   const [messages, setMessages] = useState([]);
   const [incoming, setIncoming] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [notification, setNotification] = useState(true);
 
   const handleMessageChange = useCallback(
@@ -57,15 +67,19 @@ const TenantChatRoom = () => {
       createdAt: new Date().toISOString(),
       id: new Date().toISOString(), // temporary id for the message
     };
+
     console.log("Sending message");
-    let response = await socket.emit("event_message", {
-      room: `${fakeCrentials.listingId}`,
-      message,
-    });
-    await socket.emit("notification", {
-      room: `${fakeCrentials.listingId}`,
-      message,
-    });
+
+    await Promise.all([
+      socket.emit("event_message", {
+        room: `${fakeCrentials.listingId}`,
+        message,
+      }),
+      socket.emit("notification", {
+        room: `${fakeCrentials.listingId}`,
+        message,
+      })
+    ])
   };
 
   const scrollToBottom = () => {
@@ -111,13 +125,13 @@ const TenantChatRoom = () => {
     return () => {
       socket.emit("event_leave", `${fakeCrentials.listingId}`);
     };
-  }, [socket]);
+  }, []);
 
   return (
-    <div className="w-100 vh-100 d-flex flex-column p-2  ">
+    <TenantChatRoomContainer>
       <div className="flex-grow-1" style={{ overflowY: "auto" }} ref={ulRef}>
         <ul className="p-0">
-          {incoming?.map((message, index) => (
+          {incoming?.map((message) => (
             <div key={message.id}>
               <p className="m-0" style={messageInfo}>
                 {message.sender}
@@ -154,7 +168,7 @@ const TenantChatRoom = () => {
           </div>
         </button>
       </form>
-    </div>
+    </TenantChatRoomContainer>
   );
 };
 

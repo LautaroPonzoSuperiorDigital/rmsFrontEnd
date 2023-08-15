@@ -10,4 +10,4 @@ const publicRoutes = [
 
 const publicRouter = createBrowserRouter(publicRoutes)
 
-export default publicRouter
+export const createPublicRouter = () => publicRouter
