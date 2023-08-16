@@ -13,12 +13,9 @@ const ButtonTenant = ({
 
   const handleMoveToTenant = async () => {
     try {
-      console.log("click");
-      const tenant = await api.patch(`/tenant/${tenantId}`, {
-        approvalStatus: "APPROVED",
-        listingId: `${listingId}`,
-        tenantId: `${tenantId}`,
-      });
+      const tenant = await api.patch(
+        `/tenant/${tenantId}/listing/${listingId}/approved`
+      );
       setNewTanant(true);
     } catch (err) {
       console.log(err);

@@ -4,6 +4,17 @@ import "../../styles/publIcListings/application.css";
 import Logo from "../../assets/img/Logo.svg";
 import { api } from "../../services/api";
 import { env } from "../../config/env";
+import { HeaderGoBack } from "../icons/tenants";
+import { useAuth } from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
+
+const goBackStyle = {
+  margin: 0,
+  fontSize: "22px",
+  marginLeft: "15px",
+  marginRight: "15px",
+  cursor: "pointer",
+};
 
 const ApplicationModal = ({ selectedImage, onClose, id }) => {
   const [activeSection, setActiveSection] = useState("registration");
@@ -16,6 +27,8 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
   const [message, setMessage] = useState("");
   const [isStartScreening, setIsStartScreening] = useState(false);
   const [userId, setUserId] = useState({});
+  const { user } = useAuth();
+  console.log(user);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,14 +37,11 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
         .replace(/\D/g, "") // Remove non-numeric characters
         .replace(/^(\d{3})(\d{1,3})?(\d{1,4})?/, "$1-$2-$3"); // Insert hyphens
       setFormData({ ...formData, [name]: formattedValue });
-      // if (name === "driverLicense") {
-      //   setFormData({ ...formData, [name]: value.toString() });
-      // }
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
-
+  console.log(selectedListing.location);
   const submitRegistration = async (e) => {
     e.preventDefault();
     try {
@@ -49,21 +59,33 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
     }
   };
   const handleStartScreening = async () => {
-    const applicationData = {
-      userId: userId,
-      listingId: selectedListing.id,
-      status: "PENDING",
-      location: selectedListing.location,
-      name: formData.name,
-      email: formData.email,
-      phoneNumber: formData.phoneNumber,
-    };
+    let data;
+
+    if (user) {
+      data = {
+        userId: user.id,
+        listingId: selectedListing.id,
+        location: selectedListing.location,
+        status: "PENDING",
+        name: user.name,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+      };
+    } else {
+      data = {
+        userId: userId,
+        listingId: selectedListing.id,
+        status: "PENDING",
+        location: selectedListing.location,
+        name: formData.name,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
+      };
+    }
+
     try {
-      const response = await api.post(
-        "/application-screening",
-        applicationData
-      );
-      window.open(env.rentSpreeLink, "_blank");
+      const response = await api.post("/application-screening", data);
+      // window.open(env.rentSpreeLink, "_blank");
     } catch (err) {
       console.log(err.response);
     }
@@ -72,6 +94,11 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
   const handleLogoClick = () => {
     onClose();
     window.location.href = "/";
+  };
+
+  const handleGoBack = () => {
+    onClose();
+    window.location.href = "/tenants/public-listings";
   };
 
   useEffect(() => {
@@ -87,6 +114,9 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
         setSelectedListing(selectedListingData);
         setAmenities(selectedListingData?.Amenities || []);
         setRequirements(selectedListingData?.Requirements || []);
+        if (user) {
+          setIsStartScreening(true);
+        }
       } catch (error) {
         console.error("Error fetching listings:", error);
       }
@@ -117,7 +147,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
           }
         `}
         </style>
-        <div className="ApplicationNavBar d-flex align-items-center">
+        <div className="ApplicationNavBar d-flex align-items-center justify-content-between">
           <img
             className="LogoPublic1 justify-content-start ms-4"
             src={Logo}
@@ -125,6 +155,11 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
             onClick={handleLogoClick}
           />
           <h2 className="Application">Application</h2>
+
+          <div className="d-flex align-items-center" onClick={handleGoBack}>
+            <HeaderGoBack />
+            <p style={goBackStyle}>GO BACK</p>
+          </div>
           {/* <nav className="navBar1 d-flex align-items-center">
             <ul>
               <li
@@ -287,49 +322,53 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
           {activeSection === "registration" && (
             <div className="registrationContainer d-flex justify-content-center">
               <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
-                <h2 className="d-flex justify-content-center mt-3 registrationText">
-                  Registration
-                </h2>
-                <form className="resetForm" onSubmit={submitRegistration}>
-                  <input
-                    className="form-control inputReset"
-                    type="text"
-                    placeholder="FULL LEGAL NAME"
-                    name="name"
-                    required
-                    onChange={handleChange}
-                  />
-                  <input
-                    className="form-control inputReset"
-                    type="text"
-                    placeholder="PHONE NO 123-456-7890 "
-                    name="phoneNumber"
-                    required
-                    onChange={handleChange}
-                    value={formData.phoneNumber || ""}
-                  />
-                  <input
-                    className="form-control inputReset"
-                    type="email"
-                    placeholder="EMAIL"
-                    name="email"
-                    required
-                    onChange={handleChange}
-                  />
-                  <input
-                    className="form-control inputReset"
-                    type="password"
-                    placeholder="PASSWORD"
-                    name="password"
-                    required
-                    onChange={handleChange}
-                  />
+                {!user && (
+                  <>
+                    <h2 className="d-flex justify-content-center mt-3 registrationText">
+                      Registration
+                    </h2>
+                    <form className="resetForm" onSubmit={submitRegistration}>
+                      <input
+                        className="form-control inputReset"
+                        type="text"
+                        placeholder="FULL LEGAL NAME"
+                        name="name"
+                        required
+                        onChange={handleChange}
+                      />
+                      <input
+                        className="form-control inputReset"
+                        type="text"
+                        placeholder="PHONE NO 123-456-7890 "
+                        name="phoneNumber"
+                        required
+                        onChange={handleChange}
+                        value={formData.phoneNumber || ""}
+                      />
+                      <input
+                        className="form-control inputReset"
+                        type="email"
+                        placeholder="EMAIL"
+                        name="email"
+                        required
+                        onChange={handleChange}
+                      />
+                      <input
+                        className="form-control inputReset"
+                        type="password"
+                        placeholder="PASSWORD"
+                        name="password"
+                        required
+                        onChange={handleChange}
+                      />
 
-                  <button className="bgButton d-flex align-items-center justify-content-center">
-                    <span className="submitBtn">Submit</span>
-                  </button>
-                  <p style={{ color: "#31af9a" }}>{message}</p>
-                </form>
+                      <button className="bgButton d-flex align-items-center justify-content-center">
+                        <span className="submitBtn">Submit</span>
+                      </button>
+                      <p style={{ color: "#31af9a" }}>{message}</p>
+                    </form>
+                  </>
+                )}
                 {isStartScreening && (
                   <button
                     className="bgButton d-flex align-items-center justify-content-center"
