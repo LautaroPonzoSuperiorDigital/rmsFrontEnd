@@ -26,8 +26,8 @@ const AdminChatRoom = ({
     filterMessages[filterMessages.length - 1]?.createdAt
   ).toLocaleString();
 
-  const encodedKey = chatRooms.Listing.key.replace(/\\/g, "%5C");
-  const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
+  // const encodedKey = chatRooms.Listing.key.replace(/\\/g, "%5C");
+  // const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
 
   useEffect(() => {
     socket.emit("event_join", `${chatRooms.listingId}`);
@@ -57,7 +57,7 @@ const AdminChatRoom = ({
           }}
         >
           <img
-            src={imageUrl}
+            // src={imageUrl}
             alt="listing"
             style={{ width: "100%", height: "100%", borderRadius: "50%" }}
           />

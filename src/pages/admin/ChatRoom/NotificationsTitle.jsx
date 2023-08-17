@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { api } from "../../../services/api";
+import { useEffect } from "react";
 
 const newNotificationStyle = {
   fontSize: "20px",
@@ -75,6 +76,8 @@ const NotificationsTitle = ({
       console.log("adios");
     }
   };
+
+  useEffect(() => {}, [lastMessageDb]);
 
   return (
     <div>

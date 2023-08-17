@@ -45,4 +45,4 @@ const adminRouter = createBrowserRouter([
   },
 ]);
 
-export default adminRouter;
+export const createAdminRouter = () => adminRouter;

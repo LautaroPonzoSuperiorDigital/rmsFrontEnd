@@ -15,6 +15,7 @@ import picture6 from "../../assets/img/picture6.jpg";
 import ModalPublicListings from "./modalPublicListings";
 import axios from "axios";
 import { api } from "../../services/api";
+import { useAuth } from "../../hooks/useAuth";
 
 const PublicListings = () => {
   const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);
@@ -22,6 +23,7 @@ const PublicListings = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [listing, setListing] = useState([]);
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
@@ -101,8 +103,9 @@ const PublicListings = () => {
           />
           <form method="GET">
             <input
-              className={`inputPublic ms-5 ${isInputHovered ? "inputHovered" : ""
-                }`}
+              className={`inputPublic ms-5 ${
+                isInputHovered ? "inputHovered" : ""
+              }`}
               type="text"
               placeholder="     Keyword Or City"
               required
@@ -111,8 +114,9 @@ const PublicListings = () => {
             />
             <button type="submit">
               <img
-                className={`SearchIconListings justify-content-start ${isInputHovered || isSearchIconHovered ? "SearchIconHover" : ""
-                  }`}
+                className={`SearchIconListings justify-content-start ${
+                  isInputHovered || isSearchIconHovered ? "SearchIconHover" : ""
+                }`}
                 src={
                   isInputHovered || isSearchIconHovered
                     ? SearchIconHover
@@ -139,9 +143,11 @@ const PublicListings = () => {
               </option>
             </select>
           </form>
-          <button className="logInBtn" onClick={handleLoginClick}>
-            Log In
-          </button>
+          {!user && (
+            <button className="logInBtn" onClick={handleLoginClick}>
+              Log In
+            </button>
+          )}
         </div>
       </div>
       <div className="containerImgs">
@@ -163,8 +169,8 @@ const PublicListings = () => {
                       $&nbsp;
                       {listing.price
                         ? parseFloat(listing.price).toLocaleString("en", {
-                          useGrouping: true,
-                        })
+                            useGrouping: true,
+                          })
                         : ""}
                       &nbsp;
                       <span className="strong"> per month</span>
@@ -174,8 +180,8 @@ const PublicListings = () => {
                       <span className="strong">
                         {listing.houseSize
                           ? listing.houseSize.toLocaleString("EN", {
-                            maximumFractionDigits: 0,
-                          })
+                              maximumFractionDigits: 0,
+                            })
                           : ""}
                         &nbsp;SQ. FT.
                       </span>
@@ -186,8 +192,8 @@ const PublicListings = () => {
                       <span className="strong">
                         {listing.lotSize
                           ? listing.lotSize.toLocaleString("EN", {
-                            maximumFractionDigits: 0,
-                          })
+                              maximumFractionDigits: 0,
+                            })
                           : ""}{" "}
                         &nbsp;SQ. FT.
                       </span>
