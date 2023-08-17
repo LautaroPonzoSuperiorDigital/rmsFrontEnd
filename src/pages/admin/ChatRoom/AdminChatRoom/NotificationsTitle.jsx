@@ -8,11 +8,13 @@ const newNotificationStyle = {
   fontWeight: "bold",
   padding: 0,
   margin: 0,
+  color: "black",
 };
 const notificationStyle = {
   fontSize: "20px",
   fontWeight: "normal",
   margin: 0,
+  color: "black",
 };
 
 const NotificationsTitle = ({

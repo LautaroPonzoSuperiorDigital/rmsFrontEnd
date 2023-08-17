@@ -8,7 +8,7 @@ import { api } from "../../../services/api";
 
 const chatRoomStyle = {
   width: "100%",
-  maxWidth: "500px",
+  maxWidth: "550px",
   overflowY: "auto",
 };
 const chatContaienrStyle = {
@@ -16,7 +16,7 @@ const chatContaienrStyle = {
   borderRight: "1px solid #00000026",
   width: "100%",
   height: "100%",
-  maxWidth: "500px",
+  maxWidth: "800px",
   overflowY: "auto",
 };
 
@@ -72,10 +72,6 @@ const Chats = () => {
         const { data } = await api.get("/chat/chat-rooms");
 
         const chatRoomsMessage = data.map((chatRoom) => chatRoom.Chats);
-        const RepairTickets = data.map((chatRoom) => ({
-          repairTicket: chatRoom.Listing?.RepairTicket,
-        }));
-        console.log(RepairTickets);
         setChatRooms(data);
         setMessages(chatRoomsMessage.flat());
       } catch (err) {

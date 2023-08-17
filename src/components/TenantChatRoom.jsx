@@ -23,7 +23,7 @@ const messageList = {
 };
 
 const fakeCrentials = {
-  listingId: 2,
+  listingId: 1,
 };
 
 const TenantChatRoomContainer = styled.div`
