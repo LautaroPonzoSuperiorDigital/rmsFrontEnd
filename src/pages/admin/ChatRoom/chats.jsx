@@ -72,6 +72,10 @@ const Chats = () => {
         const { data } = await api.get("/chat/chat-rooms");
 
         const chatRoomsMessage = data.map((chatRoom) => chatRoom.Chats);
+        const RepairTickets = data.map((chatRoom) => ({
+          repairTicket: chatRoom.Listing?.RepairTicket,
+        }));
+        console.log(RepairTickets);
         setChatRooms(data);
         setMessages(chatRoomsMessage.flat());
       } catch (err) {
