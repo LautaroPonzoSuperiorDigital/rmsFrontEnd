@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import "../styles/modal.css";
 import Close from "../assets/img/close.svg";
 import CloseHover from "../assets/img/closeHover.svg";
-import Eye from "../assets/img/Eye.svg";
+import { api } from "../services/api";
 
 const EditModal = ({ onSave, onClose, tenant }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false);
-  const [name, setName] = useState(tenant.name);
-  const [email, setEmail] = useState(tenant.email);
-  const [phone, setPhone] = useState(tenant.phone);
+  const [name, setName] = useState(tenant && tenant.User && tenant.User.name ? tenant.User.name : "");
+  const [email, setEmail] = useState(tenant && tenant.User && tenant.User.email ? tenant.User.email : "");
+  const [phone, setPhone] = useState(tenant && tenant.phoneNumber ? tenant.phoneNumber : "");
 
   const handleMouseEnterClose = () => {
     setIsCloseHovered(true);
@@ -22,12 +22,14 @@ const EditModal = ({ onSave, onClose, tenant }) => {
     e.preventDefault();
     const updatedTenant = {
       ...tenant,
-      name: name,
-      email: email,
-      phone: phone,
+      User: {
+        ...tenant.User,
+        name: name,
+        email: email,
+      },
+      phoneNumber: phone,
     };
     onSave(updatedTenant);
-    onClose();
   };
 
   const handleCloseClick = () => {
@@ -39,15 +41,36 @@ const EditModal = ({ onSave, onClose, tenant }) => {
   };
 
   const handleSave = () => {
-    const updatedTenant = {
-      ...tenant,
+    const updatedData = {
       name: name,
       email: email,
-      phone: phone,
+      phoneNumber: phone,
     };
 
-    onSave(updatedTenant);
-    onClose();
+    api
+      .patch(`tenant/${tenant.id}`, updatedData)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Failed to update tenant data");
+        }
+
+        console.log("API response:", response);
+        
+        const updatedTenant = {
+          ...tenant,
+          User: {
+            ...tenant.User,
+            name: name,
+            email: email,
+          },
+        };
+
+        onSave(updatedTenant);
+      })
+      .catch(error => {
+        console.error("Error updating tenant data:", error);
+        console.error("Error response data:", error.response.data);
+      });
   };
 
   return (
@@ -68,32 +91,26 @@ const EditModal = ({ onSave, onClose, tenant }) => {
           <h2 className="tenant">Edit Tenant</h2>
           <input
             type="text"
-            className="modalForm"
+            className="modalForm mt-5"
             id="name"
-            placeholder={`LEGAL NAME                                                                ${tenant.name}`}
+            placeholder={`LEGAL NAME                                                    ${tenant.User.name}`}
             onChange={(e) => setName(e.target.value)}
           />
           <input
             type="email"
             className="modalForm"
             id="email"
-            placeholder={`EMAIL                                                                ${tenant.email}`}
+            placeholder={`EMAIL                                                   ${tenant.User.email}`}
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="text"
             className="modalForm"
             id="phone"
-            placeholder={`PHONE                                                                         ${tenant.phone}`}
+            placeholder={`PHONE                                                            ${tenant.phoneNumber}`}
             onChange={(e) => setPhone(e.target.value)}
           />
-          <input
-            type="text"
-            className="modalForm inputWithIcon"
-            id="SSNN"
-            placeholder="SSNN                                                                                       ***"
-          />
-          <img src={Eye} alt="Eye" className="eyeIcon" />
+
           <div className="buttonContainer">
             <button
               type="button"
@@ -103,9 +120,9 @@ const EditModal = ({ onSave, onClose, tenant }) => {
               Cancel
             </button>
             <button
-              type="button"
+              type="submit"
               className="modalButton save"
-              onClick={handleSave} 
+              onClick={handleSave}
             >
               Save
             </button>

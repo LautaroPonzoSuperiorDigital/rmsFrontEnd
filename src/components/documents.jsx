@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "./nav";
 import "../styles/Documents/documents.css";
 import SearchListings from "./searchListings";
 import { EditButton, DeleteButton } from "./buttonDocuments";
+import { format } from "date-fns";
+import { enUS } from "date-fns/locale";
 import Pagination from "./paginations";
 import Edit from "../assets/img/Edit.svg";
 import EditHover from "../assets/img/EditHover.svg";
@@ -10,11 +12,13 @@ import Delete from "../assets/img/delete.svg";
 import DeleteIconHover from "../assets/img/deleteIconHover.svg";
 import AddDocuments from "./AddDocuments";
 import AddDocs from "./modals/addDocumentsModal";
+import { api } from "../services/api";
 
 
 
 const Documents = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [documentsData, setDocumentsData] = useState([]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -23,6 +27,34 @@ const Documents = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+
+
+  useEffect(() => {
+    api.get("https://api.certifymyrent.com/tenant/1/document")
+      .then(response => {
+        setDocumentsData(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  const handleDelete = (documentId) => {
+    const updatedDocuments = documentsData.filter(document => document.id !== documentId);
+    setDocumentsData(updatedDocuments);
+
+    api.delete(`https://api.certifymyrent.com/tenant/1/document/${documentId}`)
+      .then(response => {
+      })
+      .catch(error => {
+        console.error("Error deleting document:", error);
+        setDocumentsData([...documentsData, document]);
+      });
+  };
+
+
+
 
   return (
     <>
@@ -64,35 +96,42 @@ const Documents = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="tr-hover">
-                    <td className="h p1 td td2 tdFix">
-                      <p className="location1">300 BC Lead Water</p>
-                    </td>
-                    <td className="h p1 td td2">
-                      <p className="listingA">467800</p>
-                    </td>
-                    <td className="h p1 td td2 tdFix">
-                      <p className="location2">Lead Waver</p>
-                    </td>
-                    <td className="h p1 td td2 tdFix">
-                      <p className="date2">Feb 3, 2023</p>
-                    </td>
-                    <td className="buttonContainer2 tdFix">
-                      <div className="orderButtonContainer">
-                        <EditButton
-                          defaultImage={<img src={Edit} alt="Edit" />}
-                          hoverImage={<img src={EditHover} alt="EditHover" />}
-                        />
-                        <DeleteButton
-                          className="delete1"
-                          defaultImage={<img src={Delete} alt="Delete" />}
-                          hoverImage={
-                            <img src={DeleteIconHover} alt="DeleteIconHover" />
-                          }
-                        />
-                      </div>
-                    </td>
-                  </tr>
+                  {documentsData.map(document => (
+                    <tr key={document.id} className="tr-hover">
+                      <td className="h p1 td td2 tdFix">
+                        <p className="location1">{document.Document.name}</p>
+                      </td>
+                      <td className="h p1 td td2">
+                        <p className="listingA"><a
+                          href={`https://api.certifymyrent.com/${document.Document.key}`}
+
+                          rel="noopener noreferrer"
+                        >
+                          View Document
+                        </a></p>
+                      </td>
+                      <td className="h p1 td td2 tdFix">
+                        <p className="location2">{ }</p>
+                      </td>
+                      <td className="h p1 td td2 tdFix">
+                        <p className="date2">{format(new Date(), "MMM d, yyyy", { locale: enUS })}</p>
+                      </td>
+                      <td className="buttonContainer2 tdFix">
+                        <div className="orderButtonContainer">
+                          <EditButton
+                            defaultImage={<img src={Edit} alt="Edit" />}
+                            hoverImage={<img src={EditHover} alt="EditHover" />}
+                          />
+                          <DeleteButton
+                            className="delete1"
+                            defaultImage={<img src={Delete} alt="Delete" />}
+                            hoverImage={<img src={DeleteIconHover} alt="DeleteIconHover" />}
+                            onClick={() => handleDelete(document.id)}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

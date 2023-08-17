@@ -26,6 +26,9 @@ const TenantsAdmin = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTenantId, setSelectedTenantId] = useState(null);
   const [selectedField, setSelectedField] = useState(null);
+  const [editedTenant, setEditedTenant] = useState(null);
+  const [selectedListingId, setSelectedListingId] = useState(null);
+
 
   const PAGE_SIZE = 10;
   const totalTenants = tenants.length;
@@ -77,8 +80,7 @@ const TenantsAdmin = () => {
   };
 
   const handleEditClick = (tenant) => {
-    console.log("Editing Tenant:", tenant);
-    setEditTenant(tenant);
+    setEditedTenant(tenant);
     setIsEditOpen(true);
   };
 
@@ -87,33 +89,18 @@ const TenantsAdmin = () => {
     setEditTenant(null);
   };
 
-  const handleSave = (updatedTenant) => {
-    setTenants((prevTenants) => {
-      const updatedTenants = prevTenants.map((tenant) => {
-        if (tenant.listings === updatedTenant.listings) {
-          return updatedTenant;
-        }
-        return tenant;
-      });
-      return updatedTenants;
-    });
-    setIsEditOpen(false);
-    setEditTenant(null);
-  };
 
   const handleSaveModal = (updatedTenant) => {
-    const updatedTenants = tenants.map((tenant) => {
-      if (tenant.listings === updatedTenant.listings) {
-        return updatedTenant;
-      }
-      return tenant;
-    });
+    const updatedTenants = tenants.map((tenant) =>
+      tenant.id === updatedTenant.id ? updatedTenant : tenant
+    );
     setTenants(updatedTenants);
-    handleSaveTenant(updatedTenant);
+    setIsEditOpen(false);
+    setEditedTenant(null);
   };
 
   useEffect(() => {
-    api.get('/tenant')
+    api.get(`/tenant/`)
       .then(response => {
         console.log('Fetched tenant data:', response.data);
         setTenants(response.data);
@@ -122,6 +109,7 @@ const TenantsAdmin = () => {
         console.error('Error fetching tenant data:', error);
       });
   }, []);
+
 
   return (
     <>
@@ -207,12 +195,12 @@ const TenantsAdmin = () => {
                         >
                           <p className="p1 h">{tenant.User.name}</p>
                         </td>
-                        <td
-                          onClick={(event) =>
-                            handleCellClick(tenant, "listings", event)
-                          }
-                        >
-                          <p className="p1 h">{tenant.listings}</p>
+                        <td onClick={(event) => handleCellClick(tenant, "listings", event)}>
+                          {tenant.Listings.length > 0 && (
+                            <p className="p1 h">
+                              {String(tenant.Listings[0].id).padStart(6, '0')}
+                            </p>
+                          )}
                         </td>
                         <td
                           onClick={(event) =>
@@ -272,7 +260,7 @@ const TenantsAdmin = () => {
                             className="delete"
                             defaultImage={<img src={Delete} alt="Delete" />}
                             hoverImage={<img src={DeleteIconHover} alt="DeleteIconHover" />}
-                            onClick={() => handleDeleteTenant(tenant.id)} // Pass the tenant's ID
+                            onClick={() => handleDeleteTenant(tenant.id)}
                           />
                         </td>
                       </tr>
@@ -286,8 +274,8 @@ const TenantsAdmin = () => {
       </div>
       {isEditOpen && (
         <EditModal
-          tenant={editTenant}
-          onSave={handleSave}
+          tenant={editedTenant}
+          onSave={handleSaveModal}
           onClose={handleCloseEditModal}
         />
       )}

@@ -1,34 +1,58 @@
+import React, { useState, useEffect } from "react";
 import "../../styles/Documents/documents.css";
 import Close from "../../assets/img/close.svg";
 import CloseHover from "../../assets/img/closeHover.svg";
-import React, { useState, useEffect } from "react";
+import { api } from "../../services/api";
 
 const AddDocs = ({ onClose }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [documentName, setDocumentName] = useState('');
+  const [base64File, setBase64File] = useState('');
 
   /* pdf */
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        const fileContentBase64 = reader.result.split(",")[1];
-
-        const fileObject = {
-          data: file.name,
-          Base64: fileContentBase64,
-        };
-
-        let filesArray = JSON.parse(localStorage.getItem("filesArray") || "[]");
-        filesArray.push(fileObject);
-        localStorage.setItem("documents", JSON.stringify(filesArray));
-      };
-
       reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        setSelectedFile(file);
+        setBase64File(reader.result);
+      };
     }
   };
   /* pdf */
+  /* sendDoc */
+  const handleSaveClick = async () => {
+    if (!selectedFile || !documentName) {
+      return;
+    }
+
+    console.log('Document Name:', documentName);
+    console.log('Base64 File:', base64File);
+
+    try {
+      const response = await api.post('/tenant/1/document', {
+        name: documentName,
+        file: base64File,
+      });
+
+      console.log('API Response:', response.data);
+
+      onClose(); // Close the modal after successful save
+      window.location.reload(); // Reload the page
+    } catch (error) {
+      console.error('Error saving document:', error);
+    }
+  };
+  /* sendDoc */
+
+  const handleNameChange = (event) => {
+    setDocumentName(event.target.value);
+  };
   const handleMouseEnterClose = () => {
     setIsCloseHovered(true);
   };
@@ -74,7 +98,9 @@ const AddDocs = ({ onClose }) => {
 
           <input
             className="inputDoc"
-            placeholder="NAME                                                                            364675"
+            placeholder="NAME"
+            value={documentName}
+            onChange={handleNameChange}
           />
 
           <div className="buttonContainer4 d-flex justify-content-center align-items-center">
@@ -86,7 +112,11 @@ const AddDocs = ({ onClose }) => {
               >
                 Cancel
               </button>
-              <button type="button" className="modalButton1 save save1">
+              <button
+                type="button"
+                className="modalButton1 save save1"
+                onClick={handleSaveClick}
+              >
                 Save
               </button>
             </div>
