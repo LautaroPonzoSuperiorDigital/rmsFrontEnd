@@ -31,23 +31,34 @@ const AddDocs = ({ onClose }) => {
       return;
     }
 
-    console.log('Document Name:', documentName);
+
+    const normalizedDocumentName = documentName.endsWith('.pdf')
+      ? documentName
+      : `${documentName}.pdf`;
+
+    console.log('Document Name:', normalizedDocumentName);
     console.log('Base64 File:', base64File);
 
     try {
-      const response = await api.post('/tenant/1/document', {
-        name: documentName,
-        file: base64File,
+
+      const cleanedBase64 = base64File.replace(/^data:.+;base64,/, '');
+
+      const response = await api.post('/tenant/1/document', JSON.stringify({
+        name: normalizedDocumentName,
+        file: cleanedBase64,
+      }), {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-
       console.log('API Response:', response.data);
-
-      onClose(); // Close the modal after successful save
-      window.location.reload(); // Reload the page
+      onClose();
+      window.location.reload();
     } catch (error) {
       console.error('Error saving document:', error);
     }
   };
+
   /* sendDoc */
 
   const handleNameChange = (event) => {

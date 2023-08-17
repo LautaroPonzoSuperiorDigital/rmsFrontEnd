@@ -33,6 +33,7 @@ const Documents = () => {
   useEffect(() => {
     api.get("https://api.certifymyrent.com/tenant/1/document")
       .then(response => {
+        console.log("Fetched documents:", response.data);
         setDocumentsData(response.data);
       })
       .catch(error => {
@@ -99,19 +100,21 @@ const Documents = () => {
                   {documentsData.map(document => (
                     <tr key={document.id} className="tr-hover">
                       <td className="h p1 td td2 tdFix">
-                        <p className="location1">{document.Document.name}</p>
+                        <p className="location1">
+                          <a
+                            href={`https://rms-staging.s3.us-west-1.amazonaws.com/${document.Document.key}`}
+                            download={document.Document.name}
+                          >
+                            {document.Document.name}
+                          </a>
+                        </p>
                       </td>
                       <td className="h p1 td td2">
-                        <p className="listingA"><a
-                          href={`https://api.certifymyrent.com/${document.Document.key}`}
-
-                          rel="noopener noreferrer"
-                        >
-                          View Document
-                        </a></p>
                       </td>
                       <td className="h p1 td td2 tdFix">
-                        <p className="location2">{ }</p>
+                        <p className="location2">
+
+                        </p>
                       </td>
                       <td className="h p1 td td2 tdFix">
                         <p className="date2">{format(new Date(), "MMM d, yyyy", { locale: enUS })}</p>
