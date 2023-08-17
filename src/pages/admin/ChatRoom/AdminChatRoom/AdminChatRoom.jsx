@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import Chats from "./chats";
-import { api } from "../../../services/api";
+import Chats from "../chats";
+import { api } from "../../../../services/api";
 import NotificationsTitle from "./NotificationsTitle";
+import TimeAndDate from "./TimeAndDate";
 
 const chatRoomsStyle = {
   borderBottom: "1px solid #00000026",
@@ -17,17 +18,11 @@ const AdminChatRoom = ({
   setTargetChatRoomId,
   socket,
   setFilterMessages,
+  messages,
 }) => {
   const [notification, setNotification] = useState(true);
-
-  const timeStamp = chatRooms.Chats[chatRooms.Chats.length - 1]?.createdAt;
-  const formattedTimeStamp = new Date(timeStamp).toLocaleString();
-  const foramttedFilterTimeStamp = new Date(
-    filterMessages[filterMessages.length - 1]?.createdAt
-  ).toLocaleString();
-
-  // const encodedKey = chatRooms.Listing.key.replace(/\\/g, "%5C");
-  // const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
+  const encodedKey = chatRooms.Listing.key.replace(/\\/g, "%5C");
+  const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
 
   useEffect(() => {
     socket.emit("event_join", `${chatRooms.listingId}`);
@@ -35,10 +30,6 @@ const AdminChatRoom = ({
     socket.on("notification", (data) => {
       setNotification(data);
     });
-
-    return () => {
-      socket.disconnect();
-    };
   }, [socket, chatRooms.listingId]);
 
   return (
@@ -57,7 +48,7 @@ const AdminChatRoom = ({
           }}
         >
           <img
-            // src={imageUrl}
+            src={imageUrl}
             alt="listing"
             style={{ width: "100%", height: "100%", borderRadius: "50%" }}
           />
@@ -67,26 +58,15 @@ const AdminChatRoom = ({
             <p className="m-0" style={{ fontSize: "18px" }}>
               Listing:{chatRooms.listingId} • {chatRooms.Tenant.User.name}
             </p>
-            {!notification.state &&
-              parseInt(notification.room) === chatRooms.listingId && (
-                <div
-                  onClick={() => setNotification(true)}
-                  style={notificationMessageStyle}
-                >
-                  new message
-                </div>
-              )}
           </div>
           <NotificationsTitle
             chatRooms={chatRooms}
             setFilterMessages={setFilterMessages}
+            filterMessages={filterMessages}
+            messages={messages}
           />
 
-          <p style={{ fontSize: "18px", color: "#848484" }}>
-            {filterMessages && filterMessages.length > 0
-              ? foramttedFilterTimeStamp
-              : formattedTimeStamp}
-          </p>
+          <TimeAndDate chatRooms={chatRooms} filterMessages={filterMessages} />
         </div>
         <div>
           <p>tickets</p>

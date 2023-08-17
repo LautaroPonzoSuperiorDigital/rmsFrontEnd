@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import sendMessage from "../assets/img/send-email.svg";
 import { socket } from "./socketManajer/socket";
 import { useAuth } from "../hooks/useAuth";
@@ -28,7 +23,7 @@ const messageList = {
 };
 
 const fakeCrentials = {
-  listingId: 1,
+  listingId: 2,
 };
 
 const TenantChatRoomContainer = styled.div`
@@ -38,13 +33,13 @@ const TenantChatRoomContainer = styled.div`
 
   display: flex;
   flex-direction: column;
-`
+`;
 
 const TenantChatRoom = () => {
   const { user } = useAuth();
 
   const ulRef = useRef(null);
-  
+
   const [messages, setMessages] = useState([]);
   const [incoming, setIncoming] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -78,8 +73,8 @@ const TenantChatRoom = () => {
       socket.emit("notification", {
         room: `${fakeCrentials.listingId}`,
         message,
-      })
-    ])
+      }),
+    ]);
   };
 
   const scrollToBottom = () => {

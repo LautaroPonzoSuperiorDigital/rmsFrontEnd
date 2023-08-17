@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import AdminChatRoom from "./AdminChatRoom";
+import AdminChatRoom from "./AdminChatRoom/AdminChatRoom";
 import Nav from "../../../components/nav";
 import AdminChatRoomMessages from "./AdminChatRoomMessages";
 import ChatSendMessage from "./ChatSendMessage";
@@ -95,6 +95,7 @@ const Chats = () => {
                 setTargetChatRoomId={setTargetChatRoomId}
                 socket={socket}
                 setFilterMessages={setFilterMessages}
+                messages={messages}
               />
             );
           })}

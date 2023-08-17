@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
-import { api } from "../../../services/api";
+import { useState } from "react";
+import { api } from "../../../../services/api";
 import { useEffect } from "react";
 
 const newNotificationStyle = {
@@ -19,6 +19,7 @@ const NotificationsTitle = ({
   chatRooms,
   filterMessages,
   setFilterMessages,
+  messages,
 }) => {
   const [lastMessageDb, setLastMessageDb] = useState(
     chatRooms.Chats[chatRooms.Chats.length - 1]?.message
@@ -28,7 +29,7 @@ const NotificationsTitle = ({
     chatRooms.Chats[chatRooms.Chats.length - 1]
   );
 
-  const lastMessage = filterMessages
+  const lastMessage = messages
     ?.filter((message) => message.roomChatId === chatRooms.id)
     .pop();
 
@@ -40,7 +41,6 @@ const NotificationsTitle = ({
 
   const handleSelectedChatRooms = async () => {
     if (lastMessage) {
-      console.log("hello");
       const index = filterMessages.findIndex(
         (message) => message.id === lastMessage.id
       );
@@ -50,14 +50,13 @@ const NotificationsTitle = ({
           `chat/chat-message/${lastMessage.id}`,
           { isRead: true }
         );
+        //here updates state
+        const updatedFilterMessages = [...filterMessages];
+        updatedFilterMessages[index].isRead = true;
+        setFilterMessages(updatedFilterMessages);
       } catch (err) {
         console.log(err);
       }
-
-      //here updates state
-      const updatedFilterMessages = [...filterMessages];
-      updatedFilterMessages[index].isRead = true;
-      setFilterMessages(updatedFilterMessages);
     } else {
       const lastMessageDbId = chatRooms.Chats[chatRooms.Chats.length - 1].id;
       console.log("aca", chatRooms.Chats[chatRooms.Chats.length - 1]);
@@ -72,15 +71,12 @@ const NotificationsTitle = ({
       } catch (err) {
         console.log(err);
       }
-
-      console.log("adios");
     }
   };
-
-  useEffect(() => {}, [lastMessageDb]);
+  useEffect(() => {}, [lastMessageDb, messages]);
 
   return (
-    <div>
+    <div onClick={handleSelectedChatRooms}>
       {lastMessage ? (
         <p
           style={
