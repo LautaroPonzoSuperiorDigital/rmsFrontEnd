@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import AdminChatRoom from "./AdminChatRoom";
-import Nav from "./nav";
+import Nav from "../../../components/nav";
 import AdminChatRoomMessages from "./AdminChatRoomMessages";
 import ChatSendMessage from "./ChatSendMessage";
-import { socket } from "./socketManajer/socket";
-import { api } from "../services/api";
+import { socket } from "../../../components/socketManajer/socket";
+import { api } from "../../../services/api";
 
 const chatRoomStyle = {
   width: "100%",
   maxWidth: "500px",
+  overflowY: "auto",
 };
 const chatContaienrStyle = {
   borderLeft: "1px solid #00000026",
@@ -16,6 +17,7 @@ const chatContaienrStyle = {
   width: "100%",
   height: "100%",
   maxWidth: "500px",
+  overflowY: "auto",
 };
 
 const AdminChatRoomMessagesStyle = {
@@ -23,6 +25,10 @@ const AdminChatRoomMessagesStyle = {
   height: "100%",
   maxHeight: "500px",
   overflowY: "auto",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "flex-end",
+  padding: "10px 20px",
 };
 
 const Chats = () => {
@@ -54,8 +60,6 @@ const Chats = () => {
   }, [socket]);
   //filter by chat room id
   useEffect(() => {
-    //filter by chat room id
-
     const filterMessage = messages.filter(
       (message) => message.roomChatId === targetChatRoomId
     );
@@ -68,7 +72,6 @@ const Chats = () => {
         const { data } = await api.get("/chat/chat-rooms");
 
         const chatRoomsMessage = data.map((chatRoom) => chatRoom.Chats);
-
         setChatRooms(data);
         setMessages(chatRoomsMessage.flat());
       } catch (err) {
@@ -76,7 +79,7 @@ const Chats = () => {
       }
     };
     getChatRooms();
-  }, []);
+  }, [targetChatRoomId]);
 
   return (
     <div className="vh-100 d-flex flex-column">
@@ -91,12 +94,13 @@ const Chats = () => {
                 filterMessages={filterMessages}
                 setTargetChatRoomId={setTargetChatRoomId}
                 socket={socket}
+                setFilterMessages={setFilterMessages}
               />
             );
           })}
         </div>
         <div style={chatContaienrStyle}>
-          <div>
+          <div style={{ height: "500px" }}>
             <ul style={AdminChatRoomMessagesStyle} ref={chatContainerRef}>
               {filterMessages.map((message) => (
                 <li key={message.id} className="d-flex flex-column">

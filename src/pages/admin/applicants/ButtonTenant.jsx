@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "../../../services/api";
 
 const ButtonTenant = ({
@@ -10,6 +10,7 @@ const ButtonTenant = ({
 }) => {
   const listingId = applicantionScreening[0]?.listingId;
   const animationContainerRef = useRef(null);
+  const [message, setMessage] = useState("");
 
   const handleMoveToTenant = async () => {
     try {
@@ -19,6 +20,7 @@ const ButtonTenant = ({
       setNewTanant(true);
     } catch (err) {
       console.log(err);
+      setMessage(err.response.data.message);
     }
   };
 
@@ -29,6 +31,7 @@ const ButtonTenant = ({
       <button className="mttContainer" onClick={handleMoveToTenant}>
         Move To Tenants
       </button>
+      <p className="text-danger">{message}</p>
     </div>
   );
 };
