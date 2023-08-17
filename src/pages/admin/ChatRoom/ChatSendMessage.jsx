@@ -1,5 +1,5 @@
-import { useState } from "react";
-import sendMessage from "../assets/img/send-email.svg";
+import { useRef, useState } from "react";
+import sendMessage from "../../../assets/img/send-email.svg";
 
 const inputStyle = {
   width: "100%",
@@ -9,6 +9,7 @@ const inputStyle = {
 
 const ChatSendMessage = ({ socket, chatRoomId }) => {
   const [text, setText] = useState(null);
+  const inputRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +26,7 @@ const ChatSendMessage = ({ socket, chatRoomId }) => {
       room: `${chatRoomId}`,
       message,
     });
+    inputRef.current.value = "";
   };
 
   return (
@@ -38,6 +40,7 @@ const ChatSendMessage = ({ socket, chatRoomId }) => {
         placeholder="Type a message"
         style={inputStyle}
         onChange={(e) => setText(e.target.value)}
+        ref={inputRef}
       />
       <button
         style={{

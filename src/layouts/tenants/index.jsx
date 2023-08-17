@@ -22,6 +22,7 @@ const applicantsLayoutDesktop = () => {
 };
 
 export function TenantsLayout() {
+  const { user } = useAuth();
   const windowWidth = window.innerWidth;
 
   if (windowWidth > 900) {

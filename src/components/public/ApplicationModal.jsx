@@ -41,7 +41,6 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
       setFormData({ ...formData, [name]: value });
     }
   };
-  console.log(selectedListing.location);
   const submitRegistration = async (e) => {
     e.preventDefault();
     try {
@@ -98,7 +97,11 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
 
   const handleGoBack = () => {
     onClose();
-    window.location.href = "/tenants/public-listings";
+    if (user) {
+      window.location.href = "/tenants/public-listings";
+    } else {
+      window.location.href = "/";
+    }
   };
 
   useEffect(() => {
