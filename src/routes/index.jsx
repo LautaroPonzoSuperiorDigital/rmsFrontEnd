@@ -1,24 +1,31 @@
 import { RouterProvider } from "react-router-dom";
-import adminRouter from "./admin.routes";
-import publicRouter from "./public.routes";
-import tenantsRouter from "./tenants.routes";
+
+import { createAdminRouter } from "./admin.routes";
+import { createPublicRouter } from "./public.routes";
+import { createTenantsRouter } from "./tenants.routes";
 
 import { useAuth } from "../hooks/useAuth";
 
 export default function AppRoutes() {
-  const { user } = useAuth()
+  const { user, onSignedOut } = useAuth()
 
   if (user?.role === 'ADMIN') {
+    const adminRouter = createAdminRouter()
+
     return (
       <RouterProvider router={adminRouter} />
     )
   }
 
   if (user?.role === 'TENANT') {
+    const tenantsRouter = createTenantsRouter(user, onSignedOut)
+
     return (
       <RouterProvider router={tenantsRouter} />
     )
   }
+
+  const publicRouter = createPublicRouter()
 
   return (
     <RouterProvider router={publicRouter} />

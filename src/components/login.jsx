@@ -16,22 +16,31 @@ const Login = () => {
   const { isAuthenticated, user, onSignedIn } = useAuth();
 
   const navigate = useNavigate();
+  const windowWidth = window.innerWidth;
 
-  const navigateUser = useCallback((userRole) => {
-    switch (userRole) {
-      case 'ADMIN':
-        navigate('/admin/listings')
-        break
-      case 'TENANT':
-        navigate('/tenants')
-        break
-      default:
-        break
-    }
-  }, [navigate])
+  const navigateUser = useCallback(
+    (userRole) => {
+      switch (userRole) {
+        case "ADMIN":
+          navigate("/admin/listings");
+          break;
+        case "TENANT":
+          if (windowWidth > 900) {
+            console.log(windowWidth);
+            navigate("/tenants/public-listings");
+          } else {
+            navigate("/tenants");
+          }
+          break;
+        default:
+          break;
+      }
+    },
+    [navigate]
+  );
 
   const handleLogin = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     try {
       const { data } = await api.post("/auth/local/signin", {

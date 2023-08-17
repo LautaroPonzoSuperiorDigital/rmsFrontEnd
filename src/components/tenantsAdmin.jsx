@@ -43,19 +43,6 @@ const TenantsAdmin = () => {
     currentPage * PAGE_SIZE
   );
 
-  useEffect(() => {
-    // Fetch tenant data from the API endpoint
-    api.get('/tenant')
-      .then(response => {
-        console.log('Fetched tenant data:', response.data);
-        setTenants(response.data); // Assuming the response data is an array of tenants
-      })
-      .catch(error => {
-        console.error('Error fetching tenant data:', error);
-      });
-  }, []);
-
-
   /* popUp */
   const handleCellClick = (tenant, field, event) => {
     if (!event.currentTarget.classList.contains("buttonsNoMod")) {
@@ -113,6 +100,7 @@ const TenantsAdmin = () => {
     setIsEditOpen(false);
     setEditTenant(null);
   };
+
   const handleSaveModal = (updatedTenant) => {
     const updatedTenants = tenants.map((tenant) => {
       if (tenant.listings === updatedTenant.listings) {
@@ -123,6 +111,17 @@ const TenantsAdmin = () => {
     setTenants(updatedTenants);
     handleSaveTenant(updatedTenant);
   };
+
+  useEffect(() => {
+    api.get('/tenant')
+      .then(response => {
+        console.log('Fetched tenant data:', response.data);
+        setTenants(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching tenant data:', error);
+      });
+  }, []);
 
   return (
     <>

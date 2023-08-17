@@ -1,13 +1,23 @@
 import { styled } from "styled-components"
 
 export const InputContainer = styled.label`
+  max-width: ${({ focused }) => focused ? 'calc(100% - 2px)' : '100%'};
+
   display: flex;
   align-items: center;
 
-  border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+  border-bottom: 2px solid ${({ focused }) => focused ? '#197572' : 'rgba(0, 0, 0, 0.15)'};
   color: rgba(0, 0, 0, 0.65);
 
   cursor: text;
+
+  transition: border-color 200ms ease, max-width 200ms ease;
+`
+
+export const Label = styled.span`
+  font-size: 1rem;
+
+  white-space: nowrap;
 `
 
 export const StyledInput = styled.input`
