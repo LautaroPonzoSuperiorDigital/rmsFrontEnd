@@ -4,11 +4,13 @@ import Close from "../../assets/img/close.svg";
 import CloseHover from "../../assets/img/closeHover.svg";
 import { api } from "../../services/api";
 
-const AddDocs = ({ onClose }) => {
+const AddDocs = ({ listingsData, onClose }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [documentName, setDocumentName] = useState('');
   const [base64File, setBase64File] = useState('');
+  const [listingId, setListingId] = useState('');
+
 
   /* pdf */
   const handleFileChange = (event) => {
@@ -27,6 +29,39 @@ const AddDocs = ({ onClose }) => {
   /* pdf */
   /* sendDoc */
   const handleSaveClick = async () => {
+    if (!selectedFile || !documentName || !listingId) {
+      return;
+    }
+
+    const normalizedDocumentName = documentName.endsWith('.pdf')
+      ? documentName
+      : `${documentName}.pdf`;
+
+    console.log('Data to be sent:', {
+      documentName: normalizedDocumentName,
+      listingId, // Ensure you use the updated listingId
+      base64File,
+    });
+
+    try {
+      const cleanedBase64 = base64File.replace(/^data:.+;base64,/, '');
+
+      const response = await api.post(`/tenant/${listingId}/document`, JSON.stringify({
+        name: normalizedDocumentName,
+        file: cleanedBase64,
+      }), {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('API Response:', response.data);
+      onClose();
+      window.location.reload();
+    } catch (error) {
+      console.error('Error saving document:', error);
+    }
+  };
+  /* const handleSaveClick = async () => {
     if (!selectedFile || !documentName) {
       return;
     }
@@ -57,9 +92,13 @@ const AddDocs = ({ onClose }) => {
     } catch (error) {
       console.error('Error saving document:', error);
     }
-  };
+  }; */
 
   /* sendDoc */
+
+  const handleListingIdChange = (event) => {
+    setListingId(event.target.value);
+  };
 
   const handleNameChange = (event) => {
     setDocumentName(event.target.value);
@@ -112,6 +151,12 @@ const AddDocs = ({ onClose }) => {
             placeholder="NAME"
             value={documentName}
             onChange={handleNameChange}
+          />
+          <input
+            className="inputDoc"
+            placeholder="LISTING ID                                                                        000001"
+            value={listingId}
+            onChange={handleListingIdChange}
           />
 
           <div className="buttonContainer4 d-flex justify-content-center align-items-center">

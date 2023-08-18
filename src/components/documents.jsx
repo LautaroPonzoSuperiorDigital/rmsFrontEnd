@@ -13,12 +13,15 @@ import DeleteIconHover from "../assets/img/deleteIconHover.svg";
 import AddDocuments from "./AddDocuments";
 import AddDocs from "./modals/addDocumentsModal";
 import { api } from "../services/api";
+import jwtDecode from "jwt-decode";
 
 
 
 const Documents = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [documentsData, setDocumentsData] = useState([]);
+  const [listingsData, setListingsData] = useState([]);
+  const [decodedToken, setDecodedToken] = useState(null);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -31,13 +34,29 @@ const Documents = () => {
 
 
   useEffect(() => {
-    api.get("https://api.certifymyrent.com/tenant/1/document")
+
+    const token = localStorage.getItem("certifymyrent.token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      setDecodedToken(decoded);
+      console.log("Decoded Token:", decoded);
+    }
+
+    api.get(`/tenant/2/document`)
       .then(response => {
-        console.log("Fetched documents:", response.data);
+
         setDocumentsData(response.data);
       })
       .catch(error => {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching documents data:", error);
+      });
+
+    api.get("/listing")
+      .then(response => {
+        setListingsData(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching listings data:", error);
       });
   }, []);
 
@@ -45,7 +64,7 @@ const Documents = () => {
     const updatedDocuments = documentsData.filter(document => document.id !== documentId);
     setDocumentsData(updatedDocuments);
 
-    api.delete(`https://api.certifymyrent.com/tenant/1/document/${documentId}`)
+    api.delete(`tenant/1/document/${documentId}`)
       .then(response => {
       })
       .catch(error => {
@@ -141,7 +160,7 @@ const Documents = () => {
           </div>
         </div>
       </div>
-      {isModalOpen && <AddDocs onClose={handleCloseModal} />}
+      {isModalOpen && <AddDocs onClose={handleCloseModal} listingsData={listingsData} />}
       <Pagination />
     </>
   );
