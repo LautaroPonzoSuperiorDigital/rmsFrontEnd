@@ -22,6 +22,7 @@ const Documents = () => {
   const [documentsData, setDocumentsData] = useState([]);
   const [listingsData, setListingsData] = useState([]);
   const [decodedToken, setDecodedToken] = useState(null);
+  const [tenantsData, setTenantsData] = useState([]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -39,6 +40,17 @@ const Documents = () => {
       const decoded = jwtDecode(token);
       setDecodedToken(decoded);
 
+/* last line added 4 test*/
+api.get("/tenant")
+.then(response => {
+  setTenantsData(response.data);
+  
+          console.log("Tenants Data:", response.data); 
+        })
+        .catch(error => {
+          console.error("Error fetching tenants data:", error);
+        });
+/* last line added 4 test*/
       const adminId = decoded.sub;
 
       api.get(`admin/${adminId}/listing-documents`)
@@ -66,31 +78,29 @@ const Documents = () => {
     }
   }, []);
 
+
   const handleDelete = async (documentId) => {
     try {
       const updatedDocuments = documentsData.filter(document => document.id !== documentId);
       setDocumentsData(updatedDocuments);
-  
+
       const documentToDelete = documentsData.find(document => document.id === documentId);
-  
+
       if (documentToDelete && documentToDelete.Tenant && documentToDelete.Tenant.id) {
         const tenantId = documentToDelete.Tenant.id;
-  
+
         await api.delete(`tenant/${tenantId}/document/${documentId}`);
         console.log("Document deleted successfully!");
-  
-        // Aquí puedes realizar alguna acción adicional después de borrar el documento si es necesario
       } else {
         console.error("Error: Document or Tenant data is missing or invalid.");
         setDocumentsData(updatedDocuments);
       }
     } catch (error) {
       console.error("Error deleting document:", error);
-      // Si ocurrió un error al borrar el documento, revierte el cambio en el estado
+
       setDocumentsData([...updatedDocuments, documentToDelete]);
     }
   };
-  
 
 
 
