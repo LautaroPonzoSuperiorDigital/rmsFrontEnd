@@ -10,9 +10,9 @@ const AddDocs = ({ listingsData, onClose }) => {
   const [documentName, setDocumentName] = useState('');
   const [base64File, setBase64File] = useState('');
   const [listingId, setListingId] = useState('');
+  const [currentTenant, setCurrentTenant] = useState(null);
 
-
-  /* pdf */
+  // Handle file change
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
@@ -26,7 +26,27 @@ const AddDocs = ({ listingsData, onClose }) => {
       };
     }
   };
-  /* pdf */
+
+  // Fetch current tenant information when the listingId changes
+  useEffect(() => {
+    const fetchCurrentTenant = async () => {
+      try {
+        const response = await api.get(`/listing/${listingId}/current-tenant`);
+        setCurrentTenant(response.data);
+        console.log('Current Tenant Data:', response.data); // Agregar este console.log
+      } catch (error) {
+        console.error('Error fetching current tenant:', error);
+      }
+    };
+
+    if (listingId) {
+      fetchCurrentTenant();
+    }
+  }, [listingId]);
+
+
+  // Handle save button click
+
   /* sendDoc */
   const handleSaveClick = async () => {
     if (!selectedFile || !documentName || !listingId) {
@@ -36,7 +56,6 @@ const AddDocs = ({ listingsData, onClose }) => {
     const normalizedDocumentName = documentName.endsWith('.pdf')
       ? documentName
       : `${documentName}.pdf`;
-
 
     try {
       const cleanedBase64 = base64File.replace(/^data:.+;base64,/, '');
