@@ -34,26 +34,27 @@ const Documents = () => {
 
 
   useEffect(() => {
-
     const token = localStorage.getItem("certifymyrent.token");
     if (token) {
       const decoded = jwtDecode(token);
       setDecodedToken(decoded);
       console.log("Decoded Token:", decoded);
+
+      const adminId = decoded.sub;
+      
+      api.get(`admin/${adminId}/listing-documents`)
+        .then(response => {
+          setDocumentsData(response.data);
+        })
+        .catch(error => {
+          console.error("Error fetching documents data:", error);
+        });
     }
-
-    api.get(`/tenant/2/document`)
-      .then(response => {
-
-        setDocumentsData(response.data);
-      })
-      .catch(error => {
-        console.error("Error fetching documents data:", error);
-      });
 
     api.get("/listing")
       .then(response => {
         setListingsData(response.data);
+        console.log(listingsData)
       })
       .catch(error => {
         console.error("Error fetching listings data:", error);
@@ -64,7 +65,7 @@ const Documents = () => {
     const updatedDocuments = documentsData.filter(document => document.id !== documentId);
     setDocumentsData(updatedDocuments);
 
-    api.delete(`tenant/1/document/${documentId}`)
+    api.delete(`admin/${adminId}/listing-documents`)
       .then(response => {
       })
       .catch(error => {

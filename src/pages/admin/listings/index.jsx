@@ -113,6 +113,7 @@ export default function AdminListings() {
     async function loadListings() {
       try {
         const { data } = await api.get("/listing");
+        console.log("Data from API:", data);
 
         setListings(
           data.map((listing) => {
@@ -218,8 +219,8 @@ export default function AdminListings() {
                         <p className="alignText d-flex align-items-center">
                           {listing.lotSize
                             ? listing.lotSize.toLocaleString("EN", {
-                                maximumFractionDigits: 0,
-                              })
+                              maximumFractionDigits: 0,
+                            })
                             : ""}
                           &nbsp;&nbsp;Sq. Ft. Per County
                         </p>
@@ -228,8 +229,8 @@ export default function AdminListings() {
                         <p className="alignText d-flex align-items-center">
                           {listing.houseSize
                             ? listing.houseSize.toLocaleString("EN", {
-                                maximumFractionDigits: 0,
-                              })
+                              maximumFractionDigits: 0,
+                            })
                             : ""}
                           &nbsp;&nbsp;Sq. Ft. Per County
                         </p>
@@ -239,8 +240,8 @@ export default function AdminListings() {
                           $
                           {listing.price
                             ? parseFloat(listing.price).toLocaleString("en", {
-                                useGrouping: true,
-                              })
+                              useGrouping: true,
+                            })
                             : ""}
                           / mo
                         </p>

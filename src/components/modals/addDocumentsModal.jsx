@@ -61,39 +61,6 @@ const AddDocs = ({ listingsData, onClose }) => {
       console.error('Error saving document:', error);
     }
   };
-  /* const handleSaveClick = async () => {
-    if (!selectedFile || !documentName) {
-      return;
-    }
-
-
-    const normalizedDocumentName = documentName.endsWith('.pdf')
-      ? documentName
-      : `${documentName}.pdf`;
-
-    console.log('Document Name:', normalizedDocumentName);
-    console.log('Base64 File:', base64File);
-
-    try {
-
-      const cleanedBase64 = base64File.replace(/^data:.+;base64,/, '');
-
-      const response = await api.post('/tenant/1/document', JSON.stringify({
-        name: normalizedDocumentName,
-        file: cleanedBase64,
-      }), {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log('API Response:', response.data);
-      onClose();
-      window.location.reload();
-    } catch (error) {
-      console.error('Error saving document:', error);
-    }
-  }; */
-
   /* sendDoc */
 
   const handleListingIdChange = (event) => {

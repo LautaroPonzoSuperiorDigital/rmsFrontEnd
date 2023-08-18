@@ -102,7 +102,6 @@ const TenantsAdmin = () => {
   useEffect(() => {
     api.get(`/tenant/`)
       .then(response => {
-        console.log('Fetched tenant data:', response.data);
         setTenants(response.data);
       })
       .catch(error => {
