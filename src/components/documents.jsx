@@ -38,41 +38,60 @@ const Documents = () => {
     if (token) {
       const decoded = jwtDecode(token);
       setDecodedToken(decoded);
-      console.log("Decoded Token:", decoded);
 
       const adminId = decoded.sub;
-      
+
       api.get(`admin/${adminId}/listing-documents`)
         .then(response => {
           setDocumentsData(response.data);
+
+          const documentIds = response.data.map(document => document.listingId);
+          api.get("/listing")
+            .then(listingResponse => {
+              const listings = listingResponse.data;
+              const documentsWithListings = response.data.map(document => {
+                const listing = listings.find(listing => listing.id === document.listingId);
+                return { ...document, listing };
+              });
+              setDocumentsData(documentsWithListings);
+              console.log("Listings Data:", documentsWithListings);
+            })
+            .catch(error => {
+              console.error("Error fetching listings data:", error);
+            });
         })
         .catch(error => {
           console.error("Error fetching documents data:", error);
         });
     }
-
-    api.get("/listing")
-      .then(response => {
-        setListingsData(response.data);
-        console.log(listingsData)
-      })
-      .catch(error => {
-        console.error("Error fetching listings data:", error);
-      });
   }, []);
 
-  const handleDelete = (documentId) => {
-    const updatedDocuments = documentsData.filter(document => document.id !== documentId);
-    setDocumentsData(updatedDocuments);
-
-    api.delete(`admin/${adminId}/listing-documents`)
-      .then(response => {
-      })
-      .catch(error => {
-        console.error("Error deleting document:", error);
-        setDocumentsData([...documentsData, document]);
-      });
+  const handleDelete = async (documentId) => {
+    try {
+      const updatedDocuments = documentsData.filter(document => document.id !== documentId);
+      setDocumentsData(updatedDocuments);
+  
+      const documentToDelete = documentsData.find(document => document.id === documentId);
+  
+      if (documentToDelete && documentToDelete.Tenant && documentToDelete.Tenant.id) {
+        const tenantId = documentToDelete.Tenant.id;
+  
+        await api.delete(`tenant/${tenantId}/document/${documentId}`);
+        console.log("Document deleted successfully!");
+  
+        // Aquí puedes realizar alguna acción adicional después de borrar el documento si es necesario
+      } else {
+        console.error("Error: Document or Tenant data is missing or invalid.");
+        setDocumentsData(updatedDocuments);
+      }
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      // Si ocurrió un error al borrar el documento, revierte el cambio en el estado
+      setDocumentsData([...updatedDocuments, documentToDelete]);
+    }
   };
+  
+
 
 
 

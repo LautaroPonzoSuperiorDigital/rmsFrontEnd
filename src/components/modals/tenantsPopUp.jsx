@@ -157,8 +157,8 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     try {
       const response = await api.get(`/listing/${selectedTenant.Listings[0].id}`);
       const listingData = response.data;
-      console.log("Listing Data:", listingData); 
-      setListingData(listingData); 
+      console.log("Listing Data:", listingData);
+      setListingData(listingData);
     } catch (error) {
       console.error('Error fetching listing data:', error);
     }
@@ -291,7 +291,9 @@ const TenantModal = ({ selectedTenant, onClose }) => {
           <div className="listingInfo d-flex">
             <div className="imgTestPopUp">
               {" "}
-              <img className="imgTestPopUpInsert" src={testImg} alt="" />
+
+              <img className="imgTestPopUpInsert" src={`https://rms-staging.s3.us-west-1.amazonaws.com/${listingData?.key}`} alt="" />
+
             </div>
             <div className="listingInfoOrder d-flex flex-column">
               <div className="popUpOrderListings">

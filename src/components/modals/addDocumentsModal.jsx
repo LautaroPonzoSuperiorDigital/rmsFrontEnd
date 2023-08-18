@@ -37,11 +37,6 @@ const AddDocs = ({ listingsData, onClose }) => {
       ? documentName
       : `${documentName}.pdf`;
 
-    console.log('Data to be sent:', {
-      documentName: normalizedDocumentName,
-      listingId, // Ensure you use the updated listingId
-      base64File,
-    });
 
     try {
       const cleanedBase64 = base64File.replace(/^data:.+;base64,/, '');
