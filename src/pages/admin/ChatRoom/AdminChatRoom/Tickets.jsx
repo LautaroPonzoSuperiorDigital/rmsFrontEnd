@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
-
+import { useEffect } from "react";
 import Ticket from "../../../../components/icons/ticket";
 
-const Tickets = ({ chatRooms }) => {
+const Tickets = ({ chatRooms, setTickets }) => {
   const ticketRepair = chatRooms?.Listing.RepairTicket;
   const ticketComplain = chatRooms?.Listing.TicketComplaint;
+
   return (
     <div className="d-flex flex-column ">
       {ticketRepair?.length > 0 && (

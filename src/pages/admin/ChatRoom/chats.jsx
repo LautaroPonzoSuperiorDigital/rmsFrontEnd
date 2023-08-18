@@ -5,6 +5,7 @@ import AdminChatRoomMessages from "./AdminChatRoomMessages";
 import ChatSendMessage from "./ChatSendMessage";
 import { socket } from "../../../components/socketManajer/socket";
 import { api } from "../../../services/api";
+import TicketsInfomartion from "./TicketsInformation/TicketsInfomartion";
 
 const chatRoomStyle = {
   width: "100%",
@@ -16,7 +17,7 @@ const chatContaienrStyle = {
   borderRight: "1px solid #00000026",
   width: "100%",
   height: "100%",
-  maxWidth: "800px",
+  maxWidth: "550px",
   overflowY: "auto",
 };
 
@@ -119,6 +120,10 @@ const Chats = () => {
             )}
           </div>
         </div>
+        <TicketsInfomartion
+          chatRoomId={targetChatRoomId}
+          chatRooms={chatRooms}
+        />
       </div>
     </div>
   );

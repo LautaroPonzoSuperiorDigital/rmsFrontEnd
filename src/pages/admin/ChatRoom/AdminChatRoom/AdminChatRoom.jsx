@@ -19,6 +19,7 @@ const AdminChatRoom = ({
   socket,
   setFilterMessages,
   messages,
+  setTickets,
 }) => {
   const [notification, setNotification] = useState(true);
   const encodedKey = chatRooms.Listing.key.replace(/\\/g, "%5C");
@@ -71,7 +72,7 @@ const AdminChatRoom = ({
           <TimeAndDate chatRooms={chatRooms} filterMessages={filterMessages} />
         </div>
         <div style={{ width: "200px", height: "100%" }}>
-          <Tickets chatRooms={chatRooms} />
+          <Tickets chatRooms={chatRooms} setTickets={setTickets} />
         </div>
       </div>
     </div>

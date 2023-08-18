@@ -38,7 +38,11 @@ const AdminChatRoomMessages = ({ message }) => {
         </div>
         <p
           className="m-0"
-          style={ownerMessage ? { textAlign: "end" } : { textAlign: "start" }}
+          style={
+            ownerMessage
+              ? { textAlign: "end", fontSize: 18 }
+              : { textAlign: "start", fontSize: 18 }
+          }
         >
           {message.message}
         </p>
