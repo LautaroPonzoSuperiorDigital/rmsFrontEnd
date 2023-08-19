@@ -24,7 +24,6 @@ const chatContaienrStyle = {
 const AdminChatRoomMessagesStyle = {
   width: "100%",
   height: "100%",
-  maxHeight: "500px",
   overflowY: "auto",
   display: "flex",
   flexDirection: "column",
@@ -83,9 +82,9 @@ const Chats = () => {
   }, [targetChatRoomId]);
 
   return (
-    <div className="vh-100 d-flex flex-column">
+    <div className="vh-100 d-flex flex-column  ">
       <Nav />
-      <div className="flex-grow-1 d-flex">
+      <div className=" flex-grow-1 d-flex p-2">
         <div style={chatRoomStyle}>
           {chatRooms.map((chatRoom) => {
             return (
@@ -102,7 +101,7 @@ const Chats = () => {
           })}
         </div>
         <div style={chatContaienrStyle}>
-          <div style={{ height: "500px" }}>
+          <div style={{ height: "90%" }}>
             <ul style={AdminChatRoomMessagesStyle} ref={chatContainerRef}>
               {filterMessages.map((message) => (
                 <li key={message.id} className="d-flex flex-column">
@@ -120,10 +119,12 @@ const Chats = () => {
             )}
           </div>
         </div>
-        <TicketsInfomartion
-          chatRoomId={targetChatRoomId}
-          chatRooms={chatRooms}
-        />
+        {targetChatRoomId && (
+          <TicketsInfomartion
+            chatRoomId={targetChatRoomId}
+            chatRooms={chatRooms}
+          />
+        )}
       </div>
     </div>
   );

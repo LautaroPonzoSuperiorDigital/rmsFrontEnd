@@ -7,6 +7,7 @@ import Tickets from "./Tickets";
 const chatRoomsStyle = {
   borderBottom: "1px solid #00000026",
   width: "100%",
+  height: "88px",
 };
 const notificationMessageStyle = {
   color: "#31af9a",
@@ -39,7 +40,7 @@ const AdminChatRoom = ({
       style={chatRoomsStyle}
       onClick={() => setTargetChatRoomId(chatRooms.listingId)}
     >
-      <div className="d-flex h-100 align-items-center w-100">
+      <div className="d-flex align-items-center  w-100">
         <div style={{ width: "150px" }}>
           <div
             style={{
@@ -56,7 +57,7 @@ const AdminChatRoom = ({
             />
           </div>
         </div>
-        <div>
+        <div style={{ height: "88px" }}>
           <div className="d-flex gap-3 " style={{ width: "250px" }}>
             <p className="m-0" style={{ fontSize: "18px" }}>
               Listing:{chatRooms.listingId} • {chatRooms.Tenant.User.name}

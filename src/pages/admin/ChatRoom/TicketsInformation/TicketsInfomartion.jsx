@@ -4,6 +4,25 @@ import ActiveComplainTickets from "./ActiveComplainTickets";
 import ActiveRepairTickets from "./ActiveRepairTickets";
 import CloseComplainTickets from "./CloseComplainTickets";
 import CloseRepairTickets from "./CloseRepairTickets";
+import Files from "./Files";
+
+const mockFiles = [
+  {
+    name: "T5 Credit Report Form",
+    date: "jul 19, 2022",
+    id: 1,
+  },
+  {
+    name: "12 Rt Form",
+    date: "jun 09, 2022",
+    id: 2,
+  },
+  {
+    name: "Lincense",
+    date: "may 25, 2022",
+    id: 2,
+  },
+];
 
 const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
   const matchedChatRoom = chatRooms.find(
@@ -19,8 +38,11 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
   );
 
   return (
-    <div className="d-flex flex-column gap-5">
+    <div className="d-flex flex-column gap-3 ">
       <div>
+        <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
+          ACTIVE TICKETS
+        </p>
         {activeTickets.map((ticket) =>
           ticket.cause ? (
             <ActiveComplainTickets key={ticket.id} ticket={ticket} />
@@ -41,6 +63,10 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
           )
         )}
       </div>
+      <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>FILES</p>
+      {mockFiles.map((file) => (
+        <Files key={file.id} file={file} />
+      ))}
     </div>
   );
 };

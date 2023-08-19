@@ -25,9 +25,6 @@ const textRepairStyle = {
   margin: "0px",
   lineHeight: "1px",
 };
-const bodyAccordionStyle = {
-  backgroundColor: "#31AF9A0D",
-};
 
 const dateStyle = {
   color: "#848484",
@@ -92,7 +89,7 @@ const CloseRepairTickets = ({ ticket }) => {
           aria-labelledby={`heading-${ticket.id}`}
           data-bs-parent={`#accordion-${ticket.id}`}
         >
-          <div className="accordion-body" style={bodyAccordionStyle}>
+          <div className="accordion-body">
             <div className="d-flex justify-content-between align-items-center">
               <p style={titleRepairStyle}>NAME OF THE ISSUE</p>
               <p style={textIssueRepairStyle}>{ticket.name}</p>

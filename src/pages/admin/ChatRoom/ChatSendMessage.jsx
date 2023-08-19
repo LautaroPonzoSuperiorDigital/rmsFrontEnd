@@ -32,7 +32,7 @@ const ChatSendMessage = ({ socket, chatRoomId }) => {
   return (
     <form
       className="d-flex"
-      style={{ paddingLeft: "20px" }}
+      style={{ padding: "20px" }}
       onSubmit={handleSubmit}
     >
       <input
