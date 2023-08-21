@@ -1,4 +1,4 @@
-export const Ticket = () => {
+export function Ticket() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,4 +14,4 @@ export const Ticket = () => {
       />
     </svg>
   );
-};
+}
