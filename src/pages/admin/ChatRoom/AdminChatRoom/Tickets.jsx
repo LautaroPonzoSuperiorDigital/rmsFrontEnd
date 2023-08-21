@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect } from "react";
-
+import ticket from "./../../../../assets/img/ticket.svg";
 const Tickets = ({ chatRooms, setTickets }) => {
   const ticketRepair = chatRooms?.Listing.RepairTicket;
   const ticketComplain = chatRooms?.Listing.TicketComplaint;
@@ -16,7 +16,7 @@ const Tickets = ({ chatRooms, setTickets }) => {
             Repair ticket
           </p>
           <div>
-            <Ticket />
+            <img src={ticket} />
           </div>
         </div>
       )}
@@ -28,7 +28,9 @@ const Tickets = ({ chatRooms, setTickets }) => {
           <p className="m-0" style={{ color: "#197572", fontSize: "18px" }}>
             Complain ticket
           </p>
-          <div></div>
+          <div>
+            <img src={ticket} />
+          </div>
         </div>
       )}
     </div>
