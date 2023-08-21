@@ -23,6 +23,11 @@ const mockFiles = [
     id: 2,
   },
 ];
+const ticketsContainerStyle = {
+  maxHeight: "100vh",
+  overflowY: "auto",
+  overflowX: "hidden",
+};
 
 const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
   const matchedChatRoom = chatRooms.find(
@@ -38,7 +43,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
   );
 
   return (
-    <div className="d-flex flex-column gap-3 ">
+    <div className="d-flex flex-column gap-3 " style={ticketsContainerStyle}>
       <div>
         <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
           ACTIVE TICKETS
@@ -63,10 +68,14 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
           )
         )}
       </div>
-      <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>FILES</p>
-      {mockFiles.map((file) => (
-        <Files key={file.id} file={file} />
-      ))}
+      <div>
+        <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
+          FILES
+        </p>
+        {mockFiles.map((file) => (
+          <Files key={file.id} file={file} />
+        ))}
+      </div>
     </div>
   );
 };

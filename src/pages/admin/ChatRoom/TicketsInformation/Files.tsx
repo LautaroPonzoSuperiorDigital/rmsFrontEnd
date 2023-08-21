@@ -7,7 +7,7 @@ const dateStyle = {
 };
 const Files = ({ file }) => {
   return (
-    <div className="w-100 d-flex   " style={{ padding: "20px" }}>
+    <div className="w-100 d-flex   " style={{ padding: "10px" }}>
       <div style={{ width: "240px" }}>{file.name}</div>
       <div style={dateStyle}>{file.date}</div>
     </div>
