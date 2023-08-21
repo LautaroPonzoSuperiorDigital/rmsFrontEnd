@@ -6,6 +6,7 @@ import ChatSendMessage from "./ChatSendMessage";
 import { socket } from "../../../components/socketManajer/socket";
 import { api } from "../../../services/api";
 import TicketsInfomartion from "./TicketsInformation/TicketsInfomartion";
+import AdminChatRoomNavBar from "./AdminChatRoomNavBar";
 
 const chatRoomStyle = {
   width: "100%",
@@ -43,6 +44,7 @@ const Chats = () => {
   const [filterMessages, setFilterMessages] = useState([]); // this state filter message by chat room id
   const [targetChatRoomId, setTargetChatRoomId] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
+  const [ticketActiveRooms, setTicketActiveRooms] = useState(chatRooms);
 
   const scrollToLastMessage = () => {
     if (chatContainerRef.current) {
@@ -90,9 +92,15 @@ const Chats = () => {
   return (
     <div className="vh-100 d-flex flex-column ">
       <Nav />
-      <div className=" flex-grow-1 d-flex p-2">
+      <div className=" flex-grow-1 d-flex p-2 ">
         <div style={chatRoomStyle}>
-          {chatRooms.map((chatRoom) => {
+          <div>
+            <AdminChatRoomNavBar
+              chatRooms={chatRooms}
+              setTicketActiveRooms={setTicketActiveRooms}
+            />
+          </div>
+          {ticketActiveRooms.map((chatRoom) => {
             return (
               <AdminChatRoom
                 key={chatRoom.listingId}

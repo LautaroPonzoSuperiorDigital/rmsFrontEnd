@@ -46,7 +46,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
     <div className="d-flex flex-column gap-3 " style={ticketsContainerStyle}>
       <div>
         <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
-          ACTIVE TICKETS
+          ACTIVE TICKETS ({activeTickets.length})
         </p>
         {activeTickets.map((ticket) =>
           ticket.cause ? (
@@ -58,7 +58,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
       </div>
       <div>
         <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
-          TICKETS ARCHIVE
+          TICKETS ARCHIVE ({closedTickets.length})
         </p>
         {closedTickets.map((ticket) =>
           ticket.cause ? (

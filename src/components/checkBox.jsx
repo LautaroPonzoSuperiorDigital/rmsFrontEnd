@@ -1,4 +1,4 @@
-import PropTypes from  "prop-types"
+import PropTypes from "prop-types";
 
 import "../styles/tenants.css";
 
@@ -23,7 +23,7 @@ CheckBoxLog.propTypes = {
   checked: PropTypes.bool,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
-  name: PropTypes.string
-}
+  name: PropTypes.string,
+};
 
 export default CheckBoxLog;
