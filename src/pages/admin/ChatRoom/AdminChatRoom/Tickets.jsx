@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect } from "react";
-import Ticket from "../../../../components/icons/ticket";
-
+import ticket from "./../../../../assets/img/ticket.svg";
 const Tickets = ({ chatRooms, setTickets }) => {
   const ticketRepair = chatRooms?.Listing.RepairTicket;
   const ticketComplain = chatRooms?.Listing.TicketComplaint;
@@ -17,7 +16,7 @@ const Tickets = ({ chatRooms, setTickets }) => {
             Repair ticket
           </p>
           <div>
-            <Ticket />
+            <img src={ticket} />
           </div>
         </div>
       )}
@@ -30,7 +29,7 @@ const Tickets = ({ chatRooms, setTickets }) => {
             Complain ticket
           </p>
           <div>
-            <Ticket />
+            <img src={ticket} />
           </div>
         </div>
       )}
