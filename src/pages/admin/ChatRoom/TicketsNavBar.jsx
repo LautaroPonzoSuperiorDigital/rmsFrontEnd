@@ -17,15 +17,13 @@ const TicketsNavBar = ({ targetChatRoomId, chatRooms }) => {
   const selectedListing = chatRooms.find(
     (chatRoom) => chatRoom.listingId === targetChatRoomId
   );
-  console.log(selectedListing);
+  const encodedKey = selectedListing.Listing.key.replace(/\\/g, "%5C");
+  const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
 
   return (
-    <div className="d-flex gap-3 p-1">
+    <div className="d-flex justify-content-around p-1">
       <div style={{ height: "50px", width: "45px" }}>
-        <img
-          src={selectedListing.Listing.key}
-          style={{ height: "50px", width: "45" }}
-        />
+        <img src={imageUrl} style={{ height: "50px", width: "45" }} />
       </div>
       <div>
         <p style={nameStyle} className="d-flex align-items-center">

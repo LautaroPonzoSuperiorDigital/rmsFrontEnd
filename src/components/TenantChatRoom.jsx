@@ -38,6 +38,7 @@ const TenantChatRoomContainer = styled.div`
 const TenantChatRoom = () => {
   const { user } = useAuth();
 
+  const inputRef = useRef(null);
   const ulRef = useRef(null);
 
   const [messages, setMessages] = useState([]);
@@ -48,14 +49,13 @@ const TenantChatRoom = () => {
   const handleMessageChange = useCallback(
     (e) => {
       setMessages(e.target.value);
-      console.log(messages);
     },
     [messages]
   );
   const handleSendMessage = async (e) => {
     e.preventDefault();
     const message = {
-      roomChatId: fakeCrentials.listingId,
+      roomChatId: user.listingId,
       sender: user.name,
       message: messages,
       role: user.role,
@@ -67,14 +67,16 @@ const TenantChatRoom = () => {
 
     await Promise.all([
       socket.emit("event_message", {
-        room: `${fakeCrentials.listingId}`,
+        room: `${user.listingId}`,
         message,
       }),
       socket.emit("notification", {
-        room: `${fakeCrentials.listingId}`,
+        room: `${user.listingId}`,
         message,
       }),
     ]);
+    inputRef.current.value = "";
+    inputRef.current.focus();
   };
 
   const scrollToBottom = () => {
@@ -89,7 +91,7 @@ const TenantChatRoom = () => {
     const getChatMessages = async () => {
       try {
         const { data } = await api.get("chat/chat-room-by-id", {
-          params: { id: fakeCrentials.listingId },
+          params: { id: user.listingId },
         });
         console.log(data);
         setIncoming(data.Chats);
@@ -102,7 +104,7 @@ const TenantChatRoom = () => {
 
   useEffect(() => {
     // Join the room when the component mounts
-    socket.emit("event_join", `${fakeCrentials.listingId}`);
+    socket.emit("event_join", `${user.listingId}`);
 
     // Listen for incoming messages from the room
     socket.on("event_message", (data) => {
@@ -118,7 +120,7 @@ const TenantChatRoom = () => {
 
     // Leave the room when the component unmounts
     return () => {
-      socket.emit("event_leave", `${fakeCrentials.listingId}`);
+      socket.emit("event_leave", `${user.listingId}`);
     };
   }, []);
 
@@ -145,6 +147,7 @@ const TenantChatRoom = () => {
           placeholder="Type your message here..."
           onChange={handleMessageChange}
           style={{ width: "100%" }}
+          ref={inputRef}
         />
         <button
           style={{

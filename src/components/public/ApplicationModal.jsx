@@ -26,6 +26,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState("");
   const [isStartScreening, setIsStartScreening] = useState(false);
+  const [screeningMessage, setScreeningMessage] = useState("");
   const [userId, setUserId] = useState({});
   const { user } = useAuth();
   console.log(user);
@@ -85,6 +86,8 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
     try {
       const response = await api.post("/application-screening", data);
       // window.open(env.rentSpreeLink, "_blank");
+      setIsStartScreening(false);
+      setScreeningMessage("Screening started!");
     } catch (err) {
       console.log(err.response);
     }
@@ -381,6 +384,7 @@ const ApplicationModal = ({ selectedImage, onClose, id }) => {
                   </button>
                 )}
               </div>
+              {screeningMessage}
             </div>
           )}
           {/* REGISTER END */}
