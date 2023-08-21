@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "./nav";
 import "../styles/Documents/documents.css";
 import SearchListings from "./searchListings";
 import { EditButton, DeleteButton } from "./buttonDocuments";
+import { format } from "date-fns";
+import { enUS } from "date-fns/locale";
 import Pagination from "./paginations";
 import Edit from "../assets/img/Edit.svg";
 import EditHover from "../assets/img/EditHover.svg";
@@ -10,11 +12,17 @@ import Delete from "../assets/img/delete.svg";
 import DeleteIconHover from "../assets/img/deleteIconHover.svg";
 import AddDocuments from "./AddDocuments";
 import AddDocs from "./modals/addDocumentsModal";
+import { api } from "../services/api";
+import jwtDecode from "jwt-decode";
 
 
 
 const Documents = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [documentsData, setDocumentsData] = useState([]);
+  const [listingsData, setListingsData] = useState([]);
+  const [decodedToken, setDecodedToken] = useState(null);
+  const [tenantsData, setTenantsData] = useState([]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -23,6 +31,58 @@ const Documents = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("certifymyrent.token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      setDecodedToken(decoded);
+      const adminId = decoded.sub;
+
+      api.get(`admin/${adminId}/listing-documents`)
+        .then(response => {
+          setDocumentsData(response.data);
+          const documentIds = response.data.map(document => document.listingId);
+          api.get("/listing")
+            .then(listingResponse => {
+              const listings = listingResponse.data;
+              const documentsWithListings = response.data.map(document => {
+                const listing = listings.find(listing => listing.id === document.listingId);
+                return { ...document, listing };
+              });
+              setDocumentsData(documentsWithListings);
+              console.log("Listings Data:", documentsWithListings);
+            })
+            .catch(error => {
+              console.error("Error fetching listings data:", error);
+            });
+        })
+        .catch(error => {
+          console.error("Error fetching documents data:", error);
+        });
+    }
+  }, []);
+
+
+  const handleDelete = async (documentId, tenantId) => {
+    try {
+      const updatedDocuments = documentsData.filter(document => document.id !== documentId);
+      setDocumentsData(updatedDocuments);
+
+      await api.delete(`tenant/${tenantId}/document/${documentId}`);
+      console.log("Document deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      // Revert the state update on error
+      setDocumentsData([...updatedDocuments, documentToDelete]);
+    }
+  };
+
+
+
+
 
   return (
     <>
@@ -64,42 +124,51 @@ const Documents = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="tr-hover">
-                    <td className="h p1 td td2 tdFix">
-                      <p className="location1">300 BC Lead Water</p>
-                    </td>
-                    <td className="h p1 td td2">
-                      <p className="listingA">467800</p>
-                    </td>
-                    <td className="h p1 td td2 tdFix">
-                      <p className="location2">Lead Waver</p>
-                    </td>
-                    <td className="h p1 td td2 tdFix">
-                      <p className="date2">Feb 3, 2023</p>
-                    </td>
-                    <td className="buttonContainer2 tdFix">
-                      <div className="orderButtonContainer">
-                        <EditButton
-                          defaultImage={<img src={Edit} alt="Edit" />}
-                          hoverImage={<img src={EditHover} alt="EditHover" />}
-                        />
-                        <DeleteButton
-                          className="delete1"
-                          defaultImage={<img src={Delete} alt="Delete" />}
-                          hoverImage={
-                            <img src={DeleteIconHover} alt="DeleteIconHover" />
-                          }
-                        />
-                      </div>
-                    </td>
-                  </tr>
+                  {documentsData.map(document => (
+                    <tr key={document.id} className="tr-hover">
+                      <td className="h p1 td td2 tdFix">
+                        <p className="location1">
+                          <a
+                            href={`https://rms-staging.s3.us-west-1.amazonaws.com/${document.Document.key}`}
+                            download={document.Document.name}
+                          >
+                            {document.Document.name}
+                          </a>
+                        </p>
+                      </td>
+                      <td className="h p1 td td2">
+                      </td>
+                      <td className="h p1 td td2 tdFix">
+                        <p className="location2">
+
+                        </p>
+                      </td>
+                      <td className="h p1 td td2 tdFix">
+                        <p className="date2">{format(new Date(), "MMM d, yyyy", { locale: enUS })}</p>
+                      </td>
+                      <td className="buttonContainer2 tdFix">
+                        <div className="orderButtonContainer">
+                          <EditButton
+                            defaultImage={<img src={Edit} alt="Edit" />}
+                            hoverImage={<img src={EditHover} alt="EditHover" />}
+                          />
+                          <DeleteButton
+                            className="delete1"
+                            defaultImage={<img src={Delete} alt="Delete" />}
+                            hoverImage={<img src={DeleteIconHover} alt="DeleteIconHover" />}
+                            onClick={() => handleDelete(document.id, document.Tenant.id)}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-      {isModalOpen && <AddDocs onClose={handleCloseModal} />}
+      {isModalOpen && <AddDocs onClose={handleCloseModal} listingsData={listingsData} />}
       <Pagination />
     </>
   );

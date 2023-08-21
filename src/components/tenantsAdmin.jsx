@@ -26,17 +26,20 @@ const TenantsAdmin = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTenantId, setSelectedTenantId] = useState(null);
   const [selectedField, setSelectedField] = useState(null);
+  const [editedTenant, setEditedTenant] = useState(null);
+  const [selectedListingId, setSelectedListingId] = useState(null);
+
 
   const PAGE_SIZE = 10;
   const totalTenants = tenants.length;
   const totalPages = Math.ceil(totalTenants / PAGE_SIZE);
 
   const filteredTenants = showMissedPayment
-    ? tenants.filter((tenant) => tenant.status.includes("Missed Payment"))
+    ? tenants.filter((tenant) => tenant.status && tenant.status.includes("Missed Payment"))
     : tenants;
 
   const countMissedPaymentTenants = () =>
-    tenants.filter((tenant) => tenant.status.includes("Missed Payment")).length;
+    tenants.filter((tenant) => tenant.status && tenant.status.includes("Missed Payment")).length;
 
   const tenantsPerPage = filteredTenants.slice(
     (currentPage - 1) * PAGE_SIZE,
@@ -77,8 +80,7 @@ const TenantsAdmin = () => {
   };
 
   const handleEditClick = (tenant) => {
-    console.log("Editing Tenant:", tenant);
-    setEditTenant(tenant);
+    setEditedTenant(tenant);
     setIsEditOpen(true);
   };
 
@@ -87,41 +89,26 @@ const TenantsAdmin = () => {
     setEditTenant(null);
   };
 
-  const handleSave = (updatedTenant) => {
-    setTenants((prevTenants) => {
-      const updatedTenants = prevTenants.map((tenant) => {
-        if (tenant.listings === updatedTenant.listings) {
-          return updatedTenant;
-        }
-        return tenant;
-      });
-      return updatedTenants;
-    });
-    setIsEditOpen(false);
-    setEditTenant(null);
-  };
 
   const handleSaveModal = (updatedTenant) => {
-    const updatedTenants = tenants.map((tenant) => {
-      if (tenant.listings === updatedTenant.listings) {
-        return updatedTenant;
-      }
-      return tenant;
-    });
+    const updatedTenants = tenants.map((tenant) =>
+      tenant.id === updatedTenant.id ? updatedTenant : tenant
+    );
     setTenants(updatedTenants);
-    handleSaveTenant(updatedTenant);
+    setIsEditOpen(false);
+    setEditedTenant(null);
   };
 
   useEffect(() => {
-    api.get('/tenant')
+    api.get(`/tenant/`)
       .then(response => {
-        console.log('Fetched tenant data:', response.data);
         setTenants(response.data);
       })
       .catch(error => {
         console.error('Error fetching tenant data:', error);
       });
   }, []);
+
 
   return (
     <>
@@ -148,7 +135,6 @@ const TenantsAdmin = () => {
                   <p className="m-2 mb-0 tenantShow">
                     Show only tenants with missed payment{" "}
                     <span className="filterMissedPayment">
-                      {" "}
                       {showMissedPayment ? countMissedPaymentTenants() : 0}
                     </span>
                   </p>
@@ -191,93 +177,92 @@ const TenantsAdmin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {tenantsPerPage.map((tenant) => {
-                    if (
-                      showMissedPayment &&
-                      !tenant.status.includes("Missed Payment")
-                    ) {
-                      return null;
-                    }
-                    return (
-                      <tr key={tenant.id} className="tr-hover">
-                        <td
-                          onClick={(event) =>
-                            handleCellClick(tenant, "name", event)
-                          }
-                        >
-                          <p className="p1 h">{tenant.User.name}</p>
-                        </td>
-                        <td
-                          onClick={(event) =>
-                            handleCellClick(tenant, "listings", event)
-                          }
-                        >
-                          <p className="p1 h">{tenant.listings}</p>
-                        </td>
-                        <td
-                          onClick={(event) =>
-                            handleCellClick(tenant, "status", event)
-                          }
-                        >
-                          <p
-                            className={`p1 h ${tenant && tenant.status && tenant.status.includes("Missed Payment")
-                              ? "missed"
-                              : ""
-                              }`}
+                  {tenantsPerPage
+                    .filter((tenant) => tenant.approvalStatus === "APPROVED")
+                    .map((tenant) => {
+                      if (showMissedPayment && !tenant.status.includes("Missed Payment")) {
+                        return null;
+                      }
+                      return (
+                        <tr key={tenant.id} className="tr-hover">
+                          <td
+                            onClick={(event) =>
+                              handleCellClick(tenant, "name", event)
+                            }
                           >
-                            {tenant && tenant.status}
-                          </p>
-                        </td>
-                        <td
-                          onClick={(event) =>
-                            handleCellClick(tenant, "status", event)
-                          }
-                        >
-                          <p className="p1 h">{tenant.User.email}</p>
-                        </td>
-                        <td
-                          onClick={(event) =>
-                            handleCellClick(tenant, "status", event)
-                          }
-                        >
-                          <p className="p1 h">{tenant.phoneNumber}</p>
-                        </td>
-                        <td
-                          onClick={(event) =>
-                            handleCellClick(tenant, "status", event)
-                          }
-                        >
-                          <p className="p1 h">{tenant.contract}</p>
-                        </td>
-                        <td
-                          onClick={(event) =>
-                            handleCellClick(tenant, "status", event)
-                          }
-                        >
-                          {tenant.backgroundCheck === "check" ? (
-                            <img
-                              className="checkMark"
-                              src={CheckMark}
-                              alt="CheckMark"
+                            <p className="p1 h">{tenant.User.name}</p>
+                          </td>
+                          <td onClick={(event) => handleCellClick(tenant, "listings", event)}>
+                            {tenant.Listings.length > 0 && (
+                              <p className="p1 h">
+                                {String(tenant.Listings[0].id).padStart(6, '0')}
+                              </p>
+                            )}
+                          </td>
+                          <td
+                            onClick={(event) =>
+                              handleCellClick(tenant, "status", event)
+                            }
+                          >
+                            <p
+                              className={`p1 h ${tenant && tenant.status && tenant.status.includes("Missed Payment")
+                                ? "missed"
+                                : ""
+                                }`}
+                            >
+                              {tenant && tenant.status}
+                            </p>
+                          </td>
+                          <td
+                            onClick={(event) =>
+                              handleCellClick(tenant, "status", event)
+                            }
+                          >
+                            <p className="p1 h">{tenant.User.email}</p>
+                          </td>
+                          <td
+                            onClick={(event) =>
+                              handleCellClick(tenant, "status", event)
+                            }
+                          >
+                            <p className="p1 h">{tenant.phoneNumber}</p>
+                          </td>
+                          <td
+                            onClick={(event) =>
+                              handleCellClick(tenant, "status", event)
+                            }
+                          >
+                            <p className="p1 h">{tenant.contract}</p>
+                          </td>
+                          <td
+                            onClick={(event) =>
+                              handleCellClick(tenant, "status", event)
+                            }
+                          >
+                            {tenant.backgroundCheck === "check" ? (
+                              <img
+                                className="checkMark"
+                                src={CheckMark}
+                                alt="CheckMark"
+                              />
+                            ) : null}
+                          </td>
+                          <td className="buttonsNoMod">
+                            <EditButton
+                              defaultImage={<img src={Edit} alt="Edit" />}
+                              hoverImage={<img src={EditHover} alt="EditHover" />}
+                              onClick={() => handleEditClick(tenant)}
                             />
-                          ) : null}
-                        </td>
-                        <td className="buttonsNoMod">
-                          <EditButton
-                            defaultImage={<img src={Edit} alt="Edit" />}
-                            hoverImage={<img src={EditHover} alt="EditHover" />}
-                            onClick={() => handleEditClick(tenant)}
-                          />
-                          <DeleteButton
-                            className="delete"
-                            defaultImage={<img src={Delete} alt="Delete" />}
-                            hoverImage={<img src={DeleteIconHover} alt="DeleteIconHover" />}
-                            onClick={() => handleDeleteTenant(tenant.id)} // Pass the tenant's ID
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
+                            <DeleteButton
+                              className="delete"
+                              defaultImage={<img src={Delete} alt="Delete" />}
+                              hoverImage={<img src={DeleteIconHover} alt="DeleteIconHover" />}
+                              onClick={() => handleDeleteTenant(tenant.id)}
+                            />
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             </div>
@@ -286,8 +271,8 @@ const TenantsAdmin = () => {
       </div>
       {isEditOpen && (
         <EditModal
-          tenant={editTenant}
-          onSave={handleSave}
+          tenant={editedTenant}
+          onSave={handleSaveModal}
           onClose={handleCloseEditModal}
         />
       )}
