@@ -200,8 +200,8 @@ const PublicListings = () => {
                     </p>
                   </div>
                   <div className="spects2">
-                    <p className="spectText d-flex justify-content-end location mt-3">
-                      {listing.location.split(",")[2].trim()},{" "}
+                  <p className="spectText d-flex justify-content-end location mt-3">
+                  {listing.location.split(",")[2].trim()},{" "}
                       {listing.location
                         .split(",")[3]
                         .trim()

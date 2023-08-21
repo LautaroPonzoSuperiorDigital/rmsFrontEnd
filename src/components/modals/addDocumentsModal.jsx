@@ -1,34 +1,89 @@
+import React, { useState, useEffect } from "react";
 import "../../styles/Documents/documents.css";
 import Close from "../../assets/img/close.svg";
 import CloseHover from "../../assets/img/closeHover.svg";
-import React, { useState, useEffect } from "react";
+import { api } from "../../services/api";
 
-const AddDocs = ({ onClose }) => {
+const AddDocs = ({ listingsData, onClose }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [documentName, setDocumentName] = useState('');
+  const [base64File, setBase64File] = useState('');
+  const [listingId, setListingId] = useState('');
+  const [currentTenant, setCurrentTenant] = useState(null);
 
-  /* pdf */
+  // Handle file change
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        const fileContentBase64 = reader.result.split(",")[1];
-
-        const fileObject = {
-          data: file.name,
-          Base64: fileContentBase64,
-        };
-
-        let filesArray = JSON.parse(localStorage.getItem("filesArray") || "[]");
-        filesArray.push(fileObject);
-        localStorage.setItem("documents", JSON.stringify(filesArray));
-      };
-
       reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        setSelectedFile(file);
+        setBase64File(reader.result);
+      };
     }
   };
-  /* pdf */
+
+  // Fetch current tenant information when the listingId changes
+  useEffect(() => {
+    const fetchCurrentTenant = async () => {
+      try {
+        const response = await api.get(`/listing/${listingId}/current-tenant`);
+        setCurrentTenant(response.data);
+        console.log('Current Tenant Data:', response.data); // Agregar este console.log
+      } catch (error) {
+        console.error('Error fetching current tenant:', error);
+      }
+    };
+
+    if (listingId) {
+      fetchCurrentTenant();
+    }
+  }, [listingId]);
+
+
+  // Handle save button click
+
+  /* sendDoc */
+  const handleSaveClick = async () => {
+    if (!selectedFile || !documentName || !listingId) {
+      return;
+    }
+
+    const normalizedDocumentName = documentName.endsWith('.pdf')
+      ? documentName
+      : `${documentName}.pdf`;
+
+    try {
+      const cleanedBase64 = base64File.replace(/^data:.+;base64,/, '');
+
+      const response = await api.post(`/tenant/${listingId}/document`, JSON.stringify({
+        name: normalizedDocumentName,
+        file: cleanedBase64,
+      }), {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('API Response:', response.data);
+      onClose();
+      window.location.reload();
+    } catch (error) {
+      console.error('Error saving document:', error);
+    }
+  };
+  /* sendDoc */
+
+  const handleListingIdChange = (event) => {
+    setListingId(event.target.value);
+  };
+
+  const handleNameChange = (event) => {
+    setDocumentName(event.target.value);
+  };
   const handleMouseEnterClose = () => {
     setIsCloseHovered(true);
   };
@@ -74,7 +129,15 @@ const AddDocs = ({ onClose }) => {
 
           <input
             className="inputDoc"
-            placeholder="NAME                                                                            364675"
+            placeholder="NAME"
+            value={documentName}
+            onChange={handleNameChange}
+          />
+          <input
+            className="inputDoc"
+            placeholder="LISTING ID                                                                        000001"
+            value={listingId}
+            onChange={handleListingIdChange}
           />
 
           <div className="buttonContainer4 d-flex justify-content-center align-items-center">
@@ -86,7 +149,11 @@ const AddDocs = ({ onClose }) => {
               >
                 Cancel
               </button>
-              <button type="button" className="modalButton1 save save1">
+              <button
+                type="button"
+                className="modalButton1 save save1"
+                onClick={handleSaveClick}
+              >
                 Save
               </button>
             </div>

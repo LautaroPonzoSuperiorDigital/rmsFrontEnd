@@ -22,6 +22,8 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   const [adminData, setAdminData] = useState({});
   const [tenantData, setTenantData] = useState({});
 
+  const [listingData, setListingData] = useState(null);
+
   const [token, setToken] = useState("");
   const [decodedToken, setDecodedToken] = useState(null);
 
@@ -116,7 +118,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
         throw new Error(e);
       });
 
-    // Temporizador de 5 segundos
+    // don't delete this timing line, it's for pandadoc API send template
     await new Promise((resolve) => setTimeout(resolve, 5000));
 
     const requestSendData = {
@@ -151,6 +153,17 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     }
   };
 
+  const fetchListings = async () => {
+    try {
+      const response = await api.get(`/listing/${selectedTenant.Listings[0].id}`);
+      const listingData = response.data;
+      console.log("Listing Data:", listingData);
+      setListingData(listingData);
+    } catch (error) {
+      console.error('Error fetching listing data:', error);
+    }
+  };
+
   useEffect(() => {
     if (!decodedToken)
       getTokenFromLocalStorage();
@@ -158,6 +171,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
       getAdminData();
       getTenantData();
       loadDocuments();
+      fetchListings();
     }
   }, [decodedToken]);
 
@@ -277,29 +291,34 @@ const TenantModal = ({ selectedTenant, onClose }) => {
           <div className="listingInfo d-flex">
             <div className="imgTestPopUp">
               {" "}
-              <img className="imgTestPopUpInsert" src={testImg} alt="" />
+
+              <img className="imgTestPopUpInsert" src={`https://rms-staging.s3.us-west-1.amazonaws.com/${listingData?.key}`} alt="" />
+
             </div>
             <div className="listingInfoOrder d-flex flex-column">
               <div className="popUpOrderListings">
                 <div className="popUpOrderFirstCol idPopUp d-flex">
                   <p>ID</p>
-                  <span>364675</span>
+                  {selectedTenant.Listings.length > 0 && (
+                    <span>
+                      {String(selectedTenant.Listings[0].id).padStart(6, '0')}
+                    </span>)}
                 </div>
                 <div className="popUpOrderFirstCol locationPopUp d-flex">
                   <p>LOCATION</p>
-                  <span>8148 Larga Ave, 67884, Atascadero, California</span>
+                  <span>{listingData && listingData.location}</span>
                 </div>
                 <div className="popUpOrderFirstCol lotSizePopUp d-flex">
                   <p>LOT SIZE</p>
-                  <span>13,545 Sq. Ft. Per County</span>
+                  <span>{listingData && listingData.lotSize} Sq. Ft. Per County</span>
                 </div>
                 <div className="popUpOrderFirstCol hsPopUp d-flex">
                   <p>HOUSE SIZE</p>
-                  <span>4,354 Sq. Ft. Per County</span>
+                  <span>{listingData && listingData.houseSize} Sq. Ft. Per County</span>
                 </div>
                 <div className="popUpOrderFirstCol pricePopUp d-flex">
                   <p>PRICE</p>
-                  <span>$ 4,000 / Mo</span>
+                  <span>$ {listingData && listingData.price} / Mo</span>
                 </div>
                 <div className="popUpOrderFirstCol totalProf d-flex">
                   <div className="d-flex profit justify-content-start">
@@ -314,28 +333,6 @@ const TenantModal = ({ selectedTenant, onClose }) => {
               </div>
             </div>
             <div className="EditDeletebuttons d-flex flex-column align-items-end">
-              <div className="EditButtonPopUpOrder d-flex">
-                {isHoveredEdit ? (
-                  <img
-                    src={EditHover}
-                    alt="Edit"
-                    onMouseLeave={() => setIsHoveredEdit(false)}
-                  />
-                ) : (
-                  <img
-                    src={Edit}
-                    alt="EditHover"
-                    onMouseEnter={() => setIsHoveredEdit(true)}
-                  />
-                )}
-                <span
-                  onMouseLeave={() => setIsHoveredEdit(false)}
-                  onMouseEnter={() => setIsHoveredEdit(true)}
-                >
-                  Edit Tenant
-                </span>
-              </div>
-
             </div>
           </div>
         </div>

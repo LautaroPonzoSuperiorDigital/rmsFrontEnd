@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/modal.css";
 import bg from "../../assets/img/BG.svg";
@@ -6,10 +6,12 @@ import closeListing from "../../assets/img/close.svg";
 import closeHover from "../../assets/img/closeHover.svg";
 import ModalListingsImgs from "./modalListingsImgs";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 import { api } from "../../services/api"
 
 const EditModalListings = ({ renderSectionContent }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false);
+  const [adminId, setAdminId] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const [showMainModal, setShowMainModal] = useState(true);
   const [isImageHovered, setIsImageHovered] = useState(false);
@@ -154,10 +156,22 @@ const EditModalListings = ({ renderSectionContent }) => {
     setShowImageModal(false);
     setShowMainModal(true);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("certifymyrent.token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const adminSub = decodedToken.sub;
+      setAdminId(adminSub);
+    }
+
+
+  }, []);
+
   const handleSave = () => {
     const data = {
       ...listingData,
-      adminId: 1,
+      adminId: adminId,
       amenities: amenities,
       requirements: requirements,
       image: selectedImage,
@@ -167,7 +181,6 @@ const EditModalListings = ({ renderSectionContent }) => {
 
     api.post('/listing', data)
       .then((response) => {
-        console.log(response.data);
         localStorage.removeItem("images");
         setSelectedImage(null);
         window.location.reload();
@@ -177,12 +190,13 @@ const EditModalListings = ({ renderSectionContent }) => {
       });
   };
 
+
+
   let hasNoImages =
     !renderSectionContent || renderSectionContent.images.length === 0;
   /* IMAGES */
   const handleReceiveImage = (image) => {
     setSelectedImage(image);
-    console.log(image);
     hasNoImages = false;
     /* IMAGES */
   };
