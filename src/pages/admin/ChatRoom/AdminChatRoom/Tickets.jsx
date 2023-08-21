@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { useEffect } from "react";
-import Ticket from "../../../../components/icons/ticket";
 
 const Tickets = ({ chatRooms, setTickets }) => {
   const ticketRepair = chatRooms?.Listing.RepairTicket;
@@ -29,9 +28,7 @@ const Tickets = ({ chatRooms, setTickets }) => {
           <p className="m-0" style={{ color: "#197572", fontSize: "18px" }}>
             Complain ticket
           </p>
-          <div>
-            <Ticket />
-          </div>
+          <div></div>
         </div>
       )}
     </div>
