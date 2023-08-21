@@ -31,7 +31,6 @@ const AdminChatRoomNavBar = ({ chatRooms, setTicketActiveRooms }) => {
             item.Listing.TicketComplaint.length > 0
         )
       );
-      console.log("funca");
     } else {
       setTicketActiveRooms(chatRooms);
     }

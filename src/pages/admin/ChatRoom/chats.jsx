@@ -7,6 +7,7 @@ import { socket } from "../../../components/socketManajer/socket";
 import { api } from "../../../services/api";
 import TicketsInfomartion from "./TicketsInformation/TicketsInfomartion";
 import AdminChatRoomNavBar from "./AdminChatRoomNavBar";
+import TicketsNavBar from "./TicketsNavBar";
 
 const chatRoomStyle = {
   width: "100%",
@@ -26,7 +27,7 @@ const chatContaienrStyle = {
 
 const AdminChatRoomMessagesStyle = {
   width: "100%",
-  height: "100%",
+  height: "75%",
   overflowY: "auto",
   display: "flex",
   flexDirection: "column",
@@ -45,6 +46,7 @@ const Chats = () => {
   const [targetChatRoomId, setTargetChatRoomId] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
   const [ticketActiveRooms, setTicketActiveRooms] = useState(chatRooms);
+  console.log(ticketActiveRooms);
 
   const scrollToLastMessage = () => {
     if (chatContainerRef.current) {
@@ -81,6 +83,7 @@ const Chats = () => {
 
         const chatRoomsMessage = data.map((chatRoom) => chatRoom.Chats);
         setChatRooms(data);
+        setTicketActiveRooms(data);
         setMessages(chatRoomsMessage.flat());
       } catch (err) {
         console.log(err);
@@ -115,7 +118,13 @@ const Chats = () => {
           })}
         </div>
         <div style={chatContaienrStyle}>
-          <div style={{ height: "100%", maxHeight: "550px" }}>
+          <div style={{ height: "100%" }}>
+            {targetChatRoomId && (
+              <TicketsNavBar
+                targetChatRoomId={targetChatRoomId}
+                chatRooms={chatRooms}
+              />
+            )}
             <ul style={AdminChatRoomMessagesStyle} ref={chatContainerRef}>
               {filterMessages.map((message) => (
                 <li key={message.id} className="d-flex flex-column">
@@ -126,11 +135,14 @@ const Chats = () => {
                 </li>
               ))}
             </ul>
-          </div>
-          <div>
-            {targetChatRoomId && (
-              <ChatSendMessage socket={socket} chatRoomId={targetChatRoomId} />
-            )}
+            <div>
+              {targetChatRoomId && (
+                <ChatSendMessage
+                  socket={socket}
+                  chatRoomId={targetChatRoomId}
+                />
+              )}
+            </div>
           </div>
         </div>
         <div style={TicketsInfomartionStyle}>

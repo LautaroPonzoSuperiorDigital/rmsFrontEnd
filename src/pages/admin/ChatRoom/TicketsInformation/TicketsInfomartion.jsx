@@ -35,7 +35,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
   );
   const repairTickets = matchedChatRoom?.Listing.RepairTicket || [];
   const ticketComplaints = matchedChatRoom?.Listing.TicketComplaint || [];
-  console.log(ticketComplaints);
+
   const allTickets = [...repairTickets, ...ticketComplaints];
   const activeTickets = allTickets.filter((ticket) => ticket.status === "OPEN");
   const closedTickets = allTickets.filter(
