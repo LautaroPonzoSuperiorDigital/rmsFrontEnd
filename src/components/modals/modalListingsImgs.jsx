@@ -29,40 +29,39 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
     const files = Array.from(event.target.files);
 
     if (files.length > 0) {
-      const readerPromises = files.map((file) => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-
-          reader.onload = function () {
-            resolve(reader.result);
-          };
-          reader.onerror = function (error) {
-            reject(error);
-          };
-
-          reader.readAsDataURL(file);
-        });
-      });
-
-      Promise.all(readerPromises)
-        .then((results) => {
-          const storedImages = JSON.parse(localStorage.getItem("images")) || [];
-          const updatedImages = results.map((result) => ({ base64: result }));
-
-          localStorage.setItem("images", JSON.stringify([...storedImages, ...updatedImages]));
-          setSelectedImages([...selectedImages, ...updatedImages]);
-
-          results.forEach((result) => {
-            sendImageToParent(result);
-            imagesToEachSect(updatedImages);
-
-          });
-        })
-        .catch((error) => {
-          console.error("Error converting file to Base64:", error);
-        });
+      const firstImage = URL.createObjectURL(files[0]);
     }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    reader.onload = function () {
+      console.log(reader.result);
+      let storedImages = JSON.parse(localStorage.getItem("images"));
+      if (!storedImages) {
+        storedImages = [];
+        sendImageToParent(reader.result);
+      } else sendImageToParent(storedImages[0].base64);
+      storedImages.push({ base64: reader.result });
+      localStorage.setItem("images", JSON.stringify(storedImages));
+      const updatedImages = [...selectedImages, ...[{ base64: reader.result }]];
+      setSelectedImages(updatedImages);
+    };
+    reader.onerror = function (error) {
+      console.error("Error converting file to Base64");
+      console.error("Error: ", error);
+    };
+    console.log(files);
   };
+  useEffect(() => {
+    console.log("Retrieving images from localStorage");
+    const storedImages = JSON.parse(localStorage.getItem("images"));
+    console.log(storedImages);
+    if (storedImages != null) {
+      setSelectedImages(storedImages);
+      sendImageToParent(storedImages[0].base64);
+      imagesToEachSect(storedImages);
+    }
+  }, []);
   /* image modal uploader */
 
   const openEditModal = () => {
@@ -124,6 +123,7 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
       for (const image of images) {
         const formData = new FormData();
         formData.append('image', image.base64);
+
 
         const response = await api.post('/listing/1/album/section/1/image', formData, {
           headers: {
