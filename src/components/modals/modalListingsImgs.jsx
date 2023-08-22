@@ -11,7 +11,7 @@ import "../../styles/modalImgsSwitch.css";
 import "../../styles/modal.css";
 import EditModalSections from "./modalSections";
 import { ImageContext } from "../../context/imageContext";
-import axios from "axios";
+import { api } from "../../services/api";
 
 const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,38 +29,40 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
     const files = Array.from(event.target.files);
 
     if (files.length > 0) {
-      const firstImage = URL.createObjectURL(files[0]);
-    }
+      const readerPromises = files.map((file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
 
-    const reader = new FileReader();
-    reader.readAsDataURL(files[0]);
-    reader.onload = function () {
-      console.log(reader.result);
-      let storedImages = JSON.parse(localStorage.getItem("images"));
-      if (!storedImages) {
-        storedImages = [];
-        sendImageToParent(reader.result);
-      } else sendImageToParent(storedImages[0].base64);
-      storedImages.push({ base64: reader.result });
-      localStorage.setItem("images", JSON.stringify(storedImages));
-      const updatedImages = [...selectedImages, ...[{ base64: reader.result }]];
-      setSelectedImages(updatedImages);
-    };
-    reader.onerror = function (error) {
-      console.error("Error converting file to Base64");
-      console.error("Error: ", error);
-    };
-    console.log(files);
-  };
-  useEffect(() => {
-    console.log("Retrieving images from localStorage");
-    const storedImages = JSON.parse(localStorage.getItem("images"));
-    console.log(storedImages);
-    if (storedImages != null) {
-      setSelectedImages(storedImages);
-      sendImageToParent(storedImages[0].base64);
+          reader.onload = function () {
+            resolve(reader.result);
+          };
+          reader.onerror = function (error) {
+            reject(error);
+          };
+
+          reader.readAsDataURL(file);
+        });
+      });
+
+      Promise.all(readerPromises)
+        .then((results) => {
+          const storedImages = JSON.parse(localStorage.getItem("images")) || [];
+          const updatedImages = results.map((result) => ({ base64: result }));
+
+          localStorage.setItem("images", JSON.stringify([...storedImages, ...updatedImages]));
+          setSelectedImages([...selectedImages, ...updatedImages]);
+
+          results.forEach((result) => {
+            sendImageToParent(result);
+            imagesToEachSect(updatedImages);
+
+          });
+        })
+        .catch((error) => {
+          console.error("Error converting file to Base64:", error);
+        });
     }
-  }, []);
+  };
   /* image modal uploader */
 
   const openEditModal = () => {
@@ -115,6 +117,28 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
     setIsModalOpen(false);
   }, []);
 
+
+  /* SECTIONS */
+  const imagesToEachSect = async (images) => {
+    try {
+      for (const image of images) {
+        const formData = new FormData();
+        formData.append('image', image.base64);
+
+        const response = await api.post('/listing/1/album/section/1/image', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        console.log('Image uploaded:', response.data);
+      }
+    } catch (error) {
+      console.error('Error uploading images:', error);
+    }
+  };
+  /* SECTIONS */
+
   const renderSectionContent = () => {
     switch (activeSection) {
       case "EXTERIOR":
@@ -124,26 +148,26 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
               {selectedImages.length == 0
                 ? ""
                 : selectedImages?.map((image, index) => (
-                    <div className="imgContainer1" key={index}>
-                      <img className="flex-area1" src={image.base64} />
-                      <div className="orderDeleteBgBucket">
-                        <div
-                          className="bgDel"
-                          onMouseEnter={() => handleMouseEnter(index)}
-                          onMouseLeave={() => handleMouseLeave(index)}
-                        >
-                          <div className="prop">
-                            <img
-                              className={
-                                hoveredElements[index] ? "delHover" : "del"
-                              }
-                              src={hoveredElements[index] ? delHover : del}
-                            />
-                          </div>
+                  <div className="imgContainer1" key={index}>
+                    <img className="flex-area1" src={image.base64} />
+                    <div className="orderDeleteBgBucket">
+                      <div
+                        className="bgDel"
+                        onMouseEnter={() => handleMouseEnter(index)}
+                        onMouseLeave={() => handleMouseLeave(index)}
+                      >
+                        <div className="prop">
+                          <img
+                            className={
+                              hoveredElements[index] ? "delHover" : "del"
+                            }
+                            src={hoveredElements[index] ? delHover : del}
+                          />
                         </div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                ))}
             </div>
           </div>
         );
@@ -192,57 +216,50 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
       <div className="modalNav">
         <ul className="ulModal">
           <li
-            className={`liModal ${
-              activeSection === "EXTERIOR" ? "active" : ""
-            }`}
+            className={`liModal ${activeSection === "EXTERIOR" ? "active" : ""
+              }`}
             onClick={() => handleSectionClick("EXTERIOR")}
           >
             EXTERIOR
           </li>
           <li
-            className={`liModal ${
-              activeSection === "LIVING ROOM" ? "active" : ""
-            }`}
+            className={`liModal ${activeSection === "LIVING ROOM" ? "active" : ""
+              }`}
             onClick={() => handleSectionClick("LIVING ROOM")}
           >
             LIVING ROOM
           </li>
           <li
-            className={`liModal ${
-              activeSection === "BEDROOM 1" ? "active" : ""
-            }`}
+            className={`liModal ${activeSection === "BEDROOM 1" ? "active" : ""
+              }`}
             onClick={() => handleSectionClick("BEDROOM 1")}
           >
             BEDROOM 1
           </li>
           <li
-            className={`liModal ${
-              activeSection === "BEDROOM 2" ? "active" : ""
-            }`}
+            className={`liModal ${activeSection === "BEDROOM 2" ? "active" : ""
+              }`}
             onClick={() => handleSectionClick("BEDROOM 2")}
           >
             BEDROOM 2
           </li>
           <li
-            className={`liModal ${
-              activeSection === "BATHROOM 1" ? "active" : ""
-            }`}
+            className={`liModal ${activeSection === "BATHROOM 1" ? "active" : ""
+              }`}
             onClick={() => handleSectionClick("BATHROOM 1")}
           >
             BATHROOM 1
           </li>
           <li
-            className={`liModal ${
-              activeSection === "BATHROOM 2" ? "active" : ""
-            }`}
+            className={`liModal ${activeSection === "BATHROOM 2" ? "active" : ""
+              }`}
             onClick={() => handleSectionClick("BATHROOM 2")}
           >
             BATHROOM 2
           </li>
           <li
-            className={`liModal b3 ${
-              activeSection === "BATHROOM 3" ? "active" : ""
-            }`}
+            className={`liModal b3 ${activeSection === "BATHROOM 3" ? "active" : ""
+              }`}
             onClick={() => handleSectionClick("BATHROOM 3")}
           >
             BATHROOM 3
@@ -259,6 +276,7 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
               id="fileInput"
               name="image"
               onChange={handleFileInputChange}
+              multiple
             />
           </li>
         </ul>

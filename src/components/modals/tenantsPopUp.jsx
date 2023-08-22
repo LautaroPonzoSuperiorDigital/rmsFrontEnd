@@ -368,11 +368,6 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 <p>Application Form</p>
               </div>
             </div>
-            <div className="docFile d-flex align-items-start justify-content-end">
-              <button className="addDocBtnPopUp" onClick={handleAddDocsClick}>
-                + Add Document
-              </button>
-            </div>
           </div>
           <div className="renderPopUpSection">
             {renderSectionContent(activeSection)}
@@ -380,7 +375,6 @@ const TenantModal = ({ selectedTenant, onClose }) => {
           ;{/* Navigable */}
         </div>
       </div>
-      {isModalOpen && <AddDocs onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };
