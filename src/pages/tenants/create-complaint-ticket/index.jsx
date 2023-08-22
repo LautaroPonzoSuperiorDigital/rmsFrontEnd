@@ -1,35 +1,40 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
-import { useTenantsLayout } from "../../../layouts/tenants/context"
-import { useAuth } from "../../../hooks/useAuth"
-import { api } from "../../../services/api"
+import { useTenantsLayout } from "../../../layouts/tenants/context";
+import { useAuth } from "../../../hooks/useAuth";
+import { api } from "../../../services/api";
 
-import { CreateComplaintTicketContainer, FormInput, Message, SubmitButton } from "./styles"
+import {
+  CreateComplaintTicketContainer,
+  FormInput,
+  Message,
+  SubmitButton,
+} from "./styles";
 
 export default function CreateComplaintTicket() {
-  const [message, setMessage] = useState('')
-  
-  const { showNavbar, hideNavbar } = useTenantsLayout()
-  const { user } = useAuth()
+  const [message, setMessage] = useState("");
 
+  const { showNavbar, hideNavbar } = useTenantsLayout();
+  const { user } = useAuth();
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const formData = {
       cause: e.target.cause.value,
       additionalNotes: e.target.additionalNotes.value,
       tenantId: user.tenantId,
-      listingId: 1,
-    }
+      listingId: user.listingId,
+      status: "OPEN",
+    };
 
     try {
       const { data } = await api.post("/tenant/ticket-complaint", formData);
-      
-      setMessage("Your ticket has been submitted");
-      
-      console.log(data)
 
-      e.target.reset()
+      setMessage("Your ticket has been submitted");
+
+      console.log(data);
+
+      e.target.reset();
     } catch (error) {
       console.log(error);
       setMessage("Something went wrong, please try again");
@@ -37,28 +42,20 @@ export default function CreateComplaintTicket() {
   };
 
   useEffect(() => {
-    hideNavbar()
+    hideNavbar();
 
-    return showNavbar
-  }, [hideNavbar, showNavbar])
+    return showNavbar;
+  }, [hideNavbar, showNavbar]);
 
   return (
     <CreateComplaintTicketContainer onSubmit={handleSubmit}>
-      <FormInput
-        placeholder="CAUSE"
-        name="cause"
-      />
+      <FormInput placeholder="CAUSE" name="cause" />
 
-      <FormInput
-        placeholder="ADDITIONAL NOTES"
-        name="additionalNotes"
-      />
+      <FormInput placeholder="ADDITIONAL NOTES" name="additionalNotes" />
 
       <Message>{message}</Message>
 
-      <SubmitButton>
-        Submit
-      </SubmitButton>
+      <SubmitButton>Submit</SubmitButton>
     </CreateComplaintTicketContainer>
-  )
+  );
 }
