@@ -27,10 +27,13 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
   const [modalRef, setModalRef] = useState(null);
 
 
+
+
+
   /* image modal uploader */
   const handleFileInputChange = (event) => {
     const files = Array.from(event.target.files);
-  
+
     if (files.length > 0) {
       const filePromises = files.map((file) => {
         return new Promise((resolve) => {
@@ -41,42 +44,45 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
           };
         });
       });
-  
+
       Promise.all(filePromises).then((results) => {
-        const storedImages = JSON.parse(localStorage.getItem("images")) || [];
-        const updatedImages = results.map((result) => ({
-          base64: result,
-          section: activeSection,
-        }));
-        storedImages.push(...updatedImages);
-  
-        localStorage.setItem("images", JSON.stringify(storedImages));
-        
         setSelectedImages((prevSelectedImages) => {
           const newSelectedImages = { ...prevSelectedImages };
-          newSelectedImages[activeSection] = [...(newSelectedImages[activeSection] || []), ...results];
+
+          if (!newSelectedImages[activeSection]) {
+            newSelectedImages[activeSection] = [];
+          }
+
+          // Push each image URL to the appropriate section
+          newSelectedImages[activeSection].push(...results);
+
           return newSelectedImages;
         });
-  
+
+        // Local storage logic remains the same
+        const storedImages = JSON.parse(localStorage.getItem("images")) || [];
+        storedImages.push(...results.map(result => ({ base64: result, section: activeSection })));
+        localStorage.setItem("images", JSON.stringify(storedImages));
+
         setImagesLoaded(true); // Set the flag to indicate images are loaded
       });
     }
   };
-  
+
   useEffect(() => {
     console.log("Retrieving images from localStorage");
     const storedImages = JSON.parse(localStorage.getItem("images"));
-  
+
     if (storedImages != null) {
       const imageSections = {};
-  
+
       storedImages.forEach((image) => {
         if (!imageSections.hasOwnProperty(image.section)) {
           imageSections[image.section] = [];
         }
         imageSections[image.section].push(image.base64);
       });
-  
+
       setSelectedImages(imageSections);
       sendImageToParent(imageSections[activeSection][0]);
     }
@@ -136,212 +142,36 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
   }, []);
 
   const renderSectionContent = () => {
+    console.log("selectedImages:", selectedImages);
     const sectionImages = selectedImages[activeSection] || [];
 
-
-    switch (activeSection) {
-      case "EXTERIOR":
-        return (
-          <div className="flex d-flex align-items-start justify-content-start">
-            <div className="imgFlex d-flex flex-wrap justify-content-start">
-              {sectionImages.length === 0
-                ? ""
-                : sectionImages.map((imageUrl, index) => (
-                  <div className="imgContainer1" key={index}>
-                    <img className="flex-area1" src={imageUrl} alt={`Image ${index}`} />
-                    <div className="orderDeleteBgBucket">
-                      <div
-                        className="bgDel"
-                        onMouseEnter={() => handleMouseEnter(index)}
-                        onMouseLeave={() => handleMouseLeave(index)}
-                      >
-                        <div className="prop">
-                          <img
-                            className={
-                              hoveredElements[index] ? "delHover" : "del"
-                            }
-                            src={hoveredElements[index] ? delHover : del}
-                          />
-                        </div>
-                      </div>
-                    </div>
+    const sectionContent = (
+      <div className="sectionWrapper">
+        <div className="imgFlex d-flex flex-wrap justify-content-start">
+          {sectionImages.map((imageUrl, index) => (
+            <div className="imgContainer1" key={index}>
+              <img className="flex-area1" src={imageUrl} alt={`Image ${index}`} />
+              <div className="orderDeleteBgBucket">
+                <div
+                  className="bgDel"
+                  onMouseEnter={() => handleMouseEnter(index)}
+                  onMouseLeave={() => handleMouseLeave(index)}
+                >
+                  <div className="prop">
+                    <img
+                      className={hoveredElements[index] ? "delHover" : "del"}
+                      src={hoveredElements[index] ? delHover : del}
+                    />
                   </div>
-                ))}
+                </div>
+              </div>
             </div>
-          </div>
-        );
-      case "LIVING ROOM":
-        return <div className="flex d-flex align-items-start justify-content-start">
-          <div className="imgFlex d-flex flex-wrap justify-content-start">
-            {sectionImages.length === 0
-              ? ""
-              : sectionImages.map((imageUrl, index) => (
-                <div className="imgContainer1" key={index}>
-                  <img className="flex-area1" src={imageUrl} alt={`Image ${index}`} />
-                  <div className="orderDeleteBgBucket">
-                    <div
-                      className="bgDel"
-                      onMouseEnter={() => handleMouseEnter(index)}
-                      onMouseLeave={() => handleMouseLeave(index)}
-                    >
-                      <div className="prop">
-                        <img
-                          className={
-                            hoveredElements[index] ? "delHover" : "del"
-                          }
-                          src={hoveredElements[index] ? delHover : del}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
+          ))}
         </div>
-      case "BEDROOM 1":
-        return <div className="flex d-flex align-items-start justify-content-start">
-          <div className="imgFlex d-flex flex-wrap justify-content-start">
-            {sectionImages.length === 0
-              ? ""
-              : sectionImages.map((imageUrl, index) => (
-                <div className="imgContainer1" key={index}>
-                  <img className="flex-area1" src={imageUrl} alt={`Image ${index}`} />
-                  <div className="orderDeleteBgBucket">
-                    <div
-                      className="bgDel"
-                      onMouseEnter={() => handleMouseEnter(index)}
-                      onMouseLeave={() => handleMouseLeave(index)}
-                    >
-                      <div className="prop">
-                        <img
-                          className={
-                            hoveredElements[index] ? "delHover" : "del"
-                          }
-                          src={hoveredElements[index] ? delHover : del}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
+      </div>
+    );
 
-      case "BEDROOM 2":
-        return <div className="flex d-flex align-items-start justify-content-start">
-          <div className="imgFlex d-flex flex-wrap justify-content-start">
-            {sectionImages.length === 0
-              ? ""
-              : sectionImages.map((imageUrl, index) => (
-                <div className="imgContainer1" key={index}>
-                  <img className="flex-area1" src={imageUrl} alt={`Image ${index}`} />
-                  <div className="orderDeleteBgBucket">
-                    <div
-                      className="bgDel"
-                      onMouseEnter={() => handleMouseEnter(index)}
-                      onMouseLeave={() => handleMouseLeave(index)}
-                    >
-                      <div className="prop">
-                        <img
-                          className={
-                            hoveredElements[index] ? "delHover" : "del"
-                          }
-                          src={hoveredElements[index] ? delHover : del}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      case "BATHROOM 1":
-        return <div className="flex d-flex align-items-start justify-content-start">
-          <div className="imgFlex d-flex flex-wrap justify-content-start">
-            {sectionImages.length === 0
-              ? ""
-              : sectionImages.map((imageUrl, index) => (
-                <div className="imgContainer1" key={index}>
-                  <img className="flex-area1" src={imageUrl} alt={`Image ${index}`} />
-                  <div className="orderDeleteBgBucket">
-                    <div
-                      className="bgDel"
-                      onMouseEnter={() => handleMouseEnter(index)}
-                      onMouseLeave={() => handleMouseLeave(index)}
-                    >
-                      <div className="prop">
-                        <img
-                          className={
-                            hoveredElements[index] ? "delHover" : "del"
-                          }
-                          src={hoveredElements[index] ? delHover : del}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      case "BATHROOM 2":
-        return <div className="flex d-flex align-items-start justify-content-start">
-          <div className="imgFlex d-flex flex-wrap justify-content-start">
-            {sectionImages.length === 0
-              ? ""
-              : sectionImages.map((imageUrl, index) => (
-                <div className="imgContainer1" key={index}>
-                  <img className="flex-area1" src={imageUrl} alt={`Image ${index}`} />
-                  <div className="orderDeleteBgBucket">
-                    <div
-                      className="bgDel"
-                      onMouseEnter={() => handleMouseEnter(index)}
-                      onMouseLeave={() => handleMouseLeave(index)}
-                    >
-                      <div className="prop">
-                        <img
-                          className={
-                            hoveredElements[index] ? "delHover" : "del"
-                          }
-                          src={hoveredElements[index] ? delHover : del}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      case "BATHROOM 3":
-        return <div className="flex d-flex align-items-start justify-content-start">
-          <div className="imgFlex d-flex flex-wrap justify-content-start">
-            {sectionImages.length === 0
-              ? ""
-              : sectionImages.map((imageUrl, index) => (
-                <div className="imgContainer1" key={index}>
-                  <img className="flex-area1" src={imageUrl} alt={`Image ${index}`} />
-                  <div className="orderDeleteBgBucket">
-                    <div
-                      className="bgDel"
-                      onMouseEnter={() => handleMouseEnter(index)}
-                      onMouseLeave={() => handleMouseLeave(index)}
-                    >
-                      <div className="prop">
-                        <img
-                          className={
-                            hoveredElements[index] ? "delHover" : "del"
-                          }
-                          src={hoveredElements[index] ? delHover : del}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      default:
-        return null;
-    }
+    return sectionContent;
   };
 
   return (
