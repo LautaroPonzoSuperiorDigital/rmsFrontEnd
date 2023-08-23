@@ -37,6 +37,7 @@ const TenantChatRoomContainer = styled.div`
 
 const TenantChatRoom = () => {
   const { user } = useAuth();
+  console.log(user);
 
   const inputRef = useRef(null);
   const ulRef = useRef(null);
