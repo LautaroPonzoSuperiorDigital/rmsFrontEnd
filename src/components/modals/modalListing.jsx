@@ -23,7 +23,6 @@ const EditModalListings = ({ renderSectionContent }) => {
   });
 
   const inputRefs = useRef([]);
-  
 
   const handleAmenityChange = (index, value) => {
     const newAmenities = [...amenities];
