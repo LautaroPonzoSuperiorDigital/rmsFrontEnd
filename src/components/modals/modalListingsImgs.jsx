@@ -11,7 +11,7 @@ import "../../styles/modalImgsSwitch.css";
 import "../../styles/modal.css";
 import EditModalSections from "./modalSections";
 import { ImageContext } from "../../context/imageContext";
-import { api } from "../../services/api";
+import axios from "axios";
 
 const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,29 +29,28 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
     const files = Array.from(event.target.files);
 
     if (files.length > 0) {
-      const firstImage = URL.createObjectURL(files[0]);
-    }
+      const filePromises = files.map((file) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = function () {
+            resolve(reader.result);
+          };
+        });
+      });
 
-    const reader = new FileReader();
-    reader.readAsDataURL(files[0]);
-    reader.onload = function () {
-      console.log(reader.result);
-      let storedImages = JSON.parse(localStorage.getItem("images"));
-      if (!storedImages) {
-        storedImages = [];
-        sendImageToParent(reader.result);
-      } else sendImageToParent(storedImages[0].base64);
-      storedImages.push({ base64: reader.result });
-      localStorage.setItem("images", JSON.stringify(storedImages));
-      const updatedImages = [...selectedImages, ...[{ base64: reader.result }]];
-      setSelectedImages(updatedImages);
-    };
-    reader.onerror = function (error) {
-      console.error("Error converting file to Base64");
-      console.error("Error: ", error);
-    };
-    console.log(files);
+      Promise.all(filePromises).then((results) => {
+        const storedImages = JSON.parse(localStorage.getItem("images")) || [];
+        const updatedImages = results.map((result) => ({ base64: result }));
+        storedImages.push(...updatedImages);
+
+        localStorage.setItem("images", JSON.stringify(storedImages));
+        setSelectedImages([...selectedImages, ...updatedImages]);
+        sendImageToParent(updatedImages[0].base64); // Send the first image to the parent
+      });
+    }
   };
+
   useEffect(() => {
     console.log("Retrieving images from localStorage");
     const storedImages = JSON.parse(localStorage.getItem("images"));
@@ -59,7 +58,6 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
     if (storedImages != null) {
       setSelectedImages(storedImages);
       sendImageToParent(storedImages[0].base64);
-      imagesToEachSect(storedImages);
     }
   }, []);
   /* image modal uploader */
@@ -115,29 +113,6 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
   useEffect(() => {
     setIsModalOpen(false);
   }, []);
-
-
-  /* SECTIONS */
-  const imagesToEachSect = async (images) => {
-    try {
-      for (const image of images) {
-        const formData = new FormData();
-        formData.append('image', image.base64);
-
-
-        const response = await api.post('/listing/1/album/section/1/image', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-
-        console.log('Image uploaded:', response.data);
-      }
-    } catch (error) {
-      console.error('Error uploading images:', error);
-    }
-  };
-  /* SECTIONS */
 
   const renderSectionContent = () => {
     switch (activeSection) {
