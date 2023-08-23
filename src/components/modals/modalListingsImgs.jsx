@@ -53,18 +53,16 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
             newSelectedImages[activeSection] = [];
           }
 
-          // Push each image URL to the appropriate section
           newSelectedImages[activeSection].push(...results);
 
           return newSelectedImages;
         });
 
-        // Local storage logic remains the same
         const storedImages = JSON.parse(localStorage.getItem("images")) || [];
         storedImages.push(...results.map(result => ({ base64: result, section: activeSection })));
         localStorage.setItem("images", JSON.stringify(storedImages));
 
-        setImagesLoaded(true); // Set the flag to indicate images are loaded
+        setImagesLoaded(true);
       });
     }
   };
