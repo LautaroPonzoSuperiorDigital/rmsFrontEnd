@@ -9,8 +9,8 @@ export function BottomNavbar() {
   const { user } = useAuth()
   const { navbarIsShown } = useTenantsNavbar()
 
-  if (!user || !navbarIsShown) {
-  return null
+  if (!user || !navbarIsShown || pathname === '/public-listings') {
+    return null
   }
 
   return (
