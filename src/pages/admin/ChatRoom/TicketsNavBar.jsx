@@ -1,16 +1,27 @@
-import React from "react";
-
 const nameStyle = {
   fontSize: "25px",
   color: "#272727",
   margin: "0px",
   fontWeight: 100,
+  lineHeight: "25px",
+  textTransform: "uppercase",
 };
 const listingStyle = {
   fontSize: "20px",
   color: "#272727",
   margin: "0px",
   fontWeight: 100,
+};
+const ticketContainerStyle = {
+  borderBottom: "1px solid #00000026",
+  height: "100px",
+  display: "flex",
+  alignItems: "center",
+  paddingBottom: "33px",
+  paddingTop: "33px",
+  paddingRigth: "30px",
+  paddingLeft: "30px",
+  gap: "20px",
 };
 
 const TicketsNavBar = ({ targetChatRoomId, chatRooms }) => {
@@ -21,20 +32,15 @@ const TicketsNavBar = ({ targetChatRoomId, chatRooms }) => {
   const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
 
   return (
-    <div className="d-flex justify-content-around p-1">
-      <div style={{ height: "50px", width: "45px" }}>
+    <div style={ticketContainerStyle}>
+      <div style={{ height: "50px", width: "45px", border: "1px solid black" }}>
         <img src={imageUrl} style={{ height: "50px", width: "45" }} />
       </div>
       <div>
-        <p style={nameStyle} className="d-flex align-items-center">
-          {selectedListing.Tenant.User.name}
-        </p>
+        <p style={nameStyle}>{selectedListing.Tenant.User.name}</p>
       </div>
       <div>
-        <p style={listingStyle} className="d-flex align-items-center">
-          {" "}
-          LISTING {selectedListing.listingId}
-        </p>
+        <p style={listingStyle}> LISTING {selectedListing.listingId}</p>
       </div>
     </div>
   );
