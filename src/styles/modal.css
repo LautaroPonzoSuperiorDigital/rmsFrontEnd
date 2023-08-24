@@ -370,7 +370,7 @@ li {
 
 .closeListing5 {
   height: 0.72rem;
-  width: 9%;
+  width: 3%;
   margin-right: 0.2rem;
   margin-bottom: 1rem;
   cursor: pointer;
@@ -403,7 +403,7 @@ li {
 .gobackContainer {
   margin-top: 3rem;
   margin-left: 4rem;
-  width: 100%;
+  max-width: 100%;
   white-space: nowrap;
 }
 

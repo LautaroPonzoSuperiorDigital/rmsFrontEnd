@@ -196,6 +196,8 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
           onMouseLeave={() => setIsHoveredClose(false)}
           onClick={handleCloseModal}
         />
+
+
       </div>
       <div className="modalNav">
         <ul className="ulModal">
@@ -249,21 +251,21 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
             BATHROOM 3
           </li>
           <div className="optionWidth">
-          <li className="option" onClick={handleEditSectionsClick}>
-            Edit Sections
-          </li>
-          <li className="option">
-            <label className="option" htmlFor="fileInput">
-              + Add Photos
-            </label>
-            <input
-              type="file"
-              id="fileInput"
-              name="image"
-              onChange={handleFileInputChange}
-              multiple
-            />
-          </li>
+            <li className="option" onClick={handleEditSectionsClick}>
+              Edit Sections
+            </li>
+            <li className="option">
+              <label className="option" htmlFor="fileInput">
+                + Add Photos
+              </label>
+              <input
+                type="file"
+                id="fileInput"
+                name="image"
+                onChange={handleFileInputChange}
+                multiple
+              />
+            </li>
           </div>
         </ul>
       </div>
