@@ -248,6 +248,7 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
           >
             BATHROOM 3
           </li>
+          <div className="optionWidth">
           <li className="option" onClick={handleEditSectionsClick}>
             Edit Sections
           </li>
@@ -263,6 +264,7 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
               multiple
             />
           </li>
+          </div>
         </ul>
       </div>
       <div className="sectionContent">{renderSectionContent()}</div>
