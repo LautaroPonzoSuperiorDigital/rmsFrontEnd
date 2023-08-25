@@ -7,7 +7,7 @@ import Tickets from "./Tickets";
 const chatRoomsStyle = {
   borderBottom: "1px solid #00000026",
   width: "100%",
-  height: "88px",
+  height: "100px",
   display: "flex",
 };
 
@@ -56,7 +56,9 @@ const AdminChatRoom = ({
               />
             </div>
           </div>
-          <div style={{ height: "88px" }}>
+          <div
+            style={{ height: "88px", display: "flex", flexDirection: "column" }}
+          >
             <div className="d-flex gap-3 ">
               <p className="m-0" style={{ fontSize: "18px" }}>
                 Listing:{chatRooms.listingId} • {chatRooms.Tenant.User.name}
@@ -75,7 +77,7 @@ const AdminChatRoom = ({
             />
           </div>
         </div>
-        <div style={{ height: "100%" }}>
+        <div style={{ height: "100%", display: "flex", alignItems: "center" }}>
           <Tickets chatRooms={chatRooms} setTickets={setTickets} />
         </div>
       </div>
