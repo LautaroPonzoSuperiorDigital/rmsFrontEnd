@@ -10,24 +10,22 @@ import AdminChatRoomNavBar from "./AdminChatRoomNavBar";
 import TicketsNavBar from "./TicketsNavBar";
 
 const chatRoomStyle = {
-  width: "100%",
-  maxWidth: "550px",
+  width: "33%",
+  // maxWidth: "550px",
   overflowY: "auto",
   maxHeight: "100vh",
 };
 const chatContaienrStyle = {
   borderLeft: "1px solid #00000026",
   borderRight: "1px solid #00000026",
-  width: "100%",
   height: "100%",
-  maxWidth: "550px",
+  // maxWidth: "550px",
   overflowY: "auto",
-  maxHeight: "700px",
+  width: "33%",
 };
 
 const AdminChatRoomMessagesStyle = {
-  width: "100%",
-  height: "75%",
+  height: "65%",
   overflowY: "auto",
   display: "flex",
   flexDirection: "column",
@@ -36,7 +34,10 @@ const AdminChatRoomMessagesStyle = {
 };
 
 const TicketsInfomartionStyle = {
+  display: "flex",
   maxHeight: "100vh",
+  padding: "20px 20px",
+  width: "33%",
 };
 
 const Chats = () => {
@@ -93,10 +94,10 @@ const Chats = () => {
   }, [targetChatRoomId]);
 
   return (
-    <div className="vh-100 d-flex flex-column ">
+    <div className="vh-100 d-flex flex-column w-100  ">
       <Nav />
-      <div className=" flex-grow-1 d-flex p-2 ">
-        <div style={chatRoomStyle}>
+      <div className=" flex-grow-1 d-flex p-2  justify-content-center">
+        <div style={chatRoomStyle} className="flex-grow-1">
           <div>
             <AdminChatRoomNavBar
               chatRooms={chatRooms}
@@ -117,7 +118,7 @@ const Chats = () => {
             );
           })}
         </div>
-        <div style={chatContaienrStyle}>
+        <div style={chatContaienrStyle} className="flex-grow-1">
           <div style={{ height: "100%" }}>
             {targetChatRoomId && (
               <TicketsNavBar

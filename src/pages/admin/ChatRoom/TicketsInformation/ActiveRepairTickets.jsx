@@ -5,9 +5,8 @@ import { useState } from "react";
 const titleActiveRepairStyle = {
   color: "#197572",
   fontSize: "20px",
-  fontWeight: 600,
   margin: "0px",
-  width: "416px",
+  width: "100%",
   backgroundColor: "#31AF9A0D",
 };
 const titleRepairStyle = {
@@ -25,7 +24,6 @@ const textRepairStyle = {
   color: "#131313",
   fontSize: "20px",
   margin: "0px",
-  lineHeight: "1px",
 };
 const bodyAccordionStyle = {
   backgroundColor: "#31AF9A0D",
@@ -60,15 +58,15 @@ const ActiveRepairTickets = ({ ticket }) => {
           data-bs-parent={`#accordion-${ticket.id}`}
         >
           <div className="accordion-body" style={bodyAccordionStyle}>
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center flex-wrap">
               <p style={titleRepairStyle}>NAME OF THE ISSUE</p>
               <p style={textIssueRepairStyle}>{ticket.name}</p>
             </div>
-            <div>
+            <div className="d-flex mb-4 align-items-center flex-wrap">
               <p style={titleRepairStyle}>DESCRIPTION</p>
               <p style={textRepairStyle}>{ticket.description}</p>
             </div>
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center flex-wrap">
               <p style={titleRepairStyle}>LOCATION</p>
               <p style={textRepairStyle}>{ticket.location}</p>
             </div>

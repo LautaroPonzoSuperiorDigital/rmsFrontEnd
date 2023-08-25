@@ -8,7 +8,7 @@ const dateStyle = {
 const Files = ({ file }) => {
   return (
     <div className="w-100 d-flex   " style={{ padding: "10px" }}>
-      <div style={{ width: "240px" }}>{file.name}</div>
+      <div style={{ width: "100%", maxWidth: "210px" }}>{file.name}</div>
       <div style={dateStyle}>{file.date}</div>
     </div>
   );
