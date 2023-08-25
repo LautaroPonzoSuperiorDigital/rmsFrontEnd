@@ -11,80 +11,101 @@ import "../../styles/modalImgsSwitch.css";
 import "../../styles/modal.css";
 import EditModalSections from "./modalSections";
 import { ImageContext } from "../../context/imageContext";
-import axios from "axios";
+import { api } from "../../services/api";
 
-const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
+
+const ModalListingsImgs = ({ closeModal, image, sendImageToParent, listingId }) => {
+  const [hoveredElements, setHoveredElements] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [activeSection, setActiveSection] = useState("EXTERIOR");
   const [isHoveredClose, setIsHoveredClose] = useState(false);
   const [isGoBackHovered, setIsGoBackHovered] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+
   const { selectedImages, setSelectedImages } = useContext(ImageContext);
-  const [hoveredElements, setHoveredElements] = useState([]);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [selectedImagesBase64, setSelectedImagesBase64] = useState([]);
+  const [imageFiles, setImageFiles] = useState([]);
+
+
   const [modalRef, setModalRef] = useState(null);
+  const [sections, setSections] = useState([]);
+  const [activeSection, setActiveSection] = useState("EXTERIOR");
+  const [selectedOption, setSelectedOption] = useState(null);
 
 
-
-
-
-  /* image modal uploader */
-  const handleFileInputChange = (event) => {
-    const files = Array.from(event.target.files);
-
-    if (files.length > 0) {
-      const filePromises = files.map((file) => {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = function () {
-            resolve(reader.result);
-          };
-        });
-      });
-
-      Promise.all(filePromises).then((results) => {
-        setSelectedImages((prevSelectedImages) => {
-          const newSelectedImages = { ...prevSelectedImages };
-
-          if (!newSelectedImages[activeSection]) {
-            newSelectedImages[activeSection] = [];
-          }
-
-          newSelectedImages[activeSection].push(...results);
-
-          return newSelectedImages;
-        });
-
-        const storedImages = JSON.parse(localStorage.getItem("images")) || [];
-        storedImages.push(...results.map(result => ({ base64: result, section: activeSection })));
-        localStorage.setItem("images", JSON.stringify(storedImages));
-
-        setImagesLoaded(true);
-      });
-    }
+  const staticSections = {
+    "EXTERIOR": 1,
+    "LIVING ROOM": 2,
+    "BEDROOM 1": 3,
+    "BEDROOM 2": 4,
+    "BATHROOM 1": 5,
+    "BATHROOM 2": 6,
+    "BATHROOM 3": 7,
   };
 
   useEffect(() => {
-    console.log("Retrieving images from localStorage");
-    const storedImages = JSON.parse(localStorage.getItem("images"));
+    const fetchSectionData = async () => {
+      try {
+        const response = await api.get(`/listing/${listingId}/section/`);
+        console.log("API Response:", response.data);
+        setSections(response.data);
 
-    if (storedImages != null) {
-      const imageSections = {};
+      } catch (error) {
+        console.error("API Error:", error);
+      }
+    };
 
-      storedImages.forEach((image) => {
-        if (!imageSections.hasOwnProperty(image.section)) {
-          imageSections[image.section] = [];
+    fetchSectionData();
+  }, [listingId]);
+
+
+  /* image modal uploader */
+  const handleFileInputChange = async (event) => {
+    const files = event.target.files;
+    const imageList = [];
+
+    for (const file of files) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        
+        const base64Image = e.target.result;
+        imageList.push(base64Image);
+
+        if (imageList.length === files.length) {
+          setSelectedImagesBase64(imageList);
         }
-        imageSections[image.section].push(image.base64);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  /*   try {
+      await api.post(`/listing/${listingId}/album/section/${activeSection}`, {
+        images: imageList
       });
 
-      setSelectedImages(imageSections);
-      sendImageToParent(imageSections[activeSection][0]);
-    }
-  }, []);
+      // Luego de la carga exitosa, realizar un GET para actualizar las imágenes
+      fetchImagesForSection(activeSection);
+    } catch (error) {
+      console.error("Error uploading images:", error);
+    } */
+  useEffect(() => {
+   
+    const fetchImagesForSection = async () => {
+      try {
+        const response = await api.get(`/listing/${listingId}/album/section/${activeSection}`);
+        setSelectedImages({
+          ...selectedImages,
+          [activeSection]: response.data.images
+        });
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+
+    fetchImagesForSection();
+  }, [activeSection]);
   /* image modal uploader */
 
   const openEditModal = () => {
@@ -120,9 +141,22 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
   };
   const navigate = useNavigate();
 
-  const handleSectionClick = (section) => {
-    setActiveSection(section);
-    setModalRef(section.modalRef);
+  const handleSectionClick = async (sectionId) => {
+    const selectedSection = sections.find(section => section.id === sectionId);
+    if (selectedSection) {
+      console.log(`Selected Section ID: ${sectionId}`);
+      setActiveSection(sectionId);
+      setModalRef(selectedSection.modalRef);
+      try {
+        const response = await api.get(`/listing/${listingId}/album/section/${sectionId}`);
+        setSelectedImages((prevSelectedImages) => ({
+          ...prevSelectedImages,
+          [sectionId]: response.data.imageUrls
+        }));
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    }
   };
   const handleEditSectionsClick = () => {
     setSelectedOption("editSections");
@@ -140,15 +174,14 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
   }, []);
 
   const renderSectionContent = () => {
-    console.log("selectedImages:", selectedImages);
     const sectionImages = selectedImages[activeSection] || [];
 
     const sectionContent = (
       <div className="sectionWrapper">
         <div className="imgFlex d-flex flex-wrap justify-content-start">
-          {sectionImages.map((imageUrl, index) => (
+          {sectionImages.map((base64Image, index) => (
             <div className="imgContainer1" key={index}>
-              <img className="flex-area1" src={imageUrl} alt={`Image ${index}`} />
+              <img className="flex-area1" src={base64Image} alt={`Image ${index}`} />
               <div className="orderDeleteBgBucket">
                 <div
                   className="bgDel"
@@ -201,55 +234,15 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent }) => {
       </div>
       <div className="modalNav">
         <ul className="ulModal">
-          <li
-            className={`liModal ${activeSection === "EXTERIOR" ? "active" : ""
-              }`}
-            onClick={() => handleSectionClick("EXTERIOR")}
-          >
-            EXTERIOR
-          </li>
-          <li
-            className={`liModal ${activeSection === "LIVING ROOM" ? "active" : ""
-              }`}
-            onClick={() => handleSectionClick("LIVING ROOM")}
-          >
-            LIVING ROOM
-          </li>
-          <li
-            className={`liModal ${activeSection === "BEDROOM 1" ? "active" : ""
-              }`}
-            onClick={() => handleSectionClick("BEDROOM 1")}
-          >
-            BEDROOM 1
-          </li>
-          <li
-            className={`liModal ${activeSection === "BEDROOM 2" ? "active" : ""
-              }`}
-            onClick={() => handleSectionClick("BEDROOM 2")}
-          >
-            BEDROOM 2
-          </li>
-          <li
-            className={`liModal ${activeSection === "BATHROOM 1" ? "active" : ""
-              }`}
-            onClick={() => handleSectionClick("BATHROOM 1")}
-          >
-            BATHROOM 1
-          </li>
-          <li
-            className={`liModal ${activeSection === "BATHROOM 2" ? "active" : ""
-              }`}
-            onClick={() => handleSectionClick("BATHROOM 2")}
-          >
-            BATHROOM 2
-          </li>
-          <li
-            className={`liModal b3 ${activeSection === "BATHROOM 3" ? "active" : ""
-              }`}
-            onClick={() => handleSectionClick("BATHROOM 3")}
-          >
-            BATHROOM 3
-          </li>
+          {Object.entries(staticSections).map(([sectionName, sectionId]) => (
+            <li
+              key={sectionId}
+              className={`liModal ${activeSection === sectionId ? "active" : ""}`}
+              onClick={() => handleSectionClick(sectionId)}
+            >
+              {sectionName.toUpperCase()}
+            </li>
+          ))}
           <div className="optionWidth">
             <li className="option" onClick={handleEditSectionsClick}>
               Edit Sections

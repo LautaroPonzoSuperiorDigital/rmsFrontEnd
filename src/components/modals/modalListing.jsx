@@ -168,26 +168,24 @@ const EditModalListings = ({ renderSectionContent }) => {
 
   }, []);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const data = {
       ...listingData,
       adminId: adminId,
       amenities: amenities,
       requirements: requirements,
-      image: selectedImage,
+      image: selectedImages,
     };
 
-    delete data.id
+    try {
+      // Realiza el POST para crear el listado con todas las imágenes y detalles
+      const response = await api.post('/listing', data);
 
-    api.post('/listing', data)
-      .then((response) => {
-        localStorage.removeItem("images");
-        setSelectedImage(null);
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      // Luego de la creación exitosa, redirige a la página de listados
+      navigate("/admin/listings");
+    } catch (error) {
+      console.error("Error creating listing:", error);
+    }
   };
 
 
@@ -416,6 +414,7 @@ const EditModalListings = ({ renderSectionContent }) => {
               closeModal={closeModal}
               images={selectedImage}
               sendImageToParent={handleReceiveImage}
+              listingId={listingData.id}
             />
             <style>{`.footer { display: none !important; }`}</style>
           </>
