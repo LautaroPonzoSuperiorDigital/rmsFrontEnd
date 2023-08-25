@@ -27,6 +27,7 @@ const ticketsContainerStyle = {
   maxHeight: "100vh",
   overflowY: "auto",
   overflowX: "hidden",
+  flex: 1,
 };
 
 const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
@@ -44,7 +45,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
 
   return (
     <div className="d-flex flex-column gap-3 " style={ticketsContainerStyle}>
-      <div>
+      <div className="d-flex flex-column">
         <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
           ACTIVE TICKETS ({activeTickets.length})
         </p>

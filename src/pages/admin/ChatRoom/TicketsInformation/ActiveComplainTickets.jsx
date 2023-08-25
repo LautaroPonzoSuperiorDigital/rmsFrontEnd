@@ -1,12 +1,11 @@
 import { useState } from "react";
-
 /* eslint-disable react/prop-types */
 const titleActiveRepairStyle = {
   color: "#197572",
   fontSize: "20px",
-  fontWeight: 600,
   margin: "0px",
-  width: "416px",
+  width: "100%",
+  // maxWidth: "416px",
   backgroundColor: "#31AF9A0D",
 };
 const titleRepairStyle = {
@@ -59,7 +58,7 @@ const ActiveComplainTickets = ({ ticket }) => {
           data-bs-parent={`#accordion-${ticket.id}`}
         >
           <div className="accordion-body" style={bodyAccordionStyle}>
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center mb-5">
               <p style={titleRepairStyle}>NAME OF THE ISSUE</p>
               <p style={textIssueRepairStyle}>{ticket.cause}</p>
             </div>

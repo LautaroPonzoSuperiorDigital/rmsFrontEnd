@@ -2,9 +2,15 @@ import React, { useState } from "react";
 import CheckBoxLog from "../../../components/checkBox";
 
 const navContainer = {
-  marginBottom: "10px",
+  borderBottom: "1px solid #00000026",
+  height: "100px",
+  paddingBottom: "33px",
+  paddingTop: "33px",
+  paddingRigth: "57px",
+  paddingLeft: "57px",
+  // alignItems: "center",
   display: "flex",
-  alignItems: "center",
+  width: "100%",
 };
 const navTitle = {
   fontSize: "35px",
@@ -38,7 +44,7 @@ const AdminChatRoomNavBar = ({ chatRooms, setTicketActiveRooms }) => {
 
   return (
     <div style={navContainer}>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div>
         <p style={navTitle}>Chats</p>
       </div>
       <div style={{ display: "flex", gap: 4 }}>
