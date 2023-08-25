@@ -18,7 +18,14 @@ const Tickets = ({ chatRooms, setTickets }) => {
           className="d-flex w-100 justify-content-between"
           style={{ cursor: "pointer" }}
         >
-          <p className=" ml-6" style={{ color: "#197572", fontSize: "18px" }}>
+          <p
+            className=" ml-6"
+            style={{
+              color: "#197572",
+              fontSize: "18px",
+              display: window.innerWidth < 1100 ? "none" : "block",
+            }}
+          >
             Repair ticket
           </p>
           <div>
@@ -31,7 +38,14 @@ const Tickets = ({ chatRooms, setTickets }) => {
           className="d-flex w-100 justify-content-between"
           style={{ cursor: "pointer" }}
         >
-          <p className="m-0" style={{ color: "#197572", fontSize: "18px" }}>
+          <p
+            className="m-0"
+            style={{
+              color: "#197572",
+              fontSize: "18px",
+              display: window.innerWidth < 1100 ? "none" : "block",
+            }}
+          >
             Complain ticket
           </p>
           <div>
