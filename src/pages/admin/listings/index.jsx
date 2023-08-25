@@ -70,7 +70,9 @@ export default function AdminListings() {
     setShowCreateModal(true);
   };
 
-  const handleModalClose = () => {
+  const handleModalClose = (refresh=false) => {
+    if (refresh)
+      loadListings();
     setShowCreateModal(false);
   };
 
@@ -109,31 +111,31 @@ export default function AdminListings() {
     listingDetailsModalRef.current.open();
   };
 
-  useEffect(() => {
-    async function loadListings() {
-      try {
-        const { data } = await api.get("/listing");
-        console.log("Data from API:", data);
+  async function loadListings() {
+    try {
+      const { data } = await api.get("/listing");
+      console.log("Data from API:", data);
 
-        setListings(
-          data.map((listing) => {
-            if (!listing.key) {
-              return listing;
-            }
+      setListings(
+        data.map((listing) => {
+          if (!listing.key) {
+            return listing;
+          }
 
-            const encodedKey = listing.key.replace(/\\/g, "%5C");
+          const encodedKey = listing.key.replace(/\\/g, "%5C");
 
-            return {
-              ...listing,
-              key: `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`,
-            };
-          })
-        );
-      } catch (err) {
-        alert("Error loading listings: ", err);
-      }
+          return {
+            ...listing,
+            key: `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`,
+          };
+        })
+      );
+    } catch (err) {
+      alert("Error loading listings: ", err);
     }
+  }
 
+  useEffect(() => {
     loadListings();
   }, []);
 
@@ -281,7 +283,7 @@ export default function AdminListings() {
         </div>
       </div>
       {showCreateModal && (
-        <EditModalListings onClose={handleModalClose}></EditModalListings>
+        <EditModalListings onClose={refresh => handleModalClose(refresh)} modeCreateBool={true}></EditModalListings>
       )}
 
       <Modal.Root ref={listingDetailsModalRef}>

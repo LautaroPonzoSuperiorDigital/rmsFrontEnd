@@ -14,7 +14,13 @@ import { ImageContext } from "../../context/imageContext";
 import { api } from "../../services/api";
 
 
-const ModalListingsImgs = ({ closeModal, image, sendImageToParent, listingId }) => {
+const ModalListingsImgs = ({
+  closeModal,
+  image,
+  sendImageToParent,
+  listingId,
+  modeCreateBool
+}) => {
   const [hoveredElements, setHoveredElements] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isHoveredClose, setIsHoveredClose] = useState(false);
@@ -24,87 +30,106 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent, listingId }) 
   const [isOpen, setIsOpen] = useState(true);
 
   const { selectedImages, setSelectedImages } = useContext(ImageContext);
-  const [selectedImagesBase64, setSelectedImagesBase64] = useState([]);
+  const { selectedImagesBase64, setSelectedImagesBase64 } = useContext(ImageContext);
   const [imageFiles, setImageFiles] = useState([]);
 
-
-  const [modalRef, setModalRef] = useState(null);
   const [sections, setSections] = useState([]);
   const [activeSection, setActiveSection] = useState("EXTERIOR");
   const [selectedOption, setSelectedOption] = useState(null);
 
+  // Back-end Sections are statically ordered, do not change
+  const defaultSections = [
+    "EXTERIOR",
+    "LIVING ROOM",
+    "BEDROOM 1",
+    "BEDROOM 2",
+    "BATHROOM 1",
+    "BATHROOM 2",
+    "BATHROOM 3",
+  ];
 
-  const staticSections = {
-    "EXTERIOR": 1,
-    "LIVING ROOM": 2,
-    "BEDROOM 1": 3,
-    "BEDROOM 2": 4,
-    "BATHROOM 1": 5,
-    "BATHROOM 2": 6,
-    "BATHROOM 3": 7,
-  };
+  // Init Sections
+  if (!sections || sections.length < 1)
+    for (const k in defaultSections) {
+      const v = defaultSections[k]
+      sections.push(v)
+    }
 
   useEffect(() => {
     const fetchSectionData = async () => {
-      try {
-        const response = await api.get(`/listing/${listingId}/section/`);
-        console.log("API Response:", response.data);
-        setSections(response.data);
-
-      } catch (error) {
-        console.error("API Error:", error);
-      }
+      await api.get(`/listing/${listingId}/section/`)
+        .then(response => {
+          console.log("API Response:", response.data);
+          setSections(response.data);
+        })
+        .catch(e => {
+          console.error("API Error:", e);
+        })
     };
 
-    fetchSectionData();
+    if (!modeCreateBool) {
+      fetchSectionData();
+    }
+    else {
+      // Init selectedImages if Creating Listing
+      for (const k in defaultSections) {
+        const v = defaultSections[k]
+        selectedImages[v] = []
+        selectedImagesBase64[v] = []
+      }
+    }
   }, [listingId]);
 
 
   /* image modal uploader */
   const handleFileInputChange = async (event) => {
     const files = event.target.files;
-    const imageList = [];
 
     for (const file of files) {
       const reader = new FileReader();
       reader.onload = async (e) => {
-        
         const base64Image = e.target.result;
-        imageList.push(base64Image);
 
-        if (imageList.length === files.length) {
-          setSelectedImagesBase64(imageList);
+        // Asegurarse de que la sección activa exista en selectedImagesBase64
+        if (!selectedImagesBase64[activeSection]) {
+          setSelectedImagesBase64((prevImagesBase64) => ({
+            ...prevImagesBase64,
+            [activeSection]: [],
+          }));
         }
+
+        setSelectedImagesBase64((prevImagesBase64) => ({
+          ...prevImagesBase64,
+          [activeSection]: [...prevImagesBase64[activeSection], base64Image],
+        }));
       };
       reader.readAsDataURL(file);
     }
   };
-
-  /*   try {
-      await api.post(`/listing/${listingId}/album/section/${activeSection}`, {
-        images: imageList
-      });
-
-      // Luego de la carga exitosa, realizar un GET para actualizar las imágenes
-      fetchImagesForSection(activeSection);
-    } catch (error) {
-      console.error("Error uploading images:", error);
-    } */
   useEffect(() => {
-   
+    for (const section in selectedImagesBase64) {
+      console.log(section + ":");
+      console.log(selectedImagesBase64[section]);
+    }
+  }, [selectedImagesBase64]);
+
+  useEffect(() => {
     const fetchImagesForSection = async () => {
       try {
         const response = await api.get(`/listing/${listingId}/album/section/${activeSection}`);
         setSelectedImages({
           ...selectedImages,
-          [activeSection]: response.data.images
+          [activeSection]: response.data.images,
         });
+        console.log("Fetched images for", activeSection, ":", response.data.images);
       } catch (error) {
         console.error("Error fetching images:", error);
       }
     };
 
-    fetchImagesForSection();
+    if (!modeCreateBool) {
+      fetchImagesForSection();
+    }
   }, [activeSection]);
   /* image modal uploader */
 
@@ -142,20 +167,20 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent, listingId }) 
   const navigate = useNavigate();
 
   const handleSectionClick = async (sectionId) => {
-    const selectedSection = sections.find(section => section.id === sectionId);
-    if (selectedSection) {
-      console.log(`Selected Section ID: ${sectionId}`);
-      setActiveSection(sectionId);
-      setModalRef(selectedSection.modalRef);
-      try {
-        const response = await api.get(`/listing/${listingId}/album/section/${sectionId}`);
-        setSelectedImages((prevSelectedImages) => ({
-          ...prevSelectedImages,
-          [sectionId]: response.data.imageUrls
-        }));
-      } catch (error) {
-        console.error("Error fetching images:", error);
-      }
+    const apiSectionId = parseInt(sectionId) + 1;
+    const selectedSection = sections[sectionId];
+    setActiveSection(selectedSection);
+    if (!modeCreateBool) {
+      await api.get(`/listing/${listingId}/album/section/${apiSectionId}`)
+        .then(response => {
+          setSelectedImages((prevSelectedImages) => ({
+            ...prevSelectedImages,
+            [apiSectionId]: response.data.imageUrls
+          }));
+        })
+        .catch(error => {
+          console.error("Error fetching images:", error);
+        })
     }
   };
   const handleEditSectionsClick = () => {
@@ -234,11 +259,13 @@ const ModalListingsImgs = ({ closeModal, image, sendImageToParent, listingId }) 
       </div>
       <div className="modalNav">
         <ul className="ulModal">
-          {Object.entries(staticSections).map(([sectionName, sectionId]) => (
+          {sections.map((sectionName, sectionId) => (
             <li
               key={sectionId}
-              className={`liModal ${activeSection === sectionId ? "active" : ""}`}
-              onClick={() => handleSectionClick(sectionId)}
+              className={`liModal ${activeSection === sectionName ? "active" : ""}`}
+              onClick={() => {
+                handleSectionClick(sectionId);
+              }}
             >
               {sectionName.toUpperCase()}
             </li>

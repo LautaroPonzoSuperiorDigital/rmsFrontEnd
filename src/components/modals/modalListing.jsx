@@ -5,11 +5,10 @@ import bg from "../../assets/img/BG.svg";
 import closeListing from "../../assets/img/close.svg";
 import closeHover from "../../assets/img/closeHover.svg";
 import ModalListingsImgs from "./modalListingsImgs";
-import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { api } from "../../services/api"
 
-const EditModalListings = ({ renderSectionContent }) => {
+const EditModalListings = ({ renderSectionContent, onClose, modeCreateBool=false }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [adminId, setAdminId] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -144,7 +143,7 @@ const EditModalListings = ({ renderSectionContent }) => {
     setIsImageHovered(false);
   };
   const handleCancel = () => {
-    window.location.href = "/admin/listings";
+    onClose();
   };
 
   const handleImageClick = () => {
@@ -164,8 +163,6 @@ const EditModalListings = ({ renderSectionContent }) => {
       const adminSub = decodedToken.sub;
       setAdminId(adminSub);
     }
-
-
   }, []);
 
   const handleSave = async () => {
@@ -177,18 +174,33 @@ const EditModalListings = ({ renderSectionContent }) => {
       image: selectedImages,
     };
 
-    try {
-      // Realiza el POST para crear el listado con todas las imágenes y detalles
-      const response = await api.post('/listing', data);
-
-      // Luego de la creación exitosa, redirige a la página de listados
-      navigate("/admin/listings");
-    } catch (error) {
+    await api.post('/listing', data)
+    .then(() => {
+      onClose(true);
+    })
+    .catch(error => {
       console.error("Error creating listing:", error);
-    }
+    })
   };
 
+  const uploadImages = async (imgArray) => {
+    if (Object.keys(imgArray).length < 1) return
 
+    let sectionId
+    // Loop each section
+    for ([k, v] of Object.entries(imgArray)) {
+      if (!Array.isArray(v) || v.length < 1) continue
+      let images = []
+      for (img in v)
+        images.push({"base64": img})
+      await api.post(`/listing/${listingId}/section/${sectionId}`, images)
+      .then(() => {
+      })
+      .catch(e => {
+        console.error(e)
+      })
+    }
+  };
 
   let hasNoImages =
     !renderSectionContent || renderSectionContent.images.length === 0;
@@ -415,6 +427,7 @@ const EditModalListings = ({ renderSectionContent }) => {
               images={selectedImage}
               sendImageToParent={handleReceiveImage}
               listingId={listingData.id}
+              modeCreateBool={modeCreateBool}
             />
             <style>{`.footer { display: none !important; }`}</style>
           </>
