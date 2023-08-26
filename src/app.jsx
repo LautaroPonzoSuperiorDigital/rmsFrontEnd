@@ -5,9 +5,7 @@ import AppRoutes from "./routes";
 function App() {
   return (
     <AuthProvider>
-      <ImageProvider>
-        <AppRoutes />
-      </ImageProvider>
+      <AppRoutes />
     </AuthProvider>
   )
 }

@@ -7,6 +7,7 @@ import closeHover from "../../assets/img/closeHover.svg";
 import ModalListingsImgs from "./modalListingsImgs";
 import jwtDecode from "jwt-decode";
 import { api } from "../../services/api"
+import { ImageContext } from "../../context/imageContext";
 
 const EditModalListings = ({ renderSectionContent, onClose, modeCreateBool=false }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false);
@@ -14,7 +15,8 @@ const EditModalListings = ({ renderSectionContent, onClose, modeCreateBool=false
   const [showImageModal, setShowImageModal] = useState(false);
   const [showMainModal, setShowMainModal] = useState(true);
   const [isImageHovered, setIsImageHovered] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [listingImages, setListingImage] = useState(null);
+  const [displayImageThumbnail, setListingThumbnail] = useState(null);
   const [amenities, setAmenities] = useState([""]);
   const [requirements, setRequirements] = useState([""]);
   const [listingData, setListingData] = useState({
@@ -171,11 +173,12 @@ const EditModalListings = ({ renderSectionContent, onClose, modeCreateBool=false
       adminId: adminId,
       amenities: amenities,
       requirements: requirements,
-      image: selectedImages,
+      image: listingImages,
     };
 
     await api.post('/listing', data)
     .then(() => {
+     
       onClose(true);
     })
     .catch(error => {
@@ -204,12 +207,35 @@ const EditModalListings = ({ renderSectionContent, onClose, modeCreateBool=false
 
   let hasNoImages =
     !renderSectionContent || renderSectionContent.images.length === 0;
-  /* IMAGES */
-  const handleReceiveImage = (image) => {
-    setSelectedImage(image);
-    hasNoImages = false;
-    /* IMAGES */
+
+  /**
+   * This function handles receiving images from child modal `modalListingsImgs`
+   * 
+   * It stores the uplodaded images into the `listingImages` state so it persists
+   * while creating Listing registry.
+   * 
+   * @param images Array array of base64 images received from `listingImages` child component.
+   */
+  const handleReceiveImage = (images) => {
+    setListingImage(images);
+    // Finds object field name in which there's more than 1 image.
+    const found = Object.keys(images).find(key=>{
+      return images[key].length>=1
+    })
+    // If found, sets thumbnail.
+    if(found){
+      hasNoImages = false;
+      setListingThumbnail(images[found][0])
+    }
   };
+
+  const calculateTotalImages = () => {
+    let total = 0
+    Object.keys(listingImages).forEach(key=>{
+      total += listingImages[key].length
+    })
+    return (<span>{total}</span>)
+  }
 
   return (
     <div className="bg">
@@ -219,7 +245,7 @@ const EditModalListings = ({ renderSectionContent, onClose, modeCreateBool=false
             className="imgContainer d-flex justify-content-center align-items-start"
             onClick={handleImageClick}
           >
-            {selectedImage == null ? (
+            {listingImages == null ? (
               <img
                 className="ModalImg"
                 src={bg}
@@ -230,7 +256,7 @@ const EditModalListings = ({ renderSectionContent, onClose, modeCreateBool=false
             ) : (
               <img
                 className="ModalImg"
-                src={selectedImage}
+                src={displayImageThumbnail}
                 alt="testImg"
                 onMouseEnter={handleImageMouseEnter}
                 onMouseLeave={handleImageMouseLeave}
@@ -238,13 +264,12 @@ const EditModalListings = ({ renderSectionContent, onClose, modeCreateBool=false
             )}
 
             <div className={`imgOverlay ${isImageHovered ? "hovered" : ""}`}>
-              {selectedImage == null ? (
+              {!listingImages ? (
                 <span className="editText">+ Add Photos</span>
               ) : (
                 <div className="editBar">
                   <span className="editText1">
-                    Edit Album (
-                    {JSON.parse(localStorage.getItem("images")).length})
+                    Edit Album ({calculateTotalImages()})
                   </span>
                 </div>
               )}
@@ -424,10 +449,10 @@ const EditModalListings = ({ renderSectionContent, onClose, modeCreateBool=false
           <>
             <ModalListingsImgs
               closeModal={closeModal}
-              images={selectedImage}
-              sendImageToParent={handleReceiveImage}
+              sendImagesToParent={handleReceiveImage}
               listingId={listingData.id}
               modeCreateBool={modeCreateBool}
+              modeCreateImages={listingImages}
             />
             <style>{`.footer { display: none !important; }`}</style>
           </>

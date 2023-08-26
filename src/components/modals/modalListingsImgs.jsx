@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import arrow from "../../assets/img/arrow.svg";
 import arrowHover from "../../assets/img/arrowHover.svg";
 import closeListing3 from "../../assets/img/close.svg";
@@ -10,17 +10,21 @@ import img1 from "../../assets/img/1.jpg";
 import "../../styles/modalImgsSwitch.css";
 import "../../styles/modal.css";
 import EditModalSections from "./modalSections";
-import { ImageContext } from "../../context/imageContext";
 import { api } from "../../services/api";
 
 
 const ModalListingsImgs = ({
   closeModal,
-  image,
-  sendImageToParent,
+  sendImagesToParent,
   listingId,
-  modeCreateBool
+  modeCreateBool,
+  modeCreateImages
 }) => {
+
+  const navigate = useNavigate();
+
+  const imageInput = useRef();
+
   const [hoveredElements, setHoveredElements] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isHoveredClose, setIsHoveredClose] = useState(false);
@@ -28,15 +32,11 @@ const ModalListingsImgs = ({
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+  const [isRefresh, setRefresh] = useState(false);
 
-  const { selectedImages, setSelectedImages } = useContext(ImageContext);
-  const { selectedImagesBase64, setSelectedImagesBase64 } = useContext(ImageContext);
-  const [imageFiles, setImageFiles] = useState([]);
-
-  const [sections, setSections] = useState([]);
-  const [activeSection, setActiveSection] = useState("EXTERIOR");
-  const [selectedOption, setSelectedOption] = useState(null);
-
+  const [ selectedImages, setSelectedImages ] = useState([]);
+  const [ selectedImagesBase64, setSelectedImagesBase64 ] = useState([]);
+  
   // Back-end Sections are statically ordered, do not change
   const defaultSections = [
     "EXTERIOR",
@@ -48,18 +48,25 @@ const ModalListingsImgs = ({
     "BATHROOM 3",
   ];
 
+  const [sections, setSections] = useState([]);
+  const [activeSection, setActiveSection] = useState(defaultSections[0]);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+
   // Init Sections
-  if (!sections || sections.length < 1)
+  if (!sections || sections.length < 1) {
+    let tempSections = [];
     for (const k in defaultSections) {
       const v = defaultSections[k]
-      sections.push(v)
+      tempSections.push(v)
     }
+    setSections(tempSections);
+  }
 
   useEffect(() => {
     const fetchSectionData = async () => {
       await api.get(`/listing/${listingId}/section/`)
         .then(response => {
-          console.log("API Response:", response.data);
           setSections(response.data);
         })
         .catch(e => {
@@ -83,56 +90,44 @@ const ModalListingsImgs = ({
 
   /* image modal uploader */
   const handleFileInputChange = async (event) => {
-    const files = event.target.files;
-
+    const files = imageInput.current.files;
+    
     for (const file of files) {
-      const reader = new FileReader();
+      let reader = new FileReader();
       reader.onload = async (e) => {
         const base64Image = e.target.result;
-
-        // Asegurarse de que la sección activa exista en selectedImagesBase64
         if (!selectedImagesBase64[activeSection]) {
           setSelectedImagesBase64((prevImagesBase64) => ({
             ...prevImagesBase64,
             [activeSection]: [],
           }));
         }
-
         setSelectedImagesBase64((prevImagesBase64) => ({
           ...prevImagesBase64,
           [activeSection]: [...prevImagesBase64[activeSection], base64Image],
         }));
       };
+      reader.onerror = async (e) => {
+        console.log(e)
+      }
       reader.readAsDataURL(file);
     }
   };
+
   useEffect(() => {
-    for (const section in selectedImagesBase64) {
-      console.log(section + ":");
-      console.log(selectedImagesBase64[section]);
-    }
+    console.log("UPDATED IMAGES")
+    sendImagesToParent(selectedImagesBase64)
   }, [selectedImagesBase64]);
 
   useEffect(() => {
-    const fetchImagesForSection = async () => {
-      try {
-        const response = await api.get(`/listing/${listingId}/album/section/${activeSection}`);
-        setSelectedImages({
-          ...selectedImages,
-          [activeSection]: response.data.images,
-        });
-        console.log("Fetched images for", activeSection, ":", response.data.images);
-      } catch (error) {
-        console.error("Error fetching images:", error);
-      }
-    };
-
-    if (!modeCreateBool) {
-      fetchImagesForSection();
+    if(modeCreateBool==true && modeCreateImages != undefined){
+      setSelectedImagesBase64(modeCreateImages)
     }
-  }, [activeSection]);
-  /* image modal uploader */
+  }, []);
 
+  /** 
+   * Image modal uploader 
+  */
   const openEditModal = () => {
     setIsEditModalOpen(true);
   };
@@ -140,7 +135,6 @@ const ModalListingsImgs = ({
   const closeEditModal = () => {
     setIsEditModalOpen(false);
   };
-  const hasImages = false;
 
   const handleGoBackMouseEnter = () => {
     setIsGoBackHovered(true);
@@ -164,7 +158,6 @@ const ModalListingsImgs = ({
       return newState;
     });
   };
-  const navigate = useNavigate();
 
   const handleSectionClick = async (sectionId) => {
     const apiSectionId = parseInt(sectionId) + 1;
@@ -183,6 +176,7 @@ const ModalListingsImgs = ({
         })
     }
   };
+
   const handleEditSectionsClick = () => {
     setSelectedOption("editSections");
     setIsModalOpen(true);
@@ -199,7 +193,7 @@ const ModalListingsImgs = ({
   }, []);
 
   const renderSectionContent = () => {
-    const sectionImages = selectedImages[activeSection] || [];
+    const sectionImages = selectedImagesBase64[activeSection] || [];
 
     const sectionContent = (
       <div className="sectionWrapper">
@@ -282,7 +276,9 @@ const ModalListingsImgs = ({
                 type="file"
                 id="fileInput"
                 name="image"
-                onChange={handleFileInputChange}
+                ref={imageInput}
+                onInput={(e)=>handleFileInputChange(e)}
+                accept="image/png, image/jpeg"
                 multiple
               />
             </li>
