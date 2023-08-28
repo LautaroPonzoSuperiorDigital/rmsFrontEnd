@@ -16,25 +16,28 @@ export default function Documents() {
 
   return (
     <DocumentsContainer>
-      {tenantDocuments.map(tenantDocument => (
-        <Document key={tenantDocument.id}>
-          <DocumentHeader>
-            <DocumentTitle>{tenantDocument.Document.name}</DocumentTitle>
+      {tenantDocuments.map(tenantDocument => {
+        const isSigned = tenantDocument.signUrl && tenantDocument.isSigned
 
-            {tenantDocument.Document.isSignRequired && !tenantDocument.Document.isSigned && (
-              <SignDocument>Sign</SignDocument>
-            )}
-          </DocumentHeader>
+        return (
+          <Document key={tenantDocument.id}>
+            <DocumentHeader>
+              <DocumentTitle>{tenantDocument.Document.name}</DocumentTitle>
 
-          <DocumentFooter>
-            <DocumentDate>{tenantDocument.date}</DocumentDate>
-            
-            {tenantDocument.Document.isSigned && (
-              <DocumentSigned>Signed</DocumentSigned>
-            )}
-          </DocumentFooter>
-        </Document>
-      ))}
+              {!isSigned && (
+                <SignDocument to={tenantDocument.signUrl} target="_blank">Sign</SignDocument>
+              )}
+            </DocumentHeader>
+
+            <DocumentFooter>
+              <DocumentDate>{tenantDocument.date}</DocumentDate>
+              
+              {isSigned && (
+                <DocumentSigned>Signed</DocumentSigned>
+              )}
+            </DocumentFooter>
+          </Document>
+        )})}
     </DocumentsContainer>
   )
 }
