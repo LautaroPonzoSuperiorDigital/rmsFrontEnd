@@ -10,7 +10,7 @@ const Tickets = ({ chatRooms, setTickets }) => {
   const areTicketOpenComplain = ticketComplain?.some(
     (ticket) => ticket.status === "OPEN"
   );
-  console.log(areTicketOpenComplain);
+
   return (
     <div className="d-flex flex-column ">
       {ticketRepair?.length > 0 && areTicketsOpenRepair && (
