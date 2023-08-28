@@ -47,6 +47,7 @@ const Chats = () => {
   const [targetChatRoomId, setTargetChatRoomId] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
   const [ticketActiveRooms, setTicketActiveRooms] = useState(chatRooms);
+  const [key, setKey] = useState(false);
 
   const scrollToLastMessage = () => {
     if (chatContainerRef.current) {
@@ -90,7 +91,8 @@ const Chats = () => {
       }
     };
     getChatRooms();
-  }, [targetChatRoomId]);
+    setKey(false);
+  }, [targetChatRoomId, key]);
 
   return (
     <div className="vh-100 d-flex flex-column w-100  ">

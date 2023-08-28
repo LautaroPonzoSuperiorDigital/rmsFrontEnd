@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
 
+import { useEffect, useState } from "react";
 import ActiveComplainTickets from "./ActiveComplainTickets";
 import ActiveRepairTickets from "./ActiveRepairTickets";
 import CloseComplainTickets from "./CloseComplainTickets";
 import CloseRepairTickets from "./CloseRepairTickets";
 import Files from "./Files";
+import { api } from "../../../../services/api";
 
 const mockFiles = [
   {
@@ -31,17 +33,45 @@ const ticketsContainerStyle = {
 };
 
 const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
-  const matchedChatRoom = chatRooms.find(
-    (chatRoom) => chatRoom.id === chatRoomId
-  );
-  const repairTickets = matchedChatRoom?.Listing.RepairTicket || [];
-  const ticketComplaints = matchedChatRoom?.Listing.TicketComplaint || [];
+  const [activeTickets, setActiveTickets] = useState([]);
+  const [closedTickets, setClosedTickets] = useState([]);
+  const [tickets, setTickets] = useState([]);
 
-  const allTickets = [...repairTickets, ...ticketComplaints];
-  const activeTickets = allTickets.filter((ticket) => ticket.status === "OPEN");
-  const closedTickets = allTickets.filter(
-    (ticket) => ticket.status === "CLOSED"
-  );
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const tickets = await api.get(`tenants/ticket-repair/${chatRoomId}`);
+        const tickets2 = await api.get(`tenants/ticket-complain/${chatRoomId}`);
+        const ticketsData = [...tickets.data, ...tickets2.data];
+        const filterActiveTickets = ticketsData.filter(
+          (ticket) => ticket.status === "OPEN"
+        );
+        const filterClosedTickets = ticketsData.filter(
+          (ticket) => ticket.status === "CLOSED"
+        );
+        setActiveTickets(filterActiveTickets);
+        setClosedTickets(filterClosedTickets);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchTickets();
+    // const matchedChatRoom = chatRooms.find(
+    //   (chatRoom) => chatRoom.id === chatRoomId
+    // );
+    // const repairTickets = matchedChatRoom?.Listing.RepairTicket || [];
+    // const ticketComplaints = matchedChatRoom?.Listing.TicketComplaint || [];
+
+    // const AllTickets = [...repairTickets, ...ticketComplaints];
+    // const filterActiveTickets = AllTickets.filter(
+    //   (ticket) => ticket.status === "OPEN"
+    // );
+    // const filterClosedTickets = AllTickets.filter(
+    //   (ticket) => ticket.status === "CLOSED"
+    // );
+    // setActiveTickets(filterActiveTickets);
+    // setClosedTickets(filterClosedTickets);
+  }, [chatRoomId, tickets]);
 
   return (
     <div className="d-flex flex-column gap-3 " style={ticketsContainerStyle}>
@@ -51,9 +81,19 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         </p>
         {activeTickets.map((ticket) =>
           ticket.cause ? (
-            <ActiveComplainTickets key={ticket.id} ticket={ticket} />
+            <ActiveComplainTickets
+              key={ticket.id}
+              ticket={ticket}
+              setTickets={setTickets}
+              tickets={tickets}
+            />
           ) : (
-            <ActiveRepairTickets key={ticket.id} ticket={ticket} />
+            <ActiveRepairTickets
+              key={ticket.id}
+              ticket={ticket}
+              setTickets={setTickets}
+              tickets={tickets}
+            />
           )
         )}
       </div>
