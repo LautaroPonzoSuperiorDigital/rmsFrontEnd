@@ -17,7 +17,6 @@ const TimeAndDate = ({ filterMessages, chatRooms }) => {
           filterMessages[filterMessages.length - 1]?.createdAt
         ).toLocaleString(DateTime.DATETIME_SHORT)
       : null;
-  console.log(formattedTimeStamp);
 
   return (
     <div style={{ width: "100%" }}>

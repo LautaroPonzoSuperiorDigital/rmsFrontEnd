@@ -47,7 +47,6 @@ const Chats = () => {
   const [targetChatRoomId, setTargetChatRoomId] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
   const [ticketActiveRooms, setTicketActiveRooms] = useState(chatRooms);
-  console.log(ticketActiveRooms);
 
   const scrollToLastMessage = () => {
     if (chatContainerRef.current) {
