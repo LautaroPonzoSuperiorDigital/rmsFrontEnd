@@ -34,7 +34,7 @@ export default function CreateRepairTicket() {
     };
 
     try {
-      const { data } = await api.post("/tenant/ticket-repair", formData);
+      const { data } = await api.post("/tenants/ticket-repair", formData);
 
       setMessage("Your ticket has been submitted");
 

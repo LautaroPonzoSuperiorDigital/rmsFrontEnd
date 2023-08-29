@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { api } from "../../../../services/api";
 /* eslint-disable react/prop-types */
 const titleActiveRepairStyle = {
   color: "#197572",
@@ -29,11 +30,37 @@ const bodyAccordionStyle = {
   backgroundColor: "#31AF9A0D",
 };
 
-const ActiveComplainTickets = ({ ticket }) => {
+const ActiveComplainTickets = ({ ticket, setTickets, tickets }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
+  };
+
+  const handleStatusChange = async (e) => {
+    //update-ticket-repair/:id'
+    const status = e.target.value;
+
+    try {
+      const response = await api.patch(
+        `tenants/update-ticket-complaint/${ticket.id}`,
+        {
+          status: status,
+        }
+      );
+
+      const newTicket = response.data;
+      // I want newTicket replace the one in that matchs in tickets and then setTickets
+      const newTickets = tickets.map((ticket) => {
+        if (ticket.id === newTicket.id) {
+          return newTicket;
+        }
+        return ticket;
+      });
+      setTickets(newTickets);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -65,6 +92,17 @@ const ActiveComplainTickets = ({ ticket }) => {
             <div>
               <p style={titleRepairStyle}>ADDITIONAL NOTES</p>
               <p style={textRepairStyle}>{ticket.additionalNotes}</p>
+            </div>
+            <div>
+              <p style={titleRepairStyle}>STATUS</p>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                onChange={handleStatusChange}
+              >
+                <option value="OPEN">OPEN</option>
+                <option value="CLOSED">CLOSED</option>
+              </select>
             </div>
           </div>
         </div>
