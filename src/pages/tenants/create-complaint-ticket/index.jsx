@@ -28,7 +28,7 @@ export default function CreateComplaintTicket() {
     };
 
     try {
-      const { data } = await api.post("/tenant/ticket-complaint", formData);
+      const { data } = await api.post("/tenants/ticket-complaint", formData);
 
       setMessage("Your ticket has been submitted");
 
