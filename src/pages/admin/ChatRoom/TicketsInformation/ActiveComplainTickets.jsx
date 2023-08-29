@@ -64,7 +64,7 @@ const ActiveComplainTickets = ({ ticket, setTickets, tickets }) => {
   };
 
   return (
-    <div className="accordion" id={`accordion-${ticket.id}`}>
+    <div className="accordion " id={`accordion-${ticket.id}`}>
       <div className="accordion-item">
         <h2 className="accordion-header" id={`heading-${ticket.id}`}>
           <button
