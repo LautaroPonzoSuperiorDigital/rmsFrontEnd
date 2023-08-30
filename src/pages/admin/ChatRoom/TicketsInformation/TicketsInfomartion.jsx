@@ -7,6 +7,7 @@ import CloseComplainTickets from "./CloseComplainTickets";
 import CloseRepairTickets from "./CloseRepairTickets";
 import Files from "./Files";
 import { api } from "../../../../services/api";
+import Spinner from "../../../../components/spinner/Spinner";
 
 const ticketsContainerStyle = {
   maxHeight: "100vh",
@@ -16,6 +17,7 @@ const ticketsContainerStyle = {
 };
 
 const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
+  const [loading, setLoading] = useState(true);
   const [activeTickets, setActiveTickets] = useState([]);
   const [closedTickets, setClosedTickets] = useState([]);
   const [tickets, setTickets] = useState([]);
@@ -47,6 +49,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         );
         setActiveTickets(filterActiveTickets);
         setClosedTickets(filterClosedTickets);
+        setLoading(false);
       } catch (err) {
         console.log(err);
       }
@@ -63,6 +66,10 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
           ACTIVE TICKETS ({activeTickets.length})
         </p>
+        <div className="w-100 d-flex justify-content-center">
+          {loading && <Spinner />}
+        </div>
+
         {activeTickets.map((ticket) =>
           ticket.cause ? (
             <ActiveComplainTickets
@@ -85,6 +92,10 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
           TICKETS ARCHIVE ({closedTickets.length})
         </p>
+        <div className="w-100 d-flex justify-content-center">
+          {loading && <Spinner />}
+        </div>
+
         {closedTickets.map((ticket) =>
           ticket.cause ? (
             <CloseComplainTickets key={ticket.id} ticket={ticket} />
@@ -97,6 +108,10 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
           FILES
         </p>
+        <div className="w-100 d-flex justify-content-center">
+          {loading && <Spinner />}
+        </div>
+
         {files.map((file) => (
           <Files key={file.id} file={file} />
         ))}
