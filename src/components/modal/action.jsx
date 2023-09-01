@@ -42,15 +42,21 @@ const Action = styled.button`
   &:hover {
     filter: brightness(0.9);
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
 `
 
-export function ModalAction({ text, action, outline = false, danger = false }) {
+export function ModalAction({ text, action, outline = false, danger = false, disabled }) {
   return (
     <Action
       type="button"
       onClick={action}
       outline={outline}
       danger={danger}
+      disabled={disabled}
     >
       {text}
     </Action>
@@ -62,4 +68,5 @@ ModalAction.propTypes = {
   action: PropTypes.func.isRequired,
   outline: PropTypes.bool,
   danger: PropTypes.bool,
+  disabled: PropTypes.bool,
 }

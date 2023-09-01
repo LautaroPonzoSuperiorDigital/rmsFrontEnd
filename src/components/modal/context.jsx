@@ -1,10 +1,24 @@
 /* eslint-disable react/prop-types */
-import { createContext, useContext, useEffect, useMemo } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 const ModalContext = createContext({})
 
 export function ModalProvider({ close, children }) {
-  const value = useMemo(() => ({ close }), [close])
+  const [footerIsShown, setFooterIsShown] = useState(true)
+
+  const showFooter = useCallback(() => setFooterIsShown(true), [])
+  
+  const hideFooter = useCallback(() => setFooterIsShown(false), [])
+
+  const value = useMemo(
+    () => ({
+      close,
+      footerIsShown,
+      showFooter,
+      hideFooter,
+    }),
+    [close, footerIsShown, showFooter, hideFooter]
+  )
 
   useEffect(() => {
     const keyDown = (event) => {

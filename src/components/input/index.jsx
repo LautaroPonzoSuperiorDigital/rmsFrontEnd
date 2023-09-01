@@ -11,6 +11,7 @@ const InputWithRef = (
     placeholder,
     className,
     name,
+    disabled,
     onChange,
     onClick,
     onBlur,
@@ -36,6 +37,7 @@ const InputWithRef = (
         placeholder={placeholder}
         className={className}
         name={name}
+        disabled={disabled}
         onFocus={() => setFocused(true)}
         onChange={onChange}
         onClick={onClick}
@@ -52,6 +54,7 @@ InputWithRef.propTypes = {
   placeholder: PropTypes.string,
   className: PropTypes.string,
   name: PropTypes.string,
+  disabled: PropTypes.bool,
   onChange: PropTypes.func,
   onClick: PropTypes.func,
   onBlur: PropTypes.func,
