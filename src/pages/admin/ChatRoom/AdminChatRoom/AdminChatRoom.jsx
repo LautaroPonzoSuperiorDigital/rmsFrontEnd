@@ -14,7 +14,7 @@ const ChatRoomsStyle = styled.div`
   display: flex;
   padding-left: 40px;
 
-  @media (max-width: 1274px) {
+  @media (max-width: 1374px) {
     padding-left: 20px;
   }
 `;
@@ -24,7 +24,11 @@ const ChayLayout = styled.div`
   align-items: center;
   width: 100%;
   justify-content: space-between;
-  padding-right: 57px;
+  padding-right: 10px;
+
+  @media (max-width: 1374px) {
+    padding-right: 20px;
+  }
 `;
 
 const AdminChatRoom = ({
