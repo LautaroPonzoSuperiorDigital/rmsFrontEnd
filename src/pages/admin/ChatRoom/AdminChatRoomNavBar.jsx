@@ -13,7 +13,7 @@ const NavContainerStyle = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  @media (max-width: 1274px) {
+  @media (max-width: 1374px) {
     padding-left: 20px;
   }
 `;
