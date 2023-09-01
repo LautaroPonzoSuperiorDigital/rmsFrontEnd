@@ -73,14 +73,14 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         {activeTickets.map((ticket) =>
           ticket.cause ? (
             <ActiveComplainTickets
-              key={ticket.id}
+              key={`${ticket.id} active complain `}
               ticket={ticket}
               setTickets={setTickets}
               tickets={tickets}
             />
           ) : (
             <ActiveRepairTickets
-              key={ticket.id}
+              key={`${ticket.id} active repair`}
               ticket={ticket}
               setTickets={setTickets}
               tickets={tickets}

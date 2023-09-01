@@ -2,6 +2,22 @@ import React, { useState } from "react";
 import CheckBoxLog from "../../../components/checkBox";
 import styled from "styled-components";
 
+const NavContainerStyle = styled.div`
+  border-bottom: 1px solid #00000026;
+  height: 100px;
+  padding-bottom: 33px;
+  padding-top: 33px;
+  /* padding-right: 57px; */
+  padding-left: 40px;
+  align-items: center;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  @media (max-width: 1274px) {
+    padding-left: 20px;
+  }
+`;
+
 const navContainer = {
   borderBottom: "1px solid #00000026",
   height: "100px",
@@ -61,7 +77,7 @@ const AdminChatRoomNavBar = ({ chatRooms, setTicketActiveRooms }) => {
   };
 
   return (
-    <div style={navContainer}>
+    <NavContainerStyle>
       <div>
         <p style={navTitle}>Chats</p>
       </div>
@@ -78,7 +94,7 @@ const AdminChatRoomNavBar = ({ chatRooms, setTicketActiveRooms }) => {
         </div>
         <InputStyle placeholder="ID" onChange={handleInputChange} />
       </div>
-    </div>
+    </NavContainerStyle>
   );
 };
 

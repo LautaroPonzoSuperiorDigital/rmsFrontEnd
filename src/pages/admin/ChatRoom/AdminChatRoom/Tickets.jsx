@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
+
 import ticket from "./../../../../assets/img/ticket.svg";
-const Tickets = ({ chatRooms, setTickets }) => {
+const Tickets = ({ chatRooms }) => {
   const ticketRepair = chatRooms?.Listing.RepairTicket;
   const ticketComplain = chatRooms?.Listing.TicketComplaint;
   const areTicketsOpenRepair = ticketRepair?.some(
@@ -19,11 +19,11 @@ const Tickets = ({ chatRooms, setTickets }) => {
           style={{ cursor: "pointer" }}
         >
           <p
-            className=" ml-6"
+            className=" ml-2"
             style={{
               color: "#197572",
               fontSize: "18px",
-              display: window.innerWidth < 1100 ? "none" : "block",
+              display: window.innerWidth < 1234 ? "none" : "block",
             }}
           >
             Repair ticket
@@ -43,7 +43,7 @@ const Tickets = ({ chatRooms, setTickets }) => {
             style={{
               color: "#197572",
               fontSize: "18px",
-              display: window.innerWidth < 1100 ? "none" : "block",
+              display: window.innerWidth < 1234 ? "none" : "block",
             }}
           >
             Complain ticket
