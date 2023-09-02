@@ -1,15 +1,17 @@
-import { useRef, useState } from 'react'
-import { Tabs } from 'react-tabs'
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import { useRef, useState } from "react";
+import { Tabs } from "react-tabs";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-import { formatPrice } from '../../services/price'
-import { useListingDetails } from '../../hooks/useListingDetails'
+import { formatPrice } from "../../services/price";
+import { useListingDetails } from "../../hooks/useListingDetails";
 
-import { ListingExpenseHistory } from '../listing-expense-history'
-import CheckBoxLog from "../checkBox"
-import { Edit, Export, Trash } from "../icons"
-import { ListingPaymentHistory } from '../listing-payment-history'
+import { ListingInspectionHistory } from "../listing-inspection-history";
+import { ListingExpenseHistory } from "../listing-expense-history";
+import { ListingPaymentHistory } from "../listing-payment-history";
+
+import CheckBoxLog from "../checkBox";
+import { Edit, Export, Trash } from "../icons";
 
 import {
   Album,
@@ -29,7 +31,9 @@ import {
   HistoryTabContent,
   ExpensesActionsBox,
   ExpenseAction,
-} from "./styles"
+  InspectionsActionsBox,
+  InspectionAction,
+} from "./styles";
 
 const ListingDetailsTabs = Object.freeze({
   TENANT_HISTORY: 0,
@@ -38,25 +42,27 @@ const ListingDetailsTabs = Object.freeze({
   PAYMENT_HISTORY: 3,
   EXPENSE_HISTORY: 4,
   APPLICANTS: 5,
-})
+});
 
 export function ListingDetails() {
-  const [activeTab, setActiveTab] = useState(ListingDetailsTabs.TENANT_HISTORY)
+  const [activeTab, setActiveTab] = useState(ListingDetailsTabs.TENANT_HISTORY);
 
-  const expensesRef = useRef(null)
+  const inspectionsRef = useRef(null);
+  const expensesRef = useRef(null);
 
-  const { listing, isLoadingPNL } = useListingDetails()
+  const { listing, isLoadingPNL } = useListingDetails();
 
-  const showExpensesActions = activeTab === ListingDetailsTabs.EXPENSE_HISTORY
+  const showInspectionActions =
+    activeTab === ListingDetailsTabs.INSPECTION_HISTORY;
+  const showExpensesActions = activeTab === ListingDetailsTabs.EXPENSE_HISTORY;
 
-  const openExpenseForm = () => expensesRef.current?.openForm()
+  const openInspectionForm = () => inspectionsRef.current?.openForm();
+  const openExpenseForm = () => expensesRef.current?.openForm();
 
   return (
     <ListingDetailsContainer>
       <DetailsBox>
-        <Album>
-          Album
-        </Album>
+        <Album>Album</Album>
 
         <MainDetails>
           <MainDetail>
@@ -109,9 +115,7 @@ export function ListingDetails() {
           <ExtraDetailsTop>
             <ExtraDetail>
               <span>PUBLIC</span>
-              <CheckBoxLog
-                checked={listing.isPublic}
-              />
+              <CheckBoxLog checked={listing.isPublic} />
             </ExtraDetail>
 
             <Action>
@@ -138,18 +142,18 @@ export function ListingDetails() {
           <ExtraDetail>
             <span>AMENITIES</span>
             <Amenities>
-            {listing.Amenities?.map(amenity => (
-              <li key={amenity.id}>{amenity.name}</li>
-            ))}
+              {listing.Amenities?.map((amenity) => (
+                <li key={amenity.id}>{amenity.name}</li>
+              ))}
             </Amenities>
           </ExtraDetail>
 
           <ExtraDetail>
             <span>REQUIREMENTS</span>
             <Requirements>
-            {listing.Requirements?.map(requirement => (
-              <li key={requirement.id}>{requirement.name}</li>
-            ))}
+              {listing.Requirements?.map((requirement) => (
+                <li key={requirement.id}>{requirement.name}</li>
+              ))}
             </Requirements>
           </ExtraDetail>
         </ExtraDetailsBox>
@@ -169,6 +173,14 @@ export function ListingDetails() {
           <HistoryTab>Expense History</HistoryTab>
           <HistoryTab>Applicants</HistoryTab>
 
+          {showInspectionActions && (
+            <InspectionsActionsBox>
+              <InspectionAction type="button" onClick={openInspectionForm}>
+                + Add Inspection
+              </InspectionAction>
+            </InspectionsActionsBox>
+          )}
+
           {showExpensesActions && (
             <ExpensesActionsBox>
               <ExpenseAction type="button" onClick={openExpenseForm}>
@@ -183,23 +195,28 @@ export function ListingDetails() {
           )}
         </HistoryTabs>
 
-        <HistoryTabContent>Tenant History Not Implemented Yet 😬</HistoryTabContent>
-        <HistoryTabContent>Inspection History Not Implemented Yet 😬</HistoryTabContent>
-        <HistoryTabContent>Document History Not Implemented Yet 😬</HistoryTabContent>
+        <HistoryTabContent>
+          Tenant History Not Implemented Yet 😬
+        </HistoryTabContent>
+
+        <HistoryTabContent>
+          <ListingInspectionHistory listingId={listing.id} />
+        </HistoryTabContent>
+
+        <HistoryTabContent>
+          Document History Not Implemented Yet 😬
+        </HistoryTabContent>
 
         <HistoryTabContent>
           <ListingPaymentHistory listingId={listing.id} />
         </HistoryTabContent>
 
         <HistoryTabContent>
-          <ListingExpenseHistory
-            ref={expensesRef}
-            listingId={listing.id}
-          />
+          <ListingExpenseHistory ref={expensesRef} listingId={listing.id} />
         </HistoryTabContent>
 
         <HistoryTabContent>Applicants Not Implemented Yet 😬</HistoryTabContent>
       </Tabs>
     </ListingDetailsContainer>
-  )
+  );
 }
