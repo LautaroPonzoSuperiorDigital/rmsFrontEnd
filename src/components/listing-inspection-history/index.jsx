@@ -3,39 +3,59 @@ import PropTypes from "prop-types";
 import { api } from "../../services/api";
 import { ListingInspectionHistoryCard } from "./styles";
 import InspectionFormModal from "../inspection-form";
-import { EditButton, DeleteButton } from "../../components/buttonListings";
 import Edit from "../../assets/img/Edit.svg";
 import EditHover from "../../assets/img/EditHover.svg";
 import Delete from "../../assets/img/delete.svg";
 import DeleteIconHover from "../../assets/img/deleteIconHover.svg";
+import {
+  DeleteInspectionButton,
+  EditInspectionButton,
+} from "../buttonInspections";
 
 const ListingInspectionHistoryWithRef = ({ listingId }) => {
   const [inspections, setInspections] = useState([]);
+  const [isInspectionModalOpen, setInspectionModalOpen] = useState(false);
 
-  async function handleMouseClick(inspection) {
-    return <InspectionFormModal key={inspection.id} id={inspection.id} />;
-  }
+  const handleUpdateInspection = (listingId, inspectionId) => {
+    console.log({ clicked: true });
+    openModal();
 
-  async function handleUpdateInspection(listingId, inspectionId) {
-    console.log({ listingId, inspectionId });
-    return inspectionId;
-  }
+    return (
+      <InspectionFormModal
+        key={`listing$${listingId}-inspection-${inspectionId}`}
+        isOpen={isInspectionModalOpen}
+        onClose={closeModal}
+        listingId={listingId}
+        inspectionId={inspectionId}
+      />
+    );
+  };
 
-  async function handleDeleteInspection(listingId, inspectionId) {
+  const handleDeleteInspection = async (listingId, inspectionId) => {
     if (!(listingId && inspectionId)) return;
 
     try {
-      await api.delete(`listing/${listingId}/inspection/${inspectionId}`)
+      await api.delete(`listing/${listingId}/inspection/${inspectionId}`);
 
-      onInspectionDeleted(inspectionId)
+      onInspectionDeleted(inspectionId);
     } catch (err) {
-      alert('Error deleting expense')
+      alert("Error deleting expense");
     }
-  }
+  };
 
   const onInspectionDeleted = useCallback((inspectionId) => {
-    setInspections(oldState => oldState.filter(inspection => inspection.id !== inspectionId))
-  }, [])
+    setInspections((oldState) =>
+      oldState.filter((inspection) => inspection.id !== inspectionId)
+    );
+  }, []);
+
+  const openModal = () => {
+    setInspectionModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setInspectionModalOpen(false);
+  };
 
   useEffect(() => {
     async function loadInspections() {
@@ -57,18 +77,18 @@ const ListingInspectionHistoryWithRef = ({ listingId }) => {
           <div
             className="inspection-card"
             key={inspection.id}
-            onClick={() => handleMouseClick(inspection)}
+            onClick={() => handleUpdateInspection(listingId, inspection.id)}
           >
             <div className="inspectionContent ms-3 mt-2 me-3">
               <div className="actionButtons">
-                <EditButton
+                <EditInspectionButton
                   defaultImage={<img src={Edit} alt="Edit" />}
                   hoverImage={<img src={EditHover} alt="EditHover" />}
                   onClick={() =>
                     handleUpdateInspection(listingId, inspection.id)
                   }
                 />
-                <DeleteButton
+                <DeleteInspectionButton
                   className="delete"
                   defaultImage={<img src={Delete} alt="Delete" />}
                   hoverImage={
