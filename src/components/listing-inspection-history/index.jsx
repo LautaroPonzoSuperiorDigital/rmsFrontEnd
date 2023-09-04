@@ -202,7 +202,8 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
                 {new Date(inspection.date).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "short",
-                  day: "2-digit",
+                  day: "numeric",
+                  timeZone: "UTC",
                 })}
               </span>
             </div>
