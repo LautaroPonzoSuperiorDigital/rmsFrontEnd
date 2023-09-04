@@ -25,8 +25,10 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
 
   useEffect(() => {
     const matchedChatRoom = chatRooms.find(
-      (chatRoom) => chatRoom.id === chatRoomId
+      (chatRoom) => chatRoom.listingId === chatRoomId
     );
+    console.log(matchedChatRoom);
+
     const fetchTickets = async () => {
       try {
         const tickets = await api.get(
