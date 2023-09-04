@@ -6,7 +6,7 @@ const titleActiveRepairStyle = {
   fontSize: "20px",
   fontWeight: 100,
   margin: "0px",
-  width: "416px",
+  width: "100%",
   backgroundColor: "white",
 };
 const titleRepairStyle = {
@@ -92,11 +92,11 @@ const CloseComplainTickets = ({ ticket }) => {
           data-bs-parent={`#accordion-${ticket.id}`}
         >
           <div className="accordion-body">
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center flex-wrap">
               <p style={titleRepairStyle}>NAME OF THE ISSUE</p>
               <p style={textIssueRepairStyle}>{ticket.cause}</p>
             </div>
-            <div>
+            <div className="d-flex justify-content-between align-items-center flex-wrap">
               <p style={titleRepairStyle}>ADDITIONAL NOTES</p>
               <p style={textRepairStyle}>{ticket.additionalNotes}</p>
             </div>

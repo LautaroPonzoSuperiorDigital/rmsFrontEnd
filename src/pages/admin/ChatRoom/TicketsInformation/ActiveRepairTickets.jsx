@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 
 import { useState } from "react";
+import { api } from "../../../../services/api";
 
 const titleActiveRepairStyle = {
   color: "#197572",
   fontSize: "20px",
-  fontWeight: 600,
   margin: "0px",
-  width: "416px",
+  width: "100%",
   backgroundColor: "#31AF9A0D",
 };
 const titleRepairStyle = {
@@ -25,14 +25,39 @@ const textRepairStyle = {
   color: "#131313",
   fontSize: "20px",
   margin: "0px",
-  lineHeight: "1px",
 };
 const bodyAccordionStyle = {
   backgroundColor: "#31AF9A0D",
 };
 
-const ActiveRepairTickets = ({ ticket }) => {
+const ActiveRepairTickets = ({ ticket, tickets, setTickets }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
+
+  const handleStatusChange = async (e) => {
+    //update-ticket-repair/:id'
+    const status = e.target.value;
+
+    try {
+      const response = await api.patch(
+        `tenants/update-ticket-repair/${ticket.id}`,
+        {
+          status: status,
+        }
+      );
+
+      const newTicket = response.data;
+      // I want newTicket replace the one in that matchs in tickets and then setTickets
+      const newTickets = tickets.map((ticket) => {
+        if (ticket.id === newTicket.id) {
+          return newTicket;
+        }
+        return ticket;
+      });
+      setTickets(newTickets);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -60,21 +85,32 @@ const ActiveRepairTickets = ({ ticket }) => {
           data-bs-parent={`#accordion-${ticket.id}`}
         >
           <div className="accordion-body" style={bodyAccordionStyle}>
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center flex-wrap">
               <p style={titleRepairStyle}>NAME OF THE ISSUE</p>
               <p style={textIssueRepairStyle}>{ticket.name}</p>
             </div>
-            <div>
+            <div className="d-flex mb-4  flex-column flex-wrap">
               <p style={titleRepairStyle}>DESCRIPTION</p>
               <p style={textRepairStyle}>{ticket.description}</p>
             </div>
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center flex-wrap">
               <p style={titleRepairStyle}>LOCATION</p>
               <p style={textRepairStyle}>{ticket.location}</p>
             </div>
             <div>
               <p style={titleRepairStyle}>ADDITIONAL NOTES</p>
               <p style={textRepairStyle}> {ticket.additionalNotes}</p>
+            </div>
+            <div>
+              <p style={titleRepairStyle}>STATUS</p>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                onChange={handleStatusChange}
+              >
+                <option value="OPEN">OPEN</option>
+                <option value="CLOSED">CLOSED</option>
+              </select>
             </div>
           </div>
         </div>

@@ -85,7 +85,7 @@ const NotificationsTitle = ({
             lastMeessageNotification ? newNotificationStyle : notificationStyle
           }
         >
-          {lastMessage?.message}
+          {lastMessage?.message.slice(0, 10)}
         </p>
       ) : (
         <p
@@ -93,7 +93,7 @@ const NotificationsTitle = ({
             lastMessageDbNotification ? newNotificationStyle : notificationStyle
           }
         >
-          {lastMessageDb}
+          {lastMessageDb?.slice(0, 10)}
         </p>
       )}
     </div>
