@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/publIcListings/publicListings.css";
 import camera from "../../assets/img/camera.svg";
-import publicListingsData from "./publicListingsData";
 import ApplicationModal from "./ApplicationModal";
-import picture1 from "../../assets/img/picture.jpg";
-import axios from "axios";
 import { api } from "../../services/api";
+import { createListingImage } from "../../services/listing";
 
-const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
+const ModalPublicListings = ({
+  selectedImage,
+  onCloseModal,
+  id,
+  myselectedListing,
+}) => {
+  console.log("aca", myselectedListing);
   const [showModal, setShowModal] = useState(false);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [Amenities, setAmenities] = useState([""]);
@@ -44,12 +48,17 @@ const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/listing');
+        const response = await api.get("/listing");
         const listingsWithId = response.data.map((listing) => ({
           ...listing,
-          key: `https://rms-staging.s3.us-west-1.amazonaws.com/${listing.key.replace(/\\/g, "%5C")}`,
+          key: `https://rms-staging.s3.us-west-1.amazonaws.com/${listing.key.replace(
+            /\\/g,
+            "%5C"
+          )}`,
         }));
-        const selectedListingData = listingsWithId.find((listing) => listing.id === id);
+        const selectedListingData = listingsWithId.find(
+          (listing) => listing.id === id
+        );
         setSelectedListing(selectedListingData);
         setAmenities(selectedListingData?.Amenities || []);
         setRequirements(selectedListingData?.Requirements || []);
@@ -57,7 +66,7 @@ const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
         console.error("Error fetching listings:", error);
       }
     };
-  
+
     fetchData();
   }, [id]);
 
@@ -85,10 +94,10 @@ const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
         >
           <img src={camera} alt="" /> <span className="camSpan">1/29</span>
         </button>
-        {selectedListing && (
+        {myselectedListing && (
           <img
             className="imgPublic1"
-            src={selectedListing.key}
+            src={createListingImage(myselectedListing)}
             onClick={onCloseModal}
           />
         )}
@@ -96,72 +105,50 @@ const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
       <div className="description1">
         <div className="publicPrice1 d-flex justify-content-start align-items-center">
           <p>
-            ${" "}
-            {selectedListing && selectedListing.price
-              ? parseFloat(selectedListing.price).toLocaleString("en", {
-                  useGrouping: true,
-                })
-              : ""}
+            {myselectedListing.price}${" "}
             <span className="xmonth"> per month</span>
           </p>
         </div>
         <div className="spectsModal d-flex justify-content-between">
           <div className="order">
             <p className="desc">City</p>
-            {selectedListing && (
-              <span className="desc2">
-                {selectedListing.location.split(", ").slice(-2).join(", ")}
-              </span>
-            )}
+            <span className="desc2">{myselectedListing.location}</span>
             <p className="desc">House Size</p>
-            {selectedListing && (
-              <span className="desc2">
-                {" "}
-                {selectedListing.houseSize
-                  ? selectedListing.houseSize.toLocaleString("EN", {
-                      maximumFractionDigits: 0,
-                    })
-                  : ""}
-                &nbsp;Sq. Ft. per county
-              </span>
-            )}
+
+            <span className="desc2">{myselectedListing.houseSize}</span>
+
             <p className="desc1">Amenities</p>
           </div>
           <div className="order2">
             <p className="desc id2">ID</p>
-            {selectedListing && (
-              <span className="desc2 or2">
-                {selectedListing.id.toString().padStart(6, "0")}
-              </span>
-            )}
+
+            <span className="desc2 or2">
+              {myselectedListing.id.toString().padStart(6, "0")}
+            </span>
+
             <p className="desc id2">LOT SIZE</p>
-            {selectedListing && (
-              <span className="desc2 or2">
-                {selectedListing.lotSize
-                  ? selectedListing.lotSize.toLocaleString("EN", {
-                      maximumFractionDigits: 0,
-                    })
-                  : ""}{" "}
-                &nbsp;Sq. Ft. per county
-              </span>
-            )}
+            <span className="desc2 or2">{myselectedListing.lotSize}</span>
           </div>
         </div>
         <div className="PublicList d-flex justify-content-center align-items-center">
           <div className="col-md-6 listing">
             <ul>
-              <li>{selectedListing && selectedListing.bedrooms} Bedrooms</li>
-              <li>{selectedListing && selectedListing.bathrooms} Bathrooms</li>
-              {Amenities &&
-                Amenities.slice(0, 3).map((amenity) => (
+              <li>
+                {myselectedListing && myselectedListing.bedrooms} Bedrooms
+              </li>
+              <li>
+                {myselectedListing && myselectedListing.bathrooms} Bathrooms
+              </li>
+              {myselectedListing.Amenities &&
+                myselectedListing.Amenities.slice(0, 3).map((amenity) => (
                   <li key={amenity.id}>{amenity.name}</li>
                 ))}
             </ul>
           </div>
           <div className="col-md-6 second">
             <ul>
-              {Amenities &&
-                Amenities.slice(3).map((amenity) => (
+              {myselectedListing.Amenities &&
+                myselectedListing.Amenities.slice(3).map((amenity) => (
                   <li key={amenity.id}>{amenity.name}</li>
                 ))}
             </ul>
@@ -170,8 +157,8 @@ const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
         <p className="desc3">REQUIREMENTS</p>
         <div className="requirementsUl">
           <ul>
-            {Requirements &&
-              Requirements.map((requirements) => (
+            {myselectedListing.Requirements &&
+              myselectedListing.Requirements.map((requirements) => (
                 <li key={requirements.id}>{requirements.name}</li>
               ))}
           </ul>
@@ -185,10 +172,7 @@ const ModalPublicListings = ({ selectedImage, onCloseModal, id }) => {
       {showApplicationModal && (
         <ApplicationModal
           onClose={handleModalClose}
-          selectedImage={selectedListing.key}
-          id={listingId}
-          selectedListing={selectedListing}
-          Amenities={Amenities}
+          myselectedListing={myselectedListing}
         />
       )}
     </div>

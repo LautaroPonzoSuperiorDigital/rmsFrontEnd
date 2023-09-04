@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 
 import CheckMarkListing from "../../../assets/img/checkMark.svg";
 import Edit from "../../../assets/img/Edit.svg";
@@ -14,10 +14,11 @@ import SearchListings from "../../../components/searchListings";
 import { EditButton, DeleteButton } from "../../../components/buttonListings";
 import Pagination from "../../../components/paginations";
 import AddListings from "../../../components/addListing";
-import EditModalListings from "../../../components/modals/modalListing";
 import { Modal } from "../../../components/modal";
 import { ListingDetails } from "../../../components/listing-details";
 import { ListingDetailsProvider } from "../../../context/listingDetailsContext";
+import { ListingForm } from "../../../components/listing-form";
+import { createListingImage } from "../../../services/listing";
 
 const PAGE_SIZE = 10;
 
@@ -25,12 +26,14 @@ export default function AdminListings() {
   const [listings, setListings] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false);
-  const [showCreateModal, setShowCreateModal] = useState(false);
   const [searchId, setSearchId] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [listingDetails, setListingDetails] = useState(null);
+  const [savingListingForm, setSavingListingForm] = useState(false)
 
   const listingDetailsModalRef = useRef(null);
+  const createListingModalRef = useRef(null);
+  const listingFormRef = useRef(null);
 
   const totalListings = listings.length;
   const totalPages = Math.ceil(totalListings / PAGE_SIZE);
@@ -46,6 +49,10 @@ export default function AdminListings() {
 
     return listings;
   }, [searchId, searchResults, listings, showOnlyPublicListings]);
+
+  const onListingSaved = useCallback((savedListing) => {
+    setListings(oldState => [...oldState, savedListing])
+  }, [])
 
   const handleSearch = (searchValue) => {
     setSearchId(searchValue);
@@ -67,11 +74,7 @@ export default function AdminListings() {
   };
 
   const handleAddListing = () => {
-    setShowCreateModal(true);
-  };
-
-  const handleModalClose = () => {
-    setShowCreateModal(false);
+    createListingModalRef.current.open()
   };
 
   const handlePageChange = (pageNumber) => {
@@ -113,22 +116,11 @@ export default function AdminListings() {
     async function loadListings() {
       try {
         const { data } = await api.get("/listing");
-        console.log("Data from API:", data);
 
-        setListings(
-          data.map((listing) => {
-            if (!listing.key) {
-              return listing;
-            }
-
-            const encodedKey = listing.key.replace(/\\/g, "%5C");
-
-            return {
-              ...listing,
-              key: `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`,
-            };
-          })
-        );
+        setListings(data.map((listing) => ({
+          ...listing,
+          image: createListingImage(listing)
+        })));
       } catch (err) {
         alert("Error loading listings: ", err);
       }
@@ -204,7 +196,7 @@ export default function AdminListings() {
                         <p className="alignText d-flex align-items-center h p1">
                           <img
                             className="testImg"
-                            src={listing.key}
+                            src={listing.image}
                             alt="Imagen de Amazon S3"
                           />
                           {listing.id.toString().padStart(6, "0")}
@@ -280,9 +272,34 @@ export default function AdminListings() {
           </div>
         </div>
       </div>
-      {showCreateModal && (
-        <EditModalListings onClose={handleModalClose}></EditModalListings>
-      )}
+
+      <Modal.Root ref={createListingModalRef}>
+        <Modal.Body width="90%">
+          <Modal.Header showCloseIcon />
+          <Modal.Content>
+            <ListingForm
+              ref={listingFormRef}
+              onListingSaved={onListingSaved}
+              onSavingStatusChange={setSavingListingForm}
+            />
+          </Modal.Content>
+
+          <Modal.Footer style={{ justifyContent: 'flex-end' }}>
+            <Modal.Action
+              disabled={savingListingForm}
+              outline
+              text="Cancel"
+              action={() => createListingModalRef.current.close()}
+            />
+            
+            <Modal.Action
+              disabled={savingListingForm}
+              text={savingListingForm ? "Saving..." : "Save"}
+              action={() => listingFormRef.current?.submit()}
+            />
+          </Modal.Footer>
+        </Modal.Body>
+      </Modal.Root>
 
       <Modal.Root ref={listingDetailsModalRef}>
         <Modal.Body width="90%">

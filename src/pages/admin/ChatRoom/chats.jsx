@@ -109,7 +109,7 @@ const Chats = () => {
             return (
               <AdminChatRoom
                 key={chatRoom.listingId}
-                chatRooms={chatRoom}
+                chatRoom={chatRoom}
                 filterMessages={filterMessages}
                 setTargetChatRoomId={setTargetChatRoomId}
                 socket={socket}

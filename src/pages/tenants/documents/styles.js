@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { styled } from "styled-components"
 
 export const DocumentsContainer = styled.div`
@@ -5,6 +6,7 @@ export const DocumentsContainer = styled.div`
 
   display: flex;
   flex-direction: column;
+  gap: 1.25rem;
 
   padding: 1rem;
 `
@@ -31,7 +33,7 @@ export const DocumentTitle = styled.span`
   color: #131313;
 `
 
-export const SignDocument = styled.span`
+export const SignDocument = styled(Link)`
   color: #197572;
   font-size: 1rem;
   font-weight: bold;
