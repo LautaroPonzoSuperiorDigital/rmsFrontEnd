@@ -1,5 +1,6 @@
 import PropTypes from "prop-types"
 import { styled } from "styled-components"
+import { useModal } from "./context"
 
 const Footer = styled.footer`
   margin-top: 1.5rem;
@@ -13,14 +14,21 @@ const Footer = styled.footer`
   border-top: 2px solid rgba(0, 0, 0, 0.1);
 `
 
-export function ModalFooter({ children }) {
+export function ModalFooter({ style, children }) {
+  const { footerIsShown } = useModal()
+  
+  if (!footerIsShown) {
+    return null
+  }
+  
   return (
-    <Footer>
+    <Footer style={style}>
       {children}
     </Footer>
   )
 }
 
 ModalFooter.propTypes = {
+  style: PropTypes.object,
   children: PropTypes.node.isRequired
 }

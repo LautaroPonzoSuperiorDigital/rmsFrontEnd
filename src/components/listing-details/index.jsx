@@ -12,7 +12,6 @@ import { Edit, Export, Trash } from "../icons"
 import { ListingPaymentHistory } from '../listing-payment-history'
 
 import {
-  Album,
   DetailsBox,
   ExtraDetailsBox,
   ListingDetailsContainer,
@@ -30,6 +29,7 @@ import {
   ExpensesActionsBox,
   ExpenseAction,
 } from "./styles"
+import { ListingAlbumPreview } from '../listing-album-preview'
 
 const ListingDetailsTabs = Object.freeze({
   TENANT_HISTORY: 0,
@@ -54,9 +54,10 @@ export function ListingDetails() {
   return (
     <ListingDetailsContainer>
       <DetailsBox>
-        <Album>
-          Album
-        </Album>
+        <ListingAlbumPreview
+          editable={false}
+          listingSections={listing.Sections}
+        />
 
         <MainDetails>
           <MainDetail>
