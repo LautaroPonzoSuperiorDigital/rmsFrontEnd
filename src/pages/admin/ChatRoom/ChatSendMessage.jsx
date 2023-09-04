@@ -23,7 +23,7 @@ const ChatSendMessage = ({ socket, chatRoomId }) => {
     };
 
     let response = await socket.emit("event_message", {
-      room: `${chatRoomId}`,
+      room: chatRoomId,
       message,
     });
     inputRef.current.value = "";

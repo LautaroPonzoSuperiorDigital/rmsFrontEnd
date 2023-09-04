@@ -27,7 +27,6 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
     const matchedChatRoom = chatRooms.find(
       (chatRoom) => chatRoom.listingId === chatRoomId
     );
-    console.log(matchedChatRoom);
 
     const fetchTickets = async () => {
       try {
