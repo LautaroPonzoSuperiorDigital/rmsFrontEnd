@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import { styled } from "styled-components"
+import { useModal } from "./context"
 
 const BodyContainer = styled.div`
   position: absolute;
@@ -18,8 +19,10 @@ const BodyContainer = styled.div`
 `
 
 export function ModalBody({ children, width }) {
+  const { height } = useModal()
+
   return (
-    <BodyContainer style={{ width }}>
+    <BodyContainer style={{ width, height }}>
       {children}
     </BodyContainer>
   )

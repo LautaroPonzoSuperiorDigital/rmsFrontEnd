@@ -14,7 +14,6 @@ import CheckBoxLog from "../checkBox";
 import { Edit, Export, Trash } from "../icons";
 
 import {
-  Album,
   DetailsBox,
   ExtraDetailsBox,
   ListingDetailsContainer,
@@ -31,9 +30,8 @@ import {
   HistoryTabContent,
   ExpensesActionsBox,
   ExpenseAction,
-  InspectionsActionsBox,
-  InspectionAction,
 } from "./styles";
+import { ListingAlbumPreview } from "../listing-album-preview";
 
 const ListingDetailsTabs = Object.freeze({
   TENANT_HISTORY: 0,
@@ -62,7 +60,10 @@ export function ListingDetails() {
   return (
     <ListingDetailsContainer>
       <DetailsBox>
-        <Album>Album</Album>
+        <ListingAlbumPreview
+          editable={false}
+          listingSections={listing.Sections}
+        />
 
         <MainDetails>
           <MainDetail>

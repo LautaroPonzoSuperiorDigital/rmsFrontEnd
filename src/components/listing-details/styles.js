@@ -14,10 +14,6 @@ export const DetailsBox = styled.div`
   padding: 1rem;
 `;
 
-export const Album = styled.div`
-  width: 20%;
-`;
-
 export const MainDetails = styled.div`
   display: flex;
   flex-direction: column;
