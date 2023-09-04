@@ -125,13 +125,8 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
       return;
     }
 
-    console.log({ editingInspection });
-
     try {
       if (editingInspection) {
-        console.log({
-          path: `/listing/${listingId}/inspection/${editingInspection.id}`,
-        });
         const { data: updatedInspection } = await api.patch(
           `/listing/${listingId}/inspection/${editingInspection.id}`,
           {
