@@ -4,9 +4,7 @@ import NotificationsTitle from "./NotificationsTitle";
 import TimeAndDate from "./TimeAndDate";
 import Tickets from "./Tickets";
 import styled from "styled-components";
-import { api } from "../../../../services/api";
-
-// const chatRoomsStyle = styled.div``;
+import { createListingImage } from "../../../../services/listing";
 
 const ChatRoomsStyle = styled.div`
   border-bottom: 1px solid #00000026;
@@ -33,7 +31,7 @@ const ChayLayout = styled.div`
 `;
 
 const AdminChatRoom = ({
-  chatRooms,
+  chatRoom,
   filterMessages,
   setTargetChatRoomId,
   socket,
@@ -42,31 +40,17 @@ const AdminChatRoom = ({
   setTickets,
 }) => {
   const [notification, setNotification] = useState(true);
-  const encodedKey = chatRooms.Listing.key.replace(/\\/g, "%5C");
-  const imageUrl = `https://rms-staging.s3.us-west-1.amazonaws.com/${encodedKey}`;
 
   useEffect(() => {
-    socket.emit("event_join", `${chatRooms.listingId}`);
+    socket.emit("event_join", `${chatRoom.listingId}`);
 
     socket.on("notification", (data) => {
       setNotification(data);
     });
-  }, [socket, chatRooms.listingId]);
-
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const { data } = await api.get(`/listing/${chatRooms.listingId}/album`);
-        console.log(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchImage();
-  }, []);
+  }, [socket, chatRoom.listingId]);
 
   return (
-    <ChatRoomsStyle onClick={() => setTargetChatRoomId(chatRooms.listingId)}>
+    <ChatRoomsStyle onClick={() => setTargetChatRoomId(chatRoom.listingId)}>
       <ChayLayout>
         <div className="d-flex align-items-center gap-3  ">
           <div>
@@ -79,7 +63,7 @@ const AdminChatRoom = ({
               }}
             >
               <img
-                src={imageUrl}
+                src={createListingImage(chatRoom.Listing)}
                 alt="listing"
                 style={{ width: "100%", height: "100%", borderRadius: "50%" }}
               />
@@ -93,24 +77,21 @@ const AdminChatRoom = ({
                 className="m-0"
                 style={{ fontSize: "18px", width: "100%", minWidth: "202px" }}
               >
-                Listing:{chatRooms.listingId} • {chatRooms.Tenant.User.name}
+                Listing:{chatRoom.listingId} • {chatRoom.Tenant.User.name}
               </p>
             </div>
 
             <NotificationsTitle
-              chatRooms={chatRooms}
+              chatRooms={chatRoom}
               setFilterMessages={setFilterMessages}
               filterMessages={filterMessages}
               messages={messages}
             />
-            <TimeAndDate
-              chatRooms={chatRooms}
-              filterMessages={filterMessages}
-            />
+            <TimeAndDate chatRooms={chatRoom} filterMessages={filterMessages} />
           </div>
         </div>
         <div style={{ height: "100%", display: "flex", alignItems: "center" }}>
-          <Tickets chatRooms={chatRooms} setTickets={setTickets} />
+          <Tickets chatRooms={chatRoom} setTickets={setTickets} />
         </div>
       </ChayLayout>
     </ChatRoomsStyle>
