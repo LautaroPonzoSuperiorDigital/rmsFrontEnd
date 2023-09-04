@@ -2,8 +2,18 @@ import { Tab, TabList, TabPanel } from "react-tabs"
 import { styled } from "styled-components"
 
 export const ListingAlbumContainer = styled.div`
+  height: 80vh;
+
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+
   display: flex;
   flex-direction: column;
+
+  padding: 2rem 0;
+
+  background: #fff;
 `
 
 export const GoBackButton = styled.button`

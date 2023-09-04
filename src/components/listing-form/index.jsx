@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react"
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react"
 
 import { api } from "../../services/api"
 import { createListingImage } from "../../services/listing"
@@ -8,23 +8,19 @@ import { useAuth } from "../../hooks/useAuth"
 import CheckBoxLog from "../checkBox"
 import { Input } from "../input"
 import { TextArea } from "../text-area"
-import { Album as AlbumIcon } from "../icons"
-import { ListingAlbum } from "../listing-album"
+import { useModal } from "../modal/context"
+import { ListingAlbumPreview } from "../listing-album-preview"
 
 import {
-  Album,
-  AlbumImage,
   CheckBoxContainer,
   ExtraDetail,
   ExtraDetails,
   ListingFormContainer,
   MainDetail,
   MainDetails,
-  ViewAlbumButton,
 } from "./styles"
-import { useModal } from "../modal/context"
 
-const DEFAULT_ALBUM_SECTIONS = [{ name: 'exterior', images: [] }]
+const DEFAULT_LISTING_SECTIONS = [{ name: 'exterior', Album: { Images: [] }}]
 
 const formFields = [
   { field: 'street', path: 'value' },
@@ -43,24 +39,13 @@ const formFields = [
 ]
 
 function ListingFormWithRef({ onSavingStatusChange, onListingSaved }, ref) {
-  const [showAlbum, setShowAlbum] = useState(false)
-  const [albumSections, setAlbumSections] = useState(DEFAULT_ALBUM_SECTIONS)
+  const [listingSections, setListingSections] = useState(DEFAULT_LISTING_SECTIONS)
   const [isSaving, setIsSaving] = useState(false)
 
   const formRef = useRef(null)
 
   const modal = useModal()
   const { user } = useAuth()
-
-  const albumImages = useMemo(() => {
-    const sectionsWithImages = albumSections.filter(section => section.images.length)
-
-    return sectionsWithImages.map(section => section.images).reduce((a, b) => [...a, ...b], [])
-  }, [albumSections])
-
-  const toggleAlbum = () => {
-    setShowAlbum(old => !old)
-  }
 
   const handleSubmit = async () => {
     if (!formRef.current || !user || isSaving) {
@@ -91,7 +76,7 @@ function ListingFormWithRef({ onSavingStatusChange, onListingSaved }, ref) {
 
       const Sections = []
 
-      for await (const section of albumSections) {
+      for await (const section of listingSections) {
         const { data: createdSection } = await api.post(`/listing/${listing.id}/section`, {
           name: section.name
         })
@@ -118,44 +103,49 @@ function ListingFormWithRef({ onSavingStatusChange, onListingSaved }, ref) {
   }
   
   const handleAddSection = () => {
-    setAlbumSections(old => [...old, { name: 'new section', images: [] }])
+    const newSection = {
+      name: 'new section',
+      Album: { Images: [] }
+    }
+    
+    setListingSections(old => [...old, newSection])
   }
 
   const onSectionNameChange = useCallback((albumSectionIndex, newName) => {
-    const _albumSections = [...albumSections]
+    const _listingSections = [...listingSections]
 
-    if (!_albumSections[albumSectionIndex]) {
+    if (!_listingSections[albumSectionIndex]) {
       return
     }
 
-    _albumSections[albumSectionIndex].name = newName
+    _listingSections[albumSectionIndex].name = newName
 
-    setAlbumSections(_albumSections)
-  }, [albumSections])
+    setListingSections(_listingSections)
+  }, [listingSections])
 
   const onImagesUploaded = useCallback((albumSectionIndex, newImages) => {
-    const _albumSections = [...albumSections]
+    const _listingSections = [...listingSections]
 
-    if (!_albumSections[albumSectionIndex]) {
+    if (!_listingSections[albumSectionIndex]) {
       return
     }
 
-    _albumSections[albumSectionIndex].images.push(...newImages)
+    _listingSections[albumSectionIndex].Album.Images.push(...newImages)
 
-    setAlbumSections(_albumSections)
-  }, [albumSections])
+    setListingSections(_listingSections)
+  }, [listingSections])
 
   const onImageRemoved = useCallback((albumSectionIndex, removedImageIndex) => {
-    const _albumSections = [...albumSections]
+    const _listingSections = [...listingSections]
 
-    if (!_albumSections[albumSectionIndex]) {
+    if (!_listingSections[albumSectionIndex]) {
       return
     }
 
-    _albumSections[albumSectionIndex].images.splice(removedImageIndex, 1)
+    _listingSections[albumSectionIndex].Album.Images.splice(removedImageIndex, 1)
 
-    setAlbumSections(_albumSections)
-  }, [albumSections])
+    setListingSections(_listingSections)
+  }, [listingSections])
 
   useImperativeHandle(ref, () => ({
     submit: handleSubmit
@@ -165,40 +155,27 @@ function ListingFormWithRef({ onSavingStatusChange, onListingSaved }, ref) {
     onSavingStatusChange(isSaving)
   }, [onSavingStatusChange, isSaving])
 
-  if (showAlbum) {
-    return (
-      <ListingAlbum
-        handleGoBack={toggleAlbum}
-        albumSections={albumSections}
+  return (
+    <ListingFormContainer ref={formRef}>
+      {/*
+        Create Listing Album Context
+        Values: {
+          handleAddSection
+          onSectionNameChange
+          onImagesUploaded
+          onImageRemoved
+        }
+
+        Also add: editable
+      */}
+      <ListingAlbumPreview
+        editable={true}
+        listingSections={listingSections}
         handleAddSection={handleAddSection}
         onSectionNameChange={onSectionNameChange}
         onImagesUploaded={onImagesUploaded}
         onImageRemoved={onImageRemoved}
       />
-    )
-  }
-
-  return (
-    <ListingFormContainer ref={formRef}>
-      <Album>
-        {albumImages.length ? (
-          <AlbumImage
-            src={albumImages[0].url}
-            alt="Album Image"
-          />
-        ) : (
-          <AlbumIcon />
-        )}
-
-        <ViewAlbumButton
-          type="button"
-          onClick={toggleAlbum}
-          hasImage={albumImages.length}
-          disabled={isSaving}
-        >
-          {albumImages.length ? `Edit Album (${albumImages.length})` : '+ Add Photos'}
-        </ViewAlbumButton>
-      </Album>
 
       <MainDetails>
         <Input name="street" label="STREET" disabled={isSaving} />

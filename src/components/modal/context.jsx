@@ -5,6 +5,7 @@ const ModalContext = createContext({})
 
 export function ModalProvider({ close, children }) {
   const [footerIsShown, setFooterIsShown] = useState(true)
+  const [height, setHeight] = useState(null)
 
   const showFooter = useCallback(() => setFooterIsShown(true), [])
   
@@ -14,10 +15,12 @@ export function ModalProvider({ close, children }) {
     () => ({
       close,
       footerIsShown,
+      height,
       showFooter,
       hideFooter,
+      setHeight,
     }),
-    [close, footerIsShown, showFooter, hideFooter]
+    [close, footerIsShown, height, showFooter, hideFooter, setHeight]
   )
 
   useEffect(() => {

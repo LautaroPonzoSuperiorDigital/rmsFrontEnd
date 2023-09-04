@@ -30,7 +30,8 @@ import {
 
 export function ListingAlbum({
   handleGoBack,
-  albumSections,
+  editable,
+  listingSections,
   handleAddSection,
   onSectionNameChange,
   onImagesUploaded,
@@ -39,15 +40,21 @@ export function ListingAlbum({
   const [activeSectionIndex, setActiveSectionIndex] = useState(0)
   const [edit, setEdit] = useState(false)
 
-  const { showFooter, hideFooter } = useModal()
+  const { showFooter, hideFooter, setHeight } = useModal()
 
   const uploadPhotosRef = useRef(null)
   const editInputRef = useRef(null)
 
-  const toggleEdit = () => setEdit(old => !old)
+  const toggleEdit = () => {
+    if(!editable) {
+      return
+    }
+
+    setEdit(old => !old)
+  }
 
   const handleSaveName = () => {
-    if (!editInputRef.current || !onSectionNameChange) {
+    if (!editable || !editInputRef.current || !onSectionNameChange) {
       return
     }
 
@@ -56,11 +63,15 @@ export function ListingAlbum({
   }
 
   const handleOpenUpload = () => {
+    if (!editable) {
+      return
+    }
+
     uploadPhotosRef.current.click()
   }
 
   const onUploaded = useCallback((event) => {
-    if (!onImagesUploaded) {
+    if (!editable && !onImagesUploaded) {
       return
     }
 
@@ -81,21 +92,27 @@ export function ListingAlbum({
     })
 
     onImagesUploaded(activeSectionIndex, images)
-  }, [activeSectionIndex, onImagesUploaded])
+  }, [editable, activeSectionIndex, onImagesUploaded])
 
   const handleRemoveImage = useCallback((imageIndex) => {
-    if (!onImageRemoved) {
+    if (!editable || !onImageRemoved) {
       return
     }
 
     onImageRemoved(activeSectionIndex, imageIndex)
-  }, [activeSectionIndex, onImageRemoved])
+  }, [editable, activeSectionIndex, onImageRemoved])
 
   useEffect(() => {
     hideFooter()
 
     return showFooter
   }, [hideFooter, showFooter])
+
+  useEffect(() => {
+    setHeight('90vh')
+
+    return () => setHeight(undefined)
+  }, [setHeight])
 
   return (
     <ListingAlbumContainer>
@@ -118,7 +135,7 @@ export function ListingAlbum({
         onSelect={setActiveSectionIndex}
       >
         <SectionTabs>
-          {albumSections.map((albumSection, index) => (
+          {listingSections.map((albumSection, index) => (
             <SectionTab key={index}>
               {index === activeSectionIndex && edit ? (
                 <EditSectionInput
@@ -130,7 +147,7 @@ export function ListingAlbum({
                 <span>{albumSection.name}</span>
               )}
 
-              {index === activeSectionIndex && (
+              {editable && index === activeSectionIndex && (
                 <EditSectionActions>
                   {edit ? (
                     <>
@@ -150,31 +167,45 @@ export function ListingAlbum({
               )}
             </SectionTab>
           ))}
+          
+          {editable && (
+            <SectionsActions>
+              <NewSectionButton type="button" onClick={handleAddSection}>
+                + New Section
+              </NewSectionButton>
 
-          <SectionsActions>
-            <NewSectionButton type="button" onClick={handleAddSection}>
-              + New Section
-            </NewSectionButton>
-
-            <AddPhotosButton type="button" onClick={handleOpenUpload}>
-              + Add Photos
-            </AddPhotosButton>
-          </SectionsActions>
+              <AddPhotosButton type="button" onClick={handleOpenUpload}>
+                + Add Photos
+              </AddPhotosButton>
+            </SectionsActions>
+          )}
         </SectionTabs>
 
-        {albumSections.map((section, index) => (
+        {listingSections.map((section, index) => (
           <SectionTabContent key={index}>
-            {section?.images.length ? (
+            {section?.Album.Images.length ? (
               <SectionTabImageGrid>
-                {section.images.map((image, index) => (
-                  <SectionImageContainer key={index}>
-                    <SectionImage src={image.url} />
+                {section.Album.Images.map((image, index) => {
+                  let url
 
-                    <RemoveImageButton type="button" onClick={() => handleRemoveImage(index)}>
-                      <Trash />
-                    </RemoveImageButton>
-                  </SectionImageContainer>
-                ))}
+                  if (image.key) {
+                    url = `https://rms-staging.s3.us-west-1.amazonaws.com/${image.key}`.replace(/\\/g, "%5C")
+                  } else {
+                    url = image.url
+                  }
+
+                  return (
+                    <SectionImageContainer key={index}>
+                      <SectionImage src={url} />
+
+                      {editable && (
+                        <RemoveImageButton type="button" onClick={() => handleRemoveImage(index)}>
+                          <Trash />
+                        </RemoveImageButton>
+                      )}
+                    </SectionImageContainer>
+                  )
+                })}
               </SectionTabImageGrid>
             ) : (
               <NoPhotosAdded>No Photos Added</NoPhotosAdded>
@@ -182,20 +213,23 @@ export function ListingAlbum({
           </SectionTabContent>
         ))}
       </Tabs>
-
-      <UploadPhotosInput
-        ref={uploadPhotosRef}
-        type="file"
-        multiple
-        onChange={onUploaded}
-      />
+      
+      {editable && (
+        <UploadPhotosInput
+          ref={uploadPhotosRef}
+          type="file"
+          multiple
+          onChange={onUploaded}
+        />
+      )}
     </ListingAlbumContainer>
   )
 }
 
 ListingAlbum.propTypes = {
   handleGoBack: PropTypes.func.isRequired,
-  albumSections: PropTypes.array.isRequired,
+  editable: PropTypes.bool.isRequired,
+  listingSections: PropTypes.array.isRequired,
   handleAddSection: PropTypes.func,
   onSectionNameChange: PropTypes.func,
   onImagesUploaded: PropTypes.func,
