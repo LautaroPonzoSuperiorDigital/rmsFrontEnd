@@ -2,8 +2,8 @@
 
 import ticket from "./../../../../assets/img/ticket.svg";
 const Tickets = ({ chatRooms }) => {
-  const ticketRepair = chatRooms?.Listing.RepairTicket;
-  const ticketComplain = chatRooms?.Listing.TicketComplaint;
+  const ticketRepair = chatRooms?.Listing.RepairTickets;
+  const ticketComplain = chatRooms?.Listing.ComplaintTickets;
   const areTicketsOpenRepair = ticketRepair?.some(
     (ticket) => ticket.status === "OPEN"
   );

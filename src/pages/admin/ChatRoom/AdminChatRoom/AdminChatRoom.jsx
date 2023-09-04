@@ -4,6 +4,7 @@ import NotificationsTitle from "./NotificationsTitle";
 import TimeAndDate from "./TimeAndDate";
 import Tickets from "./Tickets";
 import styled from "styled-components";
+import { api } from "../../../../services/api";
 
 // const chatRoomsStyle = styled.div``;
 
@@ -51,6 +52,18 @@ const AdminChatRoom = ({
       setNotification(data);
     });
   }, [socket, chatRooms.listingId]);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const { data } = await api.get(`/listing/${chatRooms.listingId}/album`);
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchImage();
+  }, []);
 
   return (
     <ChatRoomsStyle onClick={() => setTargetChatRoomId(chatRooms.listingId)}>
