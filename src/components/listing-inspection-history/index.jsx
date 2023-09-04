@@ -28,6 +28,7 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
   const [editingInspection, setEditingInspection] = useState(null);
   const [inspectionToDelete, setInspectionToDelete] = useState(null);
 
+  const inspectionsRef = useRef(null);
   const deleteInspectionModalRef = useRef(null);
   const inspectionFormModalRef = useRef(null);
   const inspectionFormRef = useRef(null);
@@ -36,6 +37,8 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
     openForm: handleOpenInspectionFormModal,
   }));
 
+  const openInspectionForm = () => inspectionsRef.current?.openForm();
+
   const handleOpenInspectionFormModal = () => {
     inspectionFormModalRef.current?.open();
   };
@@ -43,6 +46,11 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
   const handleCloseRemoveInspectionModal = () => {
     deleteInspectionModalRef.current.close();
     setInspectionToDelete(null);
+  };
+
+  const handleEditInspection = async (inspection) => {
+    handleOpenInspectionFormModal();
+    setEditingInspection(inspection);
   };
 
   const handleDeleteInspection = async () => {
@@ -181,9 +189,7 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
                   key={`edit-listing${listingId}-inspection${inspection.id}`}
                   defaultImage={<img src={Edit} alt="Edit" />}
                   hoverImage={<img src={EditHover} alt="EditHover" />}
-                  // onClick={() =>
-                  //   handleUpdateInspection(listingId, inspection.id)
-                  // }
+                  onClick={() => handleEditInspection(inspection)}
                 />
                 <DeleteInspectionButton
                   key={`delete-listing${listingId}-inspection${inspection.id}`}
