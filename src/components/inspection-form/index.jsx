@@ -8,6 +8,7 @@ import { DateTime } from "luxon";
 function InspectionFormWithRef({ inspection }, ref) {
   const nameRef = useRef(null);
   const dateRef = useRef(null);
+  const typeRef = useRef(null);
 
   const defaultDateValue =
     inspection &&
@@ -31,17 +32,20 @@ function InspectionFormWithRef({ inspection }, ref) {
   const getData = () => {
     const name = nameRef.current?.value;
     const date = dateRef.current?.value;
+    const type = typeRef.current?.value;
 
-    return { name, date };
+    return { name, date, type };
   };
 
   useEffect(() => {
     const name = nameRef.current;
     const date = dateRef.current;
+    const type = typeRef.current;
 
     return () => {
       name.value = "";
       date.value = "";
+      type.value = "";
     };
   }, []);
 
@@ -67,6 +71,13 @@ function InspectionFormWithRef({ inspection }, ref) {
           label="DATE"
           onChange={handleDateChange}
           defaultValue={defaultDateValue}
+        />
+
+        <Input
+          ref={typeRef}
+          type="text"
+          label="TYPE"
+          defaultValue={inspection?.type}
         />
       </Form>
     </AddInspectionContainer>

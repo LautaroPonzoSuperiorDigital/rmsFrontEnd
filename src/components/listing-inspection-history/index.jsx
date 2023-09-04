@@ -45,11 +45,26 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
     setInspectionToDelete(null);
   };
 
-  const handleDeleteInspection = async () => {
-    try {
-      await api.delete(`listing/${listingId}/inspection/${inspectionToDelete}`);
+  const handleEditInspection = async (inspection) => {
+    handleOpenInspectionFormModal();
+    setEditingInspection(inspection);
+  };
 
-      onInspectionDeleted(inspectionToDelete);
+  const handleOpenRemoveInspectionModal = async (inspection) => {
+    deleteInspectionModalRef.current?.open();
+    setInspectionToDelete(inspection);
+  };
+
+  const handleDeleteInspection = async () => {
+    if (!inspectionToDelete) return;
+
+    try {
+      await api.delete(
+        `listing/${listingId}/inspection/${inspectionToDelete.id}`
+      );
+
+      onInspectionDeleted(inspectionToDelete.id);
+      handleCloseRemoveInspectionModal();
     } catch (err) {
       alert("Error deleting inspection");
     }
@@ -113,11 +128,11 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
     try {
       if (editingInspection) {
         const { data: updatedInspection } = await api.patch(
-          `/listing/${listingId}/inspection/1${editingInspection.id}`,
+          `/listing/${listingId}/inspection/${editingInspection.id}`,
           {
             name: inspectionData.name,
             date: inspectionData.date,
-            type: "Regular",
+            type: inspectionData.type,
           }
         );
 
@@ -171,99 +186,93 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
   }, [listingId]);
 
   return (
-    <ListingInspectionHistoryCard>
-      <div className="inspection-card-container">
-        {inspections.map((inspection) => (
-          <div className="inspection-card" key={inspection.id}>
-            <div className="inspectionContent ms-3 mt-2 me-3">
-              <div className="actionButtons">
-                <EditInspectionButton
-                  key={`edit-listing${listingId}-inspection${inspection.id}`}
-                  defaultImage={<img src={Edit} alt="Edit" />}
-                  hoverImage={<img src={EditHover} alt="EditHover" />}
-                  // onClick={() =>
-                  //   handleUpdateInspection(listingId, inspection.id)
-                  // }
-                />
-                <DeleteInspectionButton
-                  key={`delete-listing${listingId}-inspection${inspection.id}`}
-                  className="delete"
-                  defaultImage={<img src={Delete} alt="Delete" />}
-                  hoverImage={
-                    <img src={DeleteIconHover} alt="DeleteIconHover" />
-                  }
-                  onClick={() =>
-                    handleDeleteInspection(listingId, inspection.id)
-                  }
-                />
+    <>
+      {!editingInspection && (
+        <ListingInspectionHistoryCard>
+          <div className="inspection-card-container">
+            {inspections.map((inspection) => (
+              <div className="inspection-card" key={inspection.id}>
+                <div className="inspectionContent ms-3 mt-2 me-3">
+                  <div className="actionButtons">
+                    <EditInspectionButton
+                      key={`edit-listing${listingId}-inspection${inspection.id}`}
+                      defaultImage={<img src={Edit} alt="Edit" />}
+                      hoverImage={<img src={EditHover} alt="EditHover" />}
+                      onClick={() => handleEditInspection(inspection)}
+                    />
+                    <DeleteInspectionButton
+                      key={`delete-listing${listingId}-inspection${inspection.id}`}
+                      className="delete"
+                      defaultImage={<img src={Delete} alt="Delete" />}
+                      hoverImage={
+                        <img src={DeleteIconHover} alt="DeleteIconHover" />
+                      }
+                      onClick={() =>
+                        handleOpenRemoveInspectionModal(inspection)
+                      }
+                    />
+                  </div>
+                  <p>{inspection.name}</p>
+                  <span>
+                    {new Date(inspection.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      timeZone: "UTC",
+                    })}
+                  </span>
+                </div>
               </div>
-              <p>{inspection.name}</p>
-              <span>
-                {new Date(inspection.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                  timeZone: "UTC",
-                })}
-              </span>
-            </div>
+            ))}
           </div>
-        ))}
-        <Modal.Root
-          ref={inspectionFormModalRef}
-          onModalClosed={() => setEditingInspection(null)}
-        >
-          <Modal.Body width="100%">
-            <Modal.Header showCloseIcon />
-            <Modal.Content>
-              <InspectionForm
-                ref={inspectionFormRef}
-                inspection={editingInspection}
-              />
-            </Modal.Content>
-            <Modal.Footer>
-              <Modal.Action
-                outline
-                text="Cancel"
-                action={handleCancelAddInspection}
-              />
-              <Modal.Action text="Save" action={handleSaveInspection} />
-            </Modal.Footer>
-          </Modal.Body>
-        </Modal.Root>
-        <Modal.Root
-          ref={deleteInspectionModalRef}
-          onModalClosed={() => setInspectionToDelete(null)}
-        >
-          <Modal.Body>
-            <Modal.Header showCloseIcon />
-            <Modal.Content>
-              <DeleteInspection inspection={inspectionToDelete} />
-            </Modal.Content>
-            <Modal.Footer>
-              <Modal.Action
-                text="Cancel"
-                action={handleCloseRemoveInspectionModal}
-                outline
-              />
-              <Modal.Action
-                text="Delete"
-                action={handleDeleteInspection}
-                danger
-              />
-            </Modal.Footer>
-          </Modal.Body>
-        </Modal.Root>
-
-        {/* <InspectionFormModal
-          key={`listing$${listingId}-inspection-${selectedInspection}`}
-          isOpen={isOpenModal}
-          onClose={closeModal}
-          listingId={listingId}
-          inspectionId={selectedInspection}
-        /> */}
-      </div>
-    </ListingInspectionHistoryCard>
+        </ListingInspectionHistoryCard>
+      )}
+      <Modal.Root
+        ref={inspectionFormModalRef}
+        onModalClosed={() => setEditingInspection(null)}
+      >
+        <Modal.Body width="50%">
+          <Modal.Header showCloseIcon />
+          <Modal.Content>
+            <InspectionForm
+              ref={inspectionFormRef}
+              inspection={editingInspection}
+            />
+          </Modal.Content>
+          <Modal.Footer>
+            <Modal.Action
+              outline
+              text="Cancel"
+              action={handleCancelAddInspection}
+            />
+            <Modal.Action text="Save" action={handleSaveInspection} />
+          </Modal.Footer>
+        </Modal.Body>
+      </Modal.Root>
+      <Modal.Root
+        ref={deleteInspectionModalRef}
+        onModalClosed={() => setInspectionToDelete(null)}
+      >
+        <Modal.Body>
+          <Modal.Header showCloseIcon />
+          <Modal.Content>
+            <DeleteInspection inspection={inspectionToDelete} />
+          </Modal.Content>
+          <Modal.Footer>
+            <Modal.Action
+              text="Cancel"
+              action={handleCloseRemoveInspectionModal}
+              outline
+            />
+            <Modal.Action
+              text="Delete"
+              action={handleDeleteInspection}
+              danger
+            />
+          </Modal.Footer>
+        </Modal.Body>
+      </Modal.Root>
+    </>
   );
 };
 
