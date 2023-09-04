@@ -82,7 +82,7 @@ function ListingFormWithRef({ onSavingStatusChange, onListingSaved }, ref) {
         })
 
         const { data: Album } = await api.post(`/listing/${listing.id}/album/section/${createdSection.id}/image`, {
-          images: section.images.map(({ base64 }) => ({ base64 }))
+          images: section.Album.Images.map(({ base64 }) => ({ base64 }))
         })
 
         Sections.push({ ...createdSection, Album })
