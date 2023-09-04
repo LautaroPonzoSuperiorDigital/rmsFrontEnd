@@ -45,20 +45,14 @@ const AdminChatRoomNavBar = ({ chatRooms, setTicketActiveRooms }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [input, setInput] = useState("");
 
-  const filteredData = chatRooms.filter(
-    (item) =>
-      item.Listing.RepairTicket.length > 0 ||
-      item.Listing.TicketComplaint.length > 0
-  );
-
   const handleCheckBoxChange = (newCheckedValue) => {
     setIsChecked(newCheckedValue);
     if (newCheckedValue === true) {
       setTicketActiveRooms(
         chatRooms.filter(
           (item) =>
-            item.Listing.RepairTicket.length > 0 ||
-            item.Listing.TicketComplaint.length > 0
+            item.Listing.RepairTickets.length > 0 ||
+            item.Listing.ComplaintTickets.length > 0
         )
       );
     } else {

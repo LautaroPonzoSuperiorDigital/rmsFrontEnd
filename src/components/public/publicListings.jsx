@@ -6,22 +6,16 @@ import bath from "../../assets/img/bath.svg";
 import bed from "../../assets/img/bed.svg";
 import SearchIconHover from "../../assets/img/SearchIconHover.svg";
 import SearchIcon from "../../assets/img/SearchIcon.svg";
-import picture1 from "../../assets/img/picture.jpg";
-import picture2 from "../../assets/img/picture2.jpg";
-import picture3 from "../../assets/img/picture3.jpg";
-import picture4 from "../../assets/img/picture4.jpg";
-import picture5 from "../../assets/img/picture5.jpg";
-import picture6 from "../../assets/img/picture6.jpg";
 import ModalPublicListings from "./modalPublicListings";
-import axios from "axios";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
+import { createListingImage } from "../../services/listing";
 
 const PublicListings = () => {
   const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);
   const [isInputHovered, setIsInputHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedListing, setSelectedListing] = useState(null);
   const [listing, setListing] = useState([]);
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -37,14 +31,7 @@ const PublicListings = () => {
   const handleImageClick = (id) => {
     setIsModalOpen(true);
     const selectedListing = listing.find((item) => item.id === id);
-    console.log("Selected Listing ID:", id);
-    if (selectedListing) {
-      const selectedImageObj = {
-        id: selectedListing.id,
-        image: selectedListing.image,
-      };
-      setSelectedImage(selectedImageObj);
-    }
+    setSelectedListing(selectedListing);
   };
 
   const handleSearchIconHover = () => {
@@ -64,7 +51,6 @@ const PublicListings = () => {
   };
 
   const handleCloseModal = () => {
-    setSelectedImage(null);
     setIsModalOpen(false);
   };
 
@@ -73,6 +59,7 @@ const PublicListings = () => {
       try {
         const { data } = await api.get("/listing");
         setListing(data);
+        console.log(data);
       } catch (error) {
         console.error("Error fetching listings:", error);
       }
@@ -152,7 +139,7 @@ const PublicListings = () => {
               >
                 <img
                   className="imgPublic"
-                  src={listing.key}
+                  src={createListingImage(listing)}
                   onClick={() => handleImageClick(listing.id)}
                 />
                 <div className="description d-flex col">
@@ -226,9 +213,9 @@ const PublicListings = () => {
       </div>
       {isModalOpen && (
         <ModalPublicListings
-          selectedImage={picture1}
+          myselectedListing={selectedListing}
           handleCloseModal={handleCloseModal}
-          id={selectedImage?.id}
+          id={selectedListing.id}
           Amenities={listing.Amenities}
         />
       )}
