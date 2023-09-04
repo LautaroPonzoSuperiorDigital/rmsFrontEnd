@@ -29,7 +29,6 @@ const TicketsNavBar = ({ targetChatRoomId, chatRooms }) => {
   const selectedListing = chatRooms.find(
     (chatRoom) => chatRoom.listingId === targetChatRoomId
   );
-  console.log(selectedListing.Listing);
 
   return (
     <div style={ticketContainerStyle}>
