@@ -30,6 +30,8 @@ import {
   HistoryTabContent,
   ExpensesActionsBox,
   ExpenseAction,
+  InspectionsActionsBox,
+  InspectionAction,
 } from "./styles";
 import { ListingAlbumPreview } from "../listing-album-preview";
 
@@ -201,7 +203,11 @@ export function ListingDetails() {
         </HistoryTabContent>
 
         <HistoryTabContent>
-          <ListingInspectionHistory listingId={listing.id} />
+          <ListingInspectionHistory
+            key={`listing-${listing.id}-inspections`}
+            ref={inspectionsRef}
+            listingId={listing.id}
+          />
         </HistoryTabContent>
 
         <HistoryTabContent>
