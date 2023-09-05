@@ -13,6 +13,7 @@ import { isAxiosError } from "axios";
 import { useListingDetails } from "../hooks/useListingDetails";
 import { InspectionForm } from "../components/inspection-form";
 import { DeleteInspection } from "../components/delete-inspection";
+import { SectionList } from "../components/inspection-form/styles";
 
 export const ListingInspectionsContext = createContext(undefined);
 
@@ -244,15 +245,13 @@ export function ListingInspectionsProvider({ children }) {
                     className="row row-cols-4 pr6-l"
                     style={{ display: "flex" }}
                   >
-                    {/* Map through sections */}
                     {sections.map((section) => (
-                      <div
+                      <SectionList
                         className="section col-md-3"
                         key={section.id}
-                        style={{ flex: "1" }} // Equal flex to distribute space equally
                       >
                         <p>{section.name}</p>
-                      </div>
+                      </SectionList>
                     ))}
                   </div>
                 </div>
