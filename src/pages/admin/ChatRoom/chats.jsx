@@ -11,7 +11,7 @@ import TicketsNavBar from "./TicketsNavBar";
 
 const chatRoomStyle = {
   width: "33%",
-  // maxWidth: "550px",
+
   overflowY: "auto",
   maxHeight: "100vh",
 };
@@ -20,18 +20,16 @@ const chatContaienrStyle = {
   borderRight: "1px solid #00000026",
   height: "100%",
 
-  // maxWidth: "550px",
   overflowY: "auto",
   width: "33%",
 };
 
 const AdminChatRoomMessagesStyle = {
-  flexGrow: "1",
-  maxHeight: "440px",
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-end",
   padding: "10px 0px",
+  maxHeight: "64vh",
 };
 
 const TicketsInfomartionStyle = {
@@ -96,7 +94,7 @@ const Chats = () => {
   }, [targetChatRoomId, key]);
 
   return (
-    <div className="vh-100 d-flex flex-column w-100  ">
+    <div className="vh-100 d-flex flex-column w-100 ">
       <Nav />
       <div className=" flex-grow-1 d-flex p-2  justify-content-center">
         <div style={chatRoomStyle} className="flex-grow-1">
@@ -129,7 +127,15 @@ const Chats = () => {
               />
             )}
             <div style={AdminChatRoomMessagesStyle}>
-              <ul ref={chatContainerRef} style={{ overflow: "auto" }}>
+              <ul
+                ref={chatContainerRef}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  overflow: "auto",
+                  flexGrow: "1",
+                }}
+              >
                 {filterMessages.map((message) => (
                   <li key={message.id} className="d-flex flex-column">
                     <AdminChatRoomMessages
