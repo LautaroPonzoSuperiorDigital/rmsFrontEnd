@@ -1,7 +1,6 @@
 import DefaultImage from "./../assets/img/defaultImage.png";
 
 export const createListingImage = (listing) => {
-  console.log(listing);
   let image = DefaultImage;
 
   if (listing.Sections[0]?.Album?.Images[0]) {

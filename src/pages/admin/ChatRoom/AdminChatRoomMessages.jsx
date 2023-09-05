@@ -20,7 +20,10 @@ const AdminChatRoomMessages = ({ message }) => {
 
   return (
     <div className="d-flex flex-column justify-content-between h-100">
-      <div className="d-flex flex-column ">
+      <div
+        className="d-flex flex-column "
+        style={{ overflowY: "auto", maxHeight: "300px" }}
+      >
         <div
           className="d-flex gap-2 align-items-center"
           style={
