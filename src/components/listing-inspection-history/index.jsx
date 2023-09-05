@@ -27,6 +27,7 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
   const [inspections, setInspections] = useState([]);
   const [editingInspection, setEditingInspection] = useState(null);
   const [inspectionToDelete, setInspectionToDelete] = useState(null);
+  const [sections, setSections] = useState([]);
 
   const deleteInspectionModalRef = useRef(null);
   const inspectionFormModalRef = useRef(null);
@@ -185,6 +186,19 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
     loadInspections();
   }, [listingId]);
 
+  useEffect(() => {
+    async function loadSections() {
+      try {
+        const { data } = await api.get(`/listing/${listingId}/section`);
+        setSections(data);
+      } catch (err) {
+        alert("Error loading listing inspections.");
+      }
+    }
+
+    loadSections();
+  }, [listingId]);
+
   return (
     <>
       {!editingInspection && (
@@ -231,13 +245,26 @@ const ListingInspectionHistoryWithRef = ({ listingId }, ref) => {
         ref={inspectionFormModalRef}
         onModalClosed={() => setEditingInspection(null)}
       >
-        <Modal.Body width="50%">
+        <Modal.Body width="100%">
           <Modal.Header showCloseIcon />
           <Modal.Content>
-            <InspectionForm
-              ref={inspectionFormRef}
-              inspection={editingInspection}
-            />
+            <div className="container h-25">
+              <div className="row">
+                <div className="form-container col-sm-8">
+                  <InspectionForm
+                    ref={inspectionFormRef}
+                    inspection={editingInspection}
+                  />
+                </div>
+                <div className="section-container col-sm-4">
+                  {sections.map((section) => (
+                    <div className="section" key={section.id}>
+                      <p>{section.name}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </Modal.Content>
           <Modal.Footer>
             <Modal.Action
