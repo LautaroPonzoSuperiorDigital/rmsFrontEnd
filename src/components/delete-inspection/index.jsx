@@ -4,7 +4,7 @@ import { DeleteInspectionContainer } from "./styles";
 export function DeleteInspection({ inspection }) {
   return (
     <DeleteInspectionContainer>
-      <h1>Delete Expense</h1>
+      <h1>Delete Inspection</h1>
       <span>
         Are you sure you want to delete the inspection <b>{inspection?.name}</b>
         ?

@@ -1,6 +1,8 @@
+import DefaultImage from "./../assets/img/defaultImage.png";
+
 export const createListingImage = (listing) => {
   console.log(listing);
-  let image = null;
+  let image = DefaultImage;
 
   if (listing.Sections[0]?.Album?.Images[0]) {
     const key = listing.Sections[0]?.Album.Images[0].key;

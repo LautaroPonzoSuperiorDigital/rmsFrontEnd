@@ -11,6 +11,7 @@ export const ListingInspectionsContext = createContext(undefined)
 
 export function ListingInspectionsProvider({ children }) {
   const [inspections, setInspections] = useState([])
+  const [sections, setSections] = useState([])
   const [editingInspection, setEditingInspection] = useState(null)
   const [inspectionToDelete, setInspectionToDelete] = useState(null)
 
@@ -157,12 +158,14 @@ export function ListingInspectionsProvider({ children }) {
   const value = useMemo(
     () => ({
       inspections,
+      sections,
       handleOpenInspectionFormModal,
       handleEditInspection,
       handleOpenRemoveInspectionModal,
     }),
     [
       inspections,
+      sections,
       handleOpenInspectionFormModal,
       handleEditInspection,
       handleOpenRemoveInspectionModal,
@@ -187,6 +190,23 @@ export function ListingInspectionsProvider({ children }) {
     loadInspections()
   }, [listing])
 
+  useEffect(() => {
+    async function loadSections() {
+      if (!listing) {
+        return
+      }
+
+      try {
+        const { data } = await api.get(`/listing/${listing.id}/section`);
+        setSections(data);
+      } catch (err) {
+        alert("Error loading listing sections.");
+      }
+    }
+
+    loadSections();
+  }, [listing]);
+
   return (
     <ListingInspectionsContext.Provider value={value}>
       {children}
@@ -195,13 +215,26 @@ export function ListingInspectionsProvider({ children }) {
         ref={inspectionFormModalRef}
         onModalClosed={handleInspectionFormModalClosed}
       >
-        <Modal.Body width="50%">
+        <Modal.Body width="90%">
           <Modal.Header showCloseIcon />
           <Modal.Content>
-            <InspectionForm
-              ref={inspectionFormRef}
-              inspection={editingInspection}
-            />
+            <div className="container h-25">
+              <div className="row">
+                <div className="form-container col-sm-8">
+                  <InspectionForm
+                    ref={inspectionFormRef}
+                    inspection={editingInspection}
+                  />
+                </div>
+                <div className="section-container col-sm-4">
+                  {sections.map((section) => (
+                    <div className="section" key={section.id}>
+                      <p>{section.name}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </Modal.Content>
           <Modal.Footer>
             <Modal.Action
