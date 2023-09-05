@@ -29,7 +29,7 @@ export default function AdminListings() {
   const [searchId, setSearchId] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [listingDetails, setListingDetails] = useState(null);
-  const [savingListingForm, setSavingListingForm] = useState(false)
+  const [savingListingForm, setSavingListingForm] = useState(false);
 
   const listingDetailsModalRef = useRef(null);
   const createListingModalRef = useRef(null);
@@ -51,8 +51,8 @@ export default function AdminListings() {
   }, [searchId, searchResults, listings, showOnlyPublicListings]);
 
   const onListingSaved = useCallback((savedListing) => {
-    setListings(oldState => [...oldState, savedListing])
-  }, [])
+    setListings((oldState) => [...oldState, savedListing]);
+  }, []);
 
   const handleSearch = (searchValue) => {
     setSearchId(searchValue);
@@ -74,7 +74,7 @@ export default function AdminListings() {
   };
 
   const handleAddListing = () => {
-    createListingModalRef.current.open()
+    createListingModalRef.current.open();
   };
 
   const handlePageChange = (pageNumber) => {
@@ -117,11 +117,14 @@ export default function AdminListings() {
       try {
         const { data } = await api.get("/listing");
 
-        setListings(data.map((listing) => ({
-          ...listing,
-          image: createListingImage(listing)
-        })));
+        setListings(
+          data.map((listing) => ({
+            ...listing,
+            image: createListingImage(listing),
+          }))
+        );
       } catch (err) {
+        console.log(err);
         alert("Error loading listings: ", err);
       }
     }
@@ -211,8 +214,8 @@ export default function AdminListings() {
                         <p className="alignText d-flex align-items-center">
                           {listing.lotSize
                             ? listing.lotSize.toLocaleString("EN", {
-                              maximumFractionDigits: 0,
-                            })
+                                maximumFractionDigits: 0,
+                              })
                             : ""}
                           &nbsp;&nbsp;Sq. Ft. Per County
                         </p>
@@ -221,8 +224,8 @@ export default function AdminListings() {
                         <p className="alignText d-flex align-items-center">
                           {listing.houseSize
                             ? listing.houseSize.toLocaleString("EN", {
-                              maximumFractionDigits: 0,
-                            })
+                                maximumFractionDigits: 0,
+                              })
                             : ""}
                           &nbsp;&nbsp;Sq. Ft. Per County
                         </p>
@@ -232,8 +235,8 @@ export default function AdminListings() {
                           $
                           {listing.price
                             ? parseFloat(listing.price).toLocaleString("en", {
-                              useGrouping: true,
-                            })
+                                useGrouping: true,
+                              })
                             : ""}
                           / mo
                         </p>
@@ -284,14 +287,14 @@ export default function AdminListings() {
             />
           </Modal.Content>
 
-          <Modal.Footer style={{ justifyContent: 'flex-end' }}>
+          <Modal.Footer style={{ justifyContent: "flex-end" }}>
             <Modal.Action
               disabled={savingListingForm}
               outline
               text="Cancel"
               action={() => createListingModalRef.current.close()}
             />
-            
+
             <Modal.Action
               disabled={savingListingForm}
               text={savingListingForm ? "Saving..." : "Save"}
