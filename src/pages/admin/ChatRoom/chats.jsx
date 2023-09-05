@@ -11,7 +11,7 @@ import TicketsNavBar from "./TicketsNavBar";
 
 const chatRoomStyle = {
   width: "33%",
-  // maxWidth: "550px",
+
   overflowY: "auto",
   maxHeight: "100vh",
 };
@@ -19,18 +19,17 @@ const chatContaienrStyle = {
   borderLeft: "1px solid #00000026",
   borderRight: "1px solid #00000026",
   height: "100%",
-  // maxWidth: "550px",
+
   overflowY: "auto",
   width: "33%",
 };
 
 const AdminChatRoomMessagesStyle = {
-  height: "65%",
-  overflowY: "auto",
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-end",
-  padding: "10px 20px",
+  padding: "10px 0px",
+  maxHeight: "64vh",
 };
 
 const TicketsInfomartionStyle = {
@@ -95,7 +94,7 @@ const Chats = () => {
   }, [targetChatRoomId, key]);
 
   return (
-    <div className="vh-100 d-flex flex-column w-100  ">
+    <div className="vh-100 d-flex flex-column w-100 ">
       <Nav />
       <div className=" flex-grow-1 d-flex p-2  justify-content-center">
         <div style={chatRoomStyle} className="flex-grow-1">
@@ -120,23 +119,33 @@ const Chats = () => {
           })}
         </div>
         <div style={chatContaienrStyle} className="flex-grow-1">
-          <div style={{ height: "100%" }}>
+          <div>
             {targetChatRoomId && (
               <TicketsNavBar
                 targetChatRoomId={targetChatRoomId}
                 chatRooms={chatRooms}
               />
             )}
-            <ul style={AdminChatRoomMessagesStyle} ref={chatContainerRef}>
-              {filterMessages.map((message) => (
-                <li key={message.id} className="d-flex flex-column">
-                  <AdminChatRoomMessages
-                    message={message}
-                    targetChatRoomId={targetChatRoomId}
-                  />
-                </li>
-              ))}
-            </ul>
+            <div style={AdminChatRoomMessagesStyle}>
+              <ul
+                ref={chatContainerRef}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  overflow: "auto",
+                  flexGrow: "1",
+                }}
+              >
+                {filterMessages.map((message) => (
+                  <li key={message.id} className="d-flex flex-column">
+                    <AdminChatRoomMessages
+                      message={message}
+                      targetChatRoomId={targetChatRoomId}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
             <div>
               {targetChatRoomId && (
                 <ChatSendMessage

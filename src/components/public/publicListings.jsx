@@ -59,7 +59,6 @@ const PublicListings = () => {
       try {
         const { data } = await api.get("/listing");
         setListing(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching listings:", error);
       }
