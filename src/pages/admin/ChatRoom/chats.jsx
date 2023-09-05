@@ -29,6 +29,7 @@ const AdminChatRoomMessagesStyle = {
   flexDirection: "column",
   justifyContent: "flex-end",
   padding: "10px 0px",
+  height: "64vh",
   maxHeight: "64vh",
 };
 
