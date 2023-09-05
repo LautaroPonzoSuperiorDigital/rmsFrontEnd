@@ -20,7 +20,6 @@ export const Form = styled.form`
 `;
 
 export const SectoinListTitle = styled.div`
-
   > h1 {
     text-align: left;
     font-style: normal;
@@ -46,5 +45,10 @@ export const SectionList = styled.div`
     color: #000000a5;
     text-transform: uppercase;
     opacity: 1;
+
+    &:hover {
+      color: #31af9a;
+      cursor: pointer;
+    }
   }
 `;

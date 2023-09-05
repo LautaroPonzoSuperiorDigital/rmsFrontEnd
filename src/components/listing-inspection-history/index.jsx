@@ -26,7 +26,6 @@ export const ListingInspectionHistory = () => {
                   hoverImage={<img src={EditHover} alt="EditHover" />}
                   onClick={() => handleEditInspection(inspection)}
                 />
-
                 <DeleteInspectionButton
                   className="delete"
                   defaultImage={<img src={Delete} alt="Delete" />}

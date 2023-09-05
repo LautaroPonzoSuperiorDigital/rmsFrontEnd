@@ -234,15 +234,15 @@ export function ListingInspectionsProvider({ children }) {
           <Modal.Content>
             <div className="container-fluid">
               <div className="row">
-                <div className="form-container w-50 col-sm-6 pt-8">
+                <div className="form-container m-0 p-0 w-50 col-sm-6 pt-8">
                   <InspectionForm
                     ref={inspectionFormRef}
                     inspection={editingInspection}
                   />
                 </div>
                 <div
-                  className="section-container w-50 col-sm-6 pt-8"
-                  style={{ paddingRight: "160px" }}
+                  className="section-container w-50 col-sm-6 pt-8 m-0"
+                  style={{ paddingRight: "10rem", paddingLeft: 0 }}
                 >
                   <SectoinListTitle>
                     <h1 className="mt-5 mb-4">Spaces</h1>
