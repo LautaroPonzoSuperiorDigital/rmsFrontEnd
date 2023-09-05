@@ -19,6 +19,21 @@ export const Form = styled.form`
   gap: 2rem;
 `;
 
+export const SectoinListTitle = styled.div`
+
+  > h1 {
+    text-align: left;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.875rem;
+    line-height: 37px;
+    font-family: "Proxima Nova", sans-serif;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+  }
+`;
+
 export const SectionList = styled.div`
   > p {
     text-align: left;
