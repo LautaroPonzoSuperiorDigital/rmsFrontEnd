@@ -17,9 +17,9 @@ export function ListingAlbumPreview({
   const [showAlbum, setShowAlbum] = useState(false)
 
   const albumImages = useMemo(() => {
-    const sectionsWithImages = listingSections.filter(section => section.Album.Images.length)
+    const sectionsWithImages = listingSections.filter(section => section.Album?.Images?.length)
 
-    return sectionsWithImages.map(section => section.Album.Images).reduce((a, b) => [...a, ...b], [])
+    return sectionsWithImages.map(section => section.Album?.Images).reduce((a, b) => [...a, ...b], [])
   }, [listingSections])
 
   const preview = useMemo(() => {

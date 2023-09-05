@@ -42,7 +42,7 @@ export function ListingPaymentHistory({ listingId }) {
           <tr key={payment.id}>
             <td>Rent Payment</td>
             <td>{formatPrice(payment.amount)}</td>
-            <td>{formatDate(payment.madeAt)}</td>
+            <td>{formatDate({ date: payment.madeAt })}</td>
             <td>
               <button type="button">
                 <Edit />

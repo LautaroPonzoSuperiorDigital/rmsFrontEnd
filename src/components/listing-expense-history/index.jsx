@@ -176,7 +176,7 @@ const ListingExpenseHistoryWithRef = ({ listingId }, ref) => {
           <tr key={expense.id}>
             <td>{expense.name}</td>
             <td>{formatPrice(expense.value)}</td>
-            <td>{formatDate(expense.date)}</td>
+            <td>{formatDate({ date: expense.date })}</td>
             <td>
               <button type="button" onClick={() => handleEditExpense(expense)}>
                 <Edit />

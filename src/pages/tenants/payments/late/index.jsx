@@ -63,7 +63,7 @@ export default function LatePayments() {
       {latePayments.map(latePayment => {
         const lateFee = latePayment.totalAmount * 0.1
         const totalAmount = formatPrice(latePayment.totalAmount + lateFee)
-        const dueDate = formatDate(latePayment.dueDate, null, DateTime.DATE_MED)
+        const dueDate = formatDate({ date: latePayment.dueDate, formatOptions: DateTime.DATE_MED })
 
         const dateAndAmount = `${dueDate} | ${totalAmount}`
 
