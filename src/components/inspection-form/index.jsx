@@ -86,7 +86,6 @@ function InspectionFormWithRef({ inspection }, ref) {
 
 InspectionFormWithRef.propTypes = {
   inspection: PropTypes.object.isRequired,
-  // listingId: PropTypes.number.isRequired,
 };
 
 export const InspectionForm = forwardRef(InspectionFormWithRef);

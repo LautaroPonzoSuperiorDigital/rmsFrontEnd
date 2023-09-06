@@ -15,7 +15,6 @@ import { EditButton, DeleteButton } from "../../../components/buttonListings";
 import Pagination from "../../../components/paginations";
 import AddListings from "../../../components/addListing";
 import { Modal } from "../../../components/modal";
-import { ListingDetails } from "../../../components/listing-details";
 import { ListingDetailsProvider } from "../../../context/listingDetailsContext";
 import { ListingForm } from "../../../components/listing-form";
 import { createListingImage } from "../../../services/listing";
@@ -31,7 +30,6 @@ export default function AdminListings() {
   const [listingDetails, setListingDetails] = useState(null);
   const [savingListingForm, setSavingListingForm] = useState(false);
 
-  const listingDetailsModalRef = useRef(null);
   const createListingModalRef = useRef(null);
   const listingFormRef = useRef(null);
 
@@ -108,8 +106,6 @@ export default function AdminListings() {
 
   const handleOpenListingDetails = (listing) => {
     setListingDetails(listing);
-
-    listingDetailsModalRef.current.open();
   };
 
   useEffect(() => {
@@ -304,18 +300,22 @@ export default function AdminListings() {
         </Modal.Body>
       </Modal.Root>
 
-      <Modal.Root ref={listingDetailsModalRef}>
+            <ListingDetailsProvider
+              listing={listingDetails}
+              setListingDetails={setListingDetails}
+            />
+      {/* <Modal.Root ref={listingDetailsModalRef}>
         <Modal.Body width="90%">
           <Modal.Header showCloseIcon />
           <Modal.Content>
             {listingDetails && (
-              <ListingDetailsProvider listing={listingDetails}>
                 <ListingDetails />
-              </ListingDetailsProvider>
-            )}
+                )}
           </Modal.Content>
         </Modal.Body>
       </Modal.Root>
+                </ListingDetailsProvider>
+                */}
 
       <Pagination
         currentPage={currentPage}

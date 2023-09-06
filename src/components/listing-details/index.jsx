@@ -34,6 +34,7 @@ import {
   InspectionAction,
 } from "./styles";
 import { ListingAlbumPreview } from "../listing-album-preview";
+import { useListingInspections } from "../../hooks/useListingInspections";
 
 const ListingDetailsTabs = Object.freeze({
   TENANT_HISTORY: 0,
@@ -47,16 +48,15 @@ const ListingDetailsTabs = Object.freeze({
 export function ListingDetails() {
   const [activeTab, setActiveTab] = useState(ListingDetailsTabs.TENANT_HISTORY);
 
-  const inspectionsRef = useRef(null);
   const expensesRef = useRef(null);
 
   const { listing, isLoadingPNL } = useListingDetails();
+  const { handleOpenInspectionFormModal } = useListingInspections()
 
   const showInspectionActions =
     activeTab === ListingDetailsTabs.INSPECTION_HISTORY;
   const showExpensesActions = activeTab === ListingDetailsTabs.EXPENSE_HISTORY;
 
-  const openInspectionForm = () => inspectionsRef.current?.openForm();
   const openExpenseForm = () => expensesRef.current?.openForm();
 
   return (
@@ -178,7 +178,7 @@ export function ListingDetails() {
 
           {showInspectionActions && (
             <InspectionsActionsBox>
-              <InspectionAction type="button" onClick={openInspectionForm}>
+              <InspectionAction type="button" onClick={handleOpenInspectionFormModal}>
                 + Add Inspection
               </InspectionAction>
             </InspectionsActionsBox>
@@ -203,11 +203,7 @@ export function ListingDetails() {
         </HistoryTabContent>
 
         <HistoryTabContent>
-          <ListingInspectionHistory
-            key={`listing-${listing.id}-inspections`}
-            ref={inspectionsRef}
-            listingId={listing.id}
-          />
+          <ListingInspectionHistory />
         </HistoryTabContent>
 
         <HistoryTabContent>

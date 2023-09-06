@@ -59,7 +59,7 @@ export function PaymentDue({ paymentDues }) {
       {currentPaymentDue ? (
         <>
           <PaymentDetails>
-            {formatDate(currentPaymentDue.dueDate, null, DateTime.DATE_MED)} | {formatPrice(currentPaymentDue.totalAmount)}
+            {formatDate({ date: currentPaymentDue.dueDate, formatOptions: DateTime.DATE_MED })} | {formatPrice(currentPaymentDue.totalAmount)}
           </PaymentDetails>
 
           <MakePaymentButton

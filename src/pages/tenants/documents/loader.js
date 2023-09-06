@@ -19,15 +19,6 @@ const createDocumentsLoader = (signOut) => async () => {
     return redirect('/')
   }
 
-  // const { data } = await api.get(`/tenant/${tenantId}/document`)
-
-  // const tenantDocuments = data.map(tenantDocument => ({
-  //   ...tenantDocument,
-  //   date: formatDate(tenantDocument.createdAt, null, DateTime.DATE_MED)
-  // }))
-
-  // return tenantDocuments
-
   const { data: sentDocuments } = await api.get(`/tenant/${tenantId}/pandadoc/document/sent`)
 
   const tenantDocuments = await Promise.all(
@@ -44,7 +35,7 @@ const createDocumentsLoader = (signOut) => async () => {
               status: documentDetail.status,
               signUrl,
               isSigned,
-              date: formatDate(sentDocument.createdAt, null, DateTime.DATE_MED)
+              date: formatDate({ date: sentDocument.createdAt, formatOptions: DateTime.DATE_MED })
             }
           }))
   )

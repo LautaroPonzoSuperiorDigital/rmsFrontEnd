@@ -14,7 +14,7 @@ export function PaymentHistory({ paymentHistory }) {
       <History>
         {paymentHistory.map(payment => {
           const totalAmount = formatPrice(payment.totalAmount)
-          const madeAt = formatDate(payment.madeAt, null, DateTime.DATE_MED)
+          const madeAt = formatDate({ date: payment.madeAt, formatOptions: DateTime.DATE_MED })
   
           const dateAndAmount = `${madeAt} | ${totalAmount}`
 
