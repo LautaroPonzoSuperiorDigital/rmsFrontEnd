@@ -19,6 +19,7 @@ import {
   Tooltip,
 } from "../components/inspection-form/styles";
 import NoteIcon from "../assets/img/note.svg";
+import AddImageIcon from "../assets/img/add-image.svg";
 
 export const ListingInspectionsContext = createContext(undefined);
 
@@ -190,9 +191,7 @@ export function ListingInspectionsProvider({ children }) {
 
   useEffect(() => {
     async function loadInspections() {
-      if (!listing) {
-        return;
-      }
+      if (!listing) return;
 
       try {
         const { data } = await api.get(`/listing/${listing.id}/inspection`);
@@ -208,9 +207,7 @@ export function ListingInspectionsProvider({ children }) {
 
   useEffect(() => {
     async function loadSections() {
-      if (!listing) {
-        return;
-      }
+      if (!listing) return;
 
       try {
         const { data } = await api.get(`/listing/${listing.id}/section`);
@@ -262,6 +259,9 @@ export function ListingInspectionsProvider({ children }) {
                               <img src={NoteIcon} alt="Note" />
                             </Tooltip>
                           )}
+                          <Tooltip tooltipText={"Add Image"}>
+                            <img src={AddImageIcon} alt="Add Image" />
+                          </Tooltip>
                         </p>
                       </SectionList>
                     ))}
