@@ -17,6 +17,8 @@ import {
   SectionList,
   SectoinListTitle,
 } from "../components/inspection-form/styles";
+import NoteIcon from "../assets/img/note.svg";
+import { Tooltip } from "bootstrap";
 
 export const ListingInspectionsContext = createContext(undefined);
 
@@ -253,7 +255,10 @@ export function ListingInspectionsProvider({ children }) {
                         className="section col-md-4 d-flex align-items-stretch"
                         key={section.id}
                       >
-                        <p className="flex-fill">{section.name}</p>
+                        <p className="flex-fill">
+                          {section.name}
+                          {section?.note && <img src={NoteIcon} alt="Note" />}
+                        </p>
                       </SectionList>
                     ))}
                   </div>
