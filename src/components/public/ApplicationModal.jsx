@@ -81,7 +81,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
 
     try {
       const response = await api.post("/application-screening", data);
-      // window.open(env.rentSpreeLink, "_blank");
+      window.open(env.rentSpreeLink, "_blank");
       setIsStartScreening(false);
       setScreeningMessage("Screening its gonna start soon");
     } catch (err) {
