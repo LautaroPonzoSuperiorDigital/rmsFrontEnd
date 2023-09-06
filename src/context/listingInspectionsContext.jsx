@@ -18,7 +18,6 @@ import {
   SectoinListTitle,
 } from "../components/inspection-form/styles";
 import NoteIcon from "../assets/img/note.svg";
-import { Tooltip } from "bootstrap";
 
 export const ListingInspectionsContext = createContext(undefined);
 
