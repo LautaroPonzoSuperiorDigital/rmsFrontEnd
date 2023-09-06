@@ -63,23 +63,29 @@ export const Tooltip = styled.div`
   position: relative;
   display: inline-block;
   cursor: pointer;
+  padding-left: 0.781rem;
 
   &:hover::before {
     content: ${(props) => `"${props.tooltipText}"`};
     position: absolute;
-    background-color: #333;
-    color: #fff;
-    border-radius: 4px;
-    padding: 8px;
-    font-size: 14px;
+    background-color: #31af9a;
+    color: #fdfdfd;
+    font-family: "Proxima Nova", sans-serif;
+    border-radius: 0.125rem;
+    padding: 1rem;
+    font-size: 1.125rem;
     white-space: nowrap;
     z-index: 1;
-    bottom: 30px; /* Adjust the distance from the icon */
+    bottom: 2rem;
     left: 50%;
     transform: translateX(-50%);
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
+    text-align: left;
+    letter-spacing: 0px;
+    text-transform: capitalize;
+    opacity: 1;
   }
 
   &:hover::before {

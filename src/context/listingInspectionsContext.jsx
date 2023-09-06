@@ -16,6 +16,7 @@ import { DeleteInspection } from "../components/delete-inspection";
 import {
   SectionList,
   SectoinListTitle,
+  Tooltip,
 } from "../components/inspection-form/styles";
 import NoteIcon from "../assets/img/note.svg";
 
@@ -256,7 +257,11 @@ export function ListingInspectionsProvider({ children }) {
                       >
                         <p className="flex-fill">
                           {section.name}
-                          {section?.note && <img src={NoteIcon} alt="Note" />}
+                          {section?.note && (
+                            <Tooltip tooltipText={section?.note}>
+                              <img src={NoteIcon} alt="Note" />
+                            </Tooltip>
+                          )}
                         </p>
                       </SectionList>
                     ))}
