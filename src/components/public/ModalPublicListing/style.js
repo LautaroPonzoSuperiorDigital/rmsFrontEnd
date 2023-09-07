@@ -14,6 +14,7 @@ export const ModalListingContainer = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
+    width: 100vw;
   }
 `;
 
@@ -23,16 +24,26 @@ export const ModalListingDescription = styled.div`
   max-width: 670px;
   height: 100%;
   padding: 20px 48px;
+  @media (max-width: 768px) {
+    padding: 0px 10px;
+  }
 `;
 export const DescriptionContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 5rem;
   @media (max-width: 768px) {
-    magin-top: 1rem;
+    margin-top: 0rem;
   }
 `;
-
+export const SpectDescriptioContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
 export const Text = styled.div`
   display: inline;
   margin: 0;
@@ -46,15 +57,6 @@ export const PriceText = styled(Text)`
 export const PriceSpan = styled.span`
   font-size: 25px;
   font-weight: 400;
-`;
-
-export const SpectDescriptioContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
 `;
 
 export const FieldName = styled.p`
