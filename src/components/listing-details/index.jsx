@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Tabs } from "react-tabs";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -35,27 +35,19 @@ import {
 } from "./styles";
 import { ListingAlbumPreview } from "../listing-album-preview";
 import { useListingInspections } from "../../hooks/useListingInspections";
+import { ListingDetailsTabs } from "../../context/listingDetailsContext";
 
-const ListingDetailsTabs = Object.freeze({
-  TENANT_HISTORY: 0,
-  INSPECTION_HISTORY: 1,
-  DOCUMENT_HISTORY: 2,
-  PAYMENT_HISTORY: 3,
-  EXPENSE_HISTORY: 4,
-  APPLICANTS: 5,
-});
+
 
 export function ListingDetails() {
-  const [activeTab, setActiveTab] = useState(ListingDetailsTabs.TENANT_HISTORY);
-
   const expensesRef = useRef(null);
 
-  const { listing, isLoadingPNL } = useListingDetails();
-  const { handleOpenInspectionFormModal } = useListingInspections()
+  const { activeTab, listing, isLoadingPNL } = useListingDetails();
+  const { handleOpenInspectionFormModal } = useListingInspections();
 
   const showInspectionActions =
-    activeTab === ListingDetailsTabs.INSPECTION_HISTORY;
-  const showExpensesActions = activeTab === ListingDetailsTabs.EXPENSE_HISTORY;
+    activeTab.value === ListingDetailsTabs.INSPECTION_HISTORY;
+  const showExpensesActions = activeTab.value === ListingDetailsTabs.EXPENSE_HISTORY;
 
   const openExpenseForm = () => expensesRef.current?.openForm();
 
@@ -165,8 +157,8 @@ export function ListingDetails() {
       <Tabs
         selectedTabClassName="active"
         selectedTabPanelClassName="active"
-        tabIndex={activeTab}
-        onSelect={setActiveTab}
+        tabIndex={activeTab.value}
+        onSelect={activeTab.set}
       >
         <HistoryTabs>
           <HistoryTab>Tenant History</HistoryTab>

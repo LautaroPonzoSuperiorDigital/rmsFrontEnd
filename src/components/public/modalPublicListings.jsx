@@ -1,26 +1,21 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
+
+import { useEffect, useState } from "react";
 import "../../styles/publIcListings/publicListings.css";
 import camera from "../../assets/img/camera.svg";
 import ApplicationModal from "./ApplicationModal";
 import { api } from "../../services/api";
 import { createListingImage } from "../../services/listing";
+import ListingCarousel from "./ListingCarousel";
 
 const ModalPublicListings = ({
   selectedImage,
   onCloseModal,
-  id,
   myselectedListing,
 }) => {
-  console.log("aca", myselectedListing);
   const [showModal, setShowModal] = useState(false);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
-  const [Amenities, setAmenities] = useState([""]);
-  const [Requirements, setRequirements] = useState([""]);
-  const [selectedListing, setSelectedListing] = useState(null);
-  const [listingId, setListingId] = useState(null); // Add the 'id' state variable
-  const [currentImage, setCurrentImage] = useState(selectedImage);
-  const navigate = useNavigate();
+  const [images, setImage] = useState([]);
 
   const imgCardContainerClass = `imgCardContainer ${
     selectedImage ? "showImage" : ""
@@ -43,48 +38,28 @@ const ModalPublicListings = ({
   const handleModalClose = () => {
     setShowModal(false);
   };
-  /* Modal Application */
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/listing");
-        const listingsWithId = response.data.map((listing) => ({
-          ...listing,
-          key: `https://rms-staging.s3.us-west-1.amazonaws.com/${listing.key.replace(
-            /\\/g,
-            "%5C"
-          )}`,
-        }));
-        const selectedListingData = listingsWithId.find(
-          (listing) => listing.id === id
-        );
-        setSelectedListing(selectedListingData);
-        setAmenities(selectedListingData?.Amenities || []);
-        setRequirements(selectedListingData?.Requirements || []);
-      } catch (error) {
-        console.error("Error fetching listings:", error);
+    const fetchImage = async () => {
+      const response = await api.get(`/listing/${myselectedListing.id}/album`);
+      const data = response.data;
+      const allImages = [];
+      if (data.Sections && Array.isArray(data.Sections)) {
+        data.Sections.forEach((section) => {
+          if (section.Images && Array.isArray(section.Images)) {
+            allImages.push(...section.Images);
+          }
+        });
       }
+      setImage(allImages);
     };
+    fetchImage();
+  }, []);
 
-    fetchData();
-  }, [id]);
-
-  useEffect(() => {
-    if (selectedListing) {
-      setListingId(selectedListing.id);
-      setAmenities(selectedListing.Amenities);
-      setRequirements(selectedListing.Requirements);
-      console.log(selectedListing);
-    }
-  }, [selectedListing]);
-
-  useEffect(() => {
-    setCurrentImage(selectedImage);
-  }, [selectedImage]);
   return (
     <div className="publicModal1">
-      <div className={imgCardContainerClass} style={containerStyle}>
+      <ListingCarousel images={images} />
+      {/* <div className={imgCardContainerClass} style={containerStyle}>
         <button className="backToSearch" onClick={handleBackToSearch}>
           Back To Search Results
         </button>
@@ -101,7 +76,7 @@ const ModalPublicListings = ({
             onClick={onCloseModal}
           />
         )}
-      </div>
+      </div> */}
       <div className="description1">
         <div className="publicPrice1 d-flex justify-content-start align-items-center">
           <p>
@@ -180,3 +155,9 @@ const ModalPublicListings = ({
 };
 
 export default ModalPublicListings;
+
+ModalPublicListings.propTypes = {
+  selectedImage: PropTypes.string,
+  onCloseModal: PropTypes.func.isRequired,
+  myselectedListing: PropTypes.object.isRequired,
+};

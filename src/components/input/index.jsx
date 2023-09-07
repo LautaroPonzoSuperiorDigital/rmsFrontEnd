@@ -15,6 +15,7 @@ const InputWithRef = (
     onChange,
     onClick,
     onBlur,
+    containerStyle,
   },
   ref,
 ) => {
@@ -27,7 +28,7 @@ const InputWithRef = (
   }
 
   return (
-    <InputContainer focused={focused}>
+    <InputContainer style={containerStyle} focused={focused}>
       {label && <Label>{label}</Label>}
 
       <StyledInput
@@ -48,6 +49,7 @@ const InputWithRef = (
 }
 
 InputWithRef.propTypes = {
+  containerStyle: PropTypes.object,
   type: PropTypes.string,
   label: PropTypes.string,
   defaultValue: PropTypes.string,

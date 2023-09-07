@@ -17,6 +17,7 @@ import AddListings from "../../../components/addListing";
 import { Modal } from "../../../components/modal";
 import { ListingDetailsProvider } from "../../../context/listingDetailsContext";
 import { ListingForm } from "../../../components/listing-form";
+import { ListingDetails } from "../../../components/listing-details";
 import { createListingImage } from "../../../services/listing";
 
 const PAGE_SIZE = 10;
@@ -32,6 +33,7 @@ export default function AdminListings() {
 
   const createListingModalRef = useRef(null);
   const listingFormRef = useRef(null);
+  const listingDetailsModalRef = useRef(null);
 
   const totalListings = listings.length;
   const totalPages = Math.ceil(totalListings / PAGE_SIZE);
@@ -106,6 +108,7 @@ export default function AdminListings() {
 
   const handleOpenListingDetails = (listing) => {
     setListingDetails(listing);
+    listingDetailsModalRef.current?.open();
   };
 
   useEffect(() => {
@@ -299,23 +302,22 @@ export default function AdminListings() {
           </Modal.Footer>
         </Modal.Body>
       </Modal.Root>
-
-            <ListingDetailsProvider
-              listing={listingDetails}
-              setListingDetails={setListingDetails}
-            />
-      {/* <Modal.Root ref={listingDetailsModalRef}>
-        <Modal.Body width="90%">
-          <Modal.Header showCloseIcon />
-          <Modal.Content>
-            {listingDetails && (
+      
+      <ListingDetailsProvider
+        listing={listingDetails}
+        setListingDetails={setListingDetails}
+      >
+        <Modal.Root ref={listingDetailsModalRef}>
+          <Modal.Body width="90%">
+            <Modal.Header showCloseIcon />
+            <Modal.Content>
+              {listingDetails && (
                 <ListingDetails />
-                )}
-          </Modal.Content>
-        </Modal.Body>
-      </Modal.Root>
-                </ListingDetailsProvider>
-                */}
+              )}
+            </Modal.Content>
+          </Modal.Body>
+        </Modal.Root>
+      </ListingDetailsProvider>
 
       <Pagination
         currentPage={currentPage}

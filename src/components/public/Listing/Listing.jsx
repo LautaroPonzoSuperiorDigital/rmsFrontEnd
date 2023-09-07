@@ -2,19 +2,30 @@ import bath from "../../../assets/img/bath.svg";
 import bed from "../../../assets/img/bed.svg";
 import PropTypes from "prop-types";
 import { createListingImage } from "../../../services/listing";
-import { PublicListing } from "./styles";
+import {
+  PublicListing,
+  ListingPublicImg,
+  ListingPublicDescription,
+  ListingPriceLocation,
+  Text,
+  PriceText,
+  SpanPrince,
+  LocationText,
+  FieldName,
+  FieldValue,
+} from "./styles.js";
 
 const Listing = ({ listing, handleImageClick }) => {
   return (
     <PublicListing>
-      <img
-        className="imgPublic"
+      <ListingPublicImg
         src={createListingImage(listing)}
         onClick={() => handleImageClick(listing.id)}
       />
-      <div className="description d-flex col">
-        <div className="spects d-flex flex-column justify-content-center align-items-start">
-          <p className="publicPrice price">
+
+      <ListingPublicDescription>
+        <ListingPriceLocation>
+          <PriceText>
             $&nbsp;
             {listing.price
               ? parseFloat(listing.price).toLocaleString("en", {
@@ -22,34 +33,10 @@ const Listing = ({ listing, handleImageClick }) => {
                 })
               : ""}
             &nbsp;
-            <span className="strong"> per month</span>
-          </p>
-          <p className="spect house_size">
-            HOUSE{" "}
-            <span className="strong">
-              {listing.houseSize
-                ? listing.houseSize.toLocaleString("EN", {
-                    maximumFractionDigits: 0,
-                  })
-                : ""}
-              &nbsp;SQ. FT.
-            </span>
-          </p>
+            <SpanPrince> per month</SpanPrince>
+          </PriceText>
 
-          <p className="spect lot_size">
-            LOT{" "}
-            <span className="strong">
-              {listing.lotSize
-                ? listing.lotSize.toLocaleString("EN", {
-                    maximumFractionDigits: 0,
-                  })
-                : ""}{" "}
-              &nbsp;SQ. FT.
-            </span>
-          </p>
-        </div>
-        <div className="spects2">
-          <p className="spectText d-flex justify-content-end location mt-3">
+          <LocationText>
             {listing.location.split(",")[2].trim()},{" "}
             {listing.location
               .split(",")[3]
@@ -61,18 +48,44 @@ const Listing = ({ listing, handleImageClick }) => {
               .trim()
               .substring(1, 2)
               .toLowerCase()}
-          </p>
-          <div className="icons1 d-flex justify-content-end">
-            <span className="nbedbath">{listing.bedrooms}</span>
-            <img className="bed bedrooms" src={bed} />
-            <span className="nbedbath bathrooms">{listing.bathrooms}</span>
-            <img className="bath" src={bath} />
-          </div>
-          <p className="listingNumber d-flex justify-content-end mt-2 id">
-            # {listing.id.toString().padStart(6, "0")}
-          </p>
+          </LocationText>
+        </ListingPriceLocation>
+        <div>
+          <ListingPriceLocation>
+            <FieldName>
+              HOUSE{" "}
+              <FieldValue className="strong">
+                {listing.houseSize
+                  ? listing.houseSize.toLocaleString("EN", {
+                      maximumFractionDigits: 0,
+                    })
+                  : ""}
+                &nbsp;SQ. FT.
+              </FieldValue>
+            </FieldName>
+            <div className=" d-flex justify-content-end align-items-center">
+              <span className="nbedbath">{listing.bedrooms}</span>
+              <img className="bed bedrooms" src={bed} />
+              <span className="nbedbath bathrooms">{listing.bathrooms}</span>
+              <img className="bath" src={bath} />
+            </div>
+          </ListingPriceLocation>
+          <ListingPriceLocation>
+            <FieldName>
+              LOT:{" "}
+              <FieldValue>
+                {listing.lotSize
+                  ? listing.lotSize.toLocaleString("EN", {
+                      maximumFractionDigits: 0,
+                    })
+                  : ""}{" "}
+                &nbsp;SQ. FT.
+              </FieldValue>
+            </FieldName>
+            <Text># {listing.id.toString().padStart(6, "0")}</Text>
+          </ListingPriceLocation>
         </div>
-      </div>
+      </ListingPublicDescription>
     </PublicListing>
   );
 };
