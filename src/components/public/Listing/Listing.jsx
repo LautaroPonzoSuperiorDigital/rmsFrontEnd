@@ -50,39 +50,41 @@ const Listing = ({ listing, handleImageClick }) => {
               .toLowerCase()}
           </LocationText>
         </ListingPriceLocation>
-        <ListingPriceLocation>
-          <FieldName>
-            HOUSE{" "}
-            <FieldValue className="strong">
-              {listing.houseSize
-                ? listing.houseSize.toLocaleString("EN", {
-                    maximumFractionDigits: 0,
-                  })
-                : ""}
-              &nbsp;SQ. FT.
-            </FieldValue>
-          </FieldName>
-          <div className=" d-flex justify-content-end align-items-center">
-            <span className="nbedbath">{listing.bedrooms}</span>
-            <img className="bed bedrooms" src={bed} />
-            <span className="nbedbath bathrooms">{listing.bathrooms}</span>
-            <img className="bath" src={bath} />
-          </div>
-        </ListingPriceLocation>
-        <ListingPriceLocation>
-          <FieldName>
-            LOT:{" "}
-            <FieldValue>
-              {listing.lotSize
-                ? listing.lotSize.toLocaleString("EN", {
-                    maximumFractionDigits: 0,
-                  })
-                : ""}{" "}
-              &nbsp;SQ. FT.
-            </FieldValue>
-          </FieldName>
-          <Text># {listing.id.toString().padStart(6, "0")}</Text>
-        </ListingPriceLocation>
+        <div>
+          <ListingPriceLocation>
+            <FieldName>
+              HOUSE{" "}
+              <FieldValue className="strong">
+                {listing.houseSize
+                  ? listing.houseSize.toLocaleString("EN", {
+                      maximumFractionDigits: 0,
+                    })
+                  : ""}
+                &nbsp;SQ. FT.
+              </FieldValue>
+            </FieldName>
+            <div className=" d-flex justify-content-end align-items-center">
+              <span className="nbedbath">{listing.bedrooms}</span>
+              <img className="bed bedrooms" src={bed} />
+              <span className="nbedbath bathrooms">{listing.bathrooms}</span>
+              <img className="bath" src={bath} />
+            </div>
+          </ListingPriceLocation>
+          <ListingPriceLocation>
+            <FieldName>
+              LOT:{" "}
+              <FieldValue>
+                {listing.lotSize
+                  ? listing.lotSize.toLocaleString("EN", {
+                      maximumFractionDigits: 0,
+                    })
+                  : ""}{" "}
+                &nbsp;SQ. FT.
+              </FieldValue>
+            </FieldName>
+            <Text># {listing.id.toString().padStart(6, "0")}</Text>
+          </ListingPriceLocation>
+        </div>
       </ListingPublicDescription>
     </PublicListing>
   );

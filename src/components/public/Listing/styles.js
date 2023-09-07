@@ -24,12 +24,14 @@ export const ListingPublicDescription = styled.div`
   display: flex;
   flex-direction: column;
   height: 10rem;
+  justify-content: space-around;
 `;
 
 export const ListingPublicImg = styled.img`
   width: 100%;
   height: 24rem;
   object-fit: cover;
+  margin-bottom: 10px;
 `;
 
 export const ListingPriceLocation = styled.div`
@@ -38,7 +40,7 @@ export const ListingPriceLocation = styled.div`
   justify-content: space-between;
   align-items: center;
   white-space: nowrap;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
 `;
 
 export const Text = styled.div`
