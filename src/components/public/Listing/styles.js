@@ -13,4 +13,79 @@ export const PublicListing = styled.div`
     max-width: 400px;
     max-height: 800px;
   }
+
+  @media (min-width: 377px) {
+    max-width: 500px;
+    max-height: 800px;
+  }
+`;
+
+export const ListingPublicDescription = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 10rem;
+`;
+
+export const ListingPublicImg = styled.img`
+  width: 100%;
+  height: 24rem;
+  object-fit: cover;
+`;
+
+export const ListingPriceLocation = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0.5rem 1rem;
+`;
+
+export const Text = styled.div`
+  display: inline;
+  margin: 0;
+  padding: 0;
+`;
+
+export const PriceText = styled(Text)`
+  font-size: 25px;
+  font-weight: 500;
+  @media (min-width: 1230px) {
+    font-size: 35px;
+  }
+`;
+
+export const SpanPrince = styled.span`
+  font-size: 14px;
+  font-weight: 400;
+  @media (min-width: 1230px) {
+    font-size: 20px;
+    font-weight: 500;
+  }
+`;
+
+export const LocationText = styled(Text)`
+  font-size: 18px;
+  font-weight: 400;
+`;
+
+export const FieldName = styled(Text)`
+  font-size: 15px;
+  font-weight: 400;
+  @media (min-width: 1230px) {
+    font-size: 18px;
+  }
+`;
+
+export const FieldValue = styled.span`
+  font-size: 15px;
+  font-weight: 600;
+  @media (min-width: 1230px) {
+    font-size: 18px;
+  }
+`;
+
+export const LotValue = styled(Text)`
+  font-size: 15px;
+  font-weight: 600;
 `;

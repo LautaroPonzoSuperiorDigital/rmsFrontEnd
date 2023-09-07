@@ -106,7 +106,8 @@
 
 .imgPublic {
   width: 100%;
-  height: 24rem;
+  height: auto;
+  max-height: 24rem;
 }
 
 .description {
