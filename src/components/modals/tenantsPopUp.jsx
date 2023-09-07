@@ -103,7 +103,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
           role: "TENANT",
         },
       ],
-      tags: ["rms-api"],
+      tags: ["rms-frontend"],
     };
     if (!requestCreateData.recipients[0].email) {
       console.log(requestCreateData);
