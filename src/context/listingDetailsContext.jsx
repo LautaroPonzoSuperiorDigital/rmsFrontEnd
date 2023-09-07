@@ -4,6 +4,7 @@ import { formatPrice } from "../services/price"
 import { api } from "../services/api"
 import { ListingInspectionsProvider } from "./listingInspectionsContext"
 import { ListingApplicantsProvider } from "./listingApplicantsContext"
+import TenantModal from "../components/modals/tenantsPopUp"
 
 export const ListingDetailsContext = createContext(undefined)
 
@@ -20,6 +21,7 @@ export function ListingDetailsProvider({ listing, children }) {
   const [isLoadingPNL, setIsLoadingPNL] = useState(true)
   const [profit, setProfit] = useState(formatPrice(0))
   const [loss, setLoss] = useState(formatPrice(0))
+  const [selectedTenant, setSelectedTenant] = useState(null)
 
   const loadProfitAndLoss = useCallback(async () => {
     if (!listing) {
@@ -39,6 +41,10 @@ export function ListingDetailsProvider({ listing, children }) {
 
     setIsLoadingPNL(false)
   }, [listing])
+
+  const handleOpenTenantModal = useCallback((tenant) => () => {
+    setSelectedTenant(tenant)
+  }, [])
 
   useEffect(() => {
     if (!listing) {
@@ -64,12 +70,14 @@ export function ListingDetailsProvider({ listing, children }) {
       listing: listingValue,
       isLoadingPNL,
       loadProfitAndLoss,
+      handleOpenTenantModal,
     }),
     [
       activeTabValue,
       listingValue,
       isLoadingPNL,
       loadProfitAndLoss,
+      handleOpenTenantModal,
     ]
   )
 
@@ -80,6 +88,13 @@ export function ListingDetailsProvider({ listing, children }) {
           {children}
         </ListingApplicantsProvider>
       </ListingInspectionsProvider>
+
+      {selectedTenant && (
+        <TenantModal
+          selectedTenant={selectedTenant}
+          onClose={() => setSelectedTenant(null)}
+        />
+      )}
     </ListingDetailsContext.Provider>
   )
 }

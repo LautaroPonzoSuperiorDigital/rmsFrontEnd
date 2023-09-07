@@ -37,6 +37,7 @@ import { ListingAlbumPreview } from "../listing-album-preview";
 import { useListingInspections } from "../../hooks/useListingInspections";
 import { ListingDetailsTabs } from "../../context/listingDetailsContext";
 import { ListingApplicants } from "../listing-applicants";
+import { ListingTenants } from "../listing-tenants";
 
 export function ListingDetails() {
   const expensesRef = useRef(null);
@@ -190,7 +191,7 @@ export function ListingDetails() {
         </HistoryTabs>
 
         <HistoryTabContent>
-          Tenant History Not Implemented Yet 😬
+          <ListingTenants />
         </HistoryTabContent>
 
         <HistoryTabContent>

@@ -40,7 +40,7 @@ export function ListingAlbum({
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [edit, setEdit] = useState(false);
 
-  const { showFooter, hideFooter, setHeight } = useModal();
+  const modal = useModal();
 
   const uploadPhotosRef = useRef(null);
   const editInputRef = useRef(null);
@@ -109,16 +109,16 @@ export function ListingAlbum({
   );
 
   useEffect(() => {
-    hideFooter();
+    modal?.hideFooter?.();
 
-    return showFooter;
-  }, [hideFooter, showFooter]);
+    return () => modal?.showFooter?.();
+  }, [modal]);
 
   useEffect(() => {
-    setHeight("90vh");
+    modal?.setHeight?.("90vh");
 
-    return () => setHeight(undefined);
-  }, [setHeight]);
+    return () => modal?.setHeight?.(undefined);
+  }, [modal]);
 
   return (
     <ListingAlbumContainer>

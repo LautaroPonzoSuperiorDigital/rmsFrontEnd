@@ -71,7 +71,7 @@ export function ListingAlbumPreview({
       >
         {albumImages.length
           ? `${editable ? "Edit Album" : "View Album"} (${albumImages.length})`
-          : "+ Add Photos"}
+          : editable ? "+ Add Photos" : "No Photos Added"}
       </ViewAlbumButton>
     </Album>
   );
