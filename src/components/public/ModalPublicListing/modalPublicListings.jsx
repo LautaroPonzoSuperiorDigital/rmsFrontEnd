@@ -1,12 +1,23 @@
 import PropTypes from "prop-types";
 
 import { useEffect, useState } from "react";
-import "../../styles/publIcListings/publicListings.css";
-import camera from "../../assets/img/camera.svg";
-import ApplicationModal from "./ApplicationModal";
-import { api } from "../../services/api";
-import { createListingImage } from "../../services/listing";
-import ListingCarousel from "./ListingCarousel";
+import "../../../styles/publIcListings/publicListings.css";
+import camera from "../../../assets/img/camera.svg";
+import ApplicationModal from "../ApplicationModal";
+import { api } from "../../../services/api";
+import { createListingImage } from "../../../services/listing";
+import ListingCarousel from "../ListingCarousel";
+import {
+  ModalListingContainer,
+  ModalListingDescription,
+  DescriptionContainer,
+  PriceText,
+  PriceSpan,
+  SpectDescriptioContainer,
+  FieldName,
+  FieldValue,
+  FieldValueLi,
+} from "./style";
 
 const ModalPublicListings = ({
   selectedImage,
@@ -57,100 +68,90 @@ const ModalPublicListings = ({
   }, []);
 
   return (
-    <div className="publicModal1">
+    <ModalListingContainer>
       <ListingCarousel images={images} />
-      {/* <div className={imgCardContainerClass} style={containerStyle}>
-        <button className="backToSearch" onClick={handleBackToSearch}>
-          Back To Search Results
-        </button>
-        <button
-          className="bottomLeftButton d-flex align-items-center justify-content-center"
-          onClick={handleBackToSearch}
-        >
-          <img src={camera} alt="" /> <span className="camSpan">1/29</span>
-        </button>
-        {myselectedListing && (
-          <img
-            className="imgPublic1"
-            src={createListingImage(myselectedListing)}
-            onClick={onCloseModal}
-          />
-        )}
-      </div> */}
-      <div className="description1">
-        <div className="publicPrice1 d-flex justify-content-start align-items-center">
-          <p>
+
+      <ModalListingDescription>
+        <DescriptionContainer>
+          <PriceText>
             {myselectedListing.price}${" "}
-            <span className="xmonth"> per month</span>
-          </p>
-        </div>
-        <div className="spectsModal d-flex justify-content-between">
-          <div className="order">
-            <p className="desc">City</p>
-            <span className="desc2">{myselectedListing.location}</span>
-            <p className="desc">House Size</p>
-
-            <span className="desc2">{myselectedListing.houseSize}</span>
-
-            <p className="desc1">Amenities</p>
+            <PriceSpan className="xmonth"> per month</PriceSpan>
+          </PriceText>
+        </DescriptionContainer>
+        <SpectDescriptioContainer>
+          <div>
+            <FieldName>City</FieldName>
+            <FieldValue>{myselectedListing.location}</FieldValue>
           </div>
-          <div className="order2">
-            <p className="desc id2">ID</p>
-
-            <span className="desc2 or2">
+          <div>
+            <FieldName>ID</FieldName>
+            <FieldValue className="desc2 or2">
               {myselectedListing.id.toString().padStart(6, "0")}
-            </span>
-
-            <p className="desc id2">LOT SIZE</p>
-            <span className="desc2 or2">{myselectedListing.lotSize}</span>
+            </FieldValue>
           </div>
-        </div>
-        <div className="PublicList d-flex justify-content-center align-items-center">
-          <div className="col-md-6 listing">
+        </SpectDescriptioContainer>
+        <SpectDescriptioContainer>
+          <div>
+            <FieldName>House Size</FieldName>
+            <FieldValue className="desc2">
+              {myselectedListing.houseSize} Sq. Ft. Per County
+            </FieldValue>
+          </div>
+          <div>
+            <FieldName>LOT SIZE</FieldName>
+            <FieldValue>{myselectedListing.lotSize}</FieldValue>
+          </div>
+        </SpectDescriptioContainer>
+        <FieldName>Amenities</FieldName>
+
+        <div>
+          <div>
             <ul>
-              <li>
+              <FieldValue>
                 {myselectedListing && myselectedListing.bedrooms} Bedrooms
-              </li>
-              <li>
+              </FieldValue>
+              <FieldValue>
                 {myselectedListing && myselectedListing.bathrooms} Bathrooms
-              </li>
+              </FieldValue>
               {myselectedListing.Amenities &&
                 myselectedListing.Amenities.slice(0, 3).map((amenity) => (
-                  <li key={amenity.id}>{amenity.name}</li>
+                  <FieldValueLi key={amenity.id}>{amenity.name}</FieldValueLi>
                 ))}
             </ul>
           </div>
-          <div className="col-md-6 second">
+          <div>
             <ul>
               {myselectedListing.Amenities &&
                 myselectedListing.Amenities.slice(3).map((amenity) => (
-                  <li key={amenity.id}>{amenity.name}</li>
+                  <FieldValueLi key={amenity.id}>{amenity.name}</FieldValueLi>
                 ))}
             </ul>
           </div>
         </div>
-        <p className="desc3">REQUIREMENTS</p>
-        <div className="requirementsUl">
+        <FieldName>REQUIREMENTS</FieldName>
+        <div>
           <ul>
             {myselectedListing.Requirements &&
               myselectedListing.Requirements.map((requirements) => (
-                <li key={requirements.id}>{requirements.name}</li>
+                <FieldValue key={requirements.id}>
+                  {requirements.name}
+                </FieldValue>
               ))}
           </ul>
         </div>
-        <div className="containerD d-flex align-items-center justify-content-center">
+        <div className="d-flex align-items-center justify-content-center">
           <button className="applyBtnPublic" onClick={handleApply}>
             Apply
           </button>
         </div>
-      </div>
+      </ModalListingDescription>
       {showApplicationModal && (
         <ApplicationModal
           onClose={handleModalClose}
           myselectedListing={myselectedListing}
         />
       )}
-    </div>
+    </ModalListingContainer>
   );
 };
 

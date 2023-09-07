@@ -5,10 +5,10 @@ import "../../styles/publIcListings/publicListings.css";
 import Logo from "../../assets/img/Logo.svg";
 import SearchIconHover from "../../assets/img/SearchIconHover.svg";
 import SearchIcon from "../../assets/img/SearchIcon.svg";
-import ModalPublicListings from "./modalPublicListings";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import Listing from "./Listing/Listing";
+import ModalPublicListings from "./ModalPublicListing/modalPublicListings";
 
 const PublicListings = () => {
   const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);

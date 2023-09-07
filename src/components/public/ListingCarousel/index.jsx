@@ -17,7 +17,7 @@ const ListingCarousel = ({ images }) => {
   return (
     <div
       id="carouselExampleControls"
-      className="carousel slide"
+      className="carousel slide h-100 w-100 d-flex align-items-center justify-content-center"
       data-ride="carousel"
     >
       <div className="carousel-inner">
@@ -26,7 +26,11 @@ const ListingCarousel = ({ images }) => {
             className={`carousel-item ${index === 0 ? "active" : ""}`}
             key={image.id}
           >
-            <img className="d-block w-100" src={renderImages(image)} />
+            <img
+              className="d-block w-100"
+              src={renderImages(image)}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
           </div>
         ))}
       </div>
