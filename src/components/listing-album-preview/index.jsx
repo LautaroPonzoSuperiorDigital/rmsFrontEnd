@@ -66,7 +66,7 @@ export function ListingAlbumPreview({
       <ViewAlbumButton
         type="button"
         onClick={toggleAlbum}
-        hasImage={albumImages.length}
+        data-has-image={!!albumImages.length}
         // disabled={isSaving}
       >
         {albumImages.length

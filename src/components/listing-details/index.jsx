@@ -36,8 +36,7 @@ import {
 import { ListingAlbumPreview } from "../listing-album-preview";
 import { useListingInspections } from "../../hooks/useListingInspections";
 import { ListingDetailsTabs } from "../../context/listingDetailsContext";
-
-
+import { ListingApplicants } from "../listing-applicants";
 
 export function ListingDetails() {
   const expensesRef = useRef(null);
@@ -137,8 +136,8 @@ export function ListingDetails() {
           <ExtraDetail>
             <span>AMENITIES</span>
             <Amenities>
-              {listing.Amenities?.map((amenity) => (
-                <li key={amenity.id}>{amenity.name}</li>
+              {listing.Amenities?.map((amenity, index) => (
+                <li key={index}>{amenity.name}</li>
               ))}
             </Amenities>
           </ExtraDetail>
@@ -146,8 +145,8 @@ export function ListingDetails() {
           <ExtraDetail>
             <span>REQUIREMENTS</span>
             <Requirements>
-              {listing.Requirements?.map((requirement) => (
-                <li key={requirement.id}>{requirement.name}</li>
+              {listing.Requirements?.map((requirement, index) => (
+                <li key={index}>{requirement.name}</li>
               ))}
             </Requirements>
           </ExtraDetail>
@@ -210,7 +209,9 @@ export function ListingDetails() {
           <ListingExpenseHistory ref={expensesRef} listingId={listing.id} />
         </HistoryTabContent>
 
-        <HistoryTabContent>Applicants Not Implemented Yet 😬</HistoryTabContent>
+        <HistoryTabContent>
+          <ListingApplicants />
+        </HistoryTabContent>
       </Tabs>
     </ListingDetailsContainer>
   );

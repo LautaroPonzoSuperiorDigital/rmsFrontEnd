@@ -3,6 +3,7 @@ import { createContext, useCallback, useEffect, useMemo, useState } from "react"
 import { formatPrice } from "../services/price"
 import { api } from "../services/api"
 import { ListingInspectionsProvider } from "./listingInspectionsContext"
+import { ListingApplicantsProvider } from "./listingApplicantsContext"
 
 export const ListingDetailsContext = createContext(undefined)
 
@@ -75,13 +76,15 @@ export function ListingDetailsProvider({ listing, children }) {
   return (
     <ListingDetailsContext.Provider value={value}>
       <ListingInspectionsProvider>
-        {children}
+        <ListingApplicantsProvider>
+          {children}
+        </ListingApplicantsProvider>
       </ListingInspectionsProvider>
     </ListingDetailsContext.Provider>
   )
 }
 
 ListingDetailsProvider.propTypes = {
-  listing: PropTypes.object.isRequired,
+  listing: PropTypes.object,
   children: PropTypes.node.isRequired,
 }
