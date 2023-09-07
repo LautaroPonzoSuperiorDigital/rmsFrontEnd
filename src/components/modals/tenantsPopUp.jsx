@@ -53,7 +53,6 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   };
 
   async function getAdminData() {
-    console.log(decodedToken);
     await api
       .get(`/user/${decodedToken.sub}`)
       .then((request) => {
@@ -106,7 +105,6 @@ const TenantModal = ({ selectedTenant, onClose }) => {
       tags: ["rms-frontend"],
     };
     if (!requestCreateData.recipients[0].email) {
-      console.log(requestCreateData);
       throw new Error("Bad Admin Data.");
     }
 
@@ -164,7 +162,6 @@ const TenantModal = ({ selectedTenant, onClose }) => {
         `/listing/${selectedTenant.Listings[0].id}`
       );
       const listingData = response.data;
-      console.log("Listing Data:", listingData);
       setListingData(listingData);
     } catch (error) {
       console.error("Error fetching listing data:", error);
