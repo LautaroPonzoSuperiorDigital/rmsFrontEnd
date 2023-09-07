@@ -258,7 +258,8 @@
 
 .description1 {
   background-color: white;
-  width: 30%;
+  width: 100%;
+  max-width: 670px;
   height: 100%;
 }
 
