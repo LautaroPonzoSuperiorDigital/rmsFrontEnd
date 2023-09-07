@@ -1,5 +1,12 @@
 import PropTypes from "prop-types";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { styled } from "styled-components";
+
+const CarouselContainer = styled.div`
+  @media (max-width: 768px) {
+    height: 15%;
+  }
+`;
 
 const ListingCarousel = ({ images }) => {
   const renderImages = (listingImage) => {
@@ -15,21 +22,21 @@ const ListingCarousel = ({ images }) => {
   };
 
   return (
-    <div
+    <CarouselContainer
       id="carouselExampleControls"
-      className="carousel slide h-100 w-100 d-flex align-items-center justify-content-center"
+      className="carousel slide h-25 w-100 d-flex align-items-center justify-content-center"
       data-ride="carousel"
     >
       <div className="carousel-inner">
         {images.map((image, index) => (
           <div
-            className={`carousel-item ${index === 0 ? "active" : ""}`}
+            className={`carousel-item ${index === 0 ? "active" : ""} h-100`}
             key={image.id}
           >
             <img
               className="d-block w-100"
               src={renderImages(image)}
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{ width: "100%", height: "100%", objectFit: "fill" }}
             />
           </div>
         ))}
@@ -52,7 +59,7 @@ const ListingCarousel = ({ images }) => {
         <span className="carousel-control-next-icon" aria-hidden="true"></span>
         <span className="sr-only">Next</span>
       </a>
-    </div>
+    </CarouselContainer>
   );
 };
 

@@ -1,9 +1,3 @@
-.containerPublic {
-  width: 100%;
-  height: auto;
-  font-family: "proxima-nova", sans-serif;
-}
-
 .position-sticky {
   background-color: white;
   border-bottom: 1px solid rgba(128, 128, 128, 0.23);
