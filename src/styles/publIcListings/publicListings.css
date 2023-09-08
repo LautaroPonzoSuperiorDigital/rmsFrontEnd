@@ -1,9 +1,8 @@
-/* Default styles for filters bar */
 .filtersBar {
   background-color: white;
   border-bottom: 1px solid rgba(128, 128, 128, 0.23);
   display: flex;
-  justify-content: space-between; /* Push elements to the left and right */
+  justify-content: space-between;
   align-items: center;
   padding: 1rem;
 }
@@ -13,17 +12,16 @@
   cursor: pointer;
 }
 
-/* Create a container for the button */
 .buttonContainer {
-  display: flex; /* Use flex to align the button */
-  align-items: center; /* Vertically center the button */
+  display: flex;
+  align-items: center;
 }
 
 .inputPublic {
   width: 25%;
   min-width: fit-content;
   max-width: 25%;
-  flex-grow: 1; /* Allow the input to expand and take available space */
+  flex-grow: 1;
   height: 2.5rem;
   border: 1px solid rgba(128, 128, 128, 0.219);
   border-radius: 0;
@@ -32,29 +30,35 @@
   padding-left: 1rem;
 }
 
-/* Add media query for mobile responsiveness */
-@media (max-width: 768px) {
-  .filtersBar {
-    flex-direction: column; /* Stack elements vertically for small screens */
-    padding: 1rem 0;
-  }
-
+@media (max-width: 991px) {
   .LogoPublic {
     width: auto;
-    margin-bottom: 1rem; /* Space below the logo */
+    margin-bottom: 1rem;
   }
 
   .inputPublic {
-    margin-left: 0; /* Remove left margin on input */
-    width: 100%; /* Take full width of the container */
-    max-width: 100%; /* Remove max-width restriction */
+    margin-left: 0;
+    width: 96%;
+    max-width: 100%;
+    margin-bottom: 0.5rem;
   }
 
-  /* Move the button container to the top for mobile */
-  .buttonContainer {
-    order: -1;
-    margin-top: 1rem; /* Add some spacing between the input and button */
+  .filtersBar {
+    flex-direction: column;
+    padding: 1rem 0;
   }
+
+  .SearchIconListings {
+    margin-left: -3.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .buttonContainer {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
 }
 
 .inputPublic:hover {
@@ -64,12 +68,11 @@
 }
 
 .SearchIconListings {
-  margin-left: -2.5rem;
+  margin-left: -3.5rem;
   margin-bottom: 0.3rem;
 }
 
 .dropdownMenu {
-  /* margin-left: 2rem; */
   padding-right: 5px;
   height: 2.5rem;
   width: 10rem;
@@ -160,8 +163,6 @@
   color: rgba(0, 0, 0, 0.78);
 }
 
-/* firstcol */
-/* secondcol */
 .spects2 {
   width: 30%;
   height: 100%;
