@@ -60,7 +60,7 @@ const AddDocs = ({ listingsData, onClose }) => {
     try {
       const cleanedBase64 = base64File.replace(/^data:.+;base64,/, '');
 
-      const response = await api.post(`/tenant/${listingId}/document`, JSON.stringify({
+      const response = await api.post(`/listing/${listingId}/document`, JSON.stringify({
         name: normalizedDocumentName,
         file: cleanedBase64,
       }), {
