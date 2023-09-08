@@ -16,6 +16,7 @@ import Pagination from "./paginations";
 import "../styles/modal.css";
 import TenantModal from "./modals/tenantsPopUp";
 import { api } from "../services/api";
+import jwtDecode from "jwt-decode";
 
 const TenantsAdmin = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -29,17 +30,20 @@ const TenantsAdmin = () => {
   const [editedTenant, setEditedTenant] = useState(null);
   const [selectedListingId, setSelectedListingId] = useState(null);
 
-
   const PAGE_SIZE = 10;
   const totalTenants = tenants.length;
   const totalPages = Math.ceil(totalTenants / PAGE_SIZE);
 
   const filteredTenants = showMissedPayment
-    ? tenants.filter((tenant) => tenant.status && tenant.status.includes("Missed Payment"))
+    ? tenants.filter(
+        (tenant) => tenant.status && tenant.status.includes("Missed Payment")
+      )
     : tenants;
 
   const countMissedPaymentTenants = () =>
-    tenants.filter((tenant) => tenant.status && tenant.status.includes("Missed Payment")).length;
+    tenants.filter(
+      (tenant) => tenant.status && tenant.status.includes("Missed Payment")
+    ).length;
 
   const tenantsPerPage = filteredTenants.slice(
     (currentPage - 1) * PAGE_SIZE,
@@ -59,14 +63,15 @@ const TenantsAdmin = () => {
   };
 
   const handleDeleteTenant = (tenantId) => {
-    const updatedTenants = tenants.filter(tenant => tenant.id !== tenantId);
+    const updatedTenants = tenants.filter((tenant) => tenant.id !== tenantId);
     setTenants(updatedTenants);
-    api.delete(`/tenant/${tenantId}`)
-      .then(response => {
-        console.log('Tenant deleted:', response.data);
+    api
+      .delete(`/tenant/${tenantId}`)
+      .then((response) => {
+        console.log("Tenant deleted:", response.data);
       })
-      .catch(error => {
-        console.error('Error deleting tenant:', error);
+      .catch((error) => {
+        console.error("Error deleting tenant:", error);
         setTenants(tenants);
       });
   };
@@ -89,7 +94,6 @@ const TenantsAdmin = () => {
     setEditTenant(null);
   };
 
-
   const handleSaveModal = (updatedTenant) => {
     const updatedTenants = tenants.map((tenant) =>
       tenant.id === updatedTenant.id ? updatedTenant : tenant
@@ -100,15 +104,27 @@ const TenantsAdmin = () => {
   };
 
   useEffect(() => {
-    api.get(`/tenant/`)
-      .then(response => {
-        setTenants(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching tenant data:', error);
-      });
-  }, []);
+    const localStorageToken = localStorage.getItem("certifymyrent.token");
 
+    if (!localStorageToken) throw new Error("Could not get token");
+
+    const decoded = jwtDecode(localStorageToken);
+
+    api.get(`/admin/user/${decoded?.sub}`).then(({ data: admin }) => {
+      api.get(`/listing?adminId=${admin.id}`).then(({ data: listings }) => {
+        listings.map((listing) => {
+          api.get(`/listing/${listing.id}/current-tenant`).then(({ data }) => {
+            const tenantObj = {
+              ...data["Tenant"],
+              listingId: listing.id,
+            };
+
+            setTenants([tenantObj, ...tenants]);
+          });
+        });
+      });
+    });
+  }, []);
 
   return (
     <>
@@ -180,7 +196,10 @@ const TenantsAdmin = () => {
                   {tenantsPerPage
                     .filter((tenant) => tenant.approvalStatus === "APPROVED")
                     .map((tenant) => {
-                      if (showMissedPayment && !tenant.status.includes("Missed Payment")) {
+                      if (
+                        showMissedPayment &&
+                        !tenant.status.includes("Missed Payment")
+                      ) {
                         return null;
                       }
                       return (
@@ -192,12 +211,16 @@ const TenantsAdmin = () => {
                           >
                             <p className="p1 h">{tenant.User.name}</p>
                           </td>
-                          <td onClick={(event) => handleCellClick(tenant, "listings", event)}>
-                            {tenant.Listings.length > 0 && (
+                          <td
+                            onClick={(event) =>
+                              handleCellClick(tenant, "listings", event)
+                            }
+                          >
+                            {
                               <p className="p1 h">
-                                {String(tenant.Listings[0].id).padStart(6, '0')}
+                                {String(tenant.listingId).padStart(6, "0")}
                               </p>
-                            )}
+                            }
                           </td>
                           <td
                             onClick={(event) =>
@@ -205,10 +228,13 @@ const TenantsAdmin = () => {
                             }
                           >
                             <p
-                              className={`p1 h ${tenant && tenant.status && tenant.status.includes("Missed Payment")
-                                ? "missed"
-                                : ""
-                                }`}
+                              className={`p1 h ${
+                                tenant &&
+                                tenant.status &&
+                                tenant.status.includes("Missed Payment")
+                                  ? "missed"
+                                  : ""
+                              }`}
                             >
                               {tenant && tenant.status}
                             </p>
@@ -250,13 +276,20 @@ const TenantsAdmin = () => {
                           <td className="buttonsNoMod">
                             <EditButton
                               defaultImage={<img src={Edit} alt="Edit" />}
-                              hoverImage={<img src={EditHover} alt="EditHover" />}
+                              hoverImage={
+                                <img src={EditHover} alt="EditHover" />
+                              }
                               onClick={() => handleEditClick(tenant)}
                             />
                             <DeleteButton
                               className="delete"
                               defaultImage={<img src={Delete} alt="Delete" />}
-                              hoverImage={<img src={DeleteIconHover} alt="DeleteIconHover" />}
+                              hoverImage={
+                                <img
+                                  src={DeleteIconHover}
+                                  alt="DeleteIconHover"
+                                />
+                              }
                               onClick={() => handleDeleteTenant(tenant.id)}
                             />
                           </td>
