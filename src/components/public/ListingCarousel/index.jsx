@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 
 const CarouselContainer = styled.div`
   @media (max-width: 768px) {
-    height: 15%;
+    height: 25%;
   }
 `;
 
@@ -24,7 +24,7 @@ const ListingCarousel = ({ images }) => {
   return (
     <CarouselContainer
       id="carouselExampleControls"
-      className="carousel slide h-25 w-100 d-flex align-items-center justify-content-center"
+      className="carousel slide  w-100 d-flex align-items-center justify-content-center"
       data-ride="carousel"
     >
       <div className="carousel-inner">
