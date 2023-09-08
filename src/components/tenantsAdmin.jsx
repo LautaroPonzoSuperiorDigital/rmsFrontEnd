@@ -7,7 +7,6 @@ import EditHover from "../assets/img/EditHover.svg";
 import Delete from "../assets/img/delete.svg";
 import DeleteIconHover from "../assets/img/deleteIconHover.svg";
 import CheckMark from "../assets/img/checkMark.svg";
-import tenantsData from "./tenantsData";
 import { EditButton, DeleteButton } from "./Buttons";
 import EditModal from "./modals";
 import CheckBoxLog from "./checkBox";
@@ -36,13 +35,13 @@ const TenantsAdmin = () => {
 
   const filteredTenants = showMissedPayment
     ? tenants.filter(
-        (tenant) => tenant.status && tenant.status.includes("Missed Payment")
+        (tenant) => tenant.approvalStatus && tenant.approvalStatus.includes("Missed Payment")
       )
     : tenants;
 
   const countMissedPaymentTenants = () =>
     tenants.filter(
-      (tenant) => tenant.status && tenant.status.includes("Missed Payment")
+      (tenant) => tenant.approvalStatus && tenant.approvalStatus.includes("Missed Payment")
     ).length;
 
   const tenantsPerPage = filteredTenants.slice(
@@ -198,12 +197,12 @@ const TenantsAdmin = () => {
                     .map((tenant) => {
                       if (
                         showMissedPayment &&
-                        !tenant.status.includes("Missed Payment")
+                        !tenant.approvalStatus.includes("Missed Payment")
                       ) {
                         return null;
                       }
                       return (
-                        <tr key={tenant.id} className="tr-hover">
+                        <tr key={`tenant-${tenant.id}`} className="tr-hover">
                           <td
                             onClick={(event) =>
                               handleCellClick(tenant, "name", event)
@@ -230,13 +229,13 @@ const TenantsAdmin = () => {
                             <p
                               className={`p1 h ${
                                 tenant &&
-                                tenant.status &&
-                                tenant.status.includes("Missed Payment")
+                                tenant.approvalStatus &&
+                                tenant.approvalStatus.includes("Missed Payment")
                                   ? "missed"
                                   : ""
                               }`}
                             >
-                              {tenant && tenant.status}
+                              {tenant && tenant.approvalStatus}
                             </p>
                           </td>
                           <td

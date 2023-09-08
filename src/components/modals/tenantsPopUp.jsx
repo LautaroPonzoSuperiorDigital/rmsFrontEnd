@@ -159,7 +159,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   const fetchListings = async () => {
     try {
       const response = await api.get(
-        `/listing/${selectedTenant.Listings[0].id}`
+        `/listing/${selectedTenant.listingId}`
       );
       const listingData = response.data;
       setListingData(listingData);
@@ -316,11 +316,9 @@ const TenantModal = ({ selectedTenant, onClose }) => {
               <div className="popUpOrderListings">
                 <div className="popUpOrderFirstCol idPopUp d-flex">
                   <p>ID</p>
-                  {selectedTenant.Listings.length > 0 && (
-                    <span>
-                      {String(selectedTenant.Listings[0].id).padStart(6, "0")}
+                  <span>
+                      {String(selectedTenant.listingId).padStart(6, "0")}
                     </span>
-                  )}
                 </div>
                 <div className="popUpOrderFirstCol locationPopUp d-flex">
                   <p>LOCATION</p>
