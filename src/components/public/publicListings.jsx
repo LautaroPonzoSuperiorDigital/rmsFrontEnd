@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ListingPublic, ListingPublicContainer } from "./styles";
 import "../../styles/publIcListings/publicListings.css";
-import Logo from "../../assets/img/Logo.svg";
+import Logo from "../../assets/img/logomark.svg";
 import SearchIconHover from "../../assets/img/SearchIconHover.svg";
 import SearchIcon from "../../assets/img/SearchIcon.svg";
 import { api } from "../../services/api";
@@ -68,24 +68,20 @@ const PublicListings = () => {
   }, []);
 
   return (
-    <div className=" containerPublic w-100">
-      <div
-        className={`position-sticky w-100 ${isModalOpen ? "modal-open" : ""}`}
-      >
-        <div className="filtersBar d-flex align-items-center">
+    <div className=" containerPublic">
+      <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
+        <div className="filtersBar d-flex align-items-center w-100 px-4">
           <img
-            className="LogoPublic justify-content-start ms-4"
+            className="LogoPublic justify-content-start"
             src={Logo}
             alt="Logo"
             onClick={handleLogoClick}
           />
-          <form method="GET">
+          <form method="GET" className="container w-100 px-2">
             <input
-              className={`inputPublic ms-5 ${
-                isInputHovered ? "inputHovered" : ""
-              }`}
+              className={`inputPublic mx-2${isInputHovered ? " inputHovered" : ""}`}
               type="text"
-              placeholder="     Keyword Or City"
+              placeholder="Keyword Or City"
               required
               onMouseEnter={handleInputHover}
               onMouseLeave={handleInputLeave}
@@ -105,26 +101,28 @@ const PublicListings = () => {
                 onMouseLeave={handleSearchIconLeave}
               />
             </button>
-            <select className="dropdownMenu">
+            <select className="dropdownMenu mx-2">
               <option className="opt" value="price">
                 &nbsp;&nbsp;Price
               </option>
             </select>
-            <select className="dropdownMenu">
+            <select className="dropdownMenu mx-2">
               <option className="opt" value="sqft">
                 &nbsp;&nbsp;Sq. Ft
               </option>
             </select>
-            <select className="dropdownMenu largeArrow">
+            <select className="dropdownMenu largeArrow mx-2">
               <option className="opt" value="Amenities">
                 &nbsp;&nbsp;Amenities
               </option>
             </select>
           </form>
           {!user && (
-            <button className="logInBtn" onClick={handleLoginClick}>
-              Log In
-            </button>
+            <div className="buttonContainer">
+              <button className="logInBtn" onClick={handleLoginClick}>
+                Log In
+              </button>
+            </div>
           )}
         </div>
       </div>
