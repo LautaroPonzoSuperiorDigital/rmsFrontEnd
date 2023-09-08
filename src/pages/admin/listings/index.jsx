@@ -19,6 +19,7 @@ import { ListingDetailsProvider } from "../../../context/listingDetailsContext";
 import { ListingForm } from "../../../components/listing-form";
 import { ListingDetails } from "../../../components/listing-details";
 import { createListingImage } from "../../../services/listing";
+import jwtDecode from "jwt-decode";
 
 const PAGE_SIZE = 10;
 
@@ -112,23 +113,37 @@ export default function AdminListings() {
   };
 
   useEffect(() => {
-    async function loadListings() {
+    function loadAdminDataAndListings() {
       try {
-        const { data } = await api.get("/listing");
+        const localStorageToken = localStorage.getItem("certifymyrent.token");
 
-        setListings(
-          data.map((listing) => ({
-            ...listing,
-            image: createListingImage(listing),
-          }))
-        );
+        if (!localStorageToken) throw new Error("Could not get token");
+
+        const decoded = jwtDecode(localStorageToken);
+
+        api
+          .get(`/admin/user/${decoded?.sub}`)
+          .then(({ data: admin }) => {
+            api
+              .get(`/listing?adminId=${admin?.id}`)
+              .then(({ data: listings }) => {
+                setListings(
+                  listings.map((listing) => ({
+                    ...listing,
+                    image: createListingImage(listing),
+                  }))
+                );
+              })
+              .catch((error) => alert("Error loading listings data: ", error));
+          })
+          .catch((error) => alert("Error loading admin data: ", error));
       } catch (err) {
         console.log(err);
-        alert("Error loading listings: ", err);
+        alert("Error loading admin and listings data: ", err);
       }
     }
 
-    loadListings();
+    loadAdminDataAndListings();
   }, []);
 
   return (
@@ -302,7 +317,7 @@ export default function AdminListings() {
           </Modal.Footer>
         </Modal.Body>
       </Modal.Root>
-      
+
       <ListingDetailsProvider
         listing={listingDetails}
         setListingDetails={setListingDetails}
@@ -311,9 +326,7 @@ export default function AdminListings() {
           <Modal.Body width="90%">
             <Modal.Header showCloseIcon />
             <Modal.Content>
-              {listingDetails && (
-                <ListingDetails />
-              )}
+              {listingDetails && <ListingDetails />}
             </Modal.Content>
           </Modal.Body>
         </Modal.Root>

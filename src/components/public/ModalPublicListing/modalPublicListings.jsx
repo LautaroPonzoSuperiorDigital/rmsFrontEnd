@@ -70,7 +70,6 @@ const ModalPublicListings = ({
   return (
     <ModalListingContainer>
       <ListingCarousel images={images} />
-
       <ModalListingDescription>
         <DescriptionContainer>
           <PriceText>

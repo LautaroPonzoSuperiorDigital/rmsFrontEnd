@@ -19,12 +19,12 @@ const createDocumentsLoader = (signOut) => async () => {
     return redirect('/')
   }
 
-  const { data: sentDocuments } = await api.get(`/tenant/${tenantId}/pandadoc/document/sent`)
+  const { data: sentDocuments } = await api.get(`/tenant/${tenantId}/document/sent`)
 
   const tenantDocuments = await Promise.all(
     sentDocuments
       .map(sentDocument =>
-        api.get(`/tenant/${tenantId}/pandadoc/document/${sentDocument.Document.docId}/detail`)
+        api.get(`/tenant/${tenantId}/document/${sentDocument.Document.docId}/detail`)
           .then(({ data: documentDetail }) => {
             const applicantRecipient = documentDetail.recipients.find(recipient => recipient.email === userEmail)
             const signUrl = applicantRecipient?.sharedLink
