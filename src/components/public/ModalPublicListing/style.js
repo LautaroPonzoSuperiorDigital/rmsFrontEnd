@@ -6,7 +6,6 @@ export const ModalListingContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  min-height: 100vh;
   background-color: white;
   display: flex;
   align-items: center;

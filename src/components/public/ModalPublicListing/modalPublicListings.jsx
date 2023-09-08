@@ -69,7 +69,10 @@ const ModalPublicListings = ({
 
   return (
     <ModalListingContainer>
-      <ListingCarousel images={images} />
+      <ListingCarousel
+        images={images}
+        handleBackToSearch={handleBackToSearch}
+      />
       <ModalListingDescription>
         <DescriptionContainer>
           <PriceText>
@@ -103,7 +106,7 @@ const ModalPublicListings = ({
         </SpectDescriptioContainer>
         <FieldName>Amenities</FieldName>
 
-        <div>
+        <div style={{ display: "flex", gap: 150 }}>
           <div>
             <ul>
               <FieldValue>
