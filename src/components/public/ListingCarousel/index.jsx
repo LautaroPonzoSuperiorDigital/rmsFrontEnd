@@ -1,14 +1,17 @@
 import PropTypes from "prop-types";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { styled } from "styled-components";
-
+import { BtnBackToSearch, BtnGallery } from "./styles";
+import ChevronLeft from "../../../assets/img/chevron.left (1).svg";
 const CarouselContainer = styled.div`
+  position: relative;
   @media (max-width: 768px) {
-    height: 25%;
+    height: 100vh;
+    max-height: 400px;
   }
 `;
 
-const ListingCarousel = ({ images }) => {
+const ListingCarousel = ({ images, handleBackToSearch, handleShowAlbum }) => {
   const renderImages = (listingImage) => {
     let image = null;
     if (listingImage) {
@@ -30,13 +33,16 @@ const ListingCarousel = ({ images }) => {
       <div className="carousel-inner">
         {images.map((image, index) => (
           <div
-            className={`carousel-item ${index === 0 ? "active" : ""} h-100`}
+            className={`carousel-item ${index === 0 ? "active" : ""} `}
             key={image.id}
           >
             <img
               className="d-block w-100"
               src={renderImages(image)}
-              style={{ width: "100%", height: "100%", objectFit: "fill" }}
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
             />
           </div>
         ))}
@@ -59,6 +65,17 @@ const ListingCarousel = ({ images }) => {
         <span className="carousel-control-next-icon" aria-hidden="true"></span>
         <span className="sr-only">Next</span>
       </a>
+      <BtnBackToSearch onClick={handleBackToSearch}>
+        <img
+          src={ChevronLeft}
+          alt="ChevronLeft"
+          style={{ width: "8px", marginRight: "9px" }}
+        />
+        Back To Search Results
+      </BtnBackToSearch>
+      <BtnGallery onClick={handleShowAlbum}>
+        {images.id}/{images.length}
+      </BtnGallery>
     </CarouselContainer>
   );
 };
