@@ -3,14 +3,15 @@ import "../../styles/Documents/documents.css";
 import Close from "../../assets/img/close.svg";
 import CloseHover from "../../assets/img/closeHover.svg";
 import { api } from "../../services/api";
+import jwtDecode from "jwt-decode";
 
 const AddDocs = ({ listingsData, onClose }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [documentName, setDocumentName] = useState('');
-  const [base64File, setBase64File] = useState('');
-  const [listingId, setListingId] = useState('');
-  const [currentTenant, setCurrentTenant] = useState(null);
+  const [documentName, setDocumentName] = useState("");
+  const [base64File, setBase64File] = useState("");
+  const [listingId, setListingId] = useState("");
+  // const [currentTenant, setCurrentTenant] = useState(null);
 
   // Handle file change
   const handleFileChange = (event) => {
@@ -27,52 +28,38 @@ const AddDocs = ({ listingsData, onClose }) => {
     }
   };
 
-  // Fetch current tenant information when the listingId changes
-  useEffect(() => {
-    const fetchCurrentTenant = async () => {
-      try {
-        const response = await api.get(`/listing/${listingId}/current-tenant`);
-        setCurrentTenant(response.data);
-        console.log('Current Tenant Data:', response.data); // Agregar este console.log
-      } catch (error) {
-        console.error('Error fetching current tenant:', error);
-      }
-    };
-
-    if (listingId) {
-      fetchCurrentTenant();
-    }
-  }, [listingId]);
-
-
-  // Handle save button click
-
-  /* sendDoc */
   const handleSaveClick = async () => {
-    if (!selectedFile || !documentName || !listingId) {
-      return;
-    }
-
-    const normalizedDocumentName = documentName.endsWith('.pdf')
-      ? documentName
-      : `${documentName}.pdf`;
+    if (!selectedFile || !documentName || !listingId) return;
 
     try {
-      const cleanedBase64 = base64File.replace(/^data:.+;base64,/, '');
+      const localStorageToken = localStorage.getItem("certifymyrent.token");
+      if (!localStorageToken) throw new Error("Could not get token");
+      const decoded = jwtDecode(localStorageToken);
 
-      const response = await api.post(`/listing/${listingId}/document`, JSON.stringify({
-        name: normalizedDocumentName,
-        file: cleanedBase64,
-      }), {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log('API Response:', response.data);
+      const { data: listing } = await api.get(`listing/${listingId}`);
+
+      if (listing?.adminId !== decoded?.sub) {
+        alert(`You are not allowed to attach file to Listing #${listingId}`);
+        throw new Error(`Not authorized`);
+      }
+
+      await api.post(
+        `/listing/${listingId}/document`,
+        JSON.stringify({
+          name: documentName,
+          file: base64File,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       onClose();
       window.location.reload();
     } catch (error) {
-      console.error('Error saving document:', error);
+      console.error("Error saving document:", error);
     }
   };
   /* sendDoc */

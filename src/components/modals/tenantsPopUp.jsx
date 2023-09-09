@@ -11,6 +11,7 @@ import testImg from "../../assets/img/testImg.jpg";
 import AddDocs from "./addDocumentsModal";
 import { api } from "../../services/api";
 import jwtDecode from "jwt-decode";
+import { ListingInspectionHistory } from "../listing-inspection-history";
 
 const TenantModal = ({ selectedTenant, onClose }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -158,9 +159,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
   const fetchListings = async () => {
     try {
-      const response = await api.get(
-        `/listing/${selectedTenant.Listings[0].id}`
-      );
+      const response = await api.get(`/listing/${selectedTenant.listingId}`);
       const listingData = response.data;
       setListingData(listingData);
     } catch (error) {
@@ -250,11 +249,9 @@ const TenantModal = ({ selectedTenant, onClose }) => {
         );
 
       case "PAYMENT HISTORY":
-        return <div></div>;
+        return <></>;
       case "INSPECTION HISTORY":
-        return (
-          <div className="renderBoxsOrder d-flex align-items-start justify-content-start "></div>
-        );
+        return <></>;
       case "APPLICATION FORM":
         return (
           <div className="renderBoxsOrder d-flex align-items-start justify-content-start "></div>
@@ -316,11 +313,9 @@ const TenantModal = ({ selectedTenant, onClose }) => {
               <div className="popUpOrderListings">
                 <div className="popUpOrderFirstCol idPopUp d-flex">
                   <p>ID</p>
-                  {selectedTenant.Listings.length > 0 && (
-                    <span>
-                      {String(selectedTenant.Listings[0].id).padStart(6, "0")}
-                    </span>
-                  )}
+                  <span>
+                    {String(selectedTenant.listingId).padStart(6, "0")}
+                  </span>
                 </div>
                 <div className="popUpOrderFirstCol locationPopUp d-flex">
                   <p>LOCATION</p>

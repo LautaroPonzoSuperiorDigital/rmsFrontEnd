@@ -52,19 +52,18 @@ const Documents = () => {
     }
   }, []);
 
-  const handleDelete = async (documentId, tenantId) => {
+  const handleDelete = async (listingId, documentId) => {
     try {
-      const updatedDocuments = documentsData.filter(
-        (document) => document.id !== documentId
-      );
-      setDocumentsData(updatedDocuments);
-
-      await api.delete(`tenant/${tenantId}/document/${documentId}`);
-      console.log("Document deleted successfully!");
+      await api
+        .delete(`listing/${listingId}/document/${documentId}`)
+        .then(() => {
+          const updatedDocuments = documentsData.filter(
+            (document) => document.id !== documentId
+          );
+          setDocumentsData(updatedDocuments);
+        });
     } catch (error) {
       console.error("Error deleting document:", error);
-      // Revert the state update on error
-      setDocumentsData([...updatedDocuments, documentToDelete]);
     }
   };
 
@@ -120,7 +119,11 @@ const Documents = () => {
                           </a>
                         </p>
                       </td>
-                      <td className="h p1 td td2"></td>
+                      <td className="h p1 td td2">
+                        <p className="LISTING2 h">
+                          {String(document.listingId).padStart(6, "0")}
+                        </p>
+                      </td>
                       <td className="h p1 td td2 tdFix">
                         <p className="location2"></p>
                       </td>
@@ -147,7 +150,7 @@ const Documents = () => {
                               />
                             }
                             onClick={() =>
-                              handleDelete(document.id, document.Tenant.id)
+                              handleDelete(document.Listing.id, document.id)
                             }
                           />
                         </div>

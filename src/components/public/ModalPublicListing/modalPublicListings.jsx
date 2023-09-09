@@ -18,6 +18,8 @@ import {
   FieldValue,
   FieldValueLi,
   BlackOverlay,
+  AmenitiesContainer,
+  BtnApply,
 } from "./style";
 import { ModalProvider } from "../../modal/context";
 import { ListingAlbum1 } from "./ListingAlbum/ListingAlbum1";
@@ -131,7 +133,7 @@ const ModalPublicListings = ({
         </SpectDescriptioContainer>
         <FieldName>Amenities</FieldName>
 
-        <div style={{ display: "flex", gap: 150 }}>
+        <AmenitiesContainer>
           <div>
             <ul>
               <FieldValue>
@@ -154,7 +156,7 @@ const ModalPublicListings = ({
                 ))}
             </ul>
           </div>
-        </div>
+        </AmenitiesContainer>
         <FieldName>REQUIREMENTS</FieldName>
         <div>
           <ul>
@@ -166,10 +168,11 @@ const ModalPublicListings = ({
               ))}
           </ul>
         </div>
-        <div className="d-flex align-items-center justify-content-center">
-          <button className="applyBtnPublic" onClick={handleApply}>
-            Apply
-          </button>
+        <div
+          className="d-flex align-items-center justify-content-center "
+          style={{ width: "100%" }}
+        >
+          <BtnApply onClick={handleApply}>Apply</BtnApply>
         </div>
         {showAlbum && (
           <ModalProvider>
