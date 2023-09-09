@@ -17,7 +17,10 @@ import {
   FieldName,
   FieldValue,
   FieldValueLi,
+  BlackOverlay,
 } from "./style";
+import { ModalProvider } from "../../modal/context";
+import { ListingAlbum1 } from "./ListingAlbum/ListingAlbum1";
 
 const ModalPublicListings = ({
   selectedImage,
@@ -27,6 +30,16 @@ const ModalPublicListings = ({
   const [showModal, setShowModal] = useState(false);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [images, setImage] = useState([]);
+  const [showAlbum, setShowAlbum] = useState(false);
+  const [section, setSection] = useState([]);
+
+  const handleGoBack = () => {
+    setShowAlbum(false);
+  };
+
+  const handleShowAlbum = () => {
+    setShowAlbum(true);
+  };
 
   const imgCardContainerClass = `imgCardContainer ${
     selectedImage ? "showImage" : ""
@@ -63,13 +76,28 @@ const ModalPublicListings = ({
         });
       }
       setImage(allImages);
+      const sectionsArray = data.Sections.map((section) => ({
+        name: section.Images[0]?.AlbumSection.Section.name,
+        Album: {
+          Images: section.Images.map((image) => ({
+            key: image.key,
+          })),
+        },
+      }));
+      console.log(sectionsArray);
+      setSection(sectionsArray);
     };
     fetchImage();
   }, []);
 
   return (
     <ModalListingContainer>
-      <ListingCarousel images={images} />
+      <ListingCarousel
+        images={images}
+        handleBackToSearch={handleBackToSearch}
+        handleShowAlbum={handleShowAlbum}
+      />
+
       <ModalListingDescription>
         <DescriptionContainer>
           <PriceText>
@@ -103,7 +131,7 @@ const ModalPublicListings = ({
         </SpectDescriptioContainer>
         <FieldName>Amenities</FieldName>
 
-        <div>
+        <div style={{ display: "flex", gap: 150 }}>
           <div>
             <ul>
               <FieldValue>
@@ -143,6 +171,16 @@ const ModalPublicListings = ({
             Apply
           </button>
         </div>
+        {showAlbum && (
+          <ModalProvider>
+            <BlackOverlay>
+              <ListingAlbum1
+                handleGoBack={handleGoBack}
+                listingSections={section}
+              />
+            </BlackOverlay>
+          </ModalProvider>
+        )}
       </ModalListingDescription>
       {showApplicationModal && (
         <ApplicationModal
