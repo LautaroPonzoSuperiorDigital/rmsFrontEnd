@@ -6,12 +6,12 @@ import ChevronLeft from "../../../assets/img/chevron.left (1).svg";
 const CarouselContainer = styled.div`
   position: relative;
   @media (max-width: 768px) {
-    height: 25%;
+    height: 100vh;
+    max-height: 400px;
   }
 `;
 
-const ListingCarousel = ({ images, handleBackToSearch }) => {
-  console.log(images);
+const ListingCarousel = ({ images, handleBackToSearch, handleShowAlbum }) => {
   const renderImages = (listingImage) => {
     let image = null;
     if (listingImage) {
@@ -33,7 +33,7 @@ const ListingCarousel = ({ images, handleBackToSearch }) => {
       <div className="carousel-inner">
         {images.map((image, index) => (
           <div
-            className={`carousel-item ${index === 0 ? "active" : ""} h-100`}
+            className={`carousel-item ${index === 0 ? "active" : ""} `}
             key={image.id}
           >
             <img
@@ -42,7 +42,6 @@ const ListingCarousel = ({ images, handleBackToSearch }) => {
               style={{
                 width: "100%",
                 height: "100%",
-                objectFit: "cover",
               }}
             />
           </div>
@@ -74,7 +73,7 @@ const ListingCarousel = ({ images, handleBackToSearch }) => {
         />
         Back To Search Results
       </BtnBackToSearch>
-      <BtnGallery>
+      <BtnGallery onClick={handleShowAlbum}>
         {images.id}/{images.length}
       </BtnGallery>
     </CarouselContainer>
