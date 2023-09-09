@@ -13,7 +13,7 @@ export const ModalListingContainer = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
-    width: 100vw;
+    overflow-y: scroll;
   }
 `;
 
@@ -94,4 +94,22 @@ export const BlackOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const AmenitiesContainer = styled.div`
+  display: flex;
+  gap: 150px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0px;
+  }
+`;
+
+export const BtnApply = styled.button`
+  background-color: #197572;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  width: 100%;
+  max-width: 580px;
 `;

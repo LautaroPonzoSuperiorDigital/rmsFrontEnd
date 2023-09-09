@@ -3,19 +3,32 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { styled } from "styled-components";
 import { BtnBackToSearch, BtnGallery } from "./styles";
 import ChevronLeft from "../../../assets/img/chevron.left (1).svg";
-const CarouselContainer = styled.div`
-  position: relative;
-  @media (max-width: 768px) {
-    height: 100vh;
-    max-height: 400px;
-  }
-`;
+import { useState } from "react";
+const CarouselContainer = styled.div``;
 
 const ListingCarousel = ({ images, handleBackToSearch, handleShowAlbum }) => {
+  const [count, setCount] = useState(1);
+
+  const handlePlusCount = () => {
+    if (count === images.length) {
+      setCount(1);
+    } else {
+      setCount(count + 1);
+    }
+  };
+
+  const handleMinusCount = () => {
+    if (count === 1) {
+      setCount(images.length);
+    } else {
+      setCount(count - 1);
+    }
+  };
+
   const renderImages = (listingImage) => {
     let image = null;
     if (listingImage) {
-      const key = listingImage.key; // Fix: Access 'key' property from 'listingImage', not 'image'
+      const key = listingImage.key;
       image = `https://rms-staging.s3.us-west-1.amazonaws.com/${key}`.replace(
         /\\/g,
         "%5C"
@@ -27,7 +40,7 @@ const ListingCarousel = ({ images, handleBackToSearch, handleShowAlbum }) => {
   return (
     <CarouselContainer
       id="carouselExampleControls"
-      className="carousel slide  w-100 d-flex align-items-center justify-content-center"
+      className="carousel   w-100 d-flex align-items-center justify-content-center"
       data-ride="carousel"
     >
       <div className="carousel-inner">
@@ -52,6 +65,7 @@ const ListingCarousel = ({ images, handleBackToSearch, handleShowAlbum }) => {
         role="button"
         data-slide="prev"
         href="#carouselExampleControls"
+        onClick={handleMinusCount}
       >
         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
         <span className="sr-only">Previous</span>
@@ -61,6 +75,7 @@ const ListingCarousel = ({ images, handleBackToSearch, handleShowAlbum }) => {
         role="button"
         data-slide="next"
         href="#carouselExampleControls"
+        onClick={handlePlusCount}
       >
         <span className="carousel-control-next-icon" aria-hidden="true"></span>
         <span className="sr-only">Next</span>
@@ -74,7 +89,7 @@ const ListingCarousel = ({ images, handleBackToSearch, handleShowAlbum }) => {
         Back To Search Results
       </BtnBackToSearch>
       <BtnGallery onClick={handleShowAlbum}>
-        {images.id}/{images.length}
+        {count}/{images.length}
       </BtnGallery>
     </CarouselContainer>
   );
