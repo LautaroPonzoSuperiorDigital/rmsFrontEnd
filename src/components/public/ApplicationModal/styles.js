@@ -105,6 +105,7 @@ export const FieldValue = styled(Text)`
   font-size: 20px;
   font-weight: 600;
   line-height: 0rem;
+  overflow-wrap: break-word;
 `;
 export const PriceText = styled(Text)`
     margin: 0;
@@ -112,6 +113,7 @@ export const PriceText = styled(Text)`
   color: #272727;
   font-size: 25px
   font-weight: 600;
+  
 `;
 
 export const AmenitiesContainer = styled.div`
@@ -124,15 +126,21 @@ export const Ulcontainers = styled.div`
   justify-content: space-between;
   height: 100%;
   width: 100%;
-  max-width: 314px;
+  gap: 50px;
+  margin-left: 20px;
 `;
 
 export const Ul = styled.ul`
-  list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   gap: 0px;
+`;
+
+export const Li = styled.li`
+  font-size: 20px;
+  color: #000000;
+  font-weight: 600;
 `;
