@@ -24,6 +24,7 @@ import {
   Ul,
   SideBarDescriptionPrice,
   Ulcontainers,
+  Li,
 } from "./styles.js";
 
 const ApplicationModal = ({ myselectedListing, onClose }) => {
@@ -136,9 +137,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
       </div>
       <ApplicationContainer>
         <SideBarDescriptionContainer>
-          <div>
-            <ImgSideBar src={createListingImage(myselectedListing)} alt="" />
-          </div>
+          <ImgSideBar src={createListingImage(myselectedListing)} alt="" />
 
           <SideBarDescriptionPrice>
             <div>
@@ -170,7 +169,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             <div>
               <FieldText>City</FieldText>
               {myselectedListing && (
-                <FieldValue className="desc2">
+                <FieldValue>
                   {myselectedListing.location.split(", ").slice(-2).join(", ")}
                 </FieldValue>
               )}
@@ -181,7 +180,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
               <FieldText>HOUSE SIZE</FieldText>
               <FieldValue>
                 {myselectedListing && (
-                  <span className="desc2">
+                  <span>
                     {" "}
                     {myselectedListing.houseSize
                       ? myselectedListing.houseSize.toLocaleString("EN", {
@@ -213,29 +212,21 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             <FieldText>AMENITIES</FieldText>
             <Ulcontainers>
               <Ul>
-                <li>
-                  <FieldValue>
-                    {myselectedListing && myselectedListing.bedrooms} Bedrooms
-                  </FieldValue>
-                </li>
-                <li>
-                  <FieldValue>
-                    {myselectedListing && myselectedListing.bathrooms} Bathrooms
-                  </FieldValue>
-                </li>
+                <Li>
+                  {myselectedListing && myselectedListing.bedrooms} Bedrooms
+                </Li>
+                <Li>
+                  {myselectedListing && myselectedListing.bathrooms} Bathrooms
+                </Li>
                 {myselectedListing.Amenities &&
                   myselectedListing.Amenities.slice(0, 3).map((amenity) => (
-                    <li key={amenity.id}>
-                      <FieldValue>{amenity.name}</FieldValue>
-                    </li>
+                    <Li key={amenity.id}>{amenity.name}</Li>
                   ))}
               </Ul>
               <Ul>
                 {myselectedListing.Amenities &&
                   myselectedListing.Amenities.slice(3, 8).map((amenity) => (
-                    <li key={amenity.id}>
-                      <FieldValue>{amenity.name}</FieldValue>
-                    </li>
+                    <Li key={amenity.id}>{amenity.name}</Li>
                   ))}
               </Ul>
             </Ulcontainers>
