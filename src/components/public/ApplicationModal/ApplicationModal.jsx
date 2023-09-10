@@ -22,6 +22,8 @@ import {
   FieldValue,
   AmenitiesContainer,
   Ul,
+  SideBarDescriptionPrice,
+  Ulcontainers,
 } from "./styles.js";
 
 const ApplicationModal = ({ myselectedListing, onClose }) => {
@@ -135,14 +137,10 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
       <ApplicationContainer>
         <SideBarDescriptionContainer>
           <div>
-            <ImgSideBar
-              className="fakeImg"
-              src={createListingImage(myselectedListing)}
-              alt=""
-            />
+            <ImgSideBar src={createListingImage(myselectedListing)} alt="" />
           </div>
 
-          <SideBarDescription>
+          <SideBarDescriptionPrice>
             <div>
               <FieldText>ID</FieldText>
 
@@ -167,7 +165,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 /mo
               </p>
             </div>
-          </SideBarDescription>
+          </SideBarDescriptionPrice>
           <SideBarDescription>
             <div>
               <FieldText>City</FieldText>
@@ -212,8 +210,8 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             </div>
           </SideBarDescription>
           <AmenitiesContainer>
-            <div>
-              <FieldText>AMENITIES</FieldText>
+            <FieldText>AMENITIES</FieldText>
+            <Ulcontainers>
               <Ul>
                 <li>
                   <FieldValue>
@@ -226,13 +224,21 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   </FieldValue>
                 </li>
                 {myselectedListing.Amenities &&
-                  myselectedListing.Amenities.map((amenity) => (
+                  myselectedListing.Amenities.slice(0, 3).map((amenity) => (
                     <li key={amenity.id}>
                       <FieldValue>{amenity.name}</FieldValue>
                     </li>
                   ))}
               </Ul>
-            </div>
+              <Ul>
+                {myselectedListing.Amenities &&
+                  myselectedListing.Amenities.slice(3, 8).map((amenity) => (
+                    <li key={amenity.id}>
+                      <FieldValue>{amenity.name}</FieldValue>
+                    </li>
+                  ))}
+              </Ul>
+            </Ulcontainers>
           </AmenitiesContainer>
 
           <AmenitiesContainer>
