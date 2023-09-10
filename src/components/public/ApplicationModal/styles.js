@@ -58,8 +58,8 @@ export const SideBarDescriptionContainer = styled.div`
   flex-direction: column;
   height: 100vh;
   width: 100%;
-  max-width: 500px;
-  padding: 10px 47px;
+  max-width: 420px;
+  padding: 20px 47px;
   border-right: 1px solid rgba(128, 128, 128, 0.533);
   @media (max-width: 768px) {
     flex-direction: row;
@@ -70,12 +70,23 @@ export const ImgSideBar = styled.img`
 margin: 0 !important;,
   width: 100%;
   height: 100%;
+  max-width: 314px;
+    max-height: 314px;
+    object-fit: cover;
+    
   
 `;
 
 export const SideBarDescription = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+export const SideBarDescriptionPrice = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 314px;
+  max-height: 314px;
 `;
 
 export const Text = styled.p`
@@ -107,6 +118,13 @@ export const AmenitiesContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+`;
+export const Ulcontainers = styled.div`
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  max-width: 314px;
 `;
 
 export const Ul = styled.ul`
