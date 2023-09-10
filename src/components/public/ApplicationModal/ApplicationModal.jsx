@@ -1,21 +1,28 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import "../../styles/publIcListings/application.css";
-import Logo from "../../assets/img/Logo.svg";
-import { api } from "../../services/api";
-import { env } from "../../config/env";
-import { HeaderGoBack } from "../icons/tenants";
-import { useAuth } from "../../hooks/useAuth";
+import "../../../styles/publIcListings/application.css";
+import Logo from "../../../assets/img/Logo.svg";
+import { api } from "../../../services/api";
+import { env } from "../../../config/env";
+import { HeaderGoBack } from "../../icons/tenants";
+import { useAuth } from "../../../hooks/useAuth";
 import { Link } from "react-router-dom";
-import { createListingImage } from "../../services/listing";
-
-const goBackStyle = {
-  margin: 0,
-  fontSize: "22px",
-  marginLeft: "15px",
-  marginRight: "15px",
-  cursor: "pointer",
-};
+import { createListingImage } from "../../../services/listing";
+import {
+  NavContainer,
+  NavText,
+  GoBackStyle,
+  GoBackContainer,
+  ApplicationContainer,
+  SideBarDescriptionContainer,
+  ImgSideBar,
+  SideBarDescription,
+  FieldText,
+  PriceText,
+  FieldValue,
+  AmenitiesContainer,
+  Ul,
+} from "./styles.js";
 
 const ApplicationModal = ({ myselectedListing, onClose }) => {
   const [activeSection, setActiveSection] = useState("registration");
@@ -105,70 +112,76 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
 
   return (
     <div className="bodyApplication">
-      <div className="bgApplicants d-flex align-items-start">
-        <style>
-          {`
-          .position-sticky {
-            display: none;
-          }
-        `}
-        </style>
-        <div className="ApplicationNavBar d-flex align-items-center justify-content-between">
-          <img
-            className="LogoPublic1 justify-content-start ms-4"
-            src={Logo}
-            alt="Logo"
-            onClick={handleLogoClick}
-          />
-          <h2 className="Application">Application</h2>
-
-          <div className="d-flex align-items-center" onClick={handleGoBack}>
-            <HeaderGoBack />
-            <p style={goBackStyle}>GO BACK</p>
+      <div className=" d-flex align-items-start justify-content-center">
+        <NavContainer>
+          <div className="d-flex align-items-center">
+            <div>
+              <img
+                src={Logo}
+                alt="Logo"
+                onClick={handleLogoClick}
+                style={{ width: "100%", height: "100%" }}
+              />
+            </div>
+            <NavText className="Application">Application</NavText>
           </div>
-        </div>
+
+          <GoBackContainer onClick={handleGoBack}>
+            <HeaderGoBack />
+            <GoBackStyle>GO BACK</GoBackStyle>
+          </GoBackContainer>
+        </NavContainer>
       </div>
-      <div className="d-flex containerApplications">
-        <div className="sidePropertyDescription d-flex justify-content-start align-items-center flex-column">
-          <img
-            className="fakeImg"
-            src={createListingImage(myselectedListing)}
-            alt=""
-          />
-          <div className="idPrice d-flex justify-items-center align-items-center">
-            <div className="d-flex flex-column align-items-start justify-content-center ID1">
-              <p>ID</p>
+      <ApplicationContainer>
+        <SideBarDescriptionContainer>
+          <div>
+            <ImgSideBar
+              className="fakeImg"
+              src={createListingImage(myselectedListing)}
+              alt=""
+            />
+          </div>
+
+          <SideBarDescription>
+            <div>
+              <FieldText>ID</FieldText>
+
               {myselectedListing && (
-                <span className="desc2 or2">
+                <FieldValue>
                   {myselectedListing.id.toString().padStart(6, "0")}
-                </span>
+                </FieldValue>
               )}
             </div>
-            <h2 className="d-flex justify-content-center price1">
-              ${" "}
-              {myselectedListing && myselectedListing.price
-                ? parseFloat(myselectedListing.price).toLocaleString("en", {
-                    useGrouping: true,
-                  })
-                : ""}
-              /mo
-            </h2>
-          </div>
-          <div className="city-hs-ls d-flex flex-column">
-            <div className="orderApp">
-              <div className="div1">
-                <p>CITY</p>
-                {myselectedListing && (
-                  <span className="desc2">
-                    {myselectedListing.location
-                      .split(", ")
-                      .slice(-2)
-                      .join(", ")}
-                  </span>
-                )}
-              </div>
-              <div className="div1">
-                <p>HOUSE SIZE</p>
+            <div>
+              <p
+                style={{
+                  color: "#272727",
+                  fontSize: "25px",
+                  fontWeight: "bold",
+                }}
+              >
+                ${" "}
+                {myselectedListing && myselectedListing.price
+                  ? parseFloat(myselectedListing.price).toLocaleString("en", {})
+                  : ""}
+                /mo
+              </p>
+            </div>
+          </SideBarDescription>
+          <SideBarDescription>
+            <div>
+              <FieldText>City</FieldText>
+              {myselectedListing && (
+                <FieldValue className="desc2">
+                  {myselectedListing.location.split(", ").slice(-2).join(", ")}
+                </FieldValue>
+              )}
+            </div>
+          </SideBarDescription>
+          <SideBarDescription>
+            <div>
+              <FieldText>HOUSE SIZE</FieldText>
+              <FieldValue>
                 {myselectedListing && (
                   <span className="desc2">
                     {" "}
@@ -180,51 +193,60 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                     &nbsp;Sq. Ft. per county
                   </span>
                 )}
-              </div>
-              <div className="div1">
-                <p>LOT SIZE</p>
-                {myselectedListing && (
-                  <span className="desc2">
-                    {myselectedListing.lotSize
-                      ? myselectedListing.lotSize.toLocaleString("EN", {
-                          maximumFractionDigits: 0,
-                        })
-                      : ""}{" "}
-                    &nbsp;Sq. Ft. per county
-                  </span>
-                )}
-              </div>
+              </FieldValue>
             </div>
-          </div>
-          <div className="amenities d-flex flex-column justify-content-center">
-            <div className="orderApp">
-              <p>AMENITIES</p>
-              <ul>
+          </SideBarDescription>
+          <SideBarDescription>
+            <div>
+              <FieldText>LOT SIZE</FieldText>
+              {myselectedListing && (
+                <FieldValue className="desc2">
+                  {myselectedListing.lotSize
+                    ? myselectedListing.lotSize.toLocaleString("EN", {
+                        maximumFractionDigits: 0,
+                      })
+                    : ""}{" "}
+                  &nbsp;Sq. Ft. per county
+                </FieldValue>
+              )}
+            </div>
+          </SideBarDescription>
+          <AmenitiesContainer>
+            <div>
+              <FieldText>AMENITIES</FieldText>
+              <Ul>
                 <li>
-                  {myselectedListing && myselectedListing.bedrooms} Bedrooms
+                  <FieldValue>
+                    {myselectedListing && myselectedListing.bedrooms} Bedrooms
+                  </FieldValue>
                 </li>
                 <li>
-                  {myselectedListing && myselectedListing.bathrooms} Bathrooms
+                  <FieldValue>
+                    {myselectedListing && myselectedListing.bathrooms} Bathrooms
+                  </FieldValue>
                 </li>
                 {myselectedListing.Amenities &&
                   myselectedListing.Amenities.map((amenity) => (
-                    <li key={amenity.id}>{amenity.name}</li>
+                    <li key={amenity.id}>
+                      <FieldValue>{amenity.name}</FieldValue>
+                    </li>
                   ))}
-              </ul>
+              </Ul>
             </div>
-          </div>
-          <div className="requirements d-flex flex-column">
-            <div className="orderReq">
-              <p className="requirementsText">REQUIREMENTS</p>
-              <ul>
-                {myselectedListing.Requirements &&
-                  myselectedListing.Requirements.map((requirement) => (
-                    <li key={requirement.id}>{requirement.name}</li>
-                  ))}
-              </ul>
-            </div>
-          </div>
-        </div>
+          </AmenitiesContainer>
+
+          <AmenitiesContainer>
+            <FieldText>REQUIREMENTS</FieldText>
+            <Ul>
+              {myselectedListing.Requirements &&
+                myselectedListing.Requirements.map((requirement) => (
+                  <li key={requirement.id}>
+                    <FieldValue>{requirement.name}</FieldValue>
+                  </li>
+                ))}
+            </Ul>
+          </AmenitiesContainer>
+        </SideBarDescriptionContainer>
         <div className="forms redside d-flex justify-content-center align-items-center">
           {activeSection === "registration" && (
             <div className="registrationContainer d-flex justify-content-center">
@@ -290,7 +312,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             </div>
           )}
         </div>
-      </div>
+      </ApplicationContainer>
     </div>
   );
 };
