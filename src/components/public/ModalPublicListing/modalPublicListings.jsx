@@ -1,12 +1,11 @@
 import PropTypes from "prop-types";
-
 import { useEffect, useState } from "react";
 import "../../../styles/publIcListings/publicListings.css";
 import camera from "../../../assets/img/camera.svg";
-import ApplicationModal from "../ApplicationModal";
 import { api } from "../../../services/api";
 import { createListingImage } from "../../../services/listing";
 import ListingCarousel from "../ListingCarousel";
+import ApplicationModal from "../ApplicationModal/ApplicationModal";
 import {
   ModalListingContainer,
   ModalListingDescription,
