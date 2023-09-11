@@ -186,12 +186,26 @@
     margin-bottom: 1.5rem;
   }
 
+  /* Hide the input field on mobile */
   .inputPublic {
     display: none;
   }
 
-  /* login button */
+  /* Hide the login button on mobile */
   .buttonContainer {
     display: none;
+  }
+
+  /* Center align the filters bar content */
+  .filtersBar {
+    flex-direction: column;
+    padding: 1rem 0;
+    align-items: center;
+  }
+
+  /* Adjust the position of the search icon */
+  .SearchIconListings {
+    margin-left: 0;
+    margin-bottom: 0.3rem;
   }
 }
