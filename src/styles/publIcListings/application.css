@@ -288,19 +288,22 @@
 .formRegistrationOrder {
   height: 100%;
   width: 100%;
+  max-width: 580px;
 }
 .registrationContainer {
   height: 80%;
   width: 80%;
 }
 .registrationText {
-  margin-bottom: 4rem;
-  width: 15%;
-  font-size: 1.8vw;
+  font-size: 35px;
   white-space: nowrap;
+  @media (max-width: 768px) {
+    font-size: 25px;
+    margin-top: 1.5rem;
+  }
 }
 .resetForm {
-  width: 36.375rem;
+  width: 100%;
 }
 .inputReset {
   border: none;
@@ -309,6 +312,11 @@
   background: transparent;
   border-radius: 0;
   margin-bottom: 2rem;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+  }
 }
 .inputReset:focus {
   border-bottom: 1px solid #197572;

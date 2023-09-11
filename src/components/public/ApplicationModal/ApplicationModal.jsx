@@ -257,13 +257,13 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             </AmenitiesContainer>
           </SideBarDescriptionContainer>
         )}
-        <div className="forms redside d-flex justify-content-center align-items-center">
+        <div className="forms redside d-flex justify-content-center align-items-center ">
           {activeSection === "registration" && (
-            <div className="registrationContainer d-flex justify-content-center">
+            <div className="registrationContainer d-flex justify-content-center align-items-center">
               <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
                 {!user && (
                   <>
-                    <h2 className="d-flex justify-content-center mt-3 registrationText">
+                    <h2 className="d-flex justify-content-center registrationText">
                       Registration
                     </h2>
                     <form className="resetForm" onSubmit={submitRegistration}>
@@ -301,23 +301,31 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                         onChange={handleChange}
                       />
 
-                      <button className="bgButton d-flex align-items-center justify-content-center">
+                      <button className="bgButton d-flex align-items-center justify-content-center w-100">
                         <span className="submitBtn">Submit</span>
                       </button>
                       <p style={{ color: "#31af9a" }}>{message}</p>
                     </form>
                   </>
                 )}
-                {isStartScreening ? (
+
+                <div
+                  style={{
+                    height: "100%",
+                    maxHeight: "45px",
+                    width: "100%",
+                    maxWidth: "580px",
+                  }}
+                >
                   <button
-                    className="bgButton d-flex align-items-center justify-content-center"
+                    className=" bgButton  d-flex align-items-center justify-content-center w-100"
                     onClick={handleStartScreening}
+                    style={{ margin: "0px" }}
                   >
                     <span className="submitBtn">Start Screening</span>
                   </button>
-                ) : (
                   <p>{screeningMessage}</p>
-                )}
+                </div>
               </div>
             </div>
           )}
