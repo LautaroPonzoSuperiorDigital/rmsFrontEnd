@@ -178,7 +178,6 @@
   }
 }
 
-/* MOBILE */
 @media (max-width: 768px) {
   .LogoPublic {
     align-self: center;
@@ -186,26 +185,40 @@
     margin-bottom: 1.5rem;
   }
 
-  /* Hide the input field on mobile */
   .inputPublic {
     display: none;
   }
 
-  /* Hide the login button on mobile */
   .buttonContainer {
     display: none;
   }
 
-  /* Center align the filters bar content */
   .filtersBar {
     flex-direction: column;
     padding: 1rem 0;
     align-items: center;
   }
 
-  /* Adjust the position of the search icon */
   .SearchIconListings {
     margin-left: 0;
     margin-bottom: 0.3rem;
+  }
+
+  .dropdownMenu {
+    display: none;
+  }
+
+  .filter-listings {
+    background-image: url("../../assets/img/slider.horizontal.3.svg");
+    background-size: cover;
+    height: 1.3rem;
+    width: 1.3rem;
+    cursor: pointer;
+  }
+
+  button[type="submit"] {
+    top: 0.5rem;
+    right: 0.5rem;
+    margin: 0;
   }
 }
