@@ -56,13 +56,15 @@ export const ApplicationContainer = styled.div`
 export const SideBarDescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   max-width: 420px;
   padding: 20px 47px;
-  border-right: 1px solid rgba(128, 128, 128, 0.533);
+  // border-right: 1px solid rgba(128, 128, 128, 0.533);
   @media (max-width: 768px) {
     flex-direction: row;
+    padding: 9px;
+    height: 85px;
   }
 `;
 
@@ -74,11 +76,16 @@ margin: 0 !important;,
     max-height: 314px;
     object-fit: cover;
     
+    @media (max-width: 768px) {
+      width: 94px;
+      height: 67px;
+    }
   
 `;
 
 export const SideBarDescription = styled.div`
   display: flex;
+
   justify-content: space-between;
 `;
 export const SideBarDescriptionPrice = styled.div`
@@ -86,7 +93,9 @@ export const SideBarDescriptionPrice = styled.div`
   justify-content: space-between;
   width: 100%;
   max-width: 314px;
-  max-height: 314px;
+  @media (max-width: 768px) {
+    display: flex;
+  }
 `;
 
 export const Text = styled.p`
@@ -99,6 +108,9 @@ export const FieldText = styled(Text)`
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5rem;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 export const FieldValue = styled(Text)`
   color: #000000;
@@ -106,6 +118,9 @@ export const FieldValue = styled(Text)`
   font-weight: 600;
   line-height: 0rem;
   overflow-wrap: break-word;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 export const PriceText = styled(Text)`
     margin: 0;
