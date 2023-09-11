@@ -180,7 +180,6 @@
 
 @media (max-width: 768px) {
   .LogoPublic {
-    flex: 1;
     align-self: center;
     width: auto;
   }
