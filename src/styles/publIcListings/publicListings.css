@@ -182,7 +182,6 @@
   .LogoPublic {
     align-self: center;
     width: auto;
-    margin-bottom: 1.5rem;
   }
 
   .inputPublic {
@@ -232,7 +231,7 @@
     right: 0.5rem;
     margin: 0;
   }
-  
+
   button[type="submit"] img {
     top: 0.5rem;
     right: 0.5rem;
