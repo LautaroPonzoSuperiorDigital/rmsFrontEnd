@@ -79,7 +79,9 @@ const PublicListings = () => {
           />
           <form method="GET" className="container w-100 px-2">
             <input
-              className={`inputPublic mx-2${isInputHovered ? " inputHovered" : ""}`}
+              className={`inputPublic mx-2${
+                isInputHovered ? " inputHovered" : ""
+              }`}
               type="text"
               placeholder="Keyword Or City"
               required
