@@ -180,6 +180,7 @@
 
 @media (max-width: 768px) {
   .LogoPublic {
+    flex: 1;
     align-self: center;
     width: auto;
   }
@@ -204,9 +205,9 @@
   }
 
   .filtersBar {
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
     padding: 1rem 0;
-    align-items: center;
   }
 
   .SearchIconListings {
