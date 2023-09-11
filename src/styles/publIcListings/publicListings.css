@@ -30,37 +30,6 @@
   padding-left: 1rem;
 }
 
-@media (max-width: 991px) {
-  .LogoPublic {
-    width: auto;
-    margin-bottom: 1rem;
-  }
-
-  .inputPublic {
-    margin-left: 0;
-    width: 96%;
-    max-width: 100%;
-    margin-bottom: 0.5rem;
-  }
-
-  .filtersBar {
-    flex-direction: column;
-    padding: 1rem 0;
-  }
-
-  .SearchIconListings {
-    margin-left: -3.5rem;
-    margin-bottom: 0.3rem;
-  }
-
-  .buttonContainer {
-    margin-top: 1rem;
-  }
-}
-
-@media (max-width: 768px) {
-}
-
 .inputPublic:hover {
   box-shadow: none;
   border-color: #31af9a;
@@ -179,4 +148,50 @@
 .icons1 {
   margin-top: -1rem;
   margin-right: 1.3rem;
+}
+
+@media (max-width: 991px) {
+  .LogoPublic {
+    width: auto;
+    margin-bottom: 1rem;
+  }
+
+  .inputPublic {
+    margin-left: 0;
+    width: 96%;
+    max-width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .filtersBar {
+    flex-direction: column;
+    padding: 1rem 0;
+  }
+
+  .SearchIconListings {
+    margin-left: -3.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .buttonContainer {
+    margin-top: 1rem;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .LogoPublic {
+    align-self: center;
+    width: auto;
+    margin-bottom: 1.5rem;
+  }
+
+  .inputPublic {
+    display: none;
+  }
+
+  /* login button */
+  .buttonContainer {
+    display: none;
+  }
 }
