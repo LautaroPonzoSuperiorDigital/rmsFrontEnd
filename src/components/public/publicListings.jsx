@@ -103,6 +103,7 @@ const PublicListings = () => {
                 onMouseLeave={handleSearchIconLeave}
               />
             </button>
+            <button className="filter-listings" />
             <select className="dropdownMenu mx-2">
               <option className="opt" value="price">
                 &nbsp;&nbsp;Price
