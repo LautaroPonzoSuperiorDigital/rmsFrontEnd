@@ -26,6 +26,7 @@ import {
   Ulcontainers,
   Li,
 } from "./styles.js";
+import DescriptionMobileNav from "./DescriptionMobileNav";
 
 const ApplicationModal = ({ myselectedListing, onClose }) => {
   const [activeSection, setActiveSection] = useState("registration");
@@ -36,6 +37,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
   const [userId, setUserId] = useState({});
   const { user } = useAuth();
   console.log(user);
+  const innerWidth = window.innerWidth;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -135,122 +137,133 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
           </GoBackContainer>
         </NavContainer>
       </div>
+
       <ApplicationContainer>
-        <SideBarDescriptionContainer>
-          <ImgSideBar src={createListingImage(myselectedListing)} alt="" />
+        {innerWidth < 768 ? (
+          <DescriptionMobileNav myselectedListing={myselectedListing} />
+        ) : (
+          <SideBarDescriptionContainer>
+            <ImgSideBar src={createListingImage(myselectedListing)} alt="" />
 
-          <SideBarDescriptionPrice>
-            <div>
-              <FieldText>ID</FieldText>
+            <SideBarDescriptionPrice>
+              <div>
+                <FieldText>ID</FieldText>
 
-              {myselectedListing && (
-                <FieldValue>
-                  {myselectedListing.id.toString().padStart(6, "0")}
-                </FieldValue>
-              )}
-            </div>
-            <div>
-              <p
-                style={{
-                  color: "#272727",
-                  fontSize: "25px",
-                  fontWeight: "bold",
-                }}
-              >
-                ${" "}
-                {myselectedListing && myselectedListing.price
-                  ? parseFloat(myselectedListing.price).toLocaleString("en", {})
-                  : ""}
-                /mo
-              </p>
-            </div>
-          </SideBarDescriptionPrice>
-          <SideBarDescription>
-            <div>
-              <FieldText>City</FieldText>
-              {myselectedListing && (
-                <FieldValue>
-                  {myselectedListing.location.split(", ").slice(-2).join(", ")}
-                </FieldValue>
-              )}
-            </div>
-          </SideBarDescription>
-          <SideBarDescription>
-            <div>
-              <FieldText>HOUSE SIZE</FieldText>
-              <FieldValue>
                 {myselectedListing && (
-                  <span>
-                    {" "}
-                    {myselectedListing.houseSize
-                      ? myselectedListing.houseSize.toLocaleString("EN", {
+                  <FieldValue>
+                    {myselectedListing.id.toString().padStart(6, "0")}
+                  </FieldValue>
+                )}
+              </div>
+              <div>
+                <p
+                  style={{
+                    color: "#272727",
+                    fontSize: "25px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  ${" "}
+                  {myselectedListing && myselectedListing.price
+                    ? parseFloat(myselectedListing.price).toLocaleString(
+                        "en",
+                        {}
+                      )
+                    : ""}
+                  /mo
+                </p>
+              </div>
+            </SideBarDescriptionPrice>
+            <SideBarDescription>
+              <div>
+                <FieldText>City</FieldText>
+                {myselectedListing && (
+                  <FieldValue>
+                    {myselectedListing.location
+                      .split(", ")
+                      .slice(-2)
+                      .join(", ")}
+                  </FieldValue>
+                )}
+              </div>
+            </SideBarDescription>
+            <SideBarDescription>
+              <div>
+                <FieldText>HOUSE SIZE</FieldText>
+                <FieldValue>
+                  {myselectedListing && (
+                    <span>
+                      {" "}
+                      {myselectedListing.houseSize
+                        ? myselectedListing.houseSize.toLocaleString("EN", {
+                            maximumFractionDigits: 0,
+                          })
+                        : ""}
+                      &nbsp;Sq. Ft. per county
+                    </span>
+                  )}
+                </FieldValue>
+              </div>
+            </SideBarDescription>
+            <SideBarDescription>
+              <div>
+                <FieldText>LOT SIZE</FieldText>
+                {myselectedListing && (
+                  <FieldValue className="desc2">
+                    {myselectedListing.lotSize
+                      ? myselectedListing.lotSize.toLocaleString("EN", {
                           maximumFractionDigits: 0,
                         })
-                      : ""}
+                      : ""}{" "}
                     &nbsp;Sq. Ft. per county
-                  </span>
+                  </FieldValue>
                 )}
-              </FieldValue>
-            </div>
-          </SideBarDescription>
-          <SideBarDescription>
-            <div>
-              <FieldText>LOT SIZE</FieldText>
-              {myselectedListing && (
-                <FieldValue className="desc2">
-                  {myselectedListing.lotSize
-                    ? myselectedListing.lotSize.toLocaleString("EN", {
-                        maximumFractionDigits: 0,
-                      })
-                    : ""}{" "}
-                  &nbsp;Sq. Ft. per county
-                </FieldValue>
-              )}
-            </div>
-          </SideBarDescription>
-          <AmenitiesContainer>
-            <FieldText>AMENITIES</FieldText>
-            <Ulcontainers>
-              <Ul>
-                <Li>
-                  {myselectedListing && myselectedListing.bedrooms} Bedrooms
-                </Li>
-                <Li>
-                  {myselectedListing && myselectedListing.bathrooms} Bathrooms
-                </Li>
-                {myselectedListing.Amenities &&
-                  myselectedListing.Amenities.slice(0, 3).map((amenity) => (
-                    <Li key={amenity.id}>{amenity.name}</Li>
-                  ))}
-              </Ul>
-              <Ul>
-                {myselectedListing.Amenities &&
-                  myselectedListing.Amenities.slice(3, 8).map((amenity) => (
-                    <Li key={amenity.id}>{amenity.name}</Li>
-                  ))}
-              </Ul>
-            </Ulcontainers>
-          </AmenitiesContainer>
+              </div>
+            </SideBarDescription>
+            <AmenitiesContainer>
+              <FieldText>AMENITIES</FieldText>
+              <Ulcontainers>
+                <Ul>
+                  <Li>
+                    {myselectedListing && myselectedListing.bedrooms} Bedrooms
+                  </Li>
+                  <Li>
+                    {myselectedListing && myselectedListing.bathrooms} Bathrooms
+                  </Li>
+                  {myselectedListing.Amenities &&
+                    myselectedListing.Amenities.slice(0, 3).map((amenity) => (
+                      <Li key={amenity.id}>{amenity.name}</Li>
+                    ))}
+                </Ul>
+                <Ul>
+                  {myselectedListing.Amenities &&
+                    myselectedListing.Amenities.slice(3, 8).map((amenity) => (
+                      <Li key={amenity.id}>{amenity.name}</Li>
+                    ))}
+                </Ul>
+              </Ulcontainers>
+            </AmenitiesContainer>
 
-          <AmenitiesContainer>
-            <FieldText>REQUIREMENTS</FieldText>
-            <Ul>
-              {myselectedListing.Requirements &&
-                myselectedListing.Requirements.map((requirement) => (
-                  <li key={requirement.id}>
-                    <FieldValue>{requirement.name}</FieldValue>
-                  </li>
-                ))}
-            </Ul>
-          </AmenitiesContainer>
-        </SideBarDescriptionContainer>
-        <div className="forms redside d-flex justify-content-center align-items-center">
+            <AmenitiesContainer>
+              <FieldText>REQUIREMENTS</FieldText>
+              <Ul>
+                {myselectedListing.Requirements &&
+                  myselectedListing.Requirements.map((requirement) => (
+                    <li key={requirement.id}>
+                      <FieldValue>{requirement.name}</FieldValue>
+                    </li>
+                  ))}
+              </Ul>
+            </AmenitiesContainer>
+          </SideBarDescriptionContainer>
+        )}
+        <div className="forms redside d-flex justify-content-center align-items-center ">
           {activeSection === "registration" && (
-            <div className="registrationContainer d-flex justify-content-center">
+            <div className="registrationContainer d-flex justify-content-center align-items-center">
               <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
                 {!user && (
                   <>
-                    <h2 className="d-flex justify-content-center mt-3 registrationText">
+                    <h2 className="d-flex justify-content-center registrationText">
                       Registration
                     </h2>
                     <form className="resetForm" onSubmit={submitRegistration}>
@@ -288,22 +301,31 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                         onChange={handleChange}
                       />
 
-                      <button className="bgButton d-flex align-items-center justify-content-center">
+                      <button className="bgButton d-flex align-items-center justify-content-center w-100">
                         <span className="submitBtn">Submit</span>
                       </button>
                       <p style={{ color: "#31af9a" }}>{message}</p>
                     </form>
                   </>
                 )}
-                {isStartScreening ? (
-                  <button
-                    className="bgButton d-flex align-items-center justify-content-center"
-                    onClick={handleStartScreening}
+                {isStartScreening && (
+                  <div
+                    style={{
+                      height: "100%",
+                      maxHeight: "45px",
+                      width: "100%",
+                      maxWidth: "580px",
+                    }}
                   >
-                    <span className="submitBtn">Start Screening</span>
-                  </button>
-                ) : (
-                  <p>{screeningMessage}</p>
+                    <button
+                      className=" bgButton  d-flex align-items-center justify-content-center w-100"
+                      onClick={handleStartScreening}
+                      style={{ margin: "0px" }}
+                    >
+                      <span className="submitBtn">Start Screening</span>
+                    </button>
+                    <p>{screeningMessage}</p>
+                  </div>
                 )}
               </div>
             </div>
