@@ -70,14 +70,14 @@ const PublicListings = () => {
   return (
     <div className=" containerPublic">
       <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
-        <div className="filtersBar d-flex align-items-center w-100 px-4">
+        <div className="filtersBar d-flex align-items-center px-4">
           <img
             className="LogoPublic justify-content-start"
             src={Logo}
             alt="Logo"
             onClick={handleLogoClick}
           />
-          <form method="GET" className="container w-100 px-2">
+          <form method="GET" className="container px-2">
             <input
               className={`inputPublic mx-2${
                 isInputHovered ? " inputHovered" : ""
