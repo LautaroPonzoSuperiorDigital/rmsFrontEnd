@@ -308,25 +308,26 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                     </form>
                   </>
                 )}
-                {isStartScreening && (
-                  <div
-                    style={{
-                      height: "100%",
-                      maxHeight: "45px",
-                      width: "100%",
-                      maxWidth: "580px",
-                    }}
-                  >
-                    <button
-                      className=" bgButton  d-flex align-items-center justify-content-center w-100"
-                      onClick={handleStartScreening}
-                      style={{ margin: "0px" }}
+                {isStartScreening ||
+                  (user.isApplicant && (
+                    <div
+                      style={{
+                        height: "100%",
+                        maxHeight: "45px",
+                        width: "100%",
+                        maxWidth: "580px",
+                      }}
                     >
-                      <span className="submitBtn">Start Screening</span>
-                    </button>
-                    <p>{screeningMessage}</p>
-                  </div>
-                )}
+                      <button
+                        className=" bgButton  d-flex align-items-center justify-content-center w-100"
+                        onClick={handleStartScreening}
+                        style={{ margin: "0px" }}
+                      >
+                        <span className="submitBtn">Start Screening</span>
+                      </button>
+                      <p>{screeningMessage}</p>
+                    </div>
+                  ))}
               </div>
             </div>
           )}
