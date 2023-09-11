@@ -23,7 +23,7 @@ const TenantsProfileContainer = styled.form`
 `
 
 const TenantsProfile = () => {
-  const { user } = useAuth()
+  const { user, onSignedOut } = useAuth()
   const { hideNavbar, showNavbar } = useTenantsLayout()
 
   useEffect(() => {
@@ -120,6 +120,7 @@ const TenantsProfile = () => {
             type="button"
             className="btn btn-outline-danger w-100"
             style={{ fontSize: "16px", fontWeight: "600" }}
+            onClick={onSignedOut}
           >
             <img src={logOut} alt="logOut" />
             Log Out

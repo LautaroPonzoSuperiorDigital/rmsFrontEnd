@@ -15,7 +15,7 @@ import { EditButton, DeleteButton } from "../../../components/buttonListings";
 import Pagination from "../../../components/paginations";
 import AddListings from "../../../components/addListing";
 import { Modal } from "../../../components/modal";
-import { ListingDetailsProvider } from "../../../context/listingDetailsContext";
+import { ListingDetailsContext, ListingDetailsProvider, ListingDetailsTabs } from "../../../context/listingDetailsContext";
 import { ListingForm } from "../../../components/listing-form";
 import { ListingDetails } from "../../../components/listing-details";
 import { createListingImage } from "../../../services/listing";
@@ -307,16 +307,23 @@ export default function AdminListings() {
         listing={listingDetails}
         setListingDetails={setListingDetails}
       >
-        <Modal.Root ref={listingDetailsModalRef}>
-          <Modal.Body width="90%">
-            <Modal.Header showCloseIcon />
-            <Modal.Content>
-              {listingDetails && (
-                <ListingDetails />
-              )}
-            </Modal.Content>
-          </Modal.Body>
-        </Modal.Root>
+        <ListingDetailsContext.Consumer>
+          {({ activeTab }) => (
+            <Modal.Root
+              ref={listingDetailsModalRef}
+              onModalClosed={() => activeTab.set(ListingDetailsTabs.TENANT_HISTORY)}
+            >
+              <Modal.Body width="90%">
+                <Modal.Header showCloseIcon />
+                <Modal.Content>
+                  {listingDetails && (
+                    <ListingDetails />
+                  )}
+                </Modal.Content>
+              </Modal.Body>
+            </Modal.Root>
+          )}
+        </ListingDetailsContext.Consumer>
       </ListingDetailsProvider>
 
       <Pagination

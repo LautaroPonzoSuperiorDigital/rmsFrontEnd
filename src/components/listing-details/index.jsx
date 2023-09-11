@@ -32,22 +32,33 @@ import {
   ExpenseAction,
   InspectionsActionsBox,
   InspectionAction,
+  DocumentsActionsBox,
+  DocumentAction,
 } from "./styles";
 import { ListingAlbumPreview } from "../listing-album-preview";
 import { useListingInspections } from "../../hooks/useListingInspections";
 import { ListingDetailsTabs } from "../../context/listingDetailsContext";
 import { ListingApplicants } from "../listing-applicants";
 import { ListingTenants } from "../listing-tenants";
+import { ListingDocuments } from "../listing-documents";
 
 export function ListingDetails() {
   const expensesRef = useRef(null);
 
-  const { activeTab, listing, isLoadingPNL } = useListingDetails();
+  const {
+    activeTab,
+    listing,
+    isLoadingPNL,
+    handleOpenEditListingModal,
+  } = useListingDetails();
   const { handleOpenInspectionFormModal } = useListingInspections();
 
   const showInspectionActions =
     activeTab.value === ListingDetailsTabs.INSPECTION_HISTORY;
+
   const showExpensesActions = activeTab.value === ListingDetailsTabs.EXPENSE_HISTORY;
+
+  const showDocumentsActions = activeTab.value === ListingDetailsTabs.DOCUMENT_HISTORY;
 
   const openExpenseForm = () => expensesRef.current?.openForm();
 
@@ -56,7 +67,8 @@ export function ListingDetails() {
       <DetailsBox>
         <ListingAlbumPreview
           editable={false}
-          listingSections={listing.Sections}
+          listingId={listing?.id}
+          // listingSections={listing.Sections}
         />
 
         <MainDetails>
@@ -113,7 +125,7 @@ export function ListingDetails() {
               <CheckBoxLog checked={listing.isPublic} />
             </ExtraDetail>
 
-            <Action>
+            <Action type="button" onClick={handleOpenEditListingModal}>
               <Edit />
               <span>Edit Listing Details</span>
             </Action>
@@ -188,6 +200,14 @@ export function ListingDetails() {
               </ExpenseAction>
             </ExpensesActionsBox>
           )}
+
+          {showDocumentsActions && (
+            <DocumentsActionsBox>
+              <DocumentAction type="button">
+                + Add Document
+              </DocumentAction>
+            </DocumentsActionsBox>
+          )}
         </HistoryTabs>
 
         <HistoryTabContent>
@@ -199,7 +219,7 @@ export function ListingDetails() {
         </HistoryTabContent>
 
         <HistoryTabContent>
-          Document History Not Implemented Yet 😬
+          <ListingDocuments />
         </HistoryTabContent>
 
         <HistoryTabContent>
