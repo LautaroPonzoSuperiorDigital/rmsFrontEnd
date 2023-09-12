@@ -278,24 +278,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
             <div className="inspection-card-container">
               {inspections.map((inspection) => (
                 <div className="inspection-card" key={inspection.id}>
-                  <div className="inspectionContent ms-3 mt-2 me-3">
-                    <div className="actionButtons">
-                      <EditInspectionButton
-                        defaultImage={<img src={Edit} alt="Edit" />}
-                        hoverImage={<img src={EditHover} alt="EditHover" />}
-                        // onClick={() => handleEditInspection(inspection)}
-                      />
-                      <DeleteInspectionButton
-                        className="delete"
-                        defaultImage={<img src={Delete} alt="Delete" />}
-                        hoverImage={
-                          <img src={DeleteIconHover} alt="DeleteIconHover" />
-                        }
-                        // onClick={() =>
-                        //   handleOpenRemoveInspectionModal(inspection)
-                        // }
-                      />
-                    </div>
+                  <div className="inspectionContent">
                     <p>{inspection.name}</p>
                     <span>
                       {formatDate({
