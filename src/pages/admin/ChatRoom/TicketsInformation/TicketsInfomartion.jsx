@@ -25,9 +25,8 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
 
   useEffect(() => {
     const matchedChatRoom = chatRooms.find(
-      (chatRoom) => chatRoom.listingId === chatRoomId
+      (chatRoom) => chatRoom.id === chatRoomId
     );
-
     const fetchTickets = async () => {
       try {
         const tickets = await api.get(
@@ -39,7 +38,6 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         const filesData = await api.get(
           `tenant/${matchedChatRoom.tenantId}/document`
         );
-        console.log(filesData.data);
 
         const ticketsData = [...tickets.data, ...tickets2.data];
         const filterActiveTickets = ticketsData.filter(
