@@ -13,6 +13,7 @@ const Applicants = () => {
   const [applicants, setApplicants] = useState([]);
   const [tabelApplicants, setTableApplicants] = useState([]);
   const [newTanant, setNewTanant] = useState(false);
+  const [deleteTenant, setDeleteTenant] = useState(false);
   const animationContainerRef = useRef(null);
 
   useEffect(() => {
@@ -22,12 +23,13 @@ const Applicants = () => {
         setApplicants(applicants.data);
         setTableApplicants(applicants.data);
         setNewTanant(false);
+        setDeleteTenant(false);
       } catch (err) {
         console.log(err);
       }
     };
     fetchApplicants();
-  }, [newTanant]);
+  }, [newTanant, deleteTenant]);
 
   useEffect(() => {
     if (showAnimation) {
@@ -71,6 +73,7 @@ const Applicants = () => {
           setNewTanant={setNewTanant}
           setApplicants={setApplicants}
           setTableApplicants={setTableApplicants}
+          setDeleteTenant={setDeleteTenant}
         />
       </div>
 
