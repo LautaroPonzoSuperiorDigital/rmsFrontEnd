@@ -27,22 +27,22 @@ const ticketContainerStyle = {
 
 const TicketsNavBar = ({ targetChatRoomId, chatRooms }) => {
   const selectedListing = chatRooms.find(
-    (chatRoom) => chatRoom.listingId === targetChatRoomId
+    (chatRoom) => chatRoom.id === targetChatRoomId
   );
 
   return (
     <div style={ticketContainerStyle}>
       <div>
         <img
-          src={createListingImage(selectedListing.Listing)}
+          src={createListingImage(selectedListing?.Listing)}
           style={{ height: "50px", width: "45" }}
         />
       </div>
       <div>
-        <p style={nameStyle}>{selectedListing.Tenant.User.name}</p>
+        <p style={nameStyle}>{selectedListing?.Tenant.User.name}</p>
       </div>
       <div>
-        <p style={listingStyle}> LISTING {selectedListing.listingId}</p>
+        <p style={listingStyle}> LISTING {selectedListing?.listingId}</p>
       </div>
     </div>
   );
