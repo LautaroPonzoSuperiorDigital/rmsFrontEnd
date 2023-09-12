@@ -40,17 +40,16 @@ const AdminChatRoom = ({
   setTickets,
 }) => {
   const [notification, setNotification] = useState(true);
-
   useEffect(() => {
-    socket.emit("event_join", `${chatRoom.listingId}`);
+    socket.emit("event_join", `${chatRoom.id}`);
 
     socket.on("notification", (data) => {
       setNotification(data);
     });
-  }, [socket, chatRoom.listingId]);
+  }, [socket, chatRoom.id]);
 
   return (
-    <ChatRoomsStyle onClick={() => setTargetChatRoomId(chatRoom.listingId)}>
+    <ChatRoomsStyle onClick={() => setTargetChatRoomId(chatRoom.id)}>
       <ChayLayout>
         <div className="d-flex align-items-center gap-3  ">
           <div>

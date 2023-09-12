@@ -84,11 +84,9 @@ const Chats = () => {
       try {
         const { data } = await api.get("/chat/chat-rooms");
         const adminListings = await api.get(`/listing?adminId=${user.id}`);
-        console.log("aca", adminListings.data);
-        console.log(data);
         if (adminListings.data.length > 0) {
           // Extract the matching listingId values
-          const matchingListingIds = data
+          const matchingListings = data
             .filter((chatroom) =>
               adminListings.data.some(
                 (adminListing) => adminListing.id === chatroom.listingId
@@ -96,12 +94,11 @@ const Chats = () => {
             )
             .map((chatroom) => chatroom);
 
-          console.log("here", matchingListingIds);
-
-          const chatRoomsMessage = matchingListingIds.map(
+          const chatRoomsMessage = matchingListings.map(
             (chatRoom) => chatRoom.Chats
           );
-          setChatRooms(data);
+          console.log(matchingListings);
+          setChatRooms(matchingListings);
           setTicketActiveRooms(data);
           setMessages(chatRoomsMessage.flat());
         } else {
@@ -127,7 +124,7 @@ const Chats = () => {
               setTicketActiveRooms={setTicketActiveRooms}
             />
           </div>
-          {ticketActiveRooms.map((chatRoom) => {
+          {chatRooms.map((chatRoom) => {
             return (
               <AdminChatRoom
                 key={chatRoom.listingId}
