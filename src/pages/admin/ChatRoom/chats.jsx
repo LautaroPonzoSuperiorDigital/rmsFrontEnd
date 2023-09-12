@@ -8,6 +8,7 @@ import { api } from "../../../services/api";
 import TicketsInfomartion from "./TicketsInformation/TicketsInfomartion";
 import AdminChatRoomNavBar from "./AdminChatRoomNavBar";
 import TicketsNavBar from "./TicketsNavBar";
+import { useAuth } from "../../../hooks/useAuth";
 
 const chatRoomStyle = {
   width: "33%",
@@ -41,6 +42,7 @@ const TicketsInfomartionStyle = {
 };
 
 const Chats = () => {
+  const { user } = useAuth();
   const chatContainerRef = useRef(null);
   const [messages, setMessages] = useState([]); ///this state recieve all message from server
   const [filterMessages, setFilterMessages] = useState([]); // this state filter message by chat room id
@@ -81,11 +83,31 @@ const Chats = () => {
     const getChatRooms = async () => {
       try {
         const { data } = await api.get("/chat/chat-rooms");
+        const adminListings = await api.get(`/listing?adminId=${user.id}`);
+        console.log("aca", adminListings.data);
+        console.log(data);
+        if (adminListings.data.length > 0) {
+          // Extract the matching listingId values
+          const matchingListingIds = data
+            .filter((chatroom) =>
+              adminListings.data.some(
+                (adminListing) => adminListing.id === chatroom.listingId
+              )
+            )
+            .map((chatroom) => chatroom);
 
-        const chatRoomsMessage = data.map((chatRoom) => chatRoom.Chats);
-        setChatRooms(data);
-        setTicketActiveRooms(data);
-        setMessages(chatRoomsMessage.flat());
+          console.log("here", matchingListingIds);
+
+          const chatRoomsMessage = matchingListingIds.map(
+            (chatRoom) => chatRoom.Chats
+          );
+          setChatRooms(data);
+          setTicketActiveRooms(data);
+          setMessages(chatRoomsMessage.flat());
+        } else {
+          console.log("adminListings its empty");
+          setChatRooms([]);
+        }
       } catch (err) {
         console.log(err);
       }

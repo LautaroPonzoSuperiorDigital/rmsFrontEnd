@@ -39,7 +39,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         const filesData = await api.get(
           `tenant/${matchedChatRoom.tenantId}/document`
         );
-        setFiles(filesData.data);
+        console.log(filesData.data);
 
         const ticketsData = [...tickets.data, ...tickets2.data];
         const filterActiveTickets = ticketsData.filter(
@@ -50,6 +50,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         );
         setActiveTickets(filterActiveTickets);
         setClosedTickets(filterClosedTickets);
+        setFiles(filesData.data.results);
         setLoading(false);
       } catch (err) {
         console.log(err);
