@@ -50,6 +50,7 @@ div.container-fluid.row.footer.d-flex {
 
     .form-container form label {
       border-bottom: 0;
+      margin: 0 0.5rem;
     }
 
     .form-container form label:nth-child(3) {
