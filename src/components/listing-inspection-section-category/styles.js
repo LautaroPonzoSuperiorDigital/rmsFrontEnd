@@ -29,6 +29,8 @@ export const ListingInspectionSectionCategoryContainer = styled.li`
       }
 
       > div > span {
+        padding-left: 0;
+        margin-left: 45%;
         // TODO:
       }
     }
