@@ -19,11 +19,13 @@ import { ListingDetailsProvider } from "../../../context/listingDetailsContext";
 import { ListingForm } from "../../../components/listing-form";
 import { ListingDetails } from "../../../components/listing-details";
 import { createListingImage } from "../../../services/listing";
-import jwtDecode from "jwt-decode";
+import { useAuth } from "../../../hooks/useAuth";
 
 const PAGE_SIZE = 10;
 
 export default function AdminListings() {
+  const { user } = useAuth();
+
   const [listings, setListings] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false);
@@ -115,17 +117,11 @@ export default function AdminListings() {
   useEffect(() => {
     function loadAdminDataAndListings() {
       try {
-        const localStorageToken = localStorage.getItem("certifymyrent.token");
-
-        if (!localStorageToken) throw new Error("Could not get token");
-
-        const decoded = jwtDecode(localStorageToken);
-
         api
-          .get(`/admin/user/${decoded?.sub}`)
-          .then(({ data: admin }) => {
+          .get(`/admin/user/${user.id}`)
+          .then(({ data: userData }) => {
             api
-              .get(`/listing?adminId=${admin?.id}`)
+              .get(`/listing?adminId=${userData?.Admin.id}`)
               .then(({ data: listings }) => {
                 setListings(
                   listings.map((listing) => ({

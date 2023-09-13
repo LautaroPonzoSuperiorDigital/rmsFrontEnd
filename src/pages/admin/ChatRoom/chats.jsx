@@ -83,7 +83,10 @@ const Chats = () => {
     const getChatRooms = async () => {
       try {
         const { data } = await api.get("/chat/chat-rooms");
-        const adminListings = await api.get(`/listing?adminId=${user.id}`);
+        const { data: adminData } = await api.get(`/admin/user/${user.id}`);
+        const adminListings = await api.get(
+          `/listing?adminId=${adminData.Admin.id}`
+        );
         if (adminListings.data.length > 0) {
           // Extract the matching listingId values
           const matchingListings = data

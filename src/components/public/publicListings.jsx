@@ -70,16 +70,18 @@ const PublicListings = () => {
   return (
     <div className=" containerPublic">
       <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
-        <div className="filtersBar d-flex align-items-center w-100 px-4">
+        <div className="filtersBar d-flex align-items-center px-4">
           <img
             className="LogoPublic justify-content-start"
             src={Logo}
             alt="Logo"
             onClick={handleLogoClick}
           />
-          <form method="GET" className="container w-100 px-2">
+          <form method="GET" className="container px-2">
             <input
-              className={`inputPublic mx-2${isInputHovered ? " inputHovered" : ""}`}
+              className={`inputPublic mx-2${
+                isInputHovered ? " inputHovered" : ""
+              }`}
               type="text"
               placeholder="Keyword Or City"
               required
@@ -101,6 +103,8 @@ const PublicListings = () => {
                 onMouseLeave={handleSearchIconLeave}
               />
             </button>
+            <button className="open-search" />
+            <button className="filter-listings" />
             <select className="dropdownMenu mx-2">
               <option className="opt" value="price">
                 &nbsp;&nbsp;Price

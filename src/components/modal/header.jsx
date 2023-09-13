@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 // import { FiX } from 'react-icons/fi'
-import { styled } from 'styled-components'
-import { useModal } from './context'
-import { Close } from '../icons'
+import { styled } from "styled-components";
+import { useModal } from "./context";
+import { Close } from "../icons";
+import { MobileClose } from "../icons/mobile-close";
 
 const Header = styled.header`
   display: flex;
@@ -11,7 +12,18 @@ const Header = styled.header`
   gap: 0.5rem;
 
   padding: 1rem;
-`
+
+  @media (max-width: 768px) {
+    width: 100vw;
+    display: inline-flex;
+
+    button {
+      position: fixed;
+      display: inline-flex;
+      margin-top: 1rem;
+    }
+  }
+`;
 
 const CloseButton = styled.button`
   cursor: pointer;
@@ -19,25 +31,32 @@ const CloseButton = styled.button`
   background: transparent;
   font-size: 0;
   outline: none;
-
   margin-left: auto;
-`
 
-export function ModalHeader({ children, showCloseIcon = false }) {
-  const { close } = useModal()
+  @media (max-width: 768px) {
+    align-items: center;
+    justify-content: start;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+`;
+
+export function ModalHeader({
+  children,
+  showCloseIcon = false,
+  isMobile = false,
+}) {
+  const { close } = useModal();
 
   return (
     <Header>
       {children}
 
       {showCloseIcon && (
-        <CloseButton
-          type="button"
-          onClick={close}
-        >
-          <Close size={16} />
+        <CloseButton type="button" onClick={close}>
+          {isMobile ? <MobileClose /> : <Close size={16} />}
         </CloseButton>
       )}
     </Header>
-  )
+  );
 }

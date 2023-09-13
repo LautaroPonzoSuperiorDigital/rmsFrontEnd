@@ -1,35 +1,48 @@
-import PropTypes from "prop-types"
-import { createContext, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Modal } from "../components/modal"
-import { api } from "../services/api"
-import { isAxiosError } from "axios"
-import { useListingDetails } from "../hooks/useListingDetails"
-import { InspectionForm } from "../components/inspection-form"
-import { DeleteInspection } from "../components/delete-inspection"
-import { ListingInspectionSection } from "../components/listing-inspection-section"
-import { ListingDetailsTabs } from "./listingDetailsContext"
-import { ListingInspectionSectionCategoryImages } from "../components/listing-inspection-section-category-images"
-import { SectionList, SectoinListTitle, Tooltip } from "../components/inspection-form/styles"
+import "../styles/Responsive/listingInspectionsContextStyle.css";
+import PropTypes from "prop-types";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Modal } from "../components/modal";
+import { api } from "../services/api";
+import { isAxiosError } from "axios";
+import { useListingDetails } from "../hooks/useListingDetails";
+import { InspectionForm } from "../components/inspection-form";
+import { DeleteInspection } from "../components/delete-inspection";
+import { ListingInspectionSection } from "../components/listing-inspection-section";
+import { ListingDetailsTabs } from "./listingDetailsContext";
+import { ListingInspectionSectionCategoryImages } from "../components/listing-inspection-section-category-images";
+import {
+  SectionList,
+  SectionListTitle,
+  Tooltip,
+} from "../components/inspection-form/styles";
 import NoteIcon from "../assets/img/note.svg";
 import AddImageIcon from "../assets/img/add-image.svg";
 
 export const ListingInspectionsContext = createContext(undefined);
 
 export function ListingInspectionsProvider({ children }) {
-  const [inspections, setInspections] = useState([])
-  const [sections, setSections] = useState([])
-  const [editingInspection, setEditingInspection] = useState(null)
-  const [inspectionToDelete, setInspectionToDelete] = useState(null)
-  const [selectedSection, setSelectedSection] = useState(null)
-  const [selectedCategory, setSelectedCategory] = useState(null)
+  const [inspections, setInspections] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [editingInspection, setEditingInspection] = useState(null);
+  const [inspectionToDelete, setInspectionToDelete] = useState(null);
+  const [selectedSection, setSelectedSection] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [modalWidth, setModalWidth] = useState("90%");
 
-  const { listing, activeTab } = useListingDetails()
+  const { listing, activeTab } = useListingDetails();
 
-  const deleteInspectionModalRef = useRef(null)
-  const inspectionFormModalRef = useRef(null)
-  const inspectionFormRef = useRef(null)
-  const sectionModalRef = useRef(null)
-  const categoryImagesModalRef = useRef(null)
+  const deleteInspectionModalRef = useRef(null);
+  const inspectionFormModalRef = useRef(null);
+  const inspectionFormRef = useRef(null);
+  const sectionModalRef = useRef(null);
+  const categoryImagesModalRef = useRef(null);
 
   const handleInspectionFormModalClosed = () => setEditingInspection(null);
 
@@ -53,19 +66,22 @@ export function ListingInspectionsProvider({ children }) {
   }, []);
 
   const handleOpenSectionModal = useCallback((section) => {
-    setSelectedSection(section)
-    sectionModalRef.current?.open()
-  }, [])
+    setSelectedSection(section);
+    sectionModalRef.current?.open();
+  }, []);
 
   const handleOpenCategoryImagesModal = useCallback((category) => {
-    setSelectedCategory(category)
-    categoryImagesModalRef.current?.open()
-  }, [])
+    setSelectedCategory(category);
+    categoryImagesModalRef.current?.open();
+  }, []);
 
-  const handleEditInspection = useCallback((inspection) => {
-    setEditingInspection(inspection)
-    handleOpenInspectionFormModal()
-  }, [handleOpenInspectionFormModal])
+  const handleEditInspection = useCallback(
+    (inspection) => {
+      setEditingInspection(inspection);
+      handleOpenInspectionFormModal();
+    },
+    [handleOpenInspectionFormModal]
+  );
 
   const onInspectionDeleted = useCallback((inspectionId) => {
     setInspections((oldState) =>
@@ -103,20 +119,20 @@ export function ListingInspectionsProvider({ children }) {
 
   const onSectionChanged = useCallback(
     (updatedSection) => {
-      const _sections = [...sections]
+      const _sections = [...sections];
 
       const sectionIndex = _sections.findIndex(
         (section) => section.id === updatedSection.id
-      )
+      );
 
-      if (sectionIndex === -1) return
+      if (sectionIndex === -1) return;
 
-      _sections.splice(sectionIndex, 1, updatedSection)
+      _sections.splice(sectionIndex, 1, updatedSection);
 
-      setSections(_sections)
+      setSections(_sections);
     },
     [sections]
-  )
+  );
 
   const handleDeleteInspection = async () => {
     if (!inspectionToDelete || !listing) return;
@@ -216,6 +232,24 @@ export function ListingInspectionsProvider({ children }) {
   );
 
   useEffect(() => {
+    function updateModalWidth() {
+      if (window.outerWidth <= 768) {
+        return setModalWidth("100%");
+      } else {
+        return setModalWidth("90%");
+      }
+    }
+
+    updateModalWidth();
+
+    window.addEventListener("resize", updateModalWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateModalWidth);
+    };
+  }, []);
+
+  useEffect(() => {
     async function loadInspections() {
       if (!listing) return;
 
@@ -223,14 +257,14 @@ export function ListingInspectionsProvider({ children }) {
         const { data } = await api.get(`/listing/${listing.id}/inspection`);
         setInspections(data);
       } catch (err) {
-        alert("Error loading listing inspections.")
+        alert("Error loading listing inspections.");
       }
     }
 
     if (activeTab.value === ListingDetailsTabs.INSPECTION_HISTORY) {
       loadInspections();
     }
-  }, [listing, activeTab])
+  }, [listing, activeTab]);
 
   useEffect(() => {
     async function loadSections() {
@@ -257,28 +291,25 @@ export function ListingInspectionsProvider({ children }) {
         ref={inspectionFormModalRef}
         onModalClosed={handleInspectionFormModalClosed}
       >
-        <Modal.Body width="90%">
-          <Modal.Header showCloseIcon />
+        <Modal.Body width={modalWidth}>
+          <Modal.Header showCloseIcon isMobile={true} />
           <Modal.Content>
-            <div className="container-fluid">
-              <div className="row">
-                <div className="form-container m-0 p-0 w-50 col-sm-6 pt-8">
+            <div className="container">
+              <div className="row inspection-row">
+                <div className="form-container m-0 p-0 col-sm-6 pt-8">
                   <InspectionForm
                     ref={inspectionFormRef}
                     inspection={editingInspection}
                   />
                 </div>
-                <div
-                  className="section-container w-50 col-sm-6 pt-8 m-0"
-                  style={{ paddingRight: "10rem", paddingLeft: 0 }}
-                >
-                  <SectoinListTitle>
+                <div className="section-container col-md-3 col-2 pt-8 m-0">
+                  <SectionListTitle>
                     <h1 className="mt-5 mb-4">Spaces</h1>
-                  </SectoinListTitle>
-                  <div className="row row-cols-3 pr6-l">
+                  </SectionListTitle>
+                  <div className="row row-cols-2 row-cols-md-3">
                     {sections.map((section) => (
                       <SectionList
-                        className="section col-md-4 d-flex align-items-stretch"
+                        className="section d-flex align-items-stretch"
                         key={section.id}
                       >
                         <p className="flex-fill">
@@ -288,7 +319,10 @@ export function ListingInspectionsProvider({ children }) {
                               <img src={NoteIcon} alt="Note" />
                             </Tooltip>
                           )}
-                          <Tooltip tooltipText={"Add Image"} onClick={() => handleOpenSectionModal(section)}>
+                          <Tooltip
+                            tooltipText={"Add Image"}
+                            onClick={() => handleOpenSectionModal(section)}
+                          >
                             <img src={AddImageIcon} alt="Add Image" />
                           </Tooltip>
                         </p>
@@ -335,7 +369,7 @@ export function ListingInspectionsProvider({ children }) {
       </Modal.Root>
 
       <Modal.Root ref={sectionModalRef}>
-        <Modal.Body width="90%">
+        <Modal.Body width={modalWidth}>
           <Modal.Header showCloseIcon />
           <Modal.Content>
             {selectedSection && (
@@ -353,7 +387,9 @@ export function ListingInspectionsProvider({ children }) {
           <Modal.Header showCloseIcon />
           <Modal.Content>
             {selectedCategory && (
-              <ListingInspectionSectionCategoryImages category={selectedCategory} />
+              <ListingInspectionSectionCategoryImages
+                category={selectedCategory}
+              />
             )}
           </Modal.Content>
         </Modal.Body>

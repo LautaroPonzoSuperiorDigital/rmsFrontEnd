@@ -1,25 +1,31 @@
 import { styled } from "styled-components";
 
+const mobileBreakpoint = "768px";
+
 export const AddInspectionContainer = styled.div`
   display: flex;
   flex-direction: column;
-
   padding: 3rem 10rem;
-
   > h1 {
     font-size: 2.25rem;
+  }
+  @media (max-width: ${mobileBreakpoint}) {
+    padding: 0;
   }
 `;
 
 export const Form = styled.form`
   margin-top: 2rem;
-
   display: flex;
   flex-direction: column;
   gap: 2rem;
+
+  @media (max-width: ${mobileBreakpoint}) {
+    gap: 1rem;
+  }
 `;
 
-export const SectoinListTitle = styled.div`
+export const SectionListTitle = styled.div`
   > h1 {
     text-align: left;
     font-style: normal;
@@ -90,5 +96,9 @@ export const Tooltip = styled.div`
 
   &:hover::before {
     opacity: 1;
+  }
+
+  @media (max-width: ${mobileBreakpoint}) {
+    padding-left: 0;
   }
 `;

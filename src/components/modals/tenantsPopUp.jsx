@@ -11,7 +11,15 @@ import testImg from "../../assets/img/testImg.jpg";
 import AddDocs from "./addDocumentsModal";
 import { api } from "../../services/api";
 import jwtDecode from "jwt-decode";
-import { ListingInspectionHistory } from "../listing-inspection-history";
+import { ListingInspectionHistoryCard } from "../listing-inspection-history/styles";
+import { formatDate } from "../../services/date";
+import { DateTime } from "luxon";
+import {
+  DeleteInspectionButton,
+  EditInspectionButton,
+} from "../buttonInspections";
+import Delete from "../../assets/img/delete.svg";
+import DeleteIconHover from "../../assets/img/deleteIconHover.svg";
 
 const TenantModal = ({ selectedTenant, onClose }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -21,6 +29,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   const [hoveredDocumentIndex, setHoveredDocumentIndex] = useState(null);
   const [adminData, setAdminData] = useState({});
   const [tenantData, setTenantData] = useState({});
+  const [inspections, setInspections] = useState([]);
 
   const [listingData, setListingData] = useState(null);
 
@@ -55,7 +64,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
   async function getAdminData() {
     await api
-      .get(`/user/${decodedToken.sub}`)
+      .get(`/admin/user/${decodedToken.sub}`)
       .then((request) => {
         setAdminData(request.data);
         return request.data;
@@ -157,6 +166,18 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     }
   }
 
+  async function loadInspections() {
+    try {
+      const response = api.get(
+        `/listing/${selectedTenant.listingId}/inspection`
+      );
+
+      setInspections((await response).data);
+    } catch (err) {
+      alert("Error fetching inspections", err);
+    }
+  }
+
   const fetchListings = async () => {
     try {
       const response = await api.get(`/listing/${selectedTenant.listingId}`);
@@ -172,8 +193,9 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     if (decodedToken) {
       getAdminData();
       getTenantData();
-      loadDocuments();
       fetchListings();
+      loadDocuments();
+      loadInspections();
     }
   }, [decodedToken]);
 
@@ -251,7 +273,25 @@ const TenantModal = ({ selectedTenant, onClose }) => {
       case "PAYMENT HISTORY":
         return <></>;
       case "INSPECTION HISTORY":
-        return <></>;
+        return (
+          <ListingInspectionHistoryCard className="mx-5 my-4">
+            <div className="inspection-card-container">
+              {inspections.map((inspection) => (
+                <div className="inspection-card" key={inspection.id}>
+                  <div className="inspectionContent">
+                    <p>{inspection.name}</p>
+                    <span>
+                      {formatDate({
+                        date: inspection.date,
+                        formatOptions: DateTime.DATE_MED,
+                      })}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ListingInspectionHistoryCard>
+        );
       case "APPLICATION FORM":
         return (
           <div className="renderBoxsOrder d-flex align-items-start justify-content-start "></div>

@@ -15,9 +15,10 @@ import Pagination from "./paginations";
 import "../styles/modal.css";
 import TenantModal from "./modals/tenantsPopUp";
 import { api } from "../services/api";
-import jwtDecode from "jwt-decode";
+import { useAuth } from "../hooks/useAuth";
 
 const TenantsAdmin = () => {
+  const { user } = useAuth();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editTenant, setEditTenant] = useState(null);
   const [tenants, setTenants] = useState([]);
@@ -35,13 +36,17 @@ const TenantsAdmin = () => {
 
   const filteredTenants = showMissedPayment
     ? tenants.filter(
-        (tenant) => tenant.approvalStatus && tenant.approvalStatus.includes("Missed Payment")
+        (tenant) =>
+          tenant.approvalStatus &&
+          tenant.approvalStatus.includes("Missed Payment")
       )
     : tenants;
 
   const countMissedPaymentTenants = () =>
     tenants.filter(
-      (tenant) => tenant.approvalStatus && tenant.approvalStatus.includes("Missed Payment")
+      (tenant) =>
+        tenant.approvalStatus &&
+        tenant.approvalStatus.includes("Missed Payment")
     ).length;
 
   const tenantsPerPage = filteredTenants.slice(
@@ -103,25 +108,23 @@ const TenantsAdmin = () => {
   };
 
   useEffect(() => {
-    const localStorageToken = localStorage.getItem("certifymyrent.token");
+    api.get(`/admin/user/${user.id}`).then(({ data: userData }) => {
+      api
+        .get(`/listing?adminId=${userData.Admin.id}`)
+        .then(({ data: listings }) => {
+          listings.map((listing) => {
+            api
+              .get(`/listing/${listing.id}/current-tenant`)
+              .then(({ data }) => {
+                const tenantObj = {
+                  ...data["Tenant"],
+                  listingId: listing.id,
+                };
 
-    if (!localStorageToken) throw new Error("Could not get token");
-
-    const decoded = jwtDecode(localStorageToken);
-
-    api.get(`/admin/user/${decoded?.sub}`).then(({ data: admin }) => {
-      api.get(`/listing?adminId=${admin.id}`).then(({ data: listings }) => {
-        listings.map((listing) => {
-          api.get(`/listing/${listing.id}/current-tenant`).then(({ data }) => {
-            const tenantObj = {
-              ...data["Tenant"],
-              listingId: listing.id,
-            };
-
-            setTenants([tenantObj, ...tenants]);
+                setTenants([tenantObj, ...tenants]);
+              });
           });
         });
-      });
     });
   }, []);
 
