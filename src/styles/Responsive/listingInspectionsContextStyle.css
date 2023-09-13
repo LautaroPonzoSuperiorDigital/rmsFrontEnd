@@ -11,6 +11,11 @@ div.container-fluid.row.footer.d-flex {
     width: 50%;
     padding-right: 10rem;
     padding-left: 0;
+    min-width: min-content;
+
+    @media (max-width: 1200px) {
+      padding-right: 1rem;
+    }
   }
 
   @media (max-width: 768px) {
