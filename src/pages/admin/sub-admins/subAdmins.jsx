@@ -7,7 +7,8 @@ import ModalAddSub from "./ModalAddSub";
 import { api } from "../../../services/api";
 import { useAuth } from "../../../hooks/useAuth";
 import { DeleteButton } from "../../../components/buttonApplicants";
-import { EditButton } from "../../../components/buttonListings";
+import Pencil from "./../../../assets/img/pencil.svg";
+import ModalUpdateSub from "./ModalUpdateSub";
 
 const tBodyStyle = {
   height: "50px",
@@ -15,9 +16,18 @@ const tBodyStyle = {
 
 const SubAdmins = () => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isUpdateModal, setUpdatemodal] = useState(false);
   const [subAdmins, setSubAdmins] = useState([]);
+  const [update, setUpdate] = useState(false);
   const { user } = useAuth();
-  console.log(user.id);
+
+  const updateModalOpen = () => {
+    setUpdatemodal(true);
+  };
+  const updateModalClose = () => {
+    setUpdatemodal(false);
+  };
+
   const openModal = () => {
     setModalOpen(true);
   };
@@ -25,19 +35,31 @@ const SubAdmins = () => {
   const closeModal = () => {
     setModalOpen(false);
   };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await api.delete(`/sub-admin/${id}`);
+      console.log(res);
+      setUpdate(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     const fetchSubAdmin = async () => {
       try {
         const adminId = await api.get(`/admin/user/${user.id}`);
-
         const response = await api.get(`/sub-admin/${adminId.data.Admin.id}`);
         setSubAdmins(response.data);
+        console.log(response.data);
+        setUpdate(false);
       } catch (error) {
         console.log(error);
       }
     };
     fetchSubAdmin();
-  }, []);
+  }, [update]);
 
   return (
     <div>
@@ -91,8 +113,22 @@ const SubAdmins = () => {
                   </td>
                   <td className="">
                     <div>
-                      <EditButton />
+                      <button className="btn-sm">
+                        <img
+                          src={Pencil}
+                          alt="Pencil"
+                          onClick={updateModalOpen}
+                        />
+                      </button>
+                      <ModalUpdateSub
+                        isOpen={isUpdateModal}
+                        onClose={updateModalClose}
+                        setUpdate={setUpdate}
+                        id={item.User.id}
+                      />
                       <DeleteButton
+                        info={"Sub Admin"}
+                        onClick={() => handleDelete(item.User.id)}
                         defaultImage={<img src={Delete} alt="Delete" />}
                         hoverImage={
                           <img src={DeleteIconHover} alt="DeleteIconHover" />
@@ -106,7 +142,11 @@ const SubAdmins = () => {
           </tbody>
         </table>
       </TableContainer>
-      <ModalAddSub isOpen={isModalOpen} onClose={closeModal} />
+      <ModalAddSub
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        setUpdate={setUpdate}
+      />
     </div>
   );
 };

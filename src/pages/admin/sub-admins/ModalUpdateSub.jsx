@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useAuth } from "../../../hooks/useAuth";
 import { api } from "../../../services/api";
 
 const ModalBackdrop = styled.div`
@@ -80,52 +79,32 @@ const BtnContainer = styled.div`
   align-items: center;
 `;
 
-const ModalAddSub = ({ isOpen, onClose, setUpdate }) => {
-  const { user } = useAuth();
-  const [adminId, setAdminId] = useState("");
+const ModalUpdateSub = ({ isOpen, onClose, setUpdate, id }) => {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchAdminId = async () => {
-      try {
-        const response = await api.get(`/admin/user/${user.id}`);
-
-        setAdminId(response.data.Admin.id);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchAdminId();
-  }, []);
-
-  if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
     try {
-      const response = await api.post(
-        `/user/admin/${adminId}/sub-admin`,
-        formData
-      );
+      const response = await api.patch(`/sub-admin/${id}`, formData);
+      console.log(response);
       setUpdate(true);
       setFormData({});
       onClose();
-    } catch (error) {
-      console.log(error);
-      setError("Something went wrong");
+    } catch (err) {
+      console.log(err);
     }
   };
 
+  if (!isOpen) return null;
   return (
     <ModalBackdrop onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <FormContainer>
-          <Title> Add Sub Admin</Title>
+          <Title> Update Sub Admin</Title>
 
           <Form>
             <Input
@@ -140,12 +119,7 @@ const ModalAddSub = ({ isOpen, onClose, setUpdate }) => {
               onChange={handleChange}
               required
             />
-            <Input
-              placeholder="PASSWORD"
-              name="password"
-              onChange={handleChange}
-              required
-            />
+
             {error}
           </Form>
 
@@ -161,4 +135,4 @@ const ModalAddSub = ({ isOpen, onClose, setUpdate }) => {
   );
 };
 
-export default ModalAddSub;
+export default ModalUpdateSub;
