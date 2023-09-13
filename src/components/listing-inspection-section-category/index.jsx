@@ -1,14 +1,11 @@
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FiCheck, FiPlus, FiTrash2, FiX } from "react-icons/fi";
-
 import placeholder from "../../assets/img/defaultImage.png";
 import { useListingInspections } from "../../hooks/useListingInspections";
 import { api } from "../../services/api";
 import { toBase64 } from "../../services/image";
-
 import { Input } from "../input";
-
 import {
   Action,
   Header,
@@ -17,6 +14,7 @@ import {
   Loader,
   UploadInput,
   LoadingBox,
+  ImagePreviewMobile,
 } from "./styles";
 
 export function ListingInspectionSectionCategory({
@@ -29,6 +27,7 @@ export function ListingInspectionSectionCategory({
   const [requestRemove, setRequestRemove] = useState(false);
   const [edit, setEdit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const { editingInspection, handleOpenCategoryImagesModal } =
     useListingInspections();
@@ -185,6 +184,20 @@ export function ListingInspectionSectionCategory({
     }
   }, [edit]);
 
+  useEffect(() => {
+    function updateModalWidth() {
+      setIsMobile(window.outerWidth <= 768);
+    }
+
+    updateModalWidth();
+
+    window.addEventListener("resize", updateModalWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateModalWidth);
+    };
+  }, []);
+
   return (
     <ListingInspectionSectionCategoryContainer>
       <Header data-loading={isLoading}>
@@ -224,14 +237,24 @@ export function ListingInspectionSectionCategory({
         )}
       </Header>
 
-      <ImagePreview
-        src={imageUrl || placeholder}
-        alt="Category Image Preview"
-        data-loading={isLoading}
-        data-clickable={!!imageUrl}
-        draggable={false}
-        onClick={handleOpenImages}
-      />
+      {isMobile ? (
+        <ImagePreviewMobile
+          src={imageUrl || undefined}
+          data-loading={isLoading}
+          data-clickable={!!imageUrl}
+          draggable={false}
+          onClick={handleOpenImages}
+        />
+      ) : (
+        <ImagePreview
+          src={imageUrl || placeholder}
+          alt="Category Image Preview"
+          data-loading={isLoading}
+          data-clickable={!!imageUrl}
+          draggable={false}
+          onClick={handleOpenImages}
+        />
+      )}
 
       <UploadInput ref={uploadInputRef} onChange={onUploaded} />
 
