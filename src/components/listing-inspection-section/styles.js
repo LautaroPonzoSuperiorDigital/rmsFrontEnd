@@ -89,7 +89,10 @@ export const NewCategory = styled.li`
   cursor: pointer;
 
   > span {
+    margin-top: unset;
+    margin-left: unset;
     color: #197572;
+    padding: 0.2rem;
 
     &:first-child {
       display: block;
@@ -102,6 +105,33 @@ export const NewCategory = styled.li`
       top: 50%;
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
+    }
+  }
+
+  @media (max-width: ${mobileBreakpoint}) {
+    min-height: unset;
+    height: unset;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    max-height: 3rem;
+    border: 1px solid #197572;
+    background-color: #fdfdfdd9;
+
+    > span {
+      color: #197572;
+
+      &:first-child {
+        font-size: 1.125rem;
+        color: #197572;
+      }
+
+      &:last-child {
+        display: none;
+      }
     }
   }
 `;

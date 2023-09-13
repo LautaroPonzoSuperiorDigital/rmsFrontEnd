@@ -20,6 +20,18 @@ export const ListingInspectionSectionCategoryContainer = styled.li`
     min-height: 3rem;
     border: 1px solid #00000026;
     background-color: #fdfdfdd9;
+
+    &:not(:has(> img[src])) {
+      border: 1px solid #1d8783;
+
+      > div > img {
+        display: none;
+      }
+
+      > div > span {
+        // TODO:
+      }
+    }
   }
 `;
 
