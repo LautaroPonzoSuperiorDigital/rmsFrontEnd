@@ -3,9 +3,10 @@ import "../../styles/Documents/documents.css";
 import Close from "../../assets/img/close.svg";
 import CloseHover from "../../assets/img/closeHover.svg";
 import { api } from "../../services/api";
-import jwtDecode from "jwt-decode";
+import { useAuth } from "../../hooks/useAuth";
 
 const AddDocs = ({ listingsData, onClose }) => {
+  const { user } = useAuth();
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [documentName, setDocumentName] = useState("");
@@ -32,13 +33,12 @@ const AddDocs = ({ listingsData, onClose }) => {
     if (!selectedFile || !documentName || !listingId) return;
 
     try {
-      const localStorageToken = localStorage.getItem("certifymyrent.token");
-      if (!localStorageToken) throw new Error("Could not get token");
-      const decoded = jwtDecode(localStorageToken);
-
       const { data: listing } = await api.get(`listing/${listingId}`);
+      const { data: userData } = await api.get(`admin/user/${user.id}`);
 
-      if (listing?.adminId !== decoded?.sub) {
+      console.log({ admin: userData.Admin.id });
+
+      if (listing.adminId !== userData.Admin.id) {
         alert(`You are not allowed to attach file to Listing #${listingId}`);
         throw new Error(`Not authorized`);
       }

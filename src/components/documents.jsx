@@ -13,13 +13,13 @@ import DeleteIconHover from "../assets/img/deleteIconHover.svg";
 import AddDocuments from "./AddDocuments";
 import AddDocs from "./modals/addDocumentsModal";
 import { api } from "../services/api";
-import jwtDecode from "jwt-decode";
+import { useAuth } from "../hooks/useAuth";
 
 const Documents = () => {
+  const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [documentsData, setDocumentsData] = useState([]);
   const [listingsData, setListingsData] = useState([]);
-  const [decodedToken, setDecodedToken] = useState(null);
   const [tenantsData, setTenantsData] = useState([]);
 
   const handleOpenModal = () => {
@@ -31,14 +31,9 @@ const Documents = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("certifymyrent.token");
-    if (token) {
-      const decoded = jwtDecode(token);
-      setDecodedToken(decoded);
-      const adminId = decoded.sub;
-
+    api.get(`/admin/user/${user.id}`).then(({ data: userData }) => {
       api
-        .get(`/listing?adminId=${adminId}`)
+        .get(`/listing?adminId=${userData.Admin.id}`)
         .then(({ data: listings }) => {
           listings.map(({ id }) => {
             api.get(`/listing/${id}/document`).then(({ data }) => {
@@ -49,7 +44,7 @@ const Documents = () => {
         .catch((error) => {
           console.error("Error fetching documents data:", error);
         });
-    }
+    });
   }, []);
 
   const handleDelete = async (listingId, documentId) => {
