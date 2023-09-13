@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/tenants.css";
 
-export const DeleteButton = ({ defaultImage, hoverImage, onClick }) => {
+export const DeleteButton = ({ defaultImage, hoverImage, onClick, info }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isDeletingHovered, setIsDeletingHovered] = useState(false);
 
@@ -26,7 +26,7 @@ export const DeleteButton = ({ defaultImage, hoverImage, onClick }) => {
         {isHovered ? hoverImage : defaultImage}
       </span>
       {isDeletingHovered && (
-        <div className="confirmationBox">Delete This Applicant</div>
+        <div className="confirmationBox">Delete This {info}</div>
       )}
     </button>
   );

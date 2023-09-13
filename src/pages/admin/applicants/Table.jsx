@@ -151,6 +151,7 @@ const Table = ({
               <td className="bor1">
                 <div className="deleteBtn1">
                   <DeleteButton
+                    info={"Tenant"}
                     onClick={() => HandleDelete(item.applicant.id)}
                     defaultImage={<img src={Delete} alt="Delete" />}
                     hoverImage={
