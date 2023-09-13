@@ -17,6 +17,7 @@ export const ListingInspectionSectionCategoryContainer = styled.li`
     justify-content: flex-start;
     align-items: stretch;
     max-height: 3rem;
+    min-height: 3rem;
     border: 1px solid #00000026;
     background-color: #fdfdfdd9;
   }
@@ -39,12 +40,12 @@ export const Header = styled.div`
   }
 
   @media (max-width: ${mobileBreakpoint}) {
-    background: rgba(253, 253, 253, 0.85);
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     padding: 0.375rem 0.5rem;
+    background: unset;
 
     > span {
       padding-left: 3.5rem;
@@ -85,13 +86,17 @@ export const ImagePreview = styled.img`
   &[data-loading="true"] {
     opacity: 0.7;
   }
+
   &[data-clickable="true"] {
     cursor: pointer;
   }
+`;
 
+export const ImagePreviewMobile = styled.img`
   @media (max-width: ${mobileBreakpoint}) {
     object-fit: scale-down;
     object-position: left;
+    max-width: 15rem;
   }
 `;
 
