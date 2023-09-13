@@ -1,13 +1,13 @@
-import PropTypes from "prop-types"
-import { useEffect, useMemo, useRef, useState } from "react"
-import { FiCheck, FiPlus, FiTrash2, FiX } from "react-icons/fi"
+import PropTypes from "prop-types";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { FiCheck, FiPlus, FiTrash2, FiX } from "react-icons/fi";
 
-import placeholder from '../../assets/img/defaultImage.png'
-import { useListingInspections } from "../../hooks/useListingInspections"
-import { api } from "../../services/api"
-import { toBase64 } from "../../services/image"
+import placeholder from "../../assets/img/defaultImage.png";
+import { useListingInspections } from "../../hooks/useListingInspections";
+import { api } from "../../services/api";
+import { toBase64 } from "../../services/image";
 
-import { Input } from "../input"
+import { Input } from "../input";
 
 import {
   Action,
@@ -17,158 +17,173 @@ import {
   Loader,
   UploadInput,
   LoadingBox,
-} from "./styles"
+} from "./styles";
 
-export function ListingInspectionSectionCategory({ category, onCategoryRemoved, onCategoryUpdated }) {
-  const [isUploading, setIsUploading] = useState(false)
-  const [isRemoving, setIsRemoving] = useState(false)
-  const [requestRemove, setRequestRemove] = useState(false)
-  const [edit, setEdit] = useState(false)
-  const [isSaving, setIsSaving] = useState(false)
+export function ListingInspectionSectionCategory({
+  category,
+  onCategoryRemoved,
+  onCategoryUpdated,
+}) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [requestRemove, setRequestRemove] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const { editingInspection, handleOpenCategoryImagesModal } = useListingInspections()
+  const { editingInspection, handleOpenCategoryImagesModal } =
+    useListingInspections();
 
-  const uploadInputRef = useRef(null)
-  const nameInputRef = useRef(null)
+  const uploadInputRef = useRef(null);
+  const nameInputRef = useRef(null);
 
-  const isLoading = isRemoving || isUploading || isSaving
+  const isLoading = isRemoving || isUploading || isSaving;
 
-  const loadingText =
-    isRemoving
-      ? 'Removing' : isUploading
-      ? 'Uploading' : isSaving
-      ? 'Saving' : null
+  const loadingText = isRemoving
+    ? "Removing"
+    : isUploading
+    ? "Uploading"
+    : isSaving
+    ? "Saving"
+    : null;
 
   const imageUrl = useMemo(() => {
-    const inspectionSection =
-      category.InspectionSections?.find(inspectionSection => inspectionSection.Images?.length)
+    const inspectionSection = category.InspectionSections?.find(
+      (inspectionSection) => inspectionSection.Images?.length
+    );
 
     if (!inspectionSection) {
-      return null
+      return null;
     }
 
-    return `https://rms-staging.s3.us-west-1.amazonaws.com/${inspectionSection.Images[0].key}`
-      .replace(
+    return `https://rms-staging.s3.us-west-1.amazonaws.com/${inspectionSection.Images[0].key}`.replace(
       /\\/g,
       "%5C"
-    )
-  }, [category])
+    );
+  }, [category]);
 
   const openUploadInput = () => {
-    if (isUploading) return
+    if (isUploading) return;
 
-    uploadInputRef.current?.click()
-  }
+    uploadInputRef.current?.click();
+  };
 
   const handleSaveImages = async (images) => {
-    setIsUploading(true)
+    setIsUploading(true);
 
     try {
-      const url = `/inspection/${editingInspection.id}/section/${category.sectionId}/category/${category.id}/image`
-      const { data } = await api.post(url, { images })
+      const url = `/inspection/${editingInspection.id}/section/${category.sectionId}/category/${category.id}/image`;
+      const { data } = await api.post(url, { images });
 
-      const InspectionSections =
-        category.InspectionSections?.length
-          ? [{
-            ...category.InspectionSections[0],
-            Images: [...category.InspectionSections[0].Images, ...data]
-          }]
-          : [{
-            categoryId: category.id,
-            sectionId: category.sectionId,
-            Images: data
-          }]
-      
+      const InspectionSections = category.InspectionSections?.length
+        ? [
+            {
+              ...category.InspectionSections[0],
+              Images: [...category.InspectionSections[0].Images, ...data],
+            },
+          ]
+        : [
+            {
+              categoryId: category.id,
+              sectionId: category.sectionId,
+              Images: data,
+            },
+          ];
+
       onCategoryUpdated({
         ...category,
-        InspectionSections
-      })
+        InspectionSections,
+      });
     } catch (err) {
-      console.log(err)
-      alert('Error saving category images')
+      console.log(err);
+      alert("Error saving category images");
     }
 
-    setIsUploading(false)
-  }
+    setIsUploading(false);
+  };
 
   const handleRemoveCategory = async () => {
     if (!requestRemove) {
-      setRequestRemove(true)
+      setRequestRemove(true);
 
       setTimeout(() => {
-        setRequestRemove(false)
-      }, 5000) // 5 sec after set to false
+        setRequestRemove(false);
+      }, 5000); // 5 sec after set to false
 
-      return
+      return;
     }
 
-    setIsRemoving(true)
+    setIsRemoving(true);
 
     try {
-      await api.delete(`/section/${category.sectionId}/category/${category.id}`)
+      await api.delete(
+        `/section/${category.sectionId}/category/${category.id}`
+      );
 
-      setIsRemoving(false)
-      onCategoryRemoved(category.id)
+      setIsRemoving(false);
+      onCategoryRemoved(category.id);
     } catch (err) {
-      console.log(err)
-      alert('Error while removing category.')
+      console.log(err);
+      alert("Error while removing category.");
 
-      setIsRemoving(false)
+      setIsRemoving(false);
     }
-  }
-  
+  };
+
   const onUploaded = async (event) => {
     const filesArray = Array.from(event.target.files);
 
-    const images = await Promise.all(filesArray.map(toBase64))
+    const images = await Promise.all(filesArray.map(toBase64));
 
-    handleSaveImages(images)
-  }
+    handleSaveImages(images);
+  };
 
-  const toggleEdit = () => setEdit(old => !old)
+  const toggleEdit = () => setEdit((old) => !old);
 
   const handleContextMenu = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    toggleEdit()
-  }
+    toggleEdit();
+  };
 
   const handleSaveName = async () => {
     if (!nameInputRef.current?.value) {
-      return
+      return;
     }
 
-    setIsSaving(true)
+    setIsSaving(true);
 
     try {
-      await api.patch(`/section/${category.sectionId}/category/${category.id}`, {
-        name: nameInputRef.current.value
-      })
+      await api.patch(
+        `/section/${category.sectionId}/category/${category.id}`,
+        {
+          name: nameInputRef.current.value,
+        }
+      );
 
-      setIsSaving(false)
-      setEdit(false)
+      setIsSaving(false);
+      setEdit(false);
       onCategoryUpdated({
         ...category,
-        name: nameInputRef.current.value
-      })
+        name: nameInputRef.current.value,
+      });
     } catch (err) {
-      console.log(err)
-      alert('Error saving category name')
-      setIsSaving(false)
+      console.log(err);
+      alert("Error saving category name");
+      setIsSaving(false);
     }
-  }
+  };
 
   const handleOpenImages = () => {
-    if (!imageUrl) return
+    if (!imageUrl) return;
 
-    handleOpenCategoryImagesModal(category)
-  }
+    handleOpenCategoryImagesModal(category);
+  };
 
   useEffect(() => {
     if (edit) {
-      nameInputRef.current?.focus()
+      nameInputRef.current?.focus();
     }
-  }, [edit])
+  }, [edit]);
 
   return (
     <ListingInspectionSectionCategoryContainer>
@@ -178,24 +193,23 @@ export function ListingInspectionSectionCategory({ category, onCategoryRemoved, 
             ref={nameInputRef}
             defaultValue={category.name}
             label="NAME"
-            containerStyle={{ marginRight: '1rem' }}
+            containerStyle={{ marginRight: "1rem" }}
           />
         ) : (
-          <span
-            onContextMenu={handleContextMenu}
-            onDoubleClick={toggleEdit}
-          >{category.name}</span>
+          <span onContextMenu={handleContextMenu} onDoubleClick={toggleEdit}>
+            {category.name}
+          </span>
         )}
-        
+
         {edit ? (
           <>
-          <Action onClick={handleSaveName} disabled={isLoading}>
-            <FiCheck />
-          </Action>
+            <Action onClick={handleSaveName} disabled={isLoading}>
+              <FiCheck />
+            </Action>
 
-          <Action onClick={toggleEdit} disabled={isLoading}>
-            <FiX />
-          </Action>
+            <Action onClick={toggleEdit} disabled={isLoading}>
+              <FiX />
+            </Action>
           </>
         ) : (
           <>
@@ -204,7 +218,7 @@ export function ListingInspectionSectionCategory({ category, onCategoryRemoved, 
             </Action>
 
             <Action onClick={handleRemoveCategory} disabled={isLoading}>
-              <FiTrash2 color={requestRemove ? '#ff0000' : 'unset'} />
+              <FiTrash2 color={requestRemove ? "#ff0000" : "unset"} />
             </Action>
           </>
         )}
@@ -219,23 +233,20 @@ export function ListingInspectionSectionCategory({ category, onCategoryRemoved, 
         onClick={handleOpenImages}
       />
 
-      <UploadInput
-        ref={uploadInputRef}
-        onChange={onUploaded}
-      />
+      <UploadInput ref={uploadInputRef} onChange={onUploaded} />
 
-      {(isLoading) && (
+      {isLoading && (
         <LoadingBox>
           <span>{loadingText}</span>
           <Loader />
         </LoadingBox>
       )}
     </ListingInspectionSectionCategoryContainer>
-  )
+  );
 }
 
 ListingInspectionSectionCategory.propTypes = {
   category: PropTypes.object.isRequired,
   onCategoryRemoved: PropTypes.func.isRequired,
   onCategoryUpdated: PropTypes.func.isRequired,
-}
+};

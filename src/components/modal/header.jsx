@@ -44,7 +44,7 @@ const CloseButton = styled.button`
 export function ModalHeader({
   children,
   showCloseIcon = false,
-  isMobile = false,
+  isMobile = window.outerWidth <= 768,
 }) {
   const { close } = useModal();
 
