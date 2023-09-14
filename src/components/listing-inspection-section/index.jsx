@@ -125,17 +125,19 @@ export function ListingInspectionSection({ section }) {
         <h1>{section.name}</h1>
       </Header>
 
-      <Input
-        ref={noteInputRef}
-        label="NOTE"
-        defaultValue={section.note}
-        onBlur={handleSaveNote}
-        containerStyle={{
-          marginTop: "2.5rem",
-          alignSelf: "flex-start",
-          width: "35%",
-        }}
-      />
+      {!isMobile && (
+        <Input
+          ref={noteInputRef}
+          label="NOTE"
+          defaultValue={section.note}
+          onBlur={handleSaveNote}
+          containerStyle={{
+            marginTop: "2.5rem",
+            alignSelf: "flex-start",
+            width: "35%",
+          }}
+        />
+      )}
 
       <CategoryList>
         {categories.map((category) => (
@@ -148,9 +150,7 @@ export function ListingInspectionSection({ section }) {
         ))}
 
         <NewCategory role="button" onClick={handleCreateCategory}>
-           {
-            isMobile ? <span>+ Add other</span> : <span>Other</span>
-           }
+          {isMobile ? <span>+ Add other</span> : <span>Other</span>}
 
           <span>+ Add</span>
         </NewCategory>

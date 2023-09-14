@@ -9,10 +9,6 @@ export const ListingInspectionSectionContainer = styled.div`
 
   @media (max-width: ${mobileBreakpoint}) {
     padding: 0 1rem;
-
-    label {
-      display: none;
-    }
   }
 `;
 
