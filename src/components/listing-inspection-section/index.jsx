@@ -148,7 +148,9 @@ export function ListingInspectionSection({ section }) {
         ))}
 
         <NewCategory role="button" onClick={handleCreateCategory}>
-          <span>Other</span>
+           {
+            isMobile ? <span>+ Add other</span> : <span>Other</span>
+           }
 
           <span>+ Add</span>
         </NewCategory>
