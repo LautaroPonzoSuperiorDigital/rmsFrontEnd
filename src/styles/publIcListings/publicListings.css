@@ -191,9 +191,8 @@
   .buttonContainer {
     display: none;
   }
-
+  /* delete diplay none beacuse in mobile I cant see btn text */
   button[type="submit"] {
-    display: none;
     top: 0.5rem;
     right: 0.5rem;
     margin: 0;
