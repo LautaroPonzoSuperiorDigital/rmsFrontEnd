@@ -30,8 +30,14 @@ export const ListingInspectionSectionCategoryContainer = styled.li`
 
       > div > span {
         padding-left: 0;
-        margin-left: 45%;
-        // TODO:
+        margin-left: auto;
+
+        &::before {
+          content: "+";
+          color: #197572;
+          font-size: 1rem;
+          margin-right: 0.5rem;
+        }
       }
     }
   }
