@@ -3,10 +3,18 @@ import styled from "styled-components";
 export const SubAdminsnav = styled.div`
   wdith: 100%;
   height: 100%;
+  max-height: 68px;
+  margin-top: 14.5px;
   padding: 10px 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+export const SubAdminsTitle = styled.p`
+  font-size: 32px;
+  margin-top: 15px;
+  margin-left: 5px;
 `;
 
 export const BtnPlusSub = styled.button`
@@ -14,6 +22,8 @@ export const BtnPlusSub = styled.button`
   height: 38px;
   color: #fff;
   background-color: #197572;
+  margin-top: 24px;
+  margin-left: 48px;
 `;
 
 export const TableContainer = styled.div`
@@ -24,7 +34,7 @@ export const TableContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-export const Table = styled.table`
+export const Table1 = styled.table`
   width: 100%;
   height: 100%;
 
@@ -43,4 +53,25 @@ export const TableTh = styled.th`
   text-align: left;
   color: ##000000a5;
   font-size: 16px;
+`;
+export const TableThead = styled.thead`
+  width: 100%;
+
+  border-bottom: 1px solid rgba(128, 128, 128, 0.267);
+  font-family: "proxima-nova", sans-serif;
+`;
+
+export const TableTd = styled.td`
+  width: 100px;
+  max-width: 10px;
+`;
+export const TableTdEmail = styled.td`
+  width: 100%;
+`;
+
+export const Table = styled.table`
+  width: 100px;
+
+  border-bottom: 1px solid rgba(128, 128, 128, 0.267);
+  font-family: "proxima-nova", sans-serif;
 `;

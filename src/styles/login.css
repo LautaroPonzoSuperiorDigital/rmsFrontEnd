@@ -71,7 +71,6 @@
   margin-left: 68%;
   white-space: nowrap;
   opacity: 1;
-
 }
 
 .forgot:hover {
@@ -93,8 +92,7 @@
 
 /* MOBILE */
 
-@media (min-width:900px) {
-
+@media (min-width: 900px) {
   .responsiveOrderLogin h1,
   .responsiveOrderLogin,
   .responsiveInputLogin,
@@ -106,14 +104,13 @@
 }
 
 @media (max-width: 899px) {
-
   .LoginBgContainer,
   .LoginContainer {
     display: none;
   }
 }
 
-@media (min-width:320px) and (max-width:899px) {
+@media (min-width: 320px) and (max-width: 899px) {
   .responsiveOrderLogin {
     background-color: #052726;
     height: 100%;
@@ -147,8 +144,8 @@
     outline: none;
     border: none;
     background-color: transparent;
-    border-bottom: 1px solid #FDFDFD;
-    color: #FDFDFD;
+    border-bottom: 1px solid #fdfdfd;
+    color: #fdfdfd;
   }
 
   .responsiveInputLogin::placeholder {
@@ -174,6 +171,7 @@
     background-color: white;
     width: 90%;
     height: 5%;
+    color: #197572;
   }
 
   .loginBtnTextResponsive {

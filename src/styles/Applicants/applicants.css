@@ -9,7 +9,7 @@
 }
 
 .NAME1 {
-  width: 15%;
+  width: 100px;
 }
 
 .NAME1 p {
@@ -29,7 +29,7 @@
 }
 
 .deleteText {
-  margin-left: 22%;
+  margin-left: 20%;
 }
 
 .deleteBtn1 {
@@ -48,7 +48,7 @@
   border-bottom: 1px solid rgba(128, 128, 128, 0.267);
   font-family: "proxima-nova", sans-serif;
   color: black;
-  white-space: nowrap;
+
   opacity: 1;
   font-size: 16px;
 }
