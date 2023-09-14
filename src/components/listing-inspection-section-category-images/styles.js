@@ -7,10 +7,24 @@ export const ListingInspectionSectionCategoryImagesContainer = styled.div`
   position: relative;
   user-select: none;
 
-  > svg {
+  svg:nth-child(1) {
+    position: absolute;
+    z-index: 1;
     width: 3rem;
     height: 3rem;
     cursor: pointer;
+    top: 50vh;
+    left: 0;
+  }
+
+  svg:nth-child(3) {
+    position: absolute;
+    z-index: 1;
+    width: 3rem;
+    height: 3rem;
+    cursor: pointer;
+    top: 50vh;
+    right: 0;
   }
 
   > img {
@@ -21,9 +35,11 @@ export const ListingInspectionSectionCategoryImagesContainer = styled.div`
 
   @media (max-width: 768px) {
     > img {
-      width: 100%;
-      height: 100vh;
+      width: 100vw;
+      height: auto;
       object-fit: contain;
+      position: absolute;
+      top: -1.92rem;
     }
   }
 `;
@@ -33,7 +49,7 @@ export const InspectionImagesDetailsBox = styled.div`
   bottom: 1rem;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(253, 253, 253, 0.8);
+  background: rgba(253, 253, 253, 0.75);
   color: #197572;
   padding: 0.375rem 0.5rem;
 
@@ -48,5 +64,7 @@ export const InspectionImagesDetailsBox = styled.div`
     text-align: center;
     text-transform: uppercase;
     height: fit-content;
+    font-size: 0.8rem;
+    font-weight: bold;
   }
 `;

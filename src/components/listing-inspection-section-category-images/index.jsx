@@ -6,8 +6,6 @@ import {
 } from "./styles";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useListingInspections } from "../../hooks/useListingInspections";
-import { formatDate } from "../../services/date";
-import { DateTime } from "luxon";
 
 export function ListingInspectionSectionCategoryImages({ category }) {
   const [imageIndex, setImageIndex] = useState(0);
@@ -35,14 +33,9 @@ export function ListingInspectionSectionCategoryImages({ category }) {
       return null;
     }
 
-    const date = formatDate({
-      date: editingInspection.date,
-      formatOptions: DateTime.DATE_SHORT,
-    });
-
-    return `${editingInspection.name} ${date} | ${category.name} ${
-      imageIndex + 1
-    }/${images.length}`;
+    return `${category?.Section?.name} / ${category?.name} (${imageIndex + 1}/${
+      images.length
+    })`;
   }, [editingInspection, category, imageIndex, images]);
 
   const handleNextImage = useCallback(() => {
