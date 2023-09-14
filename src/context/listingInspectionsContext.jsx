@@ -292,7 +292,7 @@ export function ListingInspectionsProvider({ children }) {
         onModalClosed={handleInspectionFormModalClosed}
       >
         <Modal.Body width={modalWidth}>
-          <Modal.Header showCloseIcon isMobile={true} />
+          <Modal.Header showCloseIcon />
           <Modal.Content>
             <div className="container">
               <div className="row inspection-row">
