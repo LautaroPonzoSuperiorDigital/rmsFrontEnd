@@ -64,12 +64,8 @@ export const Header = styled.div`
     inset: 0;
     display: flex;
     align-items: center;
-    padding: 0.375rem 0.5rem;
+    left: 3.5rem; 0.5rem;
     background: unset;
-
-    > span {
-      padding-left: 3.5rem;
-    }
   }
 `;
 
