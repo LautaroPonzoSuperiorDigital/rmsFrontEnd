@@ -84,7 +84,7 @@ export const CategoryList = styled.ul`
 export const NewCategory = styled.li`
   min-height: 12rem;
   height: 100%;
-  border: 1px solid #197572;
+  border: 1px solid #31af9a;
   position: relative;
   cursor: pointer;
 
