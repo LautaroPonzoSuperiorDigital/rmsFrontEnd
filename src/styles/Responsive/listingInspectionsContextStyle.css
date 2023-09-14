@@ -55,7 +55,11 @@ div.container-fluid.row.footer.d-flex {
 
     .form-container form label {
       border-bottom: 0;
-      margin: 0 0.5rem;
+      margin: unset;
+    }
+
+    .form-container form label:nth-child(2) {
+      margin-left: 1rem;
     }
 
     .form-container form label:nth-child(3) {
@@ -84,7 +88,8 @@ div.container-fluid.row.footer.d-flex {
       display: flex;
       justify-content: flex-start;
       flex-direction: row;
-      width: 100%;
+      width: 100vw;
+      padding: 0;
     }
 
     .section-container > div.row .section p div {
