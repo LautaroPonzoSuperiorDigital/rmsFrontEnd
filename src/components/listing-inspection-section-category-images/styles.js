@@ -10,7 +10,6 @@ export const ListingInspectionSectionCategoryImagesContainer = styled.div`
   > svg {
     width: 3rem;
     height: 3rem;
-
     cursor: pointer;
   }
 
