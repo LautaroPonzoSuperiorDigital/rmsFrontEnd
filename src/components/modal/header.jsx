@@ -43,6 +43,7 @@ const CloseButton = styled.button`
     justify-content: start;
     gap: 0.5rem;
     padding: 1rem;
+    z-index: 1;
   }
 `;
 
