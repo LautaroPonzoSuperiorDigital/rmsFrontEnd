@@ -28,17 +28,13 @@ export const ListingAlbumContainer = styled.div`
 export const GoBackButton = styled.button`
   outline: 0;
   border: 0;
-
   cursor: pointer;
-
   display: flex;
   align-items: center;
   gap: 0.5rem;
-
   text-transform: uppercase;
   color: #197572;
   font-weight: bold;
-
   margin-left: 3rem;
   @media (max-width: 768px) {
     margin-left: 10px;
@@ -215,6 +211,7 @@ export const SectionTabImageGrid = styled.ul`
 
 export const SectionImageContainer = styled.li`
   position: relative;
+
   @media (max-width: 768px) {
     display: flex;
     flex-direction: column;
@@ -224,14 +221,12 @@ export const SectionImageContainer = styled.li`
 `;
 
 export const SectionImage = styled.img`
-  width: 100%;
-  max-width: 300px;
-  height: 100%;
-  max-height: 300px;
+  width: 260px;
+  height: 260px;
   cursor: pointer;
-  object-fit: cover;
+  aspect-ratio: 1/1;
 
-  object-fit: contain;
+  object-fit: cover;
   @media (max-width: 768px) {
     width: 110px;
     height: 110px;
@@ -243,6 +238,7 @@ export const SectionImage = styled.img`
 export const SingleImage = styled.img`
   width: 100%;
   height: 100%;
+  object-fit: cover;
   max-height: 600px;
   margin-top: 0.5rem;
   position: relative;
