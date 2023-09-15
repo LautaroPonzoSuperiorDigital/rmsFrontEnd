@@ -36,7 +36,7 @@ export function ListingAlbum1({
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [edit, setEdit] = useState(false);
   const [showImage, setShowImage] = useState(false);
-
+  const innerWidth = window.innerWidth;
   const { showFooter, hideFooter, setHeight } = useModal();
 
   const uploadPhotosRef = useRef(null);
@@ -111,7 +111,7 @@ export function ListingAlbum1({
             fill="#197572"
           />
         </svg>
-        Go Back
+        {innerWidth > 768 ? "Go Back" : ""}
       </GoBackButton>
 
       <Tabs

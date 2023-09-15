@@ -63,9 +63,9 @@ const Listing = ({ listing, handleImageClick }) => {
                 &nbsp;SQ. FT.
               </FieldValue>
             </FieldName>
-            <div className=" d-flex justify-content-end align-items-center">
+            <div className=" d-flex justify-content-end align-items-center gap-1">
               <span className="nbedbath">{listing.bedrooms}</span>
-              <img className="bed bedrooms" src={bed} />
+              <img className="bed bedrooms " src={bed} />
               <span className="nbedbath bathrooms">{listing.bathrooms}</span>
               <img className="bath" src={bath} />
             </div>
