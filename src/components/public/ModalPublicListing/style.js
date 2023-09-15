@@ -23,6 +23,9 @@ export const ModalListingDescription = styled.div`
   max-width: 670px;
   height: 100%;
   padding: 20px 48px;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
   @media (max-width: 768px) {
     padding: 0px 10px;
   }
@@ -30,7 +33,6 @@ export const ModalListingDescription = styled.div`
 export const DescriptionContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 5rem;
   @media (max-width: 768px) {
     margin-top: 0rem;
   }
@@ -112,4 +114,19 @@ export const BtnApply = styled.button`
   padding: 10px 20px;
   width: 100%;
   max-width: 580px;
+  margin-top: auto;
+`;
+
+export const FieldContainer = styled.div`
+  @media (max-width: 768px) {
+    display: ${(props) => (props.amenities ? "" : "flex")}
+    justify-content: space-between;
+    align-items: ${(props) => (props.location ? "flex-start" : "center")}
+    flex-direction: ${(props) => (props.location ? "column" : "row")};
+    padding: 0px 10px;
+    margin-bottom: ${(props) => (props.location ? "1rem" : "0px")};
+    & > p {
+      margin: 0;
+    }
+  }
 `;
