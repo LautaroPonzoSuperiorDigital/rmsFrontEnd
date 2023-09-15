@@ -319,12 +319,14 @@ export function ListingInspectionsProvider({ children }) {
                               <img src={NoteIcon} alt="Note" />
                             </Tooltip>
                           )}
-                          <Tooltip
-                            tooltipText={"Add Image"}
-                            onClick={() => handleOpenSectionModal(section)}
-                          >
-                            <img src={AddImageIcon} alt="Add Image" />
-                          </Tooltip>
+                          {editingInspection && (
+                            <Tooltip
+                              tooltipText={"Add Image"}
+                              onClick={() => handleOpenSectionModal(section)}
+                            >
+                              <img src={AddImageIcon} alt="Add Image" />
+                            </Tooltip>
+                          )}
                         </p>
                       </SectionList>
                     ))}
