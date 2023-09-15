@@ -272,7 +272,7 @@ const EditModalListings = ({ renderSectionContent }) => {
               <input
                 type="text"
                 className="inputListing"
-                placeholder="PRICE                                                                                               $ 4,000 / Mo"
+                placeholder="PRICE                                                                                               $ 5,000 / Mo"
                 name="price"
                 value={listingData.price}
                 onChange={handleInputChange}

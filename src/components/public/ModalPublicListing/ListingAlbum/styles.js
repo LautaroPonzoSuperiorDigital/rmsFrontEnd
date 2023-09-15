@@ -19,7 +19,8 @@ export const ListingAlbumContainer = styled.div`
 
   @media (max-width: 768px) {
     width: 100vw;
-    top: 7%;
+    height: 100vh;
+    top: 0%;
     left: 0%;
   }
 `;
@@ -39,13 +40,16 @@ export const GoBackButton = styled.button`
   font-weight: bold;
 
   margin-left: 3rem;
+  @media (max-width: 768px) {
+    margin-left: 10px;
+  }
 `;
 
 export const SectionTabs = styled(TabList)`
   margin-top: 2.5rem;
   margin-bottom: 0;
   padding-left: 0;
-
+  overflow-x: auto;
   list-style: none;
 
   display: flex;
@@ -54,6 +58,11 @@ export const SectionTabs = styled(TabList)`
   gap: 2.5rem;
 
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+
+  @media (max-width: 768px) {
+    gap: 20px;
+    overflow-x: auto;
+  }
 `;
 
 export const SectionTab = styled(Tab)`
@@ -91,10 +100,16 @@ export const SectionTab = styled(Tab)`
 
   &:first-child {
     margin-left: 3rem;
+    @media (max-width: 768px) {
+      margin-left: 10px;
+    }
   }
 
   &:last-child {
     margin-right: 3rem;
+  }
+  @media (max-width: 768px) {
+    margin-right: 0px;
   }
 `;
 
@@ -174,6 +189,9 @@ export const UploadPhotosInput = styled.input`
 export const SectionTabContent = styled(TabPanel)`
   &.active {
     padding: 2rem 3rem;
+    @media (max-width: 768px) {
+      padding: 0rem;
+    }
   }
 `;
 export const NoPhotosAdded = styled.p`
@@ -190,9 +208,8 @@ export const SectionTabImageGrid = styled.ul`
   list-style: none;
   padding-left: 0;
   @media (max-width: 768px) {
-    overflow-x: scroll;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    gap: 0.5rem;
+    grid-template-columns: repeat(3, 1fr);
   }
 `;
 
@@ -203,7 +220,6 @@ export const SectionImageContainer = styled.li`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 300px;
   }
 `;
 
@@ -213,16 +229,19 @@ export const SectionImage = styled.img`
   height: 100%;
   max-height: 300px;
   cursor: pointer;
+  object-fit: cover;
 
   object-fit: contain;
   @media (max-width: 768px) {
-    width: 500px;
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    margin-top: 0.5rem;
   }
 `;
 
 export const SingleImage = styled.img`
   width: 100%;
-  max-width: 900px;
   height: 100%;
   max-height: 600px;
   margin-top: 0.5rem;

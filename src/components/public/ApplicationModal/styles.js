@@ -47,6 +47,7 @@ export const GoBackStyle = styled.div`
 export const ApplicationContainer = styled.div`
   display: flex;
   height: 100%;
+
   width: 100%;
   @media (max-width: 768px) {
     flex-direction: column;
@@ -141,11 +142,12 @@ export const Ulcontainers = styled.div`
   justify-content: space-between;
   height: 100%;
   width: 100%;
-  gap: 50px;
+  gap: 60px;
   margin-left: 20px;
 `;
 
 export const Ul = styled.ul`
+  width: 100%;
   padding: 0;
   margin: 0;
   display: flex;

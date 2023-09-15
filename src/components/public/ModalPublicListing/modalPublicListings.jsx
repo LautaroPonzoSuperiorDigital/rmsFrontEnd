@@ -19,6 +19,7 @@ import {
   BlackOverlay,
   AmenitiesContainer,
   BtnApply,
+  FieldContainer,
 } from "./style";
 import { ModalProvider } from "../../modal/context";
 import { ListingAlbum1 } from "./ListingAlbum/ListingAlbum1";
@@ -107,69 +108,74 @@ const ModalPublicListings = ({
           </PriceText>
         </DescriptionContainer>
         <SpectDescriptioContainer>
-          <div>
-            <FieldName>City</FieldName>
+          <FieldContainer location={true}>
+            <FieldName>CITY</FieldName>
             <FieldValue>{myselectedListing.location}</FieldValue>
-          </div>
-          <div>
+          </FieldContainer>
+          <FieldContainer>
             <FieldName>ID</FieldName>
             <FieldValue className="desc2 or2">
-              {myselectedListing.id.toString().padStart(6, "0")}
+              #{myselectedListing.id.toString().padStart(6, "0")}
             </FieldValue>
-          </div>
+          </FieldContainer>
         </SpectDescriptioContainer>
         <SpectDescriptioContainer>
-          <div>
-            <FieldName>House Size</FieldName>
+          <FieldContainer>
+            <FieldName>HOUSE SIZE</FieldName>
             <FieldValue className="desc2">
               {myselectedListing.houseSize} Sq. Ft. Per County
             </FieldValue>
-          </div>
-          <div>
+          </FieldContainer>
+          <FieldContainer>
             <FieldName>LOT SIZE</FieldName>
-            <FieldValue>{myselectedListing.lotSize}</FieldValue>
-          </div>
+            <FieldValue>
+              {myselectedListing.lotSize} Sq. Ft. Per County
+            </FieldValue>
+          </FieldContainer>
         </SpectDescriptioContainer>
-        <FieldName>Amenities</FieldName>
-
-        <AmenitiesContainer>
-          <div>
-            <ul>
-              <FieldValue>
-                {myselectedListing && myselectedListing.bedrooms} Bedrooms
-              </FieldValue>
-              <FieldValue>
-                {myselectedListing && myselectedListing.bathrooms} Bathrooms
-              </FieldValue>
-              {myselectedListing.Amenities &&
-                myselectedListing.Amenities.slice(0, 3).map((amenity) => (
-                  <FieldValueLi key={amenity.id}>{amenity.name}</FieldValueLi>
-                ))}
-            </ul>
-          </div>
-          <div>
-            <ul>
-              {myselectedListing.Amenities &&
-                myselectedListing.Amenities.slice(3).map((amenity) => (
-                  <FieldValueLi key={amenity.id}>{amenity.name}</FieldValueLi>
-                ))}
-            </ul>
-          </div>
-        </AmenitiesContainer>
-        <FieldName>REQUIREMENTS</FieldName>
-        <div>
-          <ul>
-            {myselectedListing.Requirements &&
-              myselectedListing.Requirements.map((requirements) => (
-                <FieldValue key={requirements.id}>
-                  {requirements.name}
+        <FieldContainer amenities={true}>
+          <FieldName>AMENITIES</FieldName>
+          <AmenitiesContainer>
+            <div>
+              <ul>
+                <FieldValue>
+                  {myselectedListing && myselectedListing.bedrooms} Bedrooms
                 </FieldValue>
-              ))}
-          </ul>
-        </div>
+                <FieldValue>
+                  {myselectedListing && myselectedListing.bathrooms} Bathrooms
+                </FieldValue>
+                {myselectedListing.Amenities &&
+                  myselectedListing.Amenities.slice(0, 3).map((amenity) => (
+                    <FieldValueLi key={amenity.id}>{amenity.name}</FieldValueLi>
+                  ))}
+              </ul>
+            </div>
+            <div>
+              <ul>
+                {myselectedListing.Amenities &&
+                  myselectedListing.Amenities.slice(3).map((amenity) => (
+                    <FieldValueLi key={amenity.id}>{amenity.name}</FieldValueLi>
+                  ))}
+              </ul>
+            </div>
+          </AmenitiesContainer>
+        </FieldContainer>
+        <FieldContainer>
+          <FieldName>REQUIREMENTS</FieldName>
+          <div>
+            <ul>
+              {myselectedListing.Requirements &&
+                myselectedListing.Requirements.map((requirements) => (
+                  <FieldValue key={requirements.id}>
+                    {requirements.name}
+                  </FieldValue>
+                ))}
+            </ul>
+          </div>
+        </FieldContainer>
         <div
           className="d-flex align-items-center justify-content-center "
-          style={{ width: "100%" }}
+          style={{ width: "100%", marginBottom: "10px" }}
         >
           <BtnApply onClick={handleApply}>Apply</BtnApply>
         </div>
@@ -184,6 +190,7 @@ const ModalPublicListings = ({
           </ModalProvider>
         )}
       </ModalListingDescription>
+
       {showApplicationModal && (
         <ApplicationModal
           onClose={handleModalClose}
