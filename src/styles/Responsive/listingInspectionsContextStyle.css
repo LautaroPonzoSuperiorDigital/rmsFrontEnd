@@ -88,12 +88,12 @@ div.container-fluid.row.footer.d-flex {
       display: flex;
       justify-content: flex-start;
       flex-direction: row;
-      width: 100vw;
+      width: 90vw;
       padding: 0;
     }
 
     .section-container > div.row .section p div {
-      padding-left: 0.5rem;
+      padding-left: 0.375rem;
       top: -1px;
     }
   }

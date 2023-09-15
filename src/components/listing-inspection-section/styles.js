@@ -40,7 +40,7 @@ export const Header = styled.div`
     align-items: center;
 
     > h1:first-child {
-      font-size: 1rem;
+      font-size: 1.2rem;
       position: absolute;
       align-self: center;
       top: 1rem;
