@@ -46,19 +46,21 @@ export function ListingInspectionSectionCategory({
     : null;
 
   const imageUrl = useMemo(() => {
-    const inspectionSection = category.InspectionSections?.find(
-      (inspectionSection) => inspectionSection.Images?.length
-    );
+    if (editingInspection) {
+      const inspectionSection = category.InspectionSections?.find(
+        (inspectionSection) => inspectionSection.Images?.length
+      );
 
-    if (!inspectionSection) {
-      return null;
+      if (inspectionSection) {
+        return `https://rms-staging.s3.us-west-1.amazonaws.com/${inspectionSection.Images[0].key}`.replace(
+          /\\/g,
+          "%5C"
+        );
+      }
     }
 
-    return `https://rms-staging.s3.us-west-1.amazonaws.com/${inspectionSection.Images[0].key}`.replace(
-      /\\/g,
-      "%5C"
-    );
-  }, [category]);
+    return null;
+  }, [category, editingInspection]);
 
   const openUploadInput = () => {
     if (isUploading) return;
