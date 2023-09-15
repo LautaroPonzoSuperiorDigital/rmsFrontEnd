@@ -22,6 +22,7 @@ export function ListingInspectionSectionCategory({
   onCategoryRemoved,
   onCategoryUpdated,
 }) {
+  console.log({ category });
   const [isUploading, setIsUploading] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const [requestRemove, setRequestRemove] = useState(false);
@@ -48,14 +49,22 @@ export function ListingInspectionSectionCategory({
   const imageUrl = useMemo(() => {
     if (editingInspection) {
       const inspectionSection = category.InspectionSections?.find(
-        (inspectionSection) => inspectionSection.Images?.length
+        (inspectedSection) => inspectedSection.Images?.length
       );
 
-      if (inspectionSection) {
-        return `https://rms-staging.s3.us-west-1.amazonaws.com/${inspectionSection.Images[0].key}`.replace(
-          /\\/g,
-          "%5C"
+      if (inspectionSection && inspectionSection.Images.length > 0) {
+        const imagesForCurrentInspection = inspectionSection.Images.filter(
+          (image) =>
+            editingInspection.id ===
+            image.InspectionSectionCategory.InspectionSection.Inspection.id
         );
+
+        if (imagesForCurrentInspection.length > 0) {
+          return `https://rms-staging.s3.us-west-1.amazonaws.com/${imagesForCurrentInspection[0].key}`.replace(
+            /\\/g,
+            "%5C"
+          );
+        }
       }
     }
 
