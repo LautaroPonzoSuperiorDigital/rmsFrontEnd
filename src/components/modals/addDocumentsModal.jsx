@@ -36,8 +36,6 @@ const AddDocs = ({ listingsData, onClose }) => {
       const { data: listing } = await api.get(`listing/${listingId}`);
       const { data: userData } = await api.get(`admin/user/${user.id}`);
 
-      console.log({ admin: userData.Admin.id });
-
       if (listing.adminId !== userData.Admin.id) {
         alert(`You are not allowed to attach file to Listing #${listingId}`);
         throw new Error(`Not authorized`);

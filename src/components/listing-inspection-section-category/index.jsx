@@ -22,14 +22,12 @@ export function ListingInspectionSectionCategory({
   onCategoryRemoved,
   onCategoryUpdated,
 }) {
-  console.log({ category });
   const [isUploading, setIsUploading] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const [requestRemove, setRequestRemove] = useState(false);
   const [edit, setEdit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
   const { editingInspection, handleOpenCategoryImagesModal } =
     useListingInspections();
 
@@ -37,7 +35,6 @@ export function ListingInspectionSectionCategory({
   const nameInputRef = useRef(null);
 
   const isLoading = isRemoving || isUploading || isSaving;
-
   const loadingText = isRemoving
     ? "Removing"
     : isUploading
