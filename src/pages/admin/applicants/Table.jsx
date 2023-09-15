@@ -39,8 +39,10 @@ const Table = ({
 
     const fetchAdminListing = async () => {
       try {
-        const res = await api.get(`/listing?adminId=${user.id}`);
+        const { data: adminData } = await api.get(`/admin/user/${user.id}`);
+        const res = await api.get(`/listing?adminId=${adminData.Admin.id}`);
         const adminListing = res.data;
+        console.log(adminListing);
 
         const myFilter = filteredApplicants.map((applicant) => ({
           applicant: applicant,
@@ -65,7 +67,9 @@ const Table = ({
     <table className="table table-responsive-lg">
       <thead className="tables">
         <td className=" NAME1">
-          <p className="mb-2 g">NAME</p>
+          <p className="mb-2 g" style={{ width: "150px", margin: 0 }}>
+            NAME
+          </p>
         </td>
         <td className="bor LISTING1">
           <p className="mb-2 g">LISTINGS</p>
@@ -98,12 +102,15 @@ const Table = ({
           item.filteredApplications.length === 0 ? null : (
             <tr className="tr-hover" key={item.id}>
               <td className="bor1">
-                <div className="mt-3   Person">
+                <div
+                  className="mt-3   Person"
+                  style={{ width: "150px", margin: 0 }}
+                >
                   <p>{item.applicant.User.name}</p>
                 </div>
               </td>
               <td className="bor1">
-                <div className="mt-3 ms-2">
+                <div className="mt-3 ms-2" style={{ width: "250px" }}>
                   {item.filteredApplications.map((item) => (
                     <p key={item.id}>{item.Listing.location}</p>
                   ))}
@@ -123,7 +130,7 @@ const Table = ({
                 </div>
               </td>
               <td className="bor1">
-                <div className="mt-3">
+                <div className="mt-3" style={{ width: "100px" }}>
                   <p>{item.applicant.User.email}</p>
                 </div>
               </td>
