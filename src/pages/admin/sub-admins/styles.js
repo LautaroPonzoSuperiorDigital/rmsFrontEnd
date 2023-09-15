@@ -37,10 +37,9 @@ export const TableContainer = styled.div`
 export const Table1 = styled.table`
   width: 100%;
   height: 100%;
-
   text-align: left;
   padding: 8px;
-  font-size: 14px;
+  font-size: 16px;
   color: #000;
   font-weight: 500;
   margin-top: 20px;
@@ -62,8 +61,7 @@ export const TableThead = styled.thead`
 `;
 
 export const TableTd = styled.td`
-  width: 100px;
-  max-width: 10px;
+  width: 150px;
 `;
 export const TableTdEmail = styled.td`
   width: 100%;

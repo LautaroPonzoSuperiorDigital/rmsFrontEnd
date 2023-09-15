@@ -12,6 +12,8 @@ export const PublicListing = styled.div`
   @media (max-width: 1230px) {
     max-width: 400px;
     max-height: 800px;
+    border: none;
+    box-shadow: none;
   }
 
   @media (min-width: 377px) {
@@ -25,6 +27,13 @@ export const ListingPublicDescription = styled.div`
   flex-direction: column;
   height: 10rem;
   justify-content: space-around;
+
+  @media (max-width: 1230px) {
+    display: block;
+    justify-content: center;
+    gap: 10px;
+    height: auto;
+  }
 `;
 
 export const ListingPublicImg = styled.img`
@@ -32,6 +41,13 @@ export const ListingPublicImg = styled.img`
   height: 24rem;
   object-fit: cover;
   margin-bottom: 10px;
+  @media (max-width: 1230px) {
+    max-width: 400px;
+    max-height: 250px;
+    border: none;
+    box-shadow: none;
+    margin-bottom: 10px;
+  }
 `;
 
 export const ListingPriceLocation = styled.div`
@@ -41,6 +57,10 @@ export const ListingPriceLocation = styled.div`
   align-items: center;
   white-space: nowrap;
   padding: 0 1rem;
+
+  @media (max-width: 1230px) {
+    padding: 0 0rem;
+  }
 `;
 
 export const Text = styled.div`

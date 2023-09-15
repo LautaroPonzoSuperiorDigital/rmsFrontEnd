@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Nav from "../../../components/nav";
 import {
   BtnPlusSub,
@@ -96,14 +96,20 @@ const SubAdmins = () => {
         <Table1>
           <TableThead>
             <TableTd className="bor NAME1">
-              <p className="mb-2 g">NAME</p>
+              <p className="mb-2 g" style={{ width: "150px", margin: 0 }}>
+                NAME
+              </p>
             </TableTd>
             <TableTd className=" bor LISTING1">
-              <p className="mb-2 g">ROLE</p>
+              <p className="mb-2 g" style={{ width: "150px" }}>
+                ROLE
+              </p>
             </TableTd>
 
             <TableTdEmail className="bor EMAIL1">
-              <p className="mb-2 g">EMAIL</p>
+              <p className="mb-2 g" style={{ width: "150px" }}>
+                EMAIL
+              </p>
             </TableTdEmail>
 
             <td className="bor">
