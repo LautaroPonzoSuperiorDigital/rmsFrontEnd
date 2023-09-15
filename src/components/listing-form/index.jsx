@@ -1,15 +1,22 @@
 /* eslint-disable react/prop-types */
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react"
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
-import { api } from "../../services/api"
-import { createListingImage } from "../../services/listing"
-import { useAuth } from "../../hooks/useAuth"
+import { api } from "../../services/api";
+import { createListingImage } from "../../services/listing";
+import { useAuth } from "../../hooks/useAuth";
 
-import CheckBoxLog from "../checkBox"
-import { Input } from "../input"
-import { TextArea } from "../text-area"
-import { useModal } from "../modal/context"
-import { ListingAlbumPreview } from "../listing-album-preview"
+import CheckBoxLog from "../checkBox";
+import { Input } from "../input";
+import { TextArea } from "../text-area";
+import { useModal } from "../modal/context";
+import { ListingAlbumPreview } from "../listing-album-preview";
 
 import {
   CheckBoxContainer,
@@ -18,23 +25,23 @@ import {
   ListingFormContainer,
   MainDetail,
   MainDetails,
-} from "./styles"
+} from "./styles";
 
 const formFields = [
-  { field: 'street', path: 'value' },
-  { field: 'zip', path: 'value' },
-  { field: 'unitNumber', path: 'value' },
-  { field: 'city', path: 'value' },
-  { field: 'state', path: 'value' },
-  { field: 'lotSize', path: 'value' },
-  { field: 'houseSize', path: 'value' },
-  { field: 'price', path: 'value' },
-  { field: 'isPublic', path: 'checked' },
-  { field: 'bedrooms', path: 'value' },
-  { field: 'bathrooms', path: 'value' },
-  { field: 'amenities', path: 'value', multiLines: true },
-  { field: 'requirements', path: 'value', multiLines: true },
-]
+  { field: "street", path: "value" },
+  { field: "zip", path: "value" },
+  { field: "unitNumber", path: "value" },
+  { field: "city", path: "value" },
+  { field: "state", path: "value" },
+  { field: "lotSize", path: "value" },
+  { field: "houseSize", path: "value" },
+  { field: "price", path: "value" },
+  { field: "isPublic", path: "checked" },
+  { field: "bedrooms", path: "value" },
+  { field: "bathrooms", path: "value" },
+  { field: "amenities", path: "value", multiLines: true },
+  { field: "requirements", path: "value", multiLines: true },
+];
 
 function ListingFormWithRef({ listing, onSavingStatusChange, onListingSaved }, ref) {  
   const [isSaving, setIsSaving] = useState(false)
@@ -42,8 +49,8 @@ function ListingFormWithRef({ listing, onSavingStatusChange, onListingSaved }, r
   const formRef = useRef(null)
   const listingAlbumRef = useRef(null)
 
-  const modal = useModal()
-  const { user } = useAuth()
+  const modal = useModal();
+  const { user } = useAuth();
 
   const createListingLocation = ({ unitNumber, street, zip, city, state }) =>
     `${unitNumber} ${street}, ${zip}, ${city}, ${state}`
@@ -145,23 +152,23 @@ function ListingFormWithRef({ listing, onSavingStatusChange, onListingSaved }, r
 
   const handleSubmit = useCallback(async () => {
     if (!formRef.current || !user || isSaving) {
-      return
+      return;
     }
 
-    const listingFormData = formFields.map(({ field, path, multiLines }) => {
-      let value = formRef.current[field][path]
+    const listingFormData = formFields
+      .map(({ field, path, multiLines }) => {
+        let value = formRef.current[field][path];
 
-      if (multiLines) {
-        value = value
-          .split('\n')
-          .filter(line => !!line)
+        if (multiLines) {
+          value = value.split("\n").filter((line) => !!line);
           // .map(name => ({ name }))
-      }
+        }
 
-      return { field, value }
-    }).reduce((a, b) => ({ ...a, [b.field]: b.value }), {})
-    
-    setIsSaving(true)
+        return { field, value };
+      })
+      .reduce((a, b) => ({ ...a, [b.field]: b.value }), {});
+
+    setIsSaving(true);
 
     try {
       const savedListing = listing
@@ -187,12 +194,12 @@ function ListingFormWithRef({ listing, onSavingStatusChange, onListingSaved }, r
   ])
 
   useImperativeHandle(ref, () => ({
-    submit: handleSubmit
-  }))
+    submit: handleSubmit,
+  }));
 
   useEffect(() => {
-    onSavingStatusChange(isSaving)
-  }, [onSavingStatusChange, isSaving])
+    onSavingStatusChange(isSaving);
+  }, [onSavingStatusChange, isSaving]);
 
   return (
     <ListingFormContainer ref={formRef}>
@@ -306,7 +313,7 @@ function ListingFormWithRef({ listing, onSavingStatusChange, onListingSaved }, r
         />
       </ExtraDetails>
     </ListingFormContainer>
-  )
+  );
 }
 
-export const ListingForm = forwardRef(ListingFormWithRef)
+export const ListingForm = forwardRef(ListingFormWithRef);

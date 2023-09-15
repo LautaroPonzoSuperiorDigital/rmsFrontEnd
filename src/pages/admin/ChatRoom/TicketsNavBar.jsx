@@ -5,7 +5,7 @@ const nameStyle = {
   color: "#272727",
   margin: "0px",
   fontWeight: 100,
-  lineHeight: "25px",
+  lineHeight: "30px",
   textTransform: "uppercase",
 };
 const listingStyle = {
@@ -19,30 +19,37 @@ const ticketContainerStyle = {
   width: "100%",
   height: "100px",
   display: "flex",
-  justifyContent: "space-around",
   alignItems: "center",
-  paddingBottom: "33px",
-  paddingTop: "33px",
+  padding: "30px",
+  gap: "10px",
 };
 
 const TicketsNavBar = ({ targetChatRoomId, chatRooms }) => {
   const selectedListing = chatRooms.find(
-    (chatRoom) => chatRoom.listingId === targetChatRoomId
+    (chatRoom) => chatRoom.id === targetChatRoomId
   );
 
   return (
     <div style={ticketContainerStyle}>
       <div>
         <img
-          src={createListingImage(selectedListing.Listing)}
+          src={createListingImage(selectedListing?.Listing)}
           style={{ height: "50px", width: "45" }}
         />
       </div>
       <div>
-        <p style={nameStyle}>{selectedListing.Tenant.User.name}</p>
+        <p style={nameStyle}>{selectedListing?.Tenant.User.name}</p>
+      </div>
+      <div
+        style={{
+          fontWeight: "bold",
+          fontSize: "20px",
+        }}
+      >
+        <p style={{ marginBottom: "3px" }}>•</p>
       </div>
       <div>
-        <p style={listingStyle}> LISTING {selectedListing.listingId}</p>
+        <p style={listingStyle}> LISTING {selectedListing?.listingId}</p>
       </div>
     </div>
   );

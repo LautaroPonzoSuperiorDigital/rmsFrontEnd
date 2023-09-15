@@ -6,10 +6,11 @@ import closeListing from "../../assets/img/close.svg";
 import closeHover from "../../assets/img/closeHover.svg";
 import ModalListingsImgs from "./modalListingsImgs";
 import axios from "axios";
-import jwtDecode from "jwt-decode";
-import { api } from "../../services/api"
+import { api } from "../../services/api";
+import { useAuth } from "../../hooks/useAuth";
 
 const EditModalListings = ({ renderSectionContent }) => {
+  const { user } = useAuth();
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [adminId, setAdminId] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -158,14 +159,9 @@ const EditModalListings = ({ renderSectionContent }) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("certifymyrent.token");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      const adminSub = decodedToken.sub;
-      setAdminId(adminSub);
-    }
-
-
+    api.get(`/admin/user/${user.id}`).then(({ data: userData }) => {
+      setAdminId(userData.Admin.id);
+    });
   }, []);
 
   const handleSave = () => {
@@ -177,9 +173,10 @@ const EditModalListings = ({ renderSectionContent }) => {
       image: selectedImage,
     };
 
-    delete data.id
+    delete data.id;
 
-    api.post('/listing', data)
+    api
+      .post("/listing", data)
       .then((response) => {
         localStorage.removeItem("images");
         setSelectedImage(null);
@@ -189,8 +186,6 @@ const EditModalListings = ({ renderSectionContent }) => {
         console.error(error);
       });
   };
-
-
 
   let hasNoImages =
     !renderSectionContent || renderSectionContent.images.length === 0;
@@ -277,7 +272,7 @@ const EditModalListings = ({ renderSectionContent }) => {
               <input
                 type="text"
                 className="inputListing"
-                placeholder="PRICE                                                                                               $ 4,000 / Mo"
+                placeholder="PRICE                                                                                               $ 5,000 / Mo"
                 name="price"
                 value={listingData.price}
                 onChange={handleInputChange}

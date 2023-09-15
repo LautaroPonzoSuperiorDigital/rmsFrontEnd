@@ -13,15 +13,13 @@ import DeleteIconHover from "../assets/img/deleteIconHover.svg";
 import AddDocuments from "./AddDocuments";
 import AddDocs from "./modals/addDocumentsModal";
 import { api } from "../services/api";
-import jwtDecode from "jwt-decode";
-
-
+import { useAuth } from "../hooks/useAuth";
 
 const Documents = () => {
+  const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [documentsData, setDocumentsData] = useState([]);
   const [listingsData, setListingsData] = useState([]);
-  const [decodedToken, setDecodedToken] = useState(null);
   const [tenantsData, setTenantsData] = useState([]);
 
   const handleOpenModal = () => {
@@ -32,57 +30,37 @@ const Documents = () => {
     setIsModalOpen(false);
   };
 
-
-
   useEffect(() => {
-    const token = localStorage.getItem("certifymyrent.token");
-    if (token) {
-      const decoded = jwtDecode(token);
-      setDecodedToken(decoded);
-      const adminId = decoded.sub;
-
-      api.get(`admin/${adminId}/listing-documents`)
-        .then(response => {
-          setDocumentsData(response.data);
-          const documentIds = response.data.map(document => document.listingId);
-          api.get("/listing")
-            .then(listingResponse => {
-              const listings = listingResponse.data;
-              const documentsWithListings = response.data.map(document => {
-                const listing = listings.find(listing => listing.id === document.listingId);
-                return { ...document, listing };
-              });
-              setDocumentsData(documentsWithListings);
-              console.log("Listings Data:", documentsWithListings);
-            })
-            .catch(error => {
-              console.error("Error fetching listings data:", error);
+    api.get(`/admin/user/${user.id}`).then(({ data: userData }) => {
+      api
+        .get(`/listing?adminId=${userData.Admin.id}`)
+        .then(({ data: listings }) => {
+          listings.map(({ id }) => {
+            api.get(`/listing/${id}/document`).then(({ data }) => {
+              setDocumentsData([...data, ...documentsData]);
             });
+          });
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error fetching documents data:", error);
         });
-    }
+    });
   }, []);
 
-
-  const handleDelete = async (documentId, tenantId) => {
+  const handleDelete = async (listingId, documentId) => {
     try {
-      const updatedDocuments = documentsData.filter(document => document.id !== documentId);
-      setDocumentsData(updatedDocuments);
-
-      await api.delete(`tenant/${tenantId}/document/${documentId}`);
-      console.log("Document deleted successfully!");
+      await api
+        .delete(`listing/${listingId}/document/${documentId}`)
+        .then(() => {
+          const updatedDocuments = documentsData.filter(
+            (document) => document.id !== documentId
+          );
+          setDocumentsData(updatedDocuments);
+        });
     } catch (error) {
       console.error("Error deleting document:", error);
-      // Revert the state update on error
-      setDocumentsData([...updatedDocuments, documentToDelete]);
     }
   };
-
-
-
-
 
   return (
     <>
@@ -124,27 +102,32 @@ const Documents = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {documentsData.map(document => (
-                    <tr key={document.id} className="tr-hover">
+                  {documentsData.map((document) => (
+                    <tr key={document?.id} className="tr-hover">
                       <td className="h p1 td td2 tdFix">
                         <p className="location1">
                           <a
-                            href={`https://rms-staging.s3.us-west-1.amazonaws.com/${document.Document.key}`}
-                            download={document.Document.name}
+                            href={`https://rms-staging.s3.us-west-1.amazonaws.com/${document?.key}`}
+                            download={document?.name}
                           >
-                            {document.Document.name}
+                            {document?.name}
                           </a>
                         </p>
                       </td>
                       <td className="h p1 td td2">
-                      </td>
-                      <td className="h p1 td td2 tdFix">
-                        <p className="location2">
-
+                        <p className="LISTING2 h">
+                          {String(document.listingId).padStart(6, "0")}
                         </p>
                       </td>
                       <td className="h p1 td td2 tdFix">
-                        <p className="date2">{format(new Date(), "MMM d, yyyy", { locale: enUS })}</p>
+                        <p className="location2"></p>
+                      </td>
+                      <td className="h p1 td td2 tdFix">
+                        <p className="date2">
+                          {format(new Date(), "MMM d, yyyy", {
+                            locale: enUS,
+                          })}
+                        </p>
                       </td>
                       <td className="buttonContainer2 tdFix">
                         <div className="orderButtonContainer">
@@ -155,8 +138,15 @@ const Documents = () => {
                           <DeleteButton
                             className="delete1"
                             defaultImage={<img src={Delete} alt="Delete" />}
-                            hoverImage={<img src={DeleteIconHover} alt="DeleteIconHover" />}
-                            onClick={() => handleDelete(document.id, document.Tenant.id)}
+                            hoverImage={
+                              <img
+                                src={DeleteIconHover}
+                                alt="DeleteIconHover"
+                              />
+                            }
+                            onClick={() =>
+                              handleDelete(document.Listing.id, document.id)
+                            }
                           />
                         </div>
                       </td>
@@ -168,7 +158,9 @@ const Documents = () => {
           </div>
         </div>
       </div>
-      {isModalOpen && <AddDocs onClose={handleCloseModal} listingsData={listingsData} />}
+      {isModalOpen && (
+        <AddDocs onClose={handleCloseModal} listingsData={listingsData} />
+      )}
       <Pagination />
     </>
   );

@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import CheckBoxLog from "../../../components/checkBox";
 import styled from "styled-components";
+import SearchIcon from "../../../assets/img/SearchIcon.svg";
+import SearchIconHover from "../../../assets/img/SearchIconHover.svg";
 
 const NavContainerStyle = styled.div`
   border-bottom: 1px solid #00000026;
   height: 100px;
   padding-bottom: 33px;
   padding-top: 33px;
-  /* padding-right: 57px; */
-  padding-left: 40px;
+  padding-right: 15px;
+  padding-left: 15px;
   align-items: center;
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  gap: 10px;
   @media (max-width: 1374px) {
-    padding-left: 20px;
+    padding-left: 0px;
   }
 `;
 
@@ -24,7 +26,7 @@ const navContainer = {
   paddingBottom: "33px",
   paddingTop: "33px",
   // paddingRigth: "57px",
-  paddingLeft: "40px",
+  paddingLeft: "px",
   alignItems: "center",
   display: "flex",
   width: "100%",
@@ -38,7 +40,13 @@ const navTitle = {
 
 const InputStyle = styled.input`
   width: 100%;
-  max-width: 100px;
+  border: 1px solid #00000026;
+  height: 40px;
+  margin-top: 10px;
+  &:focus {
+    /* Add other styles for focused input if needed */
+    outline: none;
+  }
 `;
 
 const AdminChatRoomNavBar = ({ chatRooms, setTicketActiveRooms }) => {
@@ -79,14 +87,39 @@ const AdminChatRoomNavBar = ({ chatRooms, setTicketActiveRooms }) => {
         style={{
           display: "flex",
           width: "100%",
-          justifyContent: "space-around",
+          alignItems: "center",
+          alignContent: "center",
         }}
       >
-        <div style={{ display: "flex", gap: 4 }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 2,
+            alignContent: "center",
+            alignItems: "center",
+          }}
+        >
           <CheckBoxLog checked={isChecked} onChange={handleCheckBoxChange} />
-          <p style={{ marginBottom: "0" }}>Show only active tickets</p>
+          <p
+            style={{
+              marginTop: "10px",
+              marginBottom: "0",
+              color: "#000000A5",
+              fontSize: "18px",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Show only active tickets
+          </p>
         </div>
-        <InputStyle placeholder="ID" onChange={handleInputChange} />
+      </div>
+      <div style={{ width: "100%" }}>
+        <InputStyle placeholder="Search By Id" onChange={handleInputChange} />
+        <img
+          className="SearchIconListings1"
+          src={SearchIcon}
+          alt="SearchIcon"
+        />
       </div>
     </NavContainerStyle>
   );

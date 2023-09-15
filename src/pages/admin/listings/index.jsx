@@ -19,10 +19,13 @@ import { ListingDetailsContext, ListingDetailsProvider, ListingDetailsTabs } fro
 import { ListingForm } from "../../../components/listing-form";
 import { ListingDetails } from "../../../components/listing-details";
 import { createListingImage } from "../../../services/listing";
+import { useAuth } from "../../../hooks/useAuth";
 
 const PAGE_SIZE = 10;
 
 export default function AdminListings() {
+  const { user } = useAuth();
+
   const [listings, setListings] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false);
@@ -112,23 +115,31 @@ export default function AdminListings() {
   };
 
   useEffect(() => {
-    async function loadListings() {
+    function loadAdminDataAndListings() {
       try {
-        const { data } = await api.get("/listing");
-
-        setListings(
-          data.map((listing) => ({
-            ...listing,
-            image: createListingImage(listing),
-          }))
-        );
+        api
+          .get(`/admin/user/${user.id}`)
+          .then(({ data: userData }) => {
+            api
+              .get(`/listing?adminId=${userData?.Admin.id}`)
+              .then(({ data: listings }) => {
+                setListings(
+                  listings.map((listing) => ({
+                    ...listing,
+                    image: createListingImage(listing),
+                  }))
+                );
+              })
+              .catch((error) => alert("Error loading listings data: ", error));
+          })
+          .catch((error) => alert("Error loading admin data: ", error));
       } catch (err) {
         console.log(err);
-        alert("Error loading listings: ", err);
+        alert("Error loading admin and listings data: ", err);
       }
     }
 
-    loadListings();
+    loadAdminDataAndListings();
   }, []);
 
   return (
@@ -302,7 +313,7 @@ export default function AdminListings() {
           </Modal.Footer>
         </Modal.Body>
       </Modal.Root>
-      
+
       <ListingDetailsProvider
         listing={listingDetails}
         setListingDetails={setListingDetails}

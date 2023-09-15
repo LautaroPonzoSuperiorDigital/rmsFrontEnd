@@ -20,17 +20,20 @@ const TenantsProfileContainer = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-`
+`;
 
 const TenantsProfile = () => {
   const { user, onSignedOut } = useAuth()
   const { hideNavbar, showNavbar } = useTenantsLayout()
 
+  const handleSignOut = () => {
+    onSignedOut();
+  };
   useEffect(() => {
-    hideNavbar()
-    
-    return showNavbar
-  }, [hideNavbar, showNavbar])
+    hideNavbar();
+
+    return showNavbar;
+  }, [hideNavbar, showNavbar]);
 
   return (
     <TenantsProfileContainer>
@@ -99,28 +102,12 @@ const TenantsProfile = () => {
             required
           />
         </div>
-        <div className="form-group d-flex justify-content-between align-items-center">
-          <label
-            htmlFor="cnn"
-            style={{ color: "#000000A5", fontSize: "15px" }}
-          >
-            CNN
-          </label>
-          <input
-            className="form-control  w-75 border-bottom"
-            id="cnn"
-            name="cnn"
-            placeholder="***"
-            style={inputStyle}
-            required
-          />
-        </div>
         <div className="w-100 d-flex justify-content-center align-items-center">
           <button
             type="button"
             className="btn btn-outline-danger w-100"
             style={{ fontSize: "16px", fontWeight: "600" }}
-            onClick={onSignedOut}
+            onClick={handleSignOut}
           >
             <img src={logOut} alt="logOut" />
             Log Out

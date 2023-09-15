@@ -13,6 +13,11 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleForgot = (e) => {
+    e.preventDefault();
+    navigate("/recover-password");
+  };
+
   const { isAuthenticated, user, onSignedIn } = useAuth();
   const navigate = useNavigate();
 
@@ -38,7 +43,7 @@ const Login = () => {
           break;
       }
     },
-    [navigate]
+    [navigate, windowWidth]
   );
 
   const handleLogin = async (event) => {
@@ -94,7 +99,7 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <a href="forgotPassword" className="forgot">
+          <a href="forgotPassword" className="forgot" onClick={handleForgot}>
             Forgot password?
           </a>
           <button className="button" type="submit">
@@ -127,7 +132,10 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               type="password"
             />
-            <div className="d-flex w-100 justify-content-end">
+            <div
+              className="d-flex w-100 justify-content-end"
+              onClick={handleForgot}
+            >
               <p className="fpResponsive ">Forgot Password?</p>
             </div>
             <div className="responsiveLoginBtnContainer d-flex align-items-center justify-content-center">

@@ -8,6 +8,7 @@ import { api } from "../../../services/api";
 import TicketsInfomartion from "./TicketsInformation/TicketsInfomartion";
 import AdminChatRoomNavBar from "./AdminChatRoomNavBar";
 import TicketsNavBar from "./TicketsNavBar";
+import { useAuth } from "../../../hooks/useAuth";
 
 const chatRoomStyle = {
   width: "33%",
@@ -41,6 +42,7 @@ const TicketsInfomartionStyle = {
 };
 
 const Chats = () => {
+  const { user } = useAuth();
   const chatContainerRef = useRef(null);
   const [messages, setMessages] = useState([]); ///this state recieve all message from server
   const [filterMessages, setFilterMessages] = useState([]); // this state filter message by chat room id
@@ -81,11 +83,31 @@ const Chats = () => {
     const getChatRooms = async () => {
       try {
         const { data } = await api.get("/chat/chat-rooms");
+        const { data: adminData } = await api.get(`/admin/user/${user.id}`);
+        const adminListings = await api.get(
+          `/listing?adminId=${adminData.Admin.id}`
+        );
+        if (adminListings.data.length > 0) {
+          // Extract the matching listingId values
+          const matchingListings = data
+            .filter((chatroom) =>
+              adminListings.data.some(
+                (adminListing) => adminListing.id === chatroom.listingId
+              )
+            )
+            .map((chatroom) => chatroom);
 
-        const chatRoomsMessage = data.map((chatRoom) => chatRoom.Chats);
-        setChatRooms(data);
-        setTicketActiveRooms(data);
-        setMessages(chatRoomsMessage.flat());
+          const chatRoomsMessage = matchingListings.map(
+            (chatRoom) => chatRoom.Chats
+          );
+          console.log(matchingListings);
+          setChatRooms(matchingListings);
+          setTicketActiveRooms(data);
+          setMessages(chatRoomsMessage.flat());
+        } else {
+          console.log("adminListings its empty");
+          setChatRooms([]);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -105,7 +127,7 @@ const Chats = () => {
               setTicketActiveRooms={setTicketActiveRooms}
             />
           </div>
-          {ticketActiveRooms.map((chatRoom) => {
+          {chatRooms.map((chatRoom) => {
             return (
               <AdminChatRoom
                 key={chatRoom.listingId}

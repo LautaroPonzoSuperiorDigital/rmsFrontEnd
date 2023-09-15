@@ -12,9 +12,17 @@ import AddDocs from "./addDocumentsModal";
 import { api } from "../../services/api";
 import jwtDecode from "jwt-decode";
 import { ListingAlbumPreview } from "../listing-album-preview";
+import { ListingInspectionHistoryCard } from "../listing-inspection-history/styles";
+import { formatDate } from "../../services/date";
+import { DateTime } from "luxon";
+import {
+  DeleteInspectionButton,
+  EditInspectionButton,
+} from "../buttonInspections";
+import Delete from "../../assets/img/delete.svg";
+import DeleteIconHover from "../../assets/img/deleteIconHover.svg";
 
 const TenantModal = ({ selectedTenant, onClose }) => {
-
   const [isHovered, setIsHovered] = useState(false);
   const [isHoveredEdit, setIsHoveredEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,6 +30,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   const [hoveredDocumentIndex, setHoveredDocumentIndex] = useState(null);
   const [adminData, setAdminData] = useState({});
   const [tenantData, setTenantData] = useState({});
+  const [inspections, setInspections] = useState([]);
 
   const [listingData, setListingData] = useState(null);
 
@@ -37,14 +46,14 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   };
 
   const handleDocumentHover = (documentId, isHovered) => {
-    setHoveredDocuments(prevHoveredDocuments => ({
+    setHoveredDocuments((prevHoveredDocuments) => ({
       ...prevHoveredDocuments,
-      [documentId]: isHovered
+      [documentId]: isHovered,
     }));
   };
 
   function getTokenFromLocalStorage() {
-    const v = localStorage.getItem("certifymyrent.token")
+    const v = localStorage.getItem("certifymyrent.token");
     if (!v) throw new Error("Could not get token");
     setToken(v);
     setDecodedToken(jwtDecode(v));
@@ -55,29 +64,34 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   };
 
   async function getAdminData() {
-    console.log(decodedToken)
-    await api.get(`/user/${decodedToken.sub}`)
-      .then(request => {
+    await api
+      .get(`/admin/user/${decodedToken.sub}`)
+      .then((request) => {
         setAdminData(request.data);
-        return request.data
+        return request.data;
       })
-      .catch(e => {
-        console.error(e)
+      .catch((e) => {
+        console.error(e);
       });
   }
 
   async function getTenantData() {
-    await api.get(`/tenant/${selectedTenant.id}`)
-      .then(response => {
+    await api
+      .get(`/tenant/${selectedTenant.id}`)
+      .then((response) => {
         setTenantData(response.data);
-        return response.data
+        return response.data;
       })
-      .catch(e => {
-        console.error(e)
+      .catch((e) => {
+        console.error(e);
       });
   }
 
-  async function handleSendPandadocClick(documentId, isHovered, localAdminData) {
+  async function handleSendPandadocClick(
+    documentId,
+    isHovered,
+    localAdminData
+  ) {
     let responseDocumentId;
     let name_split = String(localAdminData.name).split(" ");
     let f_name = name_split[0];
@@ -99,16 +113,15 @@ const TenantModal = ({ selectedTenant, onClose }) => {
           role: "TENANT",
         },
       ],
-      tags: ["rms-api"],
+      tags: ["rms-frontend"],
     };
     if (!requestCreateData.recipients[0].email) {
-      console.log(requestCreateData);
       throw new Error("Bad Admin Data.");
     }
 
     await api
       .post(
-        `/tenant/${selectedTenant.id}/pandadoc/template/create-document`,
+        `/tenant/${selectedTenant.id}/document-template/create-document`,
         requestCreateData
       )
       .then((response) => {
@@ -129,7 +142,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     };
     await api
       .post(
-        `/tenant/${selectedTenant.id}/pandadoc/document/${responseDocumentId}/send`,
+        `/tenant/${selectedTenant.id}/document/${responseDocumentId}/send`,
         requestSendData
       )
       .then((response) => {
@@ -143,7 +156,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   async function loadDocuments() {
     try {
       const { data } = await api.get(
-        `/tenant/${selectedTenant.id}/pandadoc/template`
+        `/tenant/${selectedTenant.id}/document-template`
       );
       if (!data) {
         throw new Error("Network data was not ok");
@@ -154,25 +167,36 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     }
   }
 
+  async function loadInspections() {
+    try {
+      const response = api.get(
+        `/listing/${selectedTenant.listingId}/inspection`
+      );
+
+      setInspections((await response).data);
+    } catch (err) {
+      alert("Error fetching inspections", err);
+    }
+  }
+
   const fetchListings = async () => {
     try {
-      const response = await api.get(`/listing/${selectedTenant.Listings[0].listingId}`);
+      const response = await api.get(`/listing/${selectedTenant.listingId}`);
       const listingData = response.data;
-      console.log("Listing Data:", listingData,selectedTenant);
       setListingData(listingData);
     } catch (error) {
-      console.error('Error fetching listing data:', error);
+      console.error("Error fetching listing data:", error);
     }
   };
 
   useEffect(() => {
-    if (!decodedToken)
-      getTokenFromLocalStorage();
+    if (!decodedToken) getTokenFromLocalStorage();
     if (decodedToken) {
       getAdminData();
       getTenantData();
-      loadDocuments();
       fetchListings();
+      loadDocuments();
+      loadInspections();
     }
   }, [decodedToken]);
 
@@ -213,15 +237,29 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                             alt="SendTemplateIconHover"
                             className="imgBtnDocs delBox"
                             onMouseLeave={() => handleDocumentHover(null)}
-                            onClick={() => handleSendPandadocClick(document.id, false, adminData)}
+                            onClick={() =>
+                              handleSendPandadocClick(
+                                document.id,
+                                false,
+                                adminData
+                              )
+                            }
                           />
                         ) : (
                           <img
                             src={SendTemplateIcon}
                             alt="SendTemplateIcon"
                             className="imgBtnDocs delBox"
-                            onMouseEnter={() => handleDocumentHover(documentIndex)}
-                            onClick={() => handleSendPandadocClick(document.id, true, adminData)}
+                            onMouseEnter={() =>
+                              handleDocumentHover(documentIndex)
+                            }
+                            onClick={() =>
+                              handleSendPandadocClick(
+                                document.id,
+                                true,
+                                adminData
+                              )
+                            }
                           />
                         )}
                       </div>
@@ -234,10 +272,26 @@ const TenantModal = ({ selectedTenant, onClose }) => {
         );
 
       case "PAYMENT HISTORY":
-        return <div></div>;
+        return <></>;
       case "INSPECTION HISTORY":
         return (
-          <div className="renderBoxsOrder d-flex align-items-start justify-content-start "></div>
+          <ListingInspectionHistoryCard className="mx-5 my-4">
+            <div className="inspection-card-container">
+              {inspections.map((inspection) => (
+                <div className="inspection-card" key={inspection.id}>
+                  <div className="inspectionContent">
+                    <p>{inspection.name}</p>
+                    <span>
+                      {formatDate({
+                        date: inspection.date,
+                        formatOptions: DateTime.DATE_MED,
+                      })}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ListingInspectionHistoryCard>
         );
       case "APPLICATION FORM":
         return (
@@ -249,6 +303,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   };
 
   return (
+    <div>
     <div className="popUpContainer">
       <div className="popUp d-flex flex-column">
         <div className="onClose d-flex align-items-center justify-content-end mt-2">
@@ -271,9 +326,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
           <div className="tenantInfo d-flex flex-column">
             <div className="popUpOrderFirstCol FullLName d-flex">
               <p>FULL LEGAL NAME</p>
-              <span>
-                {selectedTenant.User.name}
-              </span>
+              <span>{selectedTenant.User.name}</span>
             </div>
             <div className="popUpOrderFirstCol pNo d-flex">
               <p>PHONE NO.</p>
@@ -300,14 +353,19 @@ const TenantModal = ({ selectedTenant, onClose }) => {
               <img className="imgTestPopUpInsert" src={`https://rms-staging.s3.us-west-1.amazonaws.com/${listingData?.key}`} alt="" />
 
             </div> */}
+              <img
+                className="imgTestPopUpInsert"
+                src={`https://rms-staging.s3.us-west-1.amazonaws.com/${listingData?.key}`}
+                alt=""
+              />
+            </div>
             <div className="listingInfoOrder d-flex flex-column">
               <div className="popUpOrderListings">
                 <div className="popUpOrderFirstCol idPopUp d-flex">
                   <p>ID</p>
-                  {selectedTenant.Listings.length > 0 && (
-                    <span>
-                      {String(selectedTenant.Listings[0].id).padStart(6, '0')}
-                    </span>)}
+                  <span>
+                    {String(selectedTenant.listingId).padStart(6, "0")}
+                  </span>
                 </div>
                 <div className="popUpOrderFirstCol locationPopUp d-flex">
                   <p>LOCATION</p>
@@ -315,11 +373,15 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 </div>
                 <div className="popUpOrderFirstCol lotSizePopUp d-flex">
                   <p>LOT SIZE</p>
-                  <span>{listingData && listingData.lotSize} Sq. Ft. Per County</span>
+                  <span>
+                    {listingData && listingData.lotSize} Sq. Ft. Per County
+                  </span>
                 </div>
                 <div className="popUpOrderFirstCol hsPopUp d-flex">
                   <p>HOUSE SIZE</p>
-                  <span>{listingData && listingData.houseSize} Sq. Ft. Per County</span>
+                  <span>
+                    {listingData && listingData.houseSize} Sq. Ft. Per County
+                  </span>
                 </div>
                 <div className="popUpOrderFirstCol pricePopUp d-flex">
                   <p>PRICE</p>
@@ -337,8 +399,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 </div> */}
               </div>
             </div>
-            <div className="EditDeletebuttons d-flex flex-column align-items-end">
-            </div>
+            <div className="EditDeletebuttons d-flex flex-column align-items-end"></div>
           </div>
         </div>
         {/* Navegable */}
