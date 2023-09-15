@@ -50,6 +50,7 @@ export function ListingDetails() {
     listing,
     isLoadingPNL,
     handleOpenEditListingModal,
+    handleOpenDeleteListingModal,
   } = useListingDetails();
   const { handleOpenInspectionFormModal } = useListingInspections();
 
@@ -130,7 +131,7 @@ export function ListingDetails() {
               <span>Edit Listing Details</span>
             </Action>
 
-            <Action>
+            <Action type="button" onClick={handleOpenDeleteListingModal}>
               <Trash />
               <span>Delete Listing</span>
             </Action>
