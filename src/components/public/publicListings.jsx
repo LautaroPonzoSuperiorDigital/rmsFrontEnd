@@ -70,18 +70,16 @@ const PublicListings = () => {
   return (
     <div className=" containerPublic">
       <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
-        <div className="filtersBar d-flex align-items-center px-4">
+        <div className="filtersBar">
           <img
-            className="LogoPublic justify-content-start"
+            className="LogoPublic"
             src={Logo}
             alt="Logo"
             onClick={handleLogoClick}
           />
-          <form method="GET" className="container px-2">
+          <form method="GET" className="container">
             <input
-              className={`inputPublic mx-2${
-                isInputHovered ? " inputHovered" : ""
-              }`}
+              className={`inputPublic ${isInputHovered ? " inputHovered" : ""}`}
               type="text"
               placeholder="Keyword Or City"
               required
@@ -90,7 +88,7 @@ const PublicListings = () => {
             />
             <button type="submit">
               <img
-                className={`SearchIconListings justify-content-start ${
+                className={`SearchIconListings ${
                   isInputHovered || isSearchIconHovered ? "SearchIconHover" : ""
                 }`}
                 src={
@@ -105,17 +103,17 @@ const PublicListings = () => {
             </button>
             <button className="open-search" />
             <button className="filter-listings" />
-            <select className="dropdownMenu mx-2">
+            <select className="dropdownMenu">
               <option className="opt" value="price">
                 &nbsp;&nbsp;Price
               </option>
             </select>
-            <select className="dropdownMenu mx-2">
+            <select className="dropdownMenu">
               <option className="opt" value="sqft">
                 &nbsp;&nbsp;Sq. Ft
               </option>
             </select>
-            <select className="dropdownMenu largeArrow mx-2">
+            <select className="dropdownMenu largeArrow">
               <option className="opt" value="Amenities">
                 &nbsp;&nbsp;Amenities
               </option>
