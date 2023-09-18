@@ -118,7 +118,6 @@ const PublicListings = () => {
                 &nbsp;&nbsp;Lot Size
               </option>
             </select>
-
             <select className="dropdownMenu">
               <option className="opt" value="Amenities">
                 &nbsp;&nbsp;Amenities
