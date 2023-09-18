@@ -9,12 +9,12 @@ import { createListingImage } from "../../../../services/listing";
 const ChatRoomsStyle = styled.div`
   border-bottom: 1px solid #00000026;
   width: 100%;
-  height: 120px;
+  height: 100px;
   display: flex;
-  padding-left: 40px;
+  padding: 30px 30px;
 
-  @media (max-width: 1374px) {
-    padding-left: 20px;
+  @media (max-width: 1474px) {
+    padding: 0px 0px;
   }
 `;
 
@@ -55,8 +55,8 @@ const AdminChatRoom = ({
           <div>
             <div
               style={{
-                height: "80px",
-                width: "80px",
+                height: "55px",
+                width: "55px",
                 border: "1px solid #197572",
                 borderRadius: "50%",
               }}
