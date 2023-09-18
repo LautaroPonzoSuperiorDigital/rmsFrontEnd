@@ -3,6 +3,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { styled } from "styled-components";
 import { BtnBackToSearch, BtnGallery, ImgCarousel } from "./styles";
 import ChevronLeft from "../../../assets/img/chevron.left (1).svg";
+import camera from "../../../assets/img/camera.svg";
 import { useState } from "react";
 const CarouselContainer = styled.div`
   height: 100%;
@@ -84,7 +85,18 @@ const ListingCarousel = ({ images, handleBackToSearch, handleShowAlbum }) => {
         Back To Search Results
       </BtnBackToSearch>
       <BtnGallery onClick={handleShowAlbum}>
-        {count}/{images.length}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <img src={camera} alt="image" />
+          <p style={{ margin: 0, display: "flex", alignItems: "center" }}>
+            {count}/{images.length}
+          </p>
+        </div>
       </BtnGallery>
     </CarouselContainer>
   );

@@ -1,9 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import "../../../styles/publIcListings/publicListings.css";
-import camera from "../../../assets/img/camera.svg";
 import { api } from "../../../services/api";
-import { createListingImage } from "../../../services/listing";
 import ListingCarousel from "../ListingCarousel";
 import ApplicationModal from "../ApplicationModal/ApplicationModal";
 import {
@@ -23,17 +21,21 @@ import {
 } from "./style";
 import { ModalProvider } from "../../modal/context";
 import { ListingAlbum1 } from "./ListingAlbum/ListingAlbum1";
+import { useNavigate, useParams } from "react-router-dom";
 
-const ModalPublicListings = ({
-  selectedImage,
-  onCloseModal,
-  myselectedListing,
-}) => {
+const ModalPublicListings = () => {
   const [showModal, setShowModal] = useState(false);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [images, setImage] = useState([]);
   const [showAlbum, setShowAlbum] = useState(false);
   const [section, setSection] = useState([]);
+  const [listing, setListing] = useState([]);
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const handleBackToSearch = () => {
+    navigate(-1);
+  };
 
   const handleGoBack = () => {
     setShowAlbum(false);
@@ -41,19 +43,6 @@ const ModalPublicListings = ({
 
   const handleShowAlbum = () => {
     setShowAlbum(true);
-  };
-
-  const imgCardContainerClass = `imgCardContainer ${
-    selectedImage ? "showImage" : ""
-  }`;
-
-  const containerStyle = {
-    backgroundImage: selectedImage ? `url(${selectedImage})` : "none",
-  };
-
-  const handleBackToSearch = () => {
-    window.location.href = window.location.href;
-    onCloseModal();
   };
 
   /* Modal Application */
@@ -67,27 +56,34 @@ const ModalPublicListings = ({
 
   useEffect(() => {
     const fetchImage = async () => {
-      const response = await api.get(`/listing/${myselectedListing.id}/album`);
-      const data = response.data;
-      const allImages = [];
-      if (data.Sections && Array.isArray(data.Sections)) {
-        data.Sections.forEach((section) => {
-          if (section.Images && Array.isArray(section.Images)) {
-            allImages.push(...section.Images);
-          }
-        });
+      try {
+        const listing = await api.get(`/listing/${id}`);
+        setListing(listing.data);
+
+        const response = await api.get(`/listing/${id}/album`);
+        const data = response.data;
+        const allImages = [];
+        if (data.Sections && Array.isArray(data.Sections)) {
+          data.Sections.forEach((section) => {
+            if (section.Images && Array.isArray(section.Images)) {
+              allImages.push(...section.Images);
+            }
+          });
+        }
+        setImage(allImages);
+        const sectionsArray = data.Sections.map((section) => ({
+          name: section.Images[0]?.AlbumSection.Section.name,
+          Album: {
+            Images: section.Images.map((image) => ({
+              key: image.key,
+            })),
+          },
+        }));
+        console.log(sectionsArray);
+        setSection(sectionsArray);
+      } catch (error) {
+        console.log(error);
       }
-      setImage(allImages);
-      const sectionsArray = data.Sections.map((section) => ({
-        name: section.Images[0]?.AlbumSection.Section.name,
-        Album: {
-          Images: section.Images.map((image) => ({
-            key: image.key,
-          })),
-        },
-      }));
-      console.log(sectionsArray);
-      setSection(sectionsArray);
     };
     fetchImage();
   }, []);
@@ -103,57 +99,56 @@ const ModalPublicListings = ({
       <ModalListingDescription>
         <DescriptionContainer>
           <PriceText>
-            {myselectedListing.price}${" "}
+            {listing.price}${" "}
             <PriceSpan className="xmonth"> per month</PriceSpan>
           </PriceText>
         </DescriptionContainer>
         <SpectDescriptioContainer>
           <FieldContainer location={true}>
             <FieldName>CITY</FieldName>
-            <FieldValue>{myselectedListing.location}</FieldValue>
+            <FieldValue>{listing.location}</FieldValue>
           </FieldContainer>
           <FieldContainer>
             <FieldName>ID</FieldName>
-            <FieldValue className="desc2 or2">
-              #{myselectedListing.id.toString().padStart(6, "0")}
-            </FieldValue>
+            <FieldValue className="desc2 or2">#{listing.id}</FieldValue>
           </FieldContainer>
         </SpectDescriptioContainer>
         <SpectDescriptioContainer>
           <FieldContainer>
             <FieldName>HOUSE SIZE</FieldName>
             <FieldValue className="desc2">
-              {myselectedListing.houseSize} Sq. Ft. Per County
+              {listing.houseSize} Sq. Ft. Per County
             </FieldValue>
           </FieldContainer>
           <FieldContainer>
             <FieldName>LOT SIZE</FieldName>
-            <FieldValue>
-              {myselectedListing.lotSize} Sq. Ft. Per County
-            </FieldValue>
+            <FieldValue>{listing.lotSize} Sq. Ft. Per County</FieldValue>
           </FieldContainer>
         </SpectDescriptioContainer>
         <FieldContainer amenities={true}>
           <FieldName>AMENITIES</FieldName>
           <AmenitiesContainer>
             <div>
-              <ul>
+              <ul style={{ padding: 0 }}>
+                <FieldValue>{listing && listing.bedrooms} Bedrooms</FieldValue>
                 <FieldValue>
-                  {myselectedListing && myselectedListing.bedrooms} Bedrooms
+                  {listing && listing.bathrooms} Bathrooms
                 </FieldValue>
-                <FieldValue>
-                  {myselectedListing && myselectedListing.bathrooms} Bathrooms
-                </FieldValue>
-                {myselectedListing.Amenities &&
-                  myselectedListing.Amenities.slice(0, 3).map((amenity) => (
-                    <FieldValueLi key={amenity.id}>{amenity.name}</FieldValueLi>
+                {listing.Amenities &&
+                  listing.Amenities.slice(0, 3).map((amenity) => (
+                    <FieldValueLi
+                      key={amenity.id}
+                      style={{ marginLeft: "23px" }}
+                    >
+                      {amenity.name}
+                    </FieldValueLi>
                   ))}
               </ul>
             </div>
             <div>
               <ul>
-                {myselectedListing.Amenities &&
-                  myselectedListing.Amenities.slice(3).map((amenity) => (
+                {listing.Amenities &&
+                  listing.Amenities.slice(3).map((amenity) => (
                     <FieldValueLi key={amenity.id}>{amenity.name}</FieldValueLi>
                   ))}
               </ul>
@@ -164,11 +159,11 @@ const ModalPublicListings = ({
           <FieldName>REQUIREMENTS</FieldName>
           <div>
             <ul>
-              {myselectedListing.Requirements &&
-                myselectedListing.Requirements.map((requirements) => (
-                  <FieldValue key={requirements.id}>
+              {listing.Requirements &&
+                listing.Requirements.map((requirements) => (
+                  <FieldValueLi key={requirements.id}>
                     {requirements.name}
-                  </FieldValue>
+                  </FieldValueLi>
                 ))}
             </ul>
           </div>
@@ -194,7 +189,7 @@ const ModalPublicListings = ({
       {showApplicationModal && (
         <ApplicationModal
           onClose={handleModalClose}
-          myselectedListing={myselectedListing}
+          myselectedListing={listing}
         />
       )}
     </ModalListingContainer>
@@ -202,9 +197,3 @@ const ModalPublicListings = ({
 };
 
 export default ModalPublicListings;
-
-ModalPublicListings.propTypes = {
-  selectedImage: PropTypes.string,
-  onCloseModal: PropTypes.func.isRequired,
-  myselectedListing: PropTypes.object.isRequired,
-};
