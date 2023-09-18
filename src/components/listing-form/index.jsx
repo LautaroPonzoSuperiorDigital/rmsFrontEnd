@@ -27,8 +27,6 @@ import {
   MainDetails,
 } from "./styles";
 
-const DEFAULT_LISTING_SECTIONS = [{ name: "exterior", Album: { Images: [] } }];
-
 const formFields = [
   { field: "street", path: "value" },
   { field: "zip", path: "value" },
@@ -45,18 +43,114 @@ const formFields = [
   { field: "requirements", path: "value", multiLines: true },
 ];
 
-function ListingFormWithRef({ onSavingStatusChange, onListingSaved }, ref) {
-  const [listingSections, setListingSections] = useState(
-    DEFAULT_LISTING_SECTIONS
-  );
-  const [isSaving, setIsSaving] = useState(false);
+function ListingFormWithRef({ listing, onSavingStatusChange, onListingSaved }, ref) {  
+  const [isSaving, setIsSaving] = useState(false)
 
-  const formRef = useRef(null);
+  const formRef = useRef(null)
+  const listingAlbumRef = useRef(null)
 
   const modal = useModal();
   const { user } = useAuth();
 
-  const handleSubmit = async () => {
+  const createListingLocation = ({ unitNumber, street, zip, city, state }) =>
+    `${unitNumber} ${street}, ${zip}, ${city}, ${state}`
+
+  const createListing = useCallback(async (listingFormData) => {
+    const album = listingAlbumRef.current?.getAlbum()
+
+    if (!album) {
+      return
+    }
+
+    const { data: newListing } = await api.post('/listing', {
+      ...listingFormData,
+      location: createListingLocation(listingFormData),
+      adminId: user.id,
+    })
+
+    const Sections = []
+
+    for await (const { Section, Images } of album.Sections) {
+      const { data: createdSection } = await api.post(
+        `/listing/${newListing.id}/section`,
+        { name: Section.name }
+      )
+
+      const images = Images.map(({ base64 }) => ({ base64 }))
+
+      const { data: Album } = await api.post(
+        `/listing/${newListing.id}/album/section/${createdSection.id}/image`,
+        { images })
+
+      Sections.push({ ...createdSection, Album })
+    }
+
+    const savedListing = { ...newListing, Sections }
+
+    const image = createListingImage(savedListing)
+
+    return { ...savedListing, image }
+  }, [user])
+
+  const saveListing = useCallback(async (listingFormData) => {
+    if (!listing) {
+      return
+    }
+
+    const album = listingAlbumRef.current?.getAlbum()
+
+    if (!album) {
+      return
+    }
+
+    const { data: savedListing } = await api.patch(`/listing/${listing.id}`, {
+      ...listingFormData,
+      location: createListingLocation(listingFormData),
+      amenities: undefined,
+      requirements: undefined,
+    })
+
+    const {
+      removedImages,
+      addedImages,
+      changedSections,
+      addedSections,
+    } = album
+
+    await Promise.all(
+      removedImages.map(({ sectionId, imageId }) => api
+        .delete(`/listing/${listing.id}/album/section/${sectionId}/image/${imageId}`)))
+    
+    await Promise.all(
+      addedImages.map(({ base64, Section }) => api.post(
+        `/listing/${listing.id}/album/section/${Section.id}/image`,
+        { images: [{ base64 }] })))
+
+    await Promise.all(
+      changedSections.map((changedSection) => api.patch(
+        `/listing/${listing.id}/section/${changedSection.id}`,
+        { name: changedSection.name }
+      ))
+    )
+
+    for await (const { Section, Images } of addedSections) {
+      const { data: createdSection } = await api.post(
+        `/listing/${listing.id}/section`,
+        { name: Section.name}
+      )
+  
+      const images = Images.map(({ base64 }) => ({ base64 }))
+
+      await api.post(
+        `/listing/${listing.id}/album/section/${createdSection.id}/image`,
+        { images }
+      )
+    }
+
+    return savedListing
+  }, [listing])
+
+  const handleSubmit = useCallback(async () => {
     if (!formRef.current || !user || isSaving) {
       return;
     }
@@ -77,104 +171,27 @@ function ListingFormWithRef({ onSavingStatusChange, onListingSaved }, ref) {
     setIsSaving(true);
 
     try {
-      const { data: adminData } = await api.get(`/admin/user/${user.id}`);
-      console.log(adminData);
-      const { data: listing } = await api.post("/listing", {
-        ...listingFormData,
-        location: `${listingFormData.unitNumber} ${listingFormData.street}, ${listingFormData.zip}, ${listingFormData.city}, ${listingFormData.state}`,
-        adminId: adminData.Admin.id,
-      });
+      const savedListing = listing
+        ? await saveListing(listingFormData)
+        : await createListing(listingFormData)
 
-      const Sections = [];
-
-      for await (const section of listingSections) {
-        const { data: createdSection } = await api.post(
-          `/listing/${listing.id}/section`,
-          {
-            name: section.name,
-          }
-        );
-
-        const { data: Album } = await api.post(
-          `/listing/${listing.id}/album/section/${createdSection.id}/image`,
-          {
-            images: section.Album.Images.map(({ base64 }) => ({ base64 })),
-          }
-        );
-
-        Sections.push({ ...createdSection, Album });
-      }
-
-      const savedListing = { ...listing, Sections };
-
-      const image = createListingImage(savedListing);
-
-      setIsSaving(false);
-      onListingSaved({ ...savedListing, image });
-      modal.close();
+      setIsSaving(false)
+      onListingSaved(savedListing)
+      modal.close()
     } catch (err) {
-      console.log(err);
-      alert("Error while creating Listing");
-      setIsSaving(false);
+      console.log(err)
+      alert('Error while saving Listing')
+      setIsSaving(false)
     }
-  };
-
-  const handleAddSection = () => {
-    const newSection = {
-      name: "new section",
-      Album: { Images: [] },
-    };
-
-    setListingSections((old) => [...old, newSection]);
-  };
-
-  const onSectionNameChange = useCallback(
-    (albumSectionIndex, newName) => {
-      const _listingSections = [...listingSections];
-
-      if (!_listingSections[albumSectionIndex]) {
-        return;
-      }
-
-      _listingSections[albumSectionIndex].name = newName;
-
-      setListingSections(_listingSections);
-    },
-    [listingSections]
-  );
-
-  const onImagesUploaded = useCallback(
-    (albumSectionIndex, newImages) => {
-      const _listingSections = [...listingSections];
-
-      if (!_listingSections[albumSectionIndex]) {
-        return;
-      }
-
-      _listingSections[albumSectionIndex].Album.Images.push(...newImages);
-
-      setListingSections(_listingSections);
-    },
-    [listingSections]
-  );
-
-  const onImageRemoved = useCallback(
-    (albumSectionIndex, removedImageIndex) => {
-      const _listingSections = [...listingSections];
-
-      if (!_listingSections[albumSectionIndex]) {
-        return;
-      }
-
-      _listingSections[albumSectionIndex].Album.Images.splice(
-        removedImageIndex,
-        1
-      );
-
-      setListingSections(_listingSections);
-    },
-    [listingSections]
-  );
+  }, [
+    listing,
+    onListingSaved,
+    isSaving,
+    modal,
+    user,
+    createListing,
+    saveListing,
+  ])
 
   useImperativeHandle(ref, () => ({
     submit: handleSubmit,
@@ -186,49 +203,79 @@ function ListingFormWithRef({ onSavingStatusChange, onListingSaved }, ref) {
 
   return (
     <ListingFormContainer ref={formRef}>
-      {/*
-        Create Listing Album Context
-        Values: {
-          handleAddSection
-          onSectionNameChange
-          onImagesUploaded
-          onImageRemoved
-        }
-
-        Also add: editable
-      */}
       <ListingAlbumPreview
+        ref={listingAlbumRef}
+        listingId={listing?.id}
         editable={true}
-        listingSections={listingSections}
-        handleAddSection={handleAddSection}
-        onSectionNameChange={onSectionNameChange}
-        onImagesUploaded={onImagesUploaded}
-        onImageRemoved={onImageRemoved}
       />
 
       <MainDetails>
-        <Input name="street" label="STREET" disabled={isSaving} />
+        <Input
+          name="street"
+          label="STREET"
+          defaultValue={listing?.street}
+          disabled={isSaving}
+        />
 
         <MainDetail>
-          <Input name="zip" label="ZIP" disabled={isSaving} />
+          <Input
+            name="zip"
+            label="ZIP"
+            defaultValue={listing?.zip}
+            disabled={isSaving}
+          />
 
-          <Input name="unitNumber" label="UNIT NUMBER" disabled={isSaving} />
+          <Input
+            name="unitNumber"
+            label="UNIT NUMBER"
+            defaultValue={listing?.unitNumber}
+            disabled={isSaving}
+          />
         </MainDetail>
 
         <MainDetail>
-          <Input name="city" label="CITY" disabled={isSaving} />
+          <Input
+            name="city"
+            label="CITY"
+            defaultValue={listing?.city}
+            disabled={isSaving}
+          />
 
-          <Input name="state" label="STATE" disabled={isSaving} />
+          <Input
+            name="state"
+            label="STATE"
+            defaultValue={listing?.state}
+            disabled={isSaving}
+          />
         </MainDetail>
 
-        <Input name="lotSize" label="LOT SIZE" disabled={isSaving} />
+        <Input
+          name="lotSize"
+          label="LOT SIZE"
+          defaultValue={listing?.lotSize}
+          disabled={isSaving}
+        />
 
-        <Input name="houseSize" label="HOUSE SIZE" disabled={isSaving} />
+        <Input
+          name="houseSize"
+          label="HOUSE SIZE"
+          defaultValue={listing?.houseSize}
+          disabled={isSaving}
+        />
 
-        <Input name="price" label="PRICE" disabled={isSaving} />
+        <Input
+          name="price"
+          label="PRICE"
+          defaultValue={listing?.price}
+          disabled={isSaving}
+        />
 
         <CheckBoxContainer>
-          <CheckBoxLog name="isPublic" />
+          <CheckBoxLog
+            name="isPublic"
+            defaultChecked={listing?.isPublic}
+            disabled={isSaving}
+          />
 
           <span>PUBLIC</span>
         </CheckBoxContainer>
@@ -236,16 +283,32 @@ function ListingFormWithRef({ onSavingStatusChange, onListingSaved }, ref) {
 
       <ExtraDetails>
         <ExtraDetail>
-          <Input name="bedrooms" label="BEDROOMS" disabled={isSaving} />
+          <Input
+            name="bedrooms"
+            label="BEDROOMS"
+            defaultValue={listing?.bedrooms}
+            disabled={isSaving}
+          />
 
-          <Input name="bathrooms" label="BATHROOMS" disabled={isSaving} />
+          <Input
+            name="bathrooms"
+            label="BATHROOMS"
+            defaultValue={listing?.bathrooms}
+            disabled={isSaving}
+          />
         </ExtraDetail>
 
-        <TextArea name="amenities" label="AMENITIES" disabled={isSaving} />
+        <TextArea
+          name="amenities"
+          label="AMENITIES"
+          defaultValue={listing?.Amenities.map(({ name }) => name).join('\n')}
+          disabled={isSaving}
+        />
 
         <TextArea
           name="requirements"
           label="REQUIREMENTS"
+          defaultValue={listing?.Requirements.map(({ name }) => name).join('\n')}
           disabled={isSaving}
         />
       </ExtraDetails>

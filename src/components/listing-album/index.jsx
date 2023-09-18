@@ -31,16 +31,18 @@ import {
 export function ListingAlbum({
   handleGoBack,
   editable,
-  listingSections,
+  album,
   handleAddSection,
   onSectionNameChange,
   onImagesUploaded,
   onImageRemoved,
 }) {
+  // refactor, to load state separately (remove sections images from backend listing get)
+  // put it all on a react context, make ref to get images, new images and removed images.
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [edit, setEdit] = useState(false);
 
-  const { showFooter, hideFooter, setHeight } = useModal();
+  const modal = useModal();
 
   const uploadPhotosRef = useRef(null);
   const editInputRef = useRef(null);
@@ -109,16 +111,16 @@ export function ListingAlbum({
   );
 
   useEffect(() => {
-    hideFooter();
+    modal?.hideFooter?.();
 
-    return showFooter;
-  }, [hideFooter, showFooter]);
+    return () => modal?.showFooter?.();
+  }, [modal]);
 
   useEffect(() => {
-    setHeight("90vh");
+    modal?.setHeight?.("90vh");
 
-    return () => setHeight(undefined);
-  }, [setHeight]);
+    return () => modal?.setHeight?.(undefined);
+  }, [modal]);
 
   return (
     <ListingAlbumContainer>
@@ -145,16 +147,16 @@ export function ListingAlbum({
         onSelect={setActiveSectionIndex}
       >
         <SectionTabs>
-          {listingSections.map((albumSection, index) => (
+          {album?.Sections.map((albumSection, index) => (
             <SectionTab key={index}>
               {index === activeSectionIndex && edit ? (
                 <EditSectionInput
                   ref={editInputRef}
                   type="text"
-                  defaultValue={albumSection.name}
+                  defaultValue={albumSection.Section.name}
                 />
               ) : (
-                <span>{albumSection.name}</span>
+                <span>{albumSection.Section.name}</span>
               )}
 
               {editable && index === activeSectionIndex && (
@@ -191,11 +193,11 @@ export function ListingAlbum({
           )}
         </SectionTabs>
 
-        {listingSections.map((section, index) => (
+        {album?.Sections.map((section, index) => (
           <SectionTabContent key={index}>
-            {section?.Album?.Images?.length ? (
+            {section.Images?.length ? (
               <SectionTabImageGrid>
-                {section.Album.Images.map((image, index) => {
+                {section.Images.map((image, index) => {
                   let url;
 
                   if (image.key) {
@@ -246,7 +248,7 @@ export function ListingAlbum({
 ListingAlbum.propTypes = {
   handleGoBack: PropTypes.func.isRequired,
   editable: PropTypes.bool.isRequired,
-  listingSections: PropTypes.array.isRequired,
+  album: PropTypes.object,
   handleAddSection: PropTypes.func,
   onSectionNameChange: PropTypes.func,
   onImagesUploaded: PropTypes.func,

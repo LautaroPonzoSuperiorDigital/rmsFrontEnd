@@ -23,8 +23,8 @@ const TenantsProfileContainer = styled.form`
 `;
 
 const TenantsProfile = () => {
-  const { user, onSignedOut } = useAuth();
-  const { hideNavbar, showNavbar } = useTenantsLayout();
+  const { user, onSignedOut } = useAuth()
+  const { hideNavbar, showNavbar } = useTenantsLayout()
 
   const handleSignOut = () => {
     onSignedOut();

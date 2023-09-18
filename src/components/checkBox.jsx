@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 import "../styles/tenants.css";
 
-const CheckBoxLog = ({ checked, onChange, disabled, name }) => {
+const CheckBoxLog = ({ checked, defaultChecked, onChange, disabled, name }) => {
   const handleCheckBoxChange = () => {
     onChange?.(!checked);
   };
@@ -12,6 +12,7 @@ const CheckBoxLog = ({ checked, onChange, disabled, name }) => {
       type="checkbox"
       className="form-check-input checkbox"
       checked={checked}
+      defaultChecked={defaultChecked}
       onChange={handleCheckBoxChange}
       disabled={disabled}
       name={name}
@@ -21,6 +22,7 @@ const CheckBoxLog = ({ checked, onChange, disabled, name }) => {
 
 CheckBoxLog.propTypes = {
   checked: PropTypes.bool,
+  defaultChecked: PropTypes.bool,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
   name: PropTypes.string,
