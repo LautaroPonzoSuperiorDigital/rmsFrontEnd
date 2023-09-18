@@ -56,7 +56,7 @@ const PublicListings = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await api.get("/listing");
+        const { data } = await api.get("/listing?isPublic=true");
         setListing(data);
         console.log(data);
       } catch (error) {
@@ -133,16 +133,13 @@ const PublicListings = () => {
       <ListingPublicContainer>
         <ListingPublic>
           {listing.map((listing) => {
-            if (listing.isPublic) {
-              return (
-                <Listing
-                  listing={listing}
-                  handleImageClick={handleImageClick}
-                  key={listing.div}
-                />
-              );
-            }
-            return null;
+            return (
+              <Listing
+                listing={listing}
+                handleImageClick={handleImageClick}
+                key={listing.div}
+              />
+            );
           })}
         </ListingPublic>
       </ListingPublicContainer>
