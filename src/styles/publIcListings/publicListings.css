@@ -1,10 +1,24 @@
 .filtersBar {
-  background-color: white;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.23);
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.23);
+  background-color: white;
   padding: 1rem;
+}
+
+.filtersBar form {
+  display: flex;
+  width: max-content;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: baseline;
+}
+
+.filtersBar form *:not(:first-child) {
+  margin-right: 1rem;
 }
 
 .LogoPublic {
@@ -15,12 +29,12 @@
 .buttonContainer {
   display: flex;
   align-items: center;
+  min-width: 1rem;
 }
 
 .inputPublic {
-  width: 25%;
+  width: 100%;
   min-width: fit-content;
-  max-width: 25%;
   flex-grow: 1;
   height: 2.5rem;
   border: 1px solid rgba(128, 128, 128, 0.219);
@@ -191,6 +205,7 @@
   .buttonContainer {
     display: none;
   }
+
   /* delete diplay none beacuse in mobile I cant see btn text */
   button[type="submit"] {
     top: 0.5rem;
