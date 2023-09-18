@@ -44,6 +44,7 @@ const Tickets = ({ chatRooms }) => {
               color: "#197572",
               fontSize: "18px",
               display: window.innerWidth < 1234 ? "none" : "block",
+              wordBreak: "break-word",
             }}
           >
             Complain ticket

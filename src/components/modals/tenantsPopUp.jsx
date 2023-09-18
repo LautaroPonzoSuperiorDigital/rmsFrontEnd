@@ -11,6 +11,7 @@ import testImg from "../../assets/img/testImg.jpg";
 import AddDocs from "./addDocumentsModal";
 import { api } from "../../services/api";
 import jwtDecode from "jwt-decode";
+import { ListingAlbumPreview } from "../listing-album-preview";
 import { ListingInspectionHistoryCard } from "../listing-inspection-history/styles";
 import { formatDate } from "../../services/date";
 import { DateTime } from "luxon";
@@ -302,6 +303,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   };
 
   return (
+    <div>
     <div className="popUpContainer">
       <div className="popUp d-flex flex-column">
         <div className="onClose d-flex align-items-center justify-content-end mt-2">
@@ -341,8 +343,16 @@ const TenantModal = ({ selectedTenant, onClose }) => {
             </div>
           </div>
           <div className="listingInfo d-flex">
-            <div className="imgTestPopUp">
+          <ListingAlbumPreview
+            editable={false}
+            listingSections={listingData?.Sections || []}
+          />
+            {/* <div className="imgTestPopUp">
               {" "}
+
+              <img className="imgTestPopUpInsert" src={`https://rms-staging.s3.us-west-1.amazonaws.com/${listingData?.key}`} alt="" />
+
+            </div> */}
               <img
                 className="imgTestPopUpInsert"
                 src={`https://rms-staging.s3.us-west-1.amazonaws.com/${listingData?.key}`}
@@ -377,7 +387,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                   <p>PRICE</p>
                   <span>$ {listingData && listingData.price} / Mo</span>
                 </div>
-                <div className="popUpOrderFirstCol totalProf d-flex">
+                {/* <div className="popUpOrderFirstCol totalProf d-flex">
                   <div className="d-flex profit justify-content-start">
                     <p>TOTAL PROFIT</p>
                     <span>$ 364,675</span>
@@ -386,7 +396,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                     <p>TOTAL LOSS</p>
                     <span>$ 54,000</span>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="EditDeletebuttons d-flex flex-column align-items-end"></div>

@@ -58,10 +58,13 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
   }, [chatRoomId, tickets]);
 
   return (
-    <div className="d-flex flex-column gap-3 " style={ticketsContainerStyle}>
+    <div
+      className="d-flex flex-column justify-content-between "
+      style={ticketsContainerStyle}
+    >
       <div
         className="d-flex flex-column"
-        style={{ maxHeight: "200px", overflowY: "auto" }}
+        style={{ flexFlow: 1, overflowY: "auto" }}
       >
         <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
           ACTIVE TICKETS ({activeTickets.length})
@@ -88,7 +91,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
           )
         )}
       </div>
-      <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+      <div style={{ flexFlow: 1, overflowY: "auto" }}>
         <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
           TICKETS ARCHIVE ({closedTickets.length})
         </p>
@@ -104,7 +107,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
           )
         )}
       </div>
-      <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+      <div style={{ flexFlow: 1, overflowY: "auto" }}>
         <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
           FILES
         </p>

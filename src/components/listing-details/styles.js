@@ -214,6 +214,8 @@ export const ExpensesActionsBox = styled.div`
   margin-right: 3rem;
 `;
 
+export const DocumentsActionsBox = ExpensesActionsBox
+
 export const InspectionAction = styled.button`
   color: #197572;
   font-size: 1.25rem;
@@ -255,3 +257,5 @@ export const ExpenseAction = styled.button`
     }
   }
 `;
+
+export const DocumentAction = ExpenseAction

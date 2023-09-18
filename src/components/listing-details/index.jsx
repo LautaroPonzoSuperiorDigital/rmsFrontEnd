@@ -32,22 +32,34 @@ import {
   ExpenseAction,
   InspectionsActionsBox,
   InspectionAction,
+  DocumentsActionsBox,
+  DocumentAction,
 } from "./styles";
 import { ListingAlbumPreview } from "../listing-album-preview";
 import { useListingInspections } from "../../hooks/useListingInspections";
 import { ListingDetailsTabs } from "../../context/listingDetailsContext";
-
-
+import { ListingApplicants } from "../listing-applicants";
+import { ListingTenants } from "../listing-tenants";
+import { ListingDocuments } from "../listing-documents";
 
 export function ListingDetails() {
   const expensesRef = useRef(null);
 
-  const { activeTab, listing, isLoadingPNL } = useListingDetails();
+  const {
+    activeTab,
+    listing,
+    isLoadingPNL,
+    handleOpenEditListingModal,
+    handleOpenDeleteListingModal,
+  } = useListingDetails();
   const { handleOpenInspectionFormModal } = useListingInspections();
 
   const showInspectionActions =
     activeTab.value === ListingDetailsTabs.INSPECTION_HISTORY;
+
   const showExpensesActions = activeTab.value === ListingDetailsTabs.EXPENSE_HISTORY;
+
+  const showDocumentsActions = activeTab.value === ListingDetailsTabs.DOCUMENT_HISTORY;
 
   const openExpenseForm = () => expensesRef.current?.openForm();
 
@@ -56,7 +68,8 @@ export function ListingDetails() {
       <DetailsBox>
         <ListingAlbumPreview
           editable={false}
-          listingSections={listing.Sections}
+          listingId={listing?.id}
+          // listingSections={listing.Sections}
         />
 
         <MainDetails>
@@ -113,12 +126,12 @@ export function ListingDetails() {
               <CheckBoxLog checked={listing.isPublic} />
             </ExtraDetail>
 
-            <Action>
+            <Action type="button" onClick={handleOpenEditListingModal}>
               <Edit />
               <span>Edit Listing Details</span>
             </Action>
 
-            <Action>
+            <Action type="button" onClick={handleOpenDeleteListingModal}>
               <Trash />
               <span>Delete Listing</span>
             </Action>
@@ -137,8 +150,8 @@ export function ListingDetails() {
           <ExtraDetail>
             <span>AMENITIES</span>
             <Amenities>
-              {listing.Amenities?.map((amenity) => (
-                <li key={amenity.id}>{amenity.name}</li>
+              {listing.Amenities?.map((amenity, index) => (
+                <li key={index}>{amenity.name}</li>
               ))}
             </Amenities>
           </ExtraDetail>
@@ -146,8 +159,8 @@ export function ListingDetails() {
           <ExtraDetail>
             <span>REQUIREMENTS</span>
             <Requirements>
-              {listing.Requirements?.map((requirement) => (
-                <li key={requirement.id}>{requirement.name}</li>
+              {listing.Requirements?.map((requirement, index) => (
+                <li key={index}>{requirement.name}</li>
               ))}
             </Requirements>
           </ExtraDetail>
@@ -188,10 +201,18 @@ export function ListingDetails() {
               </ExpenseAction>
             </ExpensesActionsBox>
           )}
+
+          {showDocumentsActions && (
+            <DocumentsActionsBox>
+              <DocumentAction type="button">
+                + Add Document
+              </DocumentAction>
+            </DocumentsActionsBox>
+          )}
         </HistoryTabs>
 
         <HistoryTabContent>
-          Tenant History Not Implemented Yet 😬
+          <ListingTenants />
         </HistoryTabContent>
 
         <HistoryTabContent>
@@ -199,7 +220,7 @@ export function ListingDetails() {
         </HistoryTabContent>
 
         <HistoryTabContent>
-          Document History Not Implemented Yet 😬
+          <ListingDocuments />
         </HistoryTabContent>
 
         <HistoryTabContent>
@@ -210,7 +231,9 @@ export function ListingDetails() {
           <ListingExpenseHistory ref={expensesRef} listingId={listing.id} />
         </HistoryTabContent>
 
-        <HistoryTabContent>Applicants Not Implemented Yet 😬</HistoryTabContent>
+        <HistoryTabContent>
+          <ListingApplicants />
+        </HistoryTabContent>
       </Tabs>
     </ListingDetailsContainer>
   );

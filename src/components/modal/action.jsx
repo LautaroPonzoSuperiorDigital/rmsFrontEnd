@@ -1,43 +1,37 @@
 import PropTypes from "prop-types"
 import { styled } from "styled-components"
 
-const getBackground = ({ outline, danger }) => {
-  if (outline) {
-    return 'transparent'
-  }
-
-  if (danger) {
-    return 'red'
-  }
-
-  return '#197572'
-}
-
-const getColor = ({ outline, danger }) => {
-  if (outline && danger) {
-    return 'red'
-  }
-
-  if (outline) {
-    return "#197572"
-  }
-
-  return '#fff'
-}
-
 const Action = styled.button`
   outline: none;
   border: none;
 
-  background: ${getBackground};
-  color: ${getColor};
-  text-decoration: ${({ outline }) => outline ? 'underline' : 'none'};
+  background: #197572;
+  color: #fff;
   font-size: 1rem;
 
   width: 250px;
   height: 40px;
 
   transition: filter 200ms ease;
+
+  &[data-outline="true"][data-danger="true"] {
+    color: red;
+    background: transparent;
+
+    text-decoration: underline;
+  }
+
+  &[data-outline="false"][data-danger="true"] {
+    color: #fff;
+    background: red;
+  }
+
+  &[data-outline="true"][data-danger="false"] {
+    color: #197572;
+    background: transparent;
+
+    text-decoration: underline;
+  }
 
   &:hover {
     filter: brightness(0.9);
@@ -54,8 +48,8 @@ export function ModalAction({ text, action, outline = false, danger = false, dis
     <Action
       type="button"
       onClick={action}
-      outline={outline}
-      danger={danger}
+      data-outline={outline}
+      data-danger={danger}
       disabled={disabled}
     >
       {text}

@@ -26,6 +26,7 @@ const createDocumentsLoader = (signOut) => async () => {
       .map(sentDocument =>
         api.get(`/tenant/${tenantId}/document/${sentDocument.Document.docId}/detail`)
           .then(({ data: documentDetail }) => {
+            console.log(documentDetail, userEmail)
             const applicantRecipient = documentDetail.recipients.find(recipient => recipient.email === userEmail)
             const signUrl = applicantRecipient?.sharedLink
             const isSigned = applicantRecipient?.hasCompleted
