@@ -78,15 +78,15 @@ const PublicListings = () => {
             onClick={handleLogoClick}
           />
           <form method="GET" className="container">
-            <input
-              className={`inputPublic ${isInputHovered ? " inputHovered" : ""}`}
-              type="text"
-              placeholder="Keyword Or City"
-              required
-              onMouseEnter={handleInputHover}
-              onMouseLeave={handleInputLeave}
-            />
-            <button type="submit">
+            <div
+              className={`inputPublic${isInputHovered ? " inputHovered" : ""}`}
+            >
+              <input
+                type="text"
+                placeholder="Keyword Or City"
+                onMouseEnter={handleInputHover}
+                onMouseLeave={handleInputLeave}
+              />
               <img
                 className={`SearchIconListings ${
                   isInputHovered || isSearchIconHovered ? "SearchIconHover" : ""
@@ -100,7 +100,7 @@ const PublicListings = () => {
                 onMouseEnter={handleSearchIconHover}
                 onMouseLeave={handleSearchIconLeave}
               />
-            </button>
+            </div>
             <button className="open-search" />
             <button className="filter-listings" />
             <select className="dropdownMenu">
@@ -119,7 +119,7 @@ const PublicListings = () => {
               </option>
             </select>
 
-            <select className="dropdownMenu largeArrow">
+            <select className="dropdownMenu">
               <option className="opt" value="Amenities">
                 &nbsp;&nbsp;Amenities
               </option>
