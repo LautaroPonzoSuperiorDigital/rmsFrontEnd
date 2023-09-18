@@ -109,10 +109,16 @@ const PublicListings = () => {
               </option>
             </select>
             <select className="dropdownMenu">
-              <option className="opt" value="sqft">
-                &nbsp;&nbsp;Sq. Ft
+              <option className="opt" value="house_size">
+                &nbsp;&nbsp;House Size
               </option>
             </select>
+            <select className="dropdownMenu">
+              <option className="opt" value="lot_size">
+                &nbsp;&nbsp;Lot Size
+              </option>
+            </select>
+
             <select className="dropdownMenu largeArrow">
               <option className="opt" value="Amenities">
                 &nbsp;&nbsp;Amenities
