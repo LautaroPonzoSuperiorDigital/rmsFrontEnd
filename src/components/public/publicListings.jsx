@@ -18,6 +18,7 @@ const PublicListings = () => {
   const [listing, setListing] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -85,6 +86,29 @@ const PublicListings = () => {
 
   const handleCloseFilter = () => {
     setIsFilterOpen(false);
+  };
+
+  const handleSearchChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSearch = () => {
+    api
+      .get(`/listing?isPublic=true&location=${inputValue}`)
+      .then(({ data: listingsData }) => {
+        setListing(listingsData);
+      })
+      .catch((error) => {
+        console.error("Could not update listings");
+        alert("Could not update listings");
+        throw new Error(error);
+      });
+
+    setIsSearchOpen(false);
+  };
+
+  const handleCancelSearch = () => {
+    setIsSearchOpen(false);
   };
 
   return (
@@ -159,12 +183,27 @@ const PublicListings = () => {
               src={SearchIcon}
               alt="SearchIcon"
             />
-            <input type="text" placeholder="Keyword Or City" />
+            <input
+              type="text"
+              placeholder="Keyword Or City"
+              onChange={handleSearchChange}
+            />
+            {inputValue.length ? (
+              <button className="doSearch" onClick={handleSearch}>
+                Search
+              </button>
+            ) : (
+              <button className="cancelSearch" onClick={handleCancelSearch}>
+                Cancel
+              </button>
+            )}
           </div>
         )}
         {isFilterOpen && <></>}
       </div>
-      <ListingPublicContainer>
+      <ListingPublicContainer
+        style={{ filter: isSearchOpen ? "blur(5px)" : "none" }}
+      >
         <ListingPublic>
           {listing.map((listing) => {
             return (

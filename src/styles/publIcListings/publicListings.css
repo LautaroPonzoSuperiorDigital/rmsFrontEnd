@@ -2,6 +2,10 @@ body {
   min-width: 320px;
 }
 
+.searchContainer {
+  display: none;
+}
+
 .filter-listings {
   display: none;
 }
@@ -326,14 +330,14 @@ body {
     padding: 1rem;
     justify-content: flex-start;
     flex-wrap: nowrap;
-    height: 5rem;
+    height: 4.5rem;
     width: 100%;
     min-width: fit-content;
   }
 
   .searchContainer img {
     position: absolute;
-    padding-top: 1rem;
+    padding-top: 0.8rem;
     padding-left: 0.25rem;
   }
 
@@ -349,5 +353,9 @@ body {
     font-style: italic;
     padding-right: 0.5rem;
     padding-left: 2rem;
+  }
+
+  .searchContainer button {
+    color: #197572;
   }
 }
