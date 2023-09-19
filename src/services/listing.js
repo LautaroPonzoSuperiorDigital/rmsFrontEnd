@@ -1,4 +1,4 @@
-import DefaultImage from "./../assets/img/defaultImage.png";
+import DefaultImage from "../assets/img/defaultImage.png";
 import { api } from "./api";
 
 export const createListingImage = async (listing) => {

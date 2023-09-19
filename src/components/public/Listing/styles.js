@@ -15,11 +15,6 @@ export const PublicListing = styled.div`
     border: none;
     box-shadow: none;
   }
-
-  @media (min-width: 377px) {
-    max-width: 500px;
-    max-height: 800px;
-  }
 `;
 
 export const ListingPublicDescription = styled.div`
@@ -29,6 +24,8 @@ export const ListingPublicDescription = styled.div`
   justify-content: space-around;
 
   @media (max-width: 1230px) {
+    max-width: 400px;
+    max-height: 800px;
     display: block;
     justify-content: center;
     gap: 10px;

@@ -40,6 +40,7 @@ export const BtnGallery = styled.button`
   wdith: 300px !important;
   color: #197572;
   padding: 0 10px;
+  display: flex;
   @media (max-width: 1024px) {
     bottom: 50px;
   }

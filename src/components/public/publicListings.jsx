@@ -8,13 +8,11 @@ import SearchIcon from "../../assets/img/SearchIcon.svg";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import Listing from "./Listing/Listing";
-import ModalPublicListings from "./ModalPublicListing/modalPublicListings";
 
 const PublicListings = () => {
   const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);
   const [isInputHovered, setIsInputHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedListing, setSelectedListing] = useState(null);
   const [listing, setListing] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -46,9 +44,7 @@ const PublicListings = () => {
   };
 
   const handleImageClick = (id) => {
-    setIsModalOpen(true);
-    const selectedListing = listing.find((item) => item.id === id);
-    setSelectedListing(selectedListing);
+    navigate(`/listing/${id}`);
   };
 
   const handleSearchIconHover = () => {
@@ -206,24 +202,19 @@ const PublicListings = () => {
       >
         <ListingPublic>
           {listing.map((listing) => {
-            return (
-              <Listing
-                listing={listing}
-                handleImageClick={handleImageClick}
-                key={listing.div}
-              />
-            );
+            if (listing.isPublic) {
+              return (
+                <Listing
+                  listing={listing}
+                  handleImageClick={handleImageClick}
+                  key={listing.id}
+                />
+              );
+            }
+            return null;
           })}
         </ListingPublic>
       </ListingPublicContainer>
-      {isModalOpen && (
-        <ModalPublicListings
-          myselectedListing={selectedListing}
-          handleCloseModal={handleCloseModal}
-          id={selectedListing.id}
-          Amenities={listing.Amenities}
-        />
-      )}
     </div>
   );
 };
