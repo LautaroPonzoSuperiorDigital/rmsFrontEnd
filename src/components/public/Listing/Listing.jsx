@@ -16,10 +16,11 @@ import {
 } from "./styles.js";
 
 const Listing = ({ listing, handleImageClick }) => {
+  console.log(listing);
   return (
     <PublicListing>
       <ListingPublicImg
-        src={createListingImage(listing, (imageSrc) => imageSrc)}
+        src={createListingImage(listing)}
         onClick={() => handleImageClick(listing.id)}
       />
 
