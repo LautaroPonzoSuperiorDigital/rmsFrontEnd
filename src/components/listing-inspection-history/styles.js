@@ -17,6 +17,11 @@ export const ListingInspectionHistoryCard = styled.div`
     transition: background-color 0.3s ease;
     position: relative;
 
+    @media (max-width: 768px) {
+      min-width: fit-content;
+      max-width: 100%;
+    }
+
     &:hover {
       border-color: #31af9a;
       cursor: pointer;

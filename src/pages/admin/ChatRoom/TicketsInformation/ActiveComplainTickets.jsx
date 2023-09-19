@@ -50,7 +50,6 @@ const ActiveComplainTickets = ({ ticket, setTickets, tickets }) => {
       );
 
       const newTicket = response.data;
-      // I want newTicket replace the one in that matchs in tickets and then setTickets
       const newTickets = tickets.map((ticket) => {
         if (ticket.id === newTicket.id) {
           return newTicket;

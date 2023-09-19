@@ -29,9 +29,15 @@ export const ListingInspectionSectionCategoryContainer = styled.li`
       }
 
       > div > span {
+        &::before {
+          content: "+";
+          color: #197572;
+          font-size: 1rem;
+          margin-right: 0.5rem;
+        }
+
         padding-left: 0;
-        margin-left: 45%;
-        // TODO:
+        margin-left: auto;
       }
     }
   }
@@ -58,12 +64,8 @@ export const Header = styled.div`
     inset: 0;
     display: flex;
     align-items: center;
-    padding: 0.375rem 0.5rem;
+    left: 3.5rem; 0.5rem;
     background: unset;
-
-    > span {
-      padding-left: 3.5rem;
-    }
   }
 `;
 

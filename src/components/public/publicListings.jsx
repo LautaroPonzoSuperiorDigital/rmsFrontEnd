@@ -1,36 +1,50 @@
+import "../../styles/publIcListings/publicListings.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ListingPublic, ListingPublicContainer } from "./styles";
-import "../../styles/publIcListings/publicListings.css";
 import Logo from "../../assets/img/logomark.svg";
 import SearchIconHover from "../../assets/img/SearchIconHover.svg";
 import SearchIcon from "../../assets/img/SearchIcon.svg";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import Listing from "./Listing/Listing";
-import ModalPublicListings from "./ModalPublicListing/modalPublicListings";
 
 const PublicListings = () => {
   const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);
   const [isInputHovered, setIsInputHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedListing, setSelectedListing] = useState(null);
   const [listing, setListing] = useState([]);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await api.get("/listing?isPublic=true");
+        setListing(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching listings:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleLogoClick = () => {
     navigate("/");
     setIsModalOpen(false);
   };
+
   const handleLoginClick = () => {
     navigate("/login");
   };
 
   const handleImageClick = (id) => {
-    setIsModalOpen(true);
-    const selectedListing = listing.find((item) => item.id === id);
-    setSelectedListing(selectedListing);
+    navigate(`/listing/${id}`);
   };
 
   const handleSearchIconHover = () => {
@@ -53,44 +67,68 @@ const PublicListings = () => {
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await api.get("/listing");
-        setListing(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching listings:", error);
-      }
-    };
+  const handleOpenSearch = (e) => {
+    e.preventDefault(); // prevent submmit behavior
+    setIsSearchOpen(true);
+  };
 
-    fetchData();
-  }, []);
+  const handleCloseSearch = () => {
+    setIsSearchOpen(false);
+  };
+
+  const handleOpenFilter = () => {
+    setIsFilterOpen(true);
+  };
+
+  const handleCloseFilter = () => {
+    setIsFilterOpen(false);
+  };
+
+  const handleSearchChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSearch = () => {
+    api
+      .get(`/listing?isPublic=true&location=${inputValue}`)
+      .then(({ data: listingsData }) => {
+        setListing(listingsData);
+      })
+      .catch((error) => {
+        console.error("Could not update listings");
+        alert("Could not update listings");
+        throw new Error(error);
+      });
+
+    setIsSearchOpen(false);
+  };
+
+  const handleCancelSearch = () => {
+    setIsSearchOpen(false);
+  };
 
   return (
-    <div className=" containerPublic">
+    <div className="containerPublic">
       <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
-        <div className="filtersBar d-flex align-items-center px-4">
+        <div className={`filtersBar ${isSearchOpen ? "hideFiltersBar" : ""}`}>
           <img
-            className="LogoPublic justify-content-start"
+            className="LogoPublic"
             src={Logo}
             alt="Logo"
             onClick={handleLogoClick}
           />
-          <form method="GET" className="container px-2">
-            <input
-              className={`inputPublic mx-2${
-                isInputHovered ? " inputHovered" : ""
-              }`}
-              type="text"
-              placeholder="Keyword Or City"
-              required
-              onMouseEnter={handleInputHover}
-              onMouseLeave={handleInputLeave}
-            />
-            <button type="submit">
+          <form method="GET" className="container">
+            <div
+              className={`inputPublic${isInputHovered ? " inputHovered" : ""}`}
+            >
+              <input
+                type="text"
+                placeholder="Keyword Or City"
+                onMouseEnter={handleInputHover}
+                onMouseLeave={handleInputLeave}
+              />
               <img
-                className={`SearchIconListings justify-content-start ${
+                className={`SearchIconListings ${
                   isInputHovered || isSearchIconHovered ? "SearchIconHover" : ""
                 }`}
                 src={
@@ -102,20 +140,25 @@ const PublicListings = () => {
                 onMouseEnter={handleSearchIconHover}
                 onMouseLeave={handleSearchIconLeave}
               />
-            </button>
-            <button className="open-search" />
-            <button className="filter-listings" />
-            <select className="dropdownMenu mx-2">
+            </div>
+            <button className="open-search" onClick={handleOpenSearch} />
+            <button className="filter-listings" onClick={handleOpenFilter} />
+            <select className="dropdownMenu">
               <option className="opt" value="price">
                 &nbsp;&nbsp;Price
               </option>
             </select>
-            <select className="dropdownMenu mx-2">
-              <option className="opt" value="sqft">
-                &nbsp;&nbsp;Sq. Ft
+            <select className="dropdownMenu">
+              <option className="opt" value="house_size">
+                &nbsp;&nbsp;House Size
               </option>
             </select>
-            <select className="dropdownMenu largeArrow mx-2">
+            <select className="dropdownMenu">
+              <option className="opt" value="lot_size">
+                &nbsp;&nbsp;Lot Size
+              </option>
+            </select>
+            <select className="dropdownMenu">
               <option className="opt" value="Amenities">
                 &nbsp;&nbsp;Amenities
               </option>
@@ -129,8 +172,34 @@ const PublicListings = () => {
             </div>
           )}
         </div>
+        {isSearchOpen && (
+          <div className="searchContainer">
+            <img
+              className="SearchIconListings"
+              src={SearchIcon}
+              alt="SearchIcon"
+            />
+            <input
+              type="text"
+              placeholder="Keyword Or City"
+              onChange={handleSearchChange}
+            />
+            {inputValue.length ? (
+              <button className="doSearch" onClick={handleSearch}>
+                Search
+              </button>
+            ) : (
+              <button className="cancelSearch" onClick={handleCancelSearch}>
+                Cancel
+              </button>
+            )}
+          </div>
+        )}
+        {isFilterOpen && <></>}
       </div>
-      <ListingPublicContainer>
+      <ListingPublicContainer
+        style={{ filter: isSearchOpen ? "blur(5px)" : "none" }}
+      >
         <ListingPublic>
           {listing.map((listing) => {
             if (listing.isPublic) {
@@ -138,7 +207,7 @@ const PublicListings = () => {
                 <Listing
                   listing={listing}
                   handleImageClick={handleImageClick}
-                  key={listing.div}
+                  key={listing.id}
                 />
               );
             }
@@ -146,14 +215,6 @@ const PublicListings = () => {
           })}
         </ListingPublic>
       </ListingPublicContainer>
-      {isModalOpen && (
-        <ModalPublicListings
-          myselectedListing={selectedListing}
-          handleCloseModal={handleCloseModal}
-          id={selectedListing.id}
-          Amenities={listing.Amenities}
-        />
-      )}
     </div>
   );
 };

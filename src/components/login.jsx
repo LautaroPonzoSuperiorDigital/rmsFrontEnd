@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -12,7 +12,6 @@ import "../styles/login.css";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const handleForgot = (e) => {
     e.preventDefault();
@@ -20,6 +19,9 @@ const Login = () => {
   };
 
   const { isAuthenticated, user, onSignedIn } = useAuth();
+  const navigate = useNavigate();
+
+  const emailRef = useRef(null)
 
   const windowWidth = window.innerWidth;
 
@@ -41,7 +43,7 @@ const Login = () => {
           break;
       }
     },
-    [navigate]
+    [navigate, windowWidth]
   );
 
   const handleLogin = async (event) => {
@@ -72,12 +74,17 @@ const Login = () => {
     }
   }, [isAuthenticated, user, navigateUser]);
 
+  useEffect(() => {
+    emailRef.current?.focus()
+  }, [])
+
   return (
     <div className="loginBgContainer">
       <div className="LoginContainer">
         <img className="logo" src={Logo} alt="Logo" />
         <form className="form" onSubmit={handleLogin}>
           <input
+            ref={emailRef}
             className="inputs"
             type="email"
             name="text"

@@ -28,7 +28,6 @@ export function ListingInspectionSectionCategory({
   const [edit, setEdit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
   const { editingInspection, handleOpenCategoryImagesModal } =
     useListingInspections();
 
@@ -36,7 +35,6 @@ export function ListingInspectionSectionCategory({
   const nameInputRef = useRef(null);
 
   const isLoading = isRemoving || isUploading || isSaving;
-
   const loadingText = isRemoving
     ? "Removing"
     : isUploading
@@ -46,19 +44,29 @@ export function ListingInspectionSectionCategory({
     : null;
 
   const imageUrl = useMemo(() => {
-    const inspectionSection = category.InspectionSections?.find(
-      (inspectionSection) => inspectionSection.Images?.length
-    );
+    if (editingInspection) {
+      const inspectionSection = category.InspectionSections?.find(
+        (inspectedSection) => inspectedSection.Images?.length
+      );
 
-    if (!inspectionSection) {
-      return null;
+      if (inspectionSection && inspectionSection.Images.length > 0) {
+        const imagesForCurrentInspection = inspectionSection.Images.filter(
+          (image) =>
+            editingInspection.id ===
+            image.InspectionSectionCategory.InspectionSection.Inspection.id
+        );
+
+        if (imagesForCurrentInspection.length > 0) {
+          return `https://rms-staging.s3.us-west-1.amazonaws.com/${imagesForCurrentInspection[0].key}`.replace(
+            /\\/g,
+            "%5C"
+          );
+        }
+      }
     }
 
-    return `https://rms-staging.s3.us-west-1.amazonaws.com/${inspectionSection.Images[0].key}`.replace(
-      /\\/g,
-      "%5C"
-    );
-  }, [category]);
+    return null;
+  }, [category, editingInspection]);
 
   const openUploadInput = () => {
     if (isUploading) return;
@@ -213,7 +221,6 @@ export function ListingInspectionSectionCategory({
             {category.name}
           </span>
         )}
-
         {edit ? (
           <>
             <Action onClick={handleSaveName} disabled={isLoading}>
@@ -236,7 +243,6 @@ export function ListingInspectionSectionCategory({
           </>
         )}
       </Header>
-
       {isMobile ? (
         <ImagePreviewMobile
           src={imageUrl || undefined}
@@ -255,9 +261,7 @@ export function ListingInspectionSectionCategory({
           onClick={handleOpenImages}
         />
       )}
-
       <UploadInput ref={uploadInputRef} onChange={onUploaded} />
-
       {isLoading && (
         <LoadingBox>
           <span>{loadingText}</span>

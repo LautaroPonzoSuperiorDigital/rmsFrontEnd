@@ -12,12 +12,14 @@ const BodyContainer = styled.div`
   background: #fff;
 
   @media (max-width: 768px) {
+    width: 100% !important;
     position: relative;
     display: flex;
     flex-direction: column;
     transform: unset;
     left: 0;
     top: 0;
+    align-content: flex-start;
   }
 `;
 

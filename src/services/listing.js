@@ -1,4 +1,4 @@
-import DefaultImage from "./../assets/img/defaultImage.png";
+import DefaultImage from "../assets/img/defaultImage.png";
 
 export const createListingImage = (listing) => {
   let image = DefaultImage;

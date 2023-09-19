@@ -6,7 +6,7 @@ import "../styles/tenants.css";
 
 function SearchListings({ applicants, setTableApplicants }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [searchValue, setSearchValue] = useState(null);
+  const [searchValue, setSearchValue] = useState('');
 
   const handleSearchChange = (event) => {
     const searchQuery = event.target.value.trim().toLowerCase();

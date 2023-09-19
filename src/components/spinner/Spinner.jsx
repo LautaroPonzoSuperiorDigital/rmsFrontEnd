@@ -4,13 +4,23 @@ const spinnerStyle = {
   borderBottomColor: "#31af9a",
   borderLeftColor: "#31af9a",
 };
+
+const parentDivStyle = {
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
 const Spinner = () => {
   return (
-    <div
-      className="spinner-border text-primary"
-      role="status"
-      style={spinnerStyle}
-    ></div>
+    <div style={parentDivStyle}>
+      <div
+        className="spinner-border text-primary"
+        role="status"
+        style={spinnerStyle}
+      ></div>
+    </div>
   );
 };
 

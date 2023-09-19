@@ -20,18 +20,6 @@ const NavContainerStyle = styled.div`
   }
 `;
 
-const navContainer = {
-  borderBottom: "1px solid #00000026",
-  height: "100px",
-  paddingBottom: "33px",
-  paddingTop: "33px",
-  // paddingRigth: "57px",
-  paddingLeft: "px",
-  alignItems: "center",
-  display: "flex",
-  width: "100%",
-  justifyContent: "space-between",
-};
 const navTitle = {
   fontSize: "35px",
   margin: "0px",
@@ -40,6 +28,7 @@ const navTitle = {
 
 const InputStyle = styled.input`
   width: 100%;
+  max-width: 150px;
   border: 1px solid #00000026;
   height: 40px;
   margin-top: 10px;
@@ -94,7 +83,7 @@ const AdminChatRoomNavBar = ({ chatRooms, setTicketActiveRooms }) => {
         <div
           style={{
             display: "flex",
-            gap: 2,
+            justifyContent: "space-between",
             alignContent: "center",
             alignItems: "center",
           }}
@@ -113,7 +102,7 @@ const AdminChatRoomNavBar = ({ chatRooms, setTicketActiveRooms }) => {
           </p>
         </div>
       </div>
-      <div style={{ width: "100%" }}>
+      <div style={{ width: "100%", maxWidth: "150px" }}>
         <InputStyle placeholder="Search By Id" onChange={handleInputChange} />
         <img
           className="SearchIconListings1"

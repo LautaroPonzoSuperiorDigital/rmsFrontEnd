@@ -4,6 +4,7 @@ import { styled } from "styled-components";
 import { useModal } from "./context";
 import { Close } from "../icons";
 import { MobileClose } from "../icons/mobile-close";
+import { useEffect, useState } from "react";
 
 const Header = styled.header`
   display: flex;
@@ -14,8 +15,12 @@ const Header = styled.header`
   padding: 1rem;
 
   @media (max-width: 768px) {
-    width: 100vw;
+    // width: 100vw;
     display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
 
     button {
       position: fixed;
@@ -38,15 +43,27 @@ const CloseButton = styled.button`
     justify-content: start;
     gap: 0.5rem;
     padding: 1rem;
+    z-index: 1;
   }
 `;
 
-export function ModalHeader({
-  children,
-  showCloseIcon = false,
-  isMobile = window.outerWidth <= 768,
-}) {
+export function ModalHeader({ children, showCloseIcon = false }) {
+  const [isMobile, setIsMobile] = useState(false);
   const { close } = useModal();
+
+  useEffect(() => {
+    function updateModalWidth() {
+      setIsMobile(window.outerWidth <= 768);
+    }
+
+    updateModalWidth();
+
+    window.addEventListener("resize", updateModalWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateModalWidth);
+    };
+  }, []);
 
   return (
     <Header>
