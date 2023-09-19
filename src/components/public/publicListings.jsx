@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ListingPublic, ListingPublicContainer } from "./styles";
-import "../../styles/publIcListings/publicListings.css";
+import "../../styles/publicListings/publicListings.css";
 import Logo from "../../assets/img/logomark.svg";
 import SearchIconHover from "../../assets/img/SearchIconHover.svg";
 import SearchIcon from "../../assets/img/SearchIcon.svg";
@@ -19,10 +19,25 @@ const PublicListings = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await api.get("/listing?isPublic=true");
+        setListing(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching listings:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleLogoClick = () => {
     navigate("/");
     setIsModalOpen(false);
   };
+
   const handleLoginClick = () => {
     navigate("/login");
   };
@@ -53,22 +68,8 @@ const PublicListings = () => {
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await api.get("/listing?isPublic=true");
-        setListing(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching listings:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   return (
-    <div className=" containerPublic">
+    <div className="containerPublic">
       <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
         <div className="filtersBar">
           <img
