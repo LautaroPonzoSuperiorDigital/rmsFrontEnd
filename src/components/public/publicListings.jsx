@@ -71,7 +71,7 @@ const PublicListings = () => {
   };
 
   const handleOpenSearch = (e) => {
-    e.preventDefault(); // prevent submmit behavior
+    e.preventDefault();
     setIsSearchOpen(true);
   };
 
@@ -80,7 +80,7 @@ const PublicListings = () => {
   };
 
   const handleOpenFilter = (e) => {
-    e.preventDefault(); // prevent submmit behavior
+    e.preventDefault();
     setIsFilterOpen(true);
   };
 
@@ -124,7 +124,7 @@ const PublicListings = () => {
       ","
     )}`;
 
-    return (formattedValue.length === 1) ? `` : formattedValue;
+    return formattedValue.length === 1 ? `` : formattedValue;
   };
 
   return (
