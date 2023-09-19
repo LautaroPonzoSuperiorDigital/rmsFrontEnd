@@ -221,7 +221,6 @@ export function ListingInspectionSectionCategory({
             {category.name}
           </span>
         )}
-
         {edit ? (
           <>
             <Action onClick={handleSaveName} disabled={isLoading}>
@@ -244,7 +243,6 @@ export function ListingInspectionSectionCategory({
           </>
         )}
       </Header>
-
       {isMobile ? (
         <ImagePreviewMobile
           src={imageUrl || undefined}
@@ -263,9 +261,7 @@ export function ListingInspectionSectionCategory({
           onClick={handleOpenImages}
         />
       )}
-
       <UploadInput ref={uploadInputRef} onChange={onUploaded} />
-
       {isLoading && (
         <LoadingBox>
           <span>{loadingText}</span>

@@ -76,11 +76,8 @@ export function ListingInspectionSectionCategoryImages({ category }) {
   return (
     <ListingInspectionSectionCategoryImagesContainer>
       <FiChevronLeft onClick={handlePreviousImage} />
-
       <img src={image} />
-
       <FiChevronRight onClick={handleNextImage} />
-
       <InspectionImagesDetailsBox>{details}</InspectionImagesDetailsBox>
     </ListingInspectionSectionCategoryImagesContainer>
   );
