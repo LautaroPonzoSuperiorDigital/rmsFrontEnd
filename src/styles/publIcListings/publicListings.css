@@ -2,6 +2,14 @@ body {
   min-width: 320px;
 }
 
+.filter-listings {
+  display: none;
+}
+
+.open-search {
+  display: none;
+}
+
 .filtersBar {
   display: flex;
   flex-direction: row;
@@ -290,6 +298,7 @@ body {
   }
 
   .filter-listings {
+    display: flex;
     background-image: url("../../assets/img/slider.horizontal.3.svg");
     background-size: cover;
     height: 1.2rem;
@@ -299,6 +308,7 @@ body {
   }
 
   .open-search {
+    display: flex;
     background-image: url("../../assets/img/magnifyingglass.svg");
     background-size: cover;
     height: 1.2rem;
