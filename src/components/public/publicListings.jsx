@@ -8,6 +8,7 @@ import SearchIcon from "../../assets/img/SearchIcon.svg";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import Listing from "./Listing/Listing";
+import { Close } from "../icons";
 
 const PublicListings = () => {
   const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);
@@ -76,7 +77,8 @@ const PublicListings = () => {
     setIsSearchOpen(false);
   };
 
-  const handleOpenFilter = () => {
+  const handleOpenFilter = (e) => {
+    e.preventDefault(); // prevent submmit behavior
     setIsFilterOpen(true);
   };
 
@@ -100,11 +102,7 @@ const PublicListings = () => {
         throw new Error(error);
       });
 
-    setIsSearchOpen(false);
-  };
-
-  const handleCancelSearch = () => {
-    setIsSearchOpen(false);
+    handleCloseSearch();
   };
 
   return (
@@ -189,13 +187,12 @@ const PublicListings = () => {
                 Search
               </button>
             ) : (
-              <button className="cancelSearch" onClick={handleCancelSearch}>
+              <button className="cancelSearch" onClick={handleCloseSearch}>
                 Cancel
               </button>
             )}
           </div>
         )}
-        {isFilterOpen && <></>}
       </div>
       <ListingPublicContainer
         style={{ filter: isSearchOpen ? "blur(5px)" : "none" }}
@@ -215,6 +212,16 @@ const PublicListings = () => {
           })}
         </ListingPublic>
       </ListingPublicContainer>
+      {isFilterOpen && (
+        <div className="filterContainer">
+          <div className="filterHeader">
+            <button onClick={handleCloseFilter}>
+              <Close />
+            </button>
+            <text>{"filter listings"}</text>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

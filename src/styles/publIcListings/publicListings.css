@@ -6,6 +6,10 @@ body {
   display: none;
 }
 
+.filterContainer {
+  display: none;
+}
+
 .filter-listings {
   display: none;
 }
@@ -357,5 +361,56 @@ body {
 
   .searchContainer button {
     color: #197572;
+  }
+
+  .filterContainer {
+    background-color: #fff;
+    height: 75vh;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .filterHeader {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    height: 4.5rem;
+    width: 90%;
+  }
+
+  .filterHeader button {
+    display: flex;
+    height: 0.75rem;
+    width: 0.75rem;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .filterHeader button svg {
+    height: unset;
+    width: unset;
+  }
+
+  .filterHeader text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-style: normal;
+    font-weight: normal;
+    font-size: 0.9375rem;
+    line-height: 1.625rem;
+    font-family: "Proxima Nova", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    color: #000000a5;
+    opacity: 1;
   }
 }
