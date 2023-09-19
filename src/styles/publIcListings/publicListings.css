@@ -416,11 +416,11 @@ body {
 
   .line {
     width: 100%;
-    padding-top: 2rem;
+    margin: 2rem 0;
     border-bottom: 1px solid #00000026;
   }
 
-  .priceFilter {
+  .filterSection {
     height: fit-content;
     width: 90%;
     display: flex;
@@ -428,10 +428,9 @@ body {
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    /* border-bottom: 1px solid #00000026; */
   }
 
-  .priceFilterText {
+  .filterSectionText {
     height: 1.543rem;
     width: 100%;
     font-style: normal;
@@ -445,7 +444,7 @@ body {
     margin-bottom: 1.169rem;
   }
 
-  .priceFilter div {
+  .filterSection div {
     width: 45%;
     color: #00000075;
     border-bottom: 1px solid #00000026;
@@ -453,15 +452,18 @@ body {
     border-left: unset;
     border-right: unset;
     direction: rtl;
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
   }
 
-  .priceFilter div > input {
+  .filterSection div > input {
     width: 100%;
     border: unset;
     padding-left: 2rem;
   }
 
-  .priceFilterMin text {
+  .filterMin text {
     position: fixed;
     left: 5%;
     font-size: 1rem;
@@ -471,7 +473,7 @@ body {
     opacity: 1;
   }
 
-  .priceFilterMax text {
+  .filterMax text {
     position: fixed;
     left: 55%;
     font-size: 1rem;

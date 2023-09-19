@@ -20,6 +20,8 @@ const PublicListings = () => {
   const [searchInputValue, setSearchInputValue] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [minLotSize, setMinLotSize] = useState("");
+  const [maxLotSize, setMaxLotSize] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -125,6 +127,21 @@ const PublicListings = () => {
     )}`;
 
     return formattedValue.length === 1 ? `` : formattedValue;
+  };
+
+  const handleMinLotSizeChange = (e) => {
+    const value = e.target.value;
+    setMinLotSize(formatLotSizeInput(value));
+  };
+
+  const handleMaxLotSizeChange = (e) => {
+    const value = e.target.value;
+    setMaxLotSize(formatLotSizeInput(value));
+  };
+
+  const formatLotSizeInput = (value) => {
+    const numericValue = value.replace(/[^0-9]/g, "").replace(/^0+/, "");
+    return `${numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   };
 
   return (
@@ -242,9 +259,9 @@ const PublicListings = () => {
             </button>
             <text>{"filter listings"}</text>
           </div>
-          <div className="priceFilter">
-            <text className="priceFilterText">{"price"}</text>
-            <div className="priceFilterMin">
+          <div className="filterSection">
+            <text className="filterSectionText">{"price"}</text>
+            <div className="filterMin">
               <text>min</text>
               <input
                 type="text"
@@ -252,12 +269,32 @@ const PublicListings = () => {
                 onChange={handleMinPriceChange}
               />
             </div>
-            <div className="priceFilterMax">
+            <div className="filterMax">
               <text>max</text>
               <input
                 type="text"
                 value={maxPrice}
                 onChange={handleMaxPriceChange}
+              />
+            </div>
+          </div>
+          <div className="line" />
+          <div className="filterSection">
+            <text className="filterSectionText">{"lot size (sq. ft.)"}</text>
+            <div className="filterMin">
+              <text>min</text>
+              <input
+                type="text"
+                value={minLotSize}
+                onChange={handleMinLotSizeChange}
+              />
+            </div>
+            <div className="filterMax">
+              <text>max</text>
+              <input
+                type="text"
+                value={maxLotSize}
+                onChange={handleMaxLotSizeChange}
               />
             </div>
           </div>
