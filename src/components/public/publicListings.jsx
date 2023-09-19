@@ -70,7 +70,8 @@ const PublicListings = () => {
     setIsModalOpen(false);
   };
 
-  const handleOpenSearch = () => {
+  const handleOpenSearch = (e) => {
+    e.preventDefault(); // prevent submmit behavior
     setIsSearchOpen(true);
   };
 
@@ -89,7 +90,7 @@ const PublicListings = () => {
   return (
     <div className="containerPublic">
       <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
-        <div className="filtersBar">
+        <div className={`filtersBar ${isSearchOpen ? "hideFiltersBar" : ""}`}>
           <img
             className="LogoPublic"
             src={Logo}
@@ -122,8 +123,6 @@ const PublicListings = () => {
             </div>
             <button className="open-search" onClick={handleOpenSearch} />
             <button className="filter-listings" onClick={handleOpenFilter} />
-            {isSearchOpen && <></>}
-            {isFilterOpen && <></>}
             <select className="dropdownMenu">
               <option className="opt" value="price">
                 &nbsp;&nbsp;Price
@@ -153,6 +152,17 @@ const PublicListings = () => {
             </div>
           )}
         </div>
+        {isSearchOpen && (
+          <div className="searchContainer">
+            <img
+              className="SearchIconListings"
+              src={SearchIcon}
+              alt="SearchIcon"
+            />
+            <input type="text" placeholder="Keyword Or City" />
+          </div>
+        )}
+        {isFilterOpen && <></>}
       </div>
       <ListingPublicContainer>
         <ListingPublic>

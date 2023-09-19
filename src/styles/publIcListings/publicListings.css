@@ -269,6 +269,10 @@ body {
     margin-left: 1rem;
   }
 
+  .hideFiltersBar {
+    display: none;
+  }
+
   .buttonContainer {
     display: none;
   }
@@ -314,5 +318,36 @@ body {
     height: 1.2rem;
     width: 1.2rem;
     cursor: pointer;
+  }
+
+  .searchContainer {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    height: 5rem;
+    width: 100%;
+    min-width: fit-content;
+  }
+
+  .searchContainer img {
+    position: absolute;
+    padding-top: 1rem;
+    padding-left: 0.25rem;
+  }
+
+  .searchContainer input {
+    height: 100%;
+    width: 100%;
+    border-bottom: 1px solid #197572;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    outline: none;
+    font-style: italic;
+    padding-right: 0.5rem;
+    padding-left: 2rem;
   }
 }
