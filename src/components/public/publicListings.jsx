@@ -1,4 +1,4 @@
-import "../../styles/publicListings/publicListings.css";
+import "../../styles/publIcListings/publicListings.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ListingPublic, ListingPublicContainer } from "./styles";
