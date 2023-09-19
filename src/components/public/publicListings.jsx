@@ -1,7 +1,7 @@
+import "../../styles/publicListings/publicListings.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ListingPublic, ListingPublicContainer } from "./styles";
-import "../../styles/publicListings/publicListings.css";
 import Logo from "../../assets/img/logomark.svg";
 import SearchIconHover from "../../assets/img/SearchIconHover.svg";
 import SearchIcon from "../../assets/img/SearchIcon.svg";
