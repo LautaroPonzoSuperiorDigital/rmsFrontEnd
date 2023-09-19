@@ -70,27 +70,25 @@ const PublicListings = () => {
   return (
     <div className=" containerPublic">
       <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
-        <div className="filtersBar d-flex align-items-center px-4">
+        <div className="filtersBar">
           <img
-            className="LogoPublic justify-content-start"
+            className="LogoPublic"
             src={Logo}
             alt="Logo"
             onClick={handleLogoClick}
           />
-          <form method="GET" className="container px-2">
-            <input
-              className={`inputPublic mx-2${
-                isInputHovered ? " inputHovered" : ""
-              }`}
-              type="text"
-              placeholder="Keyword Or City"
-              required
-              onMouseEnter={handleInputHover}
-              onMouseLeave={handleInputLeave}
-            />
-            <button type="submit">
+          <form method="GET" className="container">
+            <div
+              className={`inputPublic${isInputHovered ? " inputHovered" : ""}`}
+            >
+              <input
+                type="text"
+                placeholder="Keyword Or City"
+                onMouseEnter={handleInputHover}
+                onMouseLeave={handleInputLeave}
+              />
               <img
-                className={`SearchIconListings justify-content-start ${
+                className={`SearchIconListings ${
                   isInputHovered || isSearchIconHovered ? "SearchIconHover" : ""
                 }`}
                 src={
@@ -102,20 +100,25 @@ const PublicListings = () => {
                 onMouseEnter={handleSearchIconHover}
                 onMouseLeave={handleSearchIconLeave}
               />
-            </button>
+            </div>
             <button className="open-search" />
             <button className="filter-listings" />
-            <select className="dropdownMenu mx-2">
+            <select className="dropdownMenu">
               <option className="opt" value="price">
                 &nbsp;&nbsp;Price
               </option>
             </select>
-            <select className="dropdownMenu mx-2">
-              <option className="opt" value="sqft">
-                &nbsp;&nbsp;Sq. Ft
+            <select className="dropdownMenu">
+              <option className="opt" value="house_size">
+                &nbsp;&nbsp;House Size
               </option>
             </select>
-            <select className="dropdownMenu largeArrow mx-2">
+            <select className="dropdownMenu">
+              <option className="opt" value="lot_size">
+                &nbsp;&nbsp;Lot Size
+              </option>
+            </select>
+            <select className="dropdownMenu">
               <option className="opt" value="Amenities">
                 &nbsp;&nbsp;Amenities
               </option>
