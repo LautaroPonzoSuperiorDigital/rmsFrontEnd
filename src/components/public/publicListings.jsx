@@ -16,6 +16,8 @@ const PublicListings = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedListing, setSelectedListing] = useState(null);
   const [listing, setListing] = useState([]);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -68,6 +70,22 @@ const PublicListings = () => {
     setIsModalOpen(false);
   };
 
+  const handleOpenSearch = () => {
+    setIsSearchOpen(true);
+  };
+
+  const handleCloseSearch = () => {
+    setIsSearchOpen(false);
+  };
+
+  const handleOpenFilter = () => {
+    setIsFilterOpen(true);
+  };
+
+  const handleCloseFilter = () => {
+    setIsFilterOpen(false);
+  };
+
   return (
     <div className="containerPublic">
       <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
@@ -102,8 +120,8 @@ const PublicListings = () => {
                 onMouseLeave={handleSearchIconLeave}
               />
             </div>
-            <button className="open-search" />
-            <button className="filter-listings" />
+            <button className="open-search" onClick={handleOpenSearch} />
+            <button className="filter-listings" onClick={handleOpenFilter} />
             <select className="dropdownMenu">
               <option className="opt" value="price">
                 &nbsp;&nbsp;Price
@@ -147,6 +165,8 @@ const PublicListings = () => {
           })}
         </ListingPublic>
       </ListingPublicContainer>
+      {isSearchOpen && <></>}
+      {isFilterOpen && <></>}
       {isModalOpen && (
         <ModalPublicListings
           myselectedListing={selectedListing}
