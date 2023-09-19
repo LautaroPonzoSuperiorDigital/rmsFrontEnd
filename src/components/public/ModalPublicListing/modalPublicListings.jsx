@@ -18,10 +18,12 @@ import {
   AmenitiesContainer,
   BtnApply,
   FieldContainer,
+  SpinnerContainer,
 } from "./style";
 import { ModalProvider } from "../../modal/context";
 import { ListingAlbum1 } from "./ListingAlbum/ListingAlbum1";
 import { useNavigate, useParams } from "react-router-dom";
+import Spinner from "../../spinner/Spinner";
 
 const ModalPublicListings = () => {
   const [showModal, setShowModal] = useState(false);
@@ -30,6 +32,7 @@ const ModalPublicListings = () => {
   const [showAlbum, setShowAlbum] = useState(false);
   const [section, setSection] = useState([]);
   const [listing, setListing] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -59,7 +62,6 @@ const ModalPublicListings = () => {
       try {
         const listing = await api.get(`/listing/${id}`);
         setListing(listing.data);
-
         const response = await api.get(`/listing/${id}/album`);
         const data = response.data;
         const allImages = [];
@@ -81,6 +83,7 @@ const ModalPublicListings = () => {
         }));
         console.log(sectionsArray);
         setSection(sectionsArray);
+        setLoading(true);
       } catch (error) {
         console.log(error);
       }
@@ -90,11 +93,17 @@ const ModalPublicListings = () => {
 
   return (
     <ModalListingContainer>
-      <ListingCarousel
-        images={images}
-        handleBackToSearch={handleBackToSearch}
-        handleShowAlbum={handleShowAlbum}
-      />
+      {!loading ? (
+        <SpinnerContainer maxHeight="290px">
+          <Spinner />
+        </SpinnerContainer>
+      ) : (
+        <ListingCarousel
+          images={images}
+          handleBackToSearch={handleBackToSearch}
+          handleShowAlbum={handleShowAlbum}
+        />
+      )}
 
       <ModalListingDescription>
         <DescriptionContainer>

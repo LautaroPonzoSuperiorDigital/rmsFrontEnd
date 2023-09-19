@@ -9,6 +9,7 @@ export const ListingPublic = styled.div`
   gap: 40px;
   @media (max-width: 900px) {
     padding: 10px 20px;
+    justify-content: center;
   }
 `;
 
