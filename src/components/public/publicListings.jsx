@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ListingPublic, ListingPublicContainer } from "./styles";
-import "../../styles/publIcListings/publicListings.css";
+import "../../styles/publicListings/publicListings.css";
 import Logo from "../../assets/img/logomark.svg";
 import SearchIconHover from "../../assets/img/SearchIconHover.svg";
 import SearchIcon from "../../assets/img/SearchIcon.svg";
@@ -16,13 +16,31 @@ const PublicListings = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedListing, setSelectedListing] = useState(null);
   const [listing, setListing] = useState([]);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await api.get("/listing?isPublic=true");
+        setListing(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching listings:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleLogoClick = () => {
     navigate("/");
     setIsModalOpen(false);
   };
+
   const handleLoginClick = () => {
     navigate("/login");
   };
@@ -53,24 +71,50 @@ const PublicListings = () => {
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await api.get("/listing?isPublic=true");
-        setListing(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching listings:", error);
-      }
-    };
+  const handleOpenSearch = (e) => {
+    e.preventDefault(); // prevent submmit behavior
+    setIsSearchOpen(true);
+  };
 
-    fetchData();
-  }, []);
+  const handleCloseSearch = () => {
+    setIsSearchOpen(false);
+  };
+
+  const handleOpenFilter = () => {
+    setIsFilterOpen(true);
+  };
+
+  const handleCloseFilter = () => {
+    setIsFilterOpen(false);
+  };
+
+  const handleSearchChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSearch = () => {
+    api
+      .get(`/listing?isPublic=true&location=${inputValue}`)
+      .then(({ data: listingsData }) => {
+        setListing(listingsData);
+      })
+      .catch((error) => {
+        console.error("Could not update listings");
+        alert("Could not update listings");
+        throw new Error(error);
+      });
+
+    setIsSearchOpen(false);
+  };
+
+  const handleCancelSearch = () => {
+    setIsSearchOpen(false);
+  };
 
   return (
-    <div className=" containerPublic">
+    <div className="containerPublic">
       <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
-        <div className="filtersBar">
+        <div className={`filtersBar ${isSearchOpen ? "hideFiltersBar" : ""}`}>
           <img
             className="LogoPublic"
             src={Logo}
@@ -101,8 +145,8 @@ const PublicListings = () => {
                 onMouseLeave={handleSearchIconLeave}
               />
             </div>
-            <button className="open-search" />
-            <button className="filter-listings" />
+            <button className="open-search" onClick={handleOpenSearch} />
+            <button className="filter-listings" onClick={handleOpenFilter} />
             <select className="dropdownMenu">
               <option className="opt" value="price">
                 &nbsp;&nbsp;Price
@@ -132,8 +176,34 @@ const PublicListings = () => {
             </div>
           )}
         </div>
+        {isSearchOpen && (
+          <div className="searchContainer">
+            <img
+              className="SearchIconListings"
+              src={SearchIcon}
+              alt="SearchIcon"
+            />
+            <input
+              type="text"
+              placeholder="Keyword Or City"
+              onChange={handleSearchChange}
+            />
+            {inputValue.length ? (
+              <button className="doSearch" onClick={handleSearch}>
+                Search
+              </button>
+            ) : (
+              <button className="cancelSearch" onClick={handleCancelSearch}>
+                Cancel
+              </button>
+            )}
+          </div>
+        )}
+        {isFilterOpen && <></>}
       </div>
-      <ListingPublicContainer>
+      <ListingPublicContainer
+        style={{ filter: isSearchOpen ? "blur(5px)" : "none" }}
+      >
         <ListingPublic>
           {listing.map((listing) => {
             return (

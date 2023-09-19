@@ -1,3 +1,19 @@
+body {
+  min-width: 320px;
+}
+
+.searchContainer {
+  display: none;
+}
+
+.filter-listings {
+  display: none;
+}
+
+.open-search {
+  display: none;
+}
+
 .filtersBar {
   display: flex;
   flex-direction: row;
@@ -257,6 +273,10 @@
     margin-left: 1rem;
   }
 
+  .hideFiltersBar {
+    display: none;
+  }
+
   .buttonContainer {
     display: none;
   }
@@ -286,6 +306,7 @@
   }
 
   .filter-listings {
+    display: flex;
     background-image: url("../../assets/img/slider.horizontal.3.svg");
     background-size: cover;
     height: 1.2rem;
@@ -295,10 +316,46 @@
   }
 
   .open-search {
+    display: flex;
     background-image: url("../../assets/img/magnifyingglass.svg");
     background-size: cover;
     height: 1.2rem;
     width: 1.2rem;
     cursor: pointer;
+  }
+
+  .searchContainer {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    height: 4.5rem;
+    width: 100%;
+    min-width: fit-content;
+  }
+
+  .searchContainer img {
+    position: absolute;
+    padding-top: 0.8rem;
+    padding-left: 0.25rem;
+  }
+
+  .searchContainer input {
+    height: 100%;
+    width: 100%;
+    border-bottom: 1px solid #197572;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    outline: none;
+    font-style: italic;
+    padding-right: 0.5rem;
+    padding-left: 2rem;
+  }
+
+  .searchContainer button {
+    color: #197572;
   }
 }
