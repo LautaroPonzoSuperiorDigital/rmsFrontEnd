@@ -1,24 +1,16 @@
-import DefaultImage from "./../assets/img/defaultImage.png";
-import { api } from "./api";
+import DefaultImage from "../assets/img/DefaultImage.png";
 
-export const createListingImage = (listing, callback) => {
+export const createListingImage = (listing) => {
   let image = DefaultImage;
 
-  api
-    .get(`/listing/${listing.id}/album`)
-    .then((response) => {
-      const data = response.data;
-      if (data?.Sections[0]?.Images[0]) {
-        const key = data?.Sections[0]?.Images[0].key;
-        image = `https://rms-staging.s3.us-west-1.amazonaws.com/${key}`.replace(
-          /\\/g,
-          "%5C"
-        );
-      }
-      callback(image);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-      callback(image); // Return the default image in case of an error
-    });
+  if (listing.Sections[0]?.Album?.Images[0]) {
+    const key = listing.Sections[0]?.Album.Images[0].key;
+
+    image = `https://rms-staging.s3.us-west-1.amazonaws.com/${key}`.replace(
+      /\\/g,
+      "%5C"
+    );
+  }
+
+  return image;
 };

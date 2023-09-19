@@ -130,3 +130,15 @@ export const FieldContainer = styled.div`
     }
   }
 `;
+
+export const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  @media (max-width: 1230px) {
+    max-width: 100%;
+    max-height: 290px;
+  }
+`;

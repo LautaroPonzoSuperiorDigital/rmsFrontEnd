@@ -19,7 +19,7 @@ const Listing = ({ listing, handleImageClick }) => {
   return (
     <PublicListing>
       <ListingPublicImg
-        src={createListingImage(listing, (imageSrc) => imageSrc)}
+        src={createListingImage(listing)}
         onClick={() => handleImageClick(listing.id)}
       />
 

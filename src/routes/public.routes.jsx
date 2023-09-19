@@ -1,14 +1,60 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-import Login from "../components/login";
-import PublicListings from "../components/public/publicListings";
-import ResetPassword from "../components/public/Reset-Password/ResetPassword";
-import { SendEmailPasswordReset } from "../components/public/SendEmailPasswordReset/SendEmailPasswordReset";
+import { Suspense, lazy } from "react";
+const LazySendEmailPasswordReset = lazy(() =>
+  import("../components/public/SendEmailPasswordReset/SendEmailPasswordReset")
+);
+const LazyResetPassword = lazy(() =>
+  import("../components/public/Reset-Password/ResetPassword")
+);
+const LazyLogin = lazy(() => import("../components/login"));
+const LazyPublicListings = lazy(() =>
+  import("../components/public/publicListings")
+);
+const LazyModalPublicListings = lazy(() =>
+  import("../components/public/ModalPublicListing/modalPublicListings")
+);
 
 const publicRoutes = [
-  { path: "/recover-password", element: <SendEmailPasswordReset /> },
-  { path: "/reset-password/:id", element: <ResetPassword /> },
-  { path: "/login", element: <Login /> },
-  { path: "/", element: <PublicListings /> },
+  {
+    path: "/recover-password",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <LazySendEmailPasswordReset />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/reset-password/:id",
+    element: (
+      <Suspense>
+        <LazyResetPassword />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/login",
+    element: (
+      <Suspense>
+        <LazyLogin />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/",
+    element: (
+      <Suspense>
+        <LazyPublicListings />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/listing/:id",
+    element: (
+      <Suspense>
+        <LazyModalPublicListings />
+      </Suspense>
+    ),
+  },
   { path: "*", element: <Navigate to="/login" replace /> },
 ];
 
