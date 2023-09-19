@@ -17,7 +17,9 @@ const PublicListings = () => {
   const [listing, setListing] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+  const [searchInputValue, setSearchInputValue] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -87,12 +89,12 @@ const PublicListings = () => {
   };
 
   const handleSearchChange = (e) => {
-    setInputValue(e.target.value);
+    setSearchInputValue(e.target.value);
   };
 
   const handleSearch = () => {
     api
-      .get(`/listing?isPublic=true&location=${inputValue}`)
+      .get(`/listing?isPublic=true&location=${searchInputValue}`)
       .then(({ data: listingsData }) => {
         setListing(listingsData);
       })
@@ -103,6 +105,26 @@ const PublicListings = () => {
       });
 
     handleCloseSearch();
+  };
+
+  const handleMinPriceChange = (e) => {
+    const value = e.target.value;
+    setMinPrice(formatPriceInput(value));
+  };
+
+  const handleMaxPriceChange = (e) => {
+    const value = e.target.value;
+    setMaxPrice(formatPriceInput(value));
+  };
+
+  const formatPriceInput = (value) => {
+    const numericValue = value.replace(/[^0-9]/g, "").replace(/^0+/, "");
+    const formattedValue = `$${numericValue.replace(
+      /\B(?=(\d{3})+(?!\d))/g,
+      ","
+    )}`;
+
+    return (formattedValue.length === 1) ? `` : formattedValue;
   };
 
   return (
@@ -182,7 +204,7 @@ const PublicListings = () => {
               placeholder="Keyword Or City"
               onChange={handleSearchChange}
             />
-            {inputValue.length ? (
+            {searchInputValue.length ? (
               <button className="doSearch" onClick={handleSearch}>
                 Search
               </button>
@@ -220,6 +242,26 @@ const PublicListings = () => {
             </button>
             <text>{"filter listings"}</text>
           </div>
+          <div className="priceFilter">
+            <text className="priceFilterText">{"price"}</text>
+            <div className="priceFilterMin">
+              <text>min</text>
+              <input
+                type="text"
+                value={minPrice}
+                onChange={handleMinPriceChange}
+              />
+            </div>
+            <div className="priceFilterMax">
+              <text>max</text>
+              <input
+                type="text"
+                value={maxPrice}
+                onChange={handleMaxPriceChange}
+              />
+            </div>
+          </div>
+          <div className="line" />
         </div>
       )}
     </div>

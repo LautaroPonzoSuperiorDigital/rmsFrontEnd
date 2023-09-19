@@ -413,4 +413,71 @@ body {
     color: #000000a5;
     opacity: 1;
   }
+
+  .line {
+    width: 100%;
+    padding-top: 2rem;
+    border-bottom: 1px solid #00000026;
+  }
+
+  .priceFilter {
+    height: fit-content;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    /* border-bottom: 1px solid #00000026; */
+  }
+
+  .priceFilterText {
+    height: 1.543rem;
+    width: 100%;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    font-family: "Proxima Nova", sans-serif;
+    opacity: 1;
+    color: #000000a5;
+    text-transform: capitalize;
+    margin-bottom: 1.169rem;
+  }
+
+  .priceFilter div {
+    width: 45%;
+    color: #00000075;
+    border-bottom: 1px solid #00000026;
+    border-top: unset;
+    border-left: unset;
+    border-right: unset;
+    direction: rtl;
+  }
+
+  .priceFilter div > input {
+    width: 100%;
+    border: unset;
+    padding-left: 2rem;
+  }
+
+  .priceFilterMin text {
+    position: fixed;
+    left: 5%;
+    font-size: 1rem;
+    letter-spacing: 0;
+    color: #00000075;
+    text-transform: uppercase;
+    opacity: 1;
+  }
+
+  .priceFilterMax text {
+    position: fixed;
+    left: 55%;
+    font-size: 1rem;
+    letter-spacing: 0;
+    color: #00000075;
+    text-transform: uppercase;
+    opacity: 1;
+  }
 }
