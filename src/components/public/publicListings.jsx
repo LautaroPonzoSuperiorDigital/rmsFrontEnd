@@ -122,6 +122,8 @@ const PublicListings = () => {
             </div>
             <button className="open-search" onClick={handleOpenSearch} />
             <button className="filter-listings" onClick={handleOpenFilter} />
+            {isSearchOpen && <></>}
+            {isFilterOpen && <></>}
             <select className="dropdownMenu">
               <option className="opt" value="price">
                 &nbsp;&nbsp;Price
@@ -165,8 +167,6 @@ const PublicListings = () => {
           })}
         </ListingPublic>
       </ListingPublicContainer>
-      {isSearchOpen && <></>}
-      {isFilterOpen && <></>}
       {isModalOpen && (
         <ModalPublicListings
           myselectedListing={selectedListing}
