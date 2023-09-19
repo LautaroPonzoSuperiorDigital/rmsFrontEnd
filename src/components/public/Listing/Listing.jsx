@@ -1,7 +1,6 @@
 import bath from "../../../assets/img/bath.svg";
 import bed from "../../../assets/img/bed.svg";
 import PropTypes from "prop-types";
-import { createListingImage } from "../../../services/listing";
 import {
   PublicListing,
   ListingPublicImg,
@@ -14,12 +13,29 @@ import {
   FieldName,
   FieldValue,
 } from "./styles.js";
+import { useEffect, useState } from "react";
+import { createListingImage } from "../../../services/listing";
 
 const Listing = ({ listing, handleImageClick }) => {
+  const [imageSrc, setImageSrc] = useState(null);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const src = await createListingImage(listing);
+        setImageSrc(src);
+      } catch (error) {
+        console.error("Error fetching image:", error);
+      }
+    };
+
+    fetchImage();
+  }, [listing]);
+
   return (
     <PublicListing>
       <ListingPublicImg
-        src={createListingImage(listing, (imageSrc) => imageSrc)}
+        src={imageSrc}
         onClick={() => handleImageClick(listing.id)}
       />
 
