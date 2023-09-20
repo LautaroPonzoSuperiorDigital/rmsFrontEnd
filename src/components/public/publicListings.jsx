@@ -330,12 +330,12 @@ const PublicListings = () => {
               <button onClick={handleCloseFilter}>
                 <Close />
               </button>
-              <text>{"filter listings"}</text>
+              <p>{"filter listings"}</p>
             </div>
             <div className="filterSection">
-              <text className="filterSectionText">{"price"}</text>
+              <p className="filterSectionText">{"price"}</p>
               <div className="filterMin">
-                <text>min</text>
+                <p>min</p>
                 <input
                   type="text"
                   value={minPrice}
@@ -343,7 +343,7 @@ const PublicListings = () => {
                 />
               </div>
               <div className="filterMax">
-                <text>max</text>
+                <p>max</p>
                 <input
                   type="text"
                   value={maxPrice}
@@ -353,9 +353,9 @@ const PublicListings = () => {
             </div>
             <div className="line" />
             <div className="filterSection">
-              <text className="filterSectionText">{"lot size (sq. ft.)"}</text>
+              <p className="filterSectionText">{"lot size (sq. ft.)"}</p>
               <div className="filterMin">
-                <text>min</text>
+                <p>min</p>
                 <input
                   type="text"
                   value={minLotSize}
@@ -363,7 +363,7 @@ const PublicListings = () => {
                 />
               </div>
               <div className="filterMax">
-                <text>max</text>
+                <p>max</p>
                 <input
                   type="text"
                   value={maxLotSize}
@@ -373,11 +373,9 @@ const PublicListings = () => {
             </div>
             <div className="line" />
             <div className="filterSection">
-              <text className="filterSectionText">
-                {"house size (sq. ft.)"}
-              </text>
+              <p className="filterSectionText">{"house size (sq. ft.)"}</p>
               <div className="filterMin">
-                <text>min</text>
+                <p>min</p>
                 <input
                   type="text"
                   value={minHouseSize}
@@ -385,7 +383,7 @@ const PublicListings = () => {
                 />
               </div>
               <div className="filterMax">
-                <text>max</text>
+                <p>max</p>
                 <input
                   type="text"
                   value={maxHouseSize}
@@ -395,7 +393,7 @@ const PublicListings = () => {
             </div>
             <div className="line" />
             <div className="amenitiesSection">
-              <text>amenities</text>
+              <p>amenities</p>
               {amenities.map((amenity, index) => (
                 <div key={index} className="amenityCheckbox">
                   <input
@@ -412,7 +410,7 @@ const PublicListings = () => {
             </div>
             <div className="roomsSection">
               <div className="roomField">
-                <text>{"bedrooms #"}</text>
+                <p>{"bedrooms #"}</p>
                 <input
                   type="text"
                   id="bedrooms-filter-input"
@@ -421,7 +419,7 @@ const PublicListings = () => {
                 />
               </div>
               <div className="roomField">
-                <text>{"bathrooms #"}</text>
+                <p>{"bathrooms #"}</p>
                 <input
                   type="text"
                   id="bathrooms-filter-input"

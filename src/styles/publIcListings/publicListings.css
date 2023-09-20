@@ -420,18 +420,21 @@ body {
     width: unset;
   }
 
-  .filterHeader text {
+  .filterHeader p {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    margin-bottom: 0;
+
+    text-align: left;
     font-style: normal;
     font-weight: normal;
-    font-size: 0.9375rem;
-    line-height: 1.625rem;
+    font-size: 15px;
+    line-height: 26px;
     font-family: "Proxima Nova", sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0;
+    letter-spacing: 0px;
     color: #000000a5;
+    text-transform: uppercase;
     opacity: 1;
   }
 
@@ -484,7 +487,7 @@ body {
     padding-left: 2rem;
   }
 
-  .filterMin text {
+  .filterMin p {
     position: absolute;
     left: 5%;
     font-size: 1rem;
@@ -494,7 +497,7 @@ body {
     opacity: 1;
   }
 
-  .filterMax text {
+  .filterMax p {
     position: absolute;
     left: 55%;
     font-size: 1rem;
@@ -508,7 +511,7 @@ body {
     width: 90%;
   }
 
-  .amenitiesSection > text {
+  .amenitiesSection > p {
     height: 1.543rem;
     width: 100%;
     font-style: normal;
@@ -571,7 +574,7 @@ body {
     padding: 1.5rem 0 0 0;
   }
 
-  .roomsSection div > text {
+  .roomsSection div > p {
     position: absolute;
     left: 5%;
     font-size: 1rem;
@@ -581,7 +584,7 @@ body {
     opacity: 1;
   }
 
-  .roomField text {
+  .roomField p {
     font-family: "Proxima Nova", sans-serif;
     font-weight: 300;
     font-size: 1rem;
