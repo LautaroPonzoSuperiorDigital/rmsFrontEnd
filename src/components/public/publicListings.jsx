@@ -267,88 +267,93 @@ const PublicListings = () => {
         </ListingPublic>
       </ListingPublicContainer>
       {isFilterOpen && (
-        <div className="filterContainer">
-          <div className="filterHeader">
-            <button onClick={handleCloseFilter}>
-              <Close />
-            </button>
-            <text>{"filter listings"}</text>
-          </div>
-          <div className="filterSection">
-            <text className="filterSectionText">{"price"}</text>
-            <div className="filterMin">
-              <text>min</text>
-              <input
-                type="text"
-                value={minPrice}
-                onChange={handleMinPriceChange}
-              />
+        <>
+          <div className="overlay" />
+          <div className="filterContainer">
+            <div className="filterHeader">
+              <button onClick={handleCloseFilter}>
+                <Close />
+              </button>
+              <text>{"filter listings"}</text>
             </div>
-            <div className="filterMax">
-              <text>max</text>
-              <input
-                type="text"
-                value={maxPrice}
-                onChange={handleMaxPriceChange}
-              />
-            </div>
-          </div>
-          <div className="line" />
-          <div className="filterSection">
-            <text className="filterSectionText">{"lot size (sq. ft.)"}</text>
-            <div className="filterMin">
-              <text>min</text>
-              <input
-                type="text"
-                value={minLotSize}
-                onChange={handleMinLotSizeChange}
-              />
-            </div>
-            <div className="filterMax">
-              <text>max</text>
-              <input
-                type="text"
-                value={maxLotSize}
-                onChange={handleMaxLotSizeChange}
-              />
-            </div>
-          </div>
-          <div className="line" />
-          <div className="filterSection">
-            <text className="filterSectionText">{"house size (sq. ft.)"}</text>
-            <div className="filterMin">
-              <text>min</text>
-              <input
-                type="text"
-                value={minHouseSize}
-                onChange={handleMinHouseSizeChange}
-              />
-            </div>
-            <div className="filterMax">
-              <text>max</text>
-              <input
-                type="text"
-                value={maxHouseSize}
-                onChange={handleMaxHouseSizeChange}
-              />
-            </div>
-          </div>
-          <div className="line" />
-          <div className="amenitiesSection">
-            <text>amenities</text>
-            {amenities.map((amenity, index) => (
-              <div key={index} className="amenityCheckbox">
+            <div className="filterSection">
+              <text className="filterSectionText">{"price"}</text>
+              <div className="filterMin">
+                <text>min</text>
                 <input
-                  type="checkbox"
-                  id={`amenity-${index}`}
-                  name="amenity"
-                  value={amenity}
+                  type="text"
+                  value={minPrice}
+                  onChange={handleMinPriceChange}
                 />
-                <label htmlFor={`amenity-${index}`}>{amenity}</label>
               </div>
-            ))}
+              <div className="filterMax">
+                <text>max</text>
+                <input
+                  type="text"
+                  value={maxPrice}
+                  onChange={handleMaxPriceChange}
+                />
+              </div>
+            </div>
+            <div className="line" />
+            <div className="filterSection">
+              <text className="filterSectionText">{"lot size (sq. ft.)"}</text>
+              <div className="filterMin">
+                <text>min</text>
+                <input
+                  type="text"
+                  value={minLotSize}
+                  onChange={handleMinLotSizeChange}
+                />
+              </div>
+              <div className="filterMax">
+                <text>max</text>
+                <input
+                  type="text"
+                  value={maxLotSize}
+                  onChange={handleMaxLotSizeChange}
+                />
+              </div>
+            </div>
+            <div className="line" />
+            <div className="filterSection">
+              <text className="filterSectionText">
+                {"house size (sq. ft.)"}
+              </text>
+              <div className="filterMin">
+                <text>min</text>
+                <input
+                  type="text"
+                  value={minHouseSize}
+                  onChange={handleMinHouseSizeChange}
+                />
+              </div>
+              <div className="filterMax">
+                <text>max</text>
+                <input
+                  type="text"
+                  value={maxHouseSize}
+                  onChange={handleMaxHouseSizeChange}
+                />
+              </div>
+            </div>
+            <div className="line" />
+            <div className="amenitiesSection">
+              <text>amenities</text>
+              {amenities.map((amenity, index) => (
+                <div key={index} className="amenityCheckbox">
+                  <input
+                    type="checkbox"
+                    id={`amenity-${index}`}
+                    name="amenity"
+                    value={amenity}
+                  />
+                  <label htmlFor={`amenity-${index}`}>{amenity}</label>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
