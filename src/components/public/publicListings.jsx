@@ -46,7 +46,7 @@ const PublicListings = () => {
       : (document.body.style.overflow = "auto");
 
     // TODO: update amenities list
-    setAmenities(["Pool", "Gated", "Pond", "Lorem Ipsum", "Dolor Sit Amet"]);
+    setAmenities(["Pool", "Gate", "Pet Friendly", "Air Conditioning"]);
     fetchListings();
   }, [isFilterOpen]);
 
