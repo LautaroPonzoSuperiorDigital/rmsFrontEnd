@@ -242,6 +242,9 @@ export const SingleImage = styled.img`
   max-height: 600px;
   margin-top: 0.5rem;
   position: relative;
+  aspect-ratio: 1/1;
+  max-width: 90vh;
+  max-height: 100vh;
 `;
 
 export const RemoveImageButton = styled.button`
