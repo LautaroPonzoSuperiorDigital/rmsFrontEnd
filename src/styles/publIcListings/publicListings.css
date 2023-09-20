@@ -2,18 +2,9 @@ body {
   min-width: 320px;
 }
 
-.searchContainer {
-  display: none;
-}
-
-.filterContainer {
-  display: none;
-}
-
-.filter-listings {
-  display: none;
-}
-
+.searchContainer,
+.filterContainer,
+.filter-listings,
 .open-search {
   display: none;
 }
@@ -122,11 +113,6 @@ body {
 
 .option:hover {
   color: #31af9a;
-}
-
-.opt {
-  font-size: 1rem;
-  margin-left: 10px;
 }
 
 .containerImgs {
@@ -425,7 +411,6 @@ body {
     left: 50%;
     transform: translateX(-50%);
     margin-bottom: 0;
-
     text-align: left;
     font-style: normal;
     font-weight: normal;
