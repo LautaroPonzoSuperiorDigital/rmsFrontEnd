@@ -364,6 +364,20 @@ const PublicListings = () => {
                 </div>
               ))}
             </div>
+            <div className="roomsSection">
+              <div className="roomField">
+                <text>{"bedrooms #"}</text>
+                <input
+                  type="text"
+                />
+              </div>
+              <div className="roomField">
+                <text>{"bathrooms #"}</text>
+                <input
+                  type="text"
+                />
+              </div>
+            </div>
           </div>
         </>
       )}
