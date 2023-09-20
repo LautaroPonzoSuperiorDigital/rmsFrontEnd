@@ -173,6 +173,37 @@ const PublicListings = () => {
       : setSelectedAmenities(selectedAmenities.filter((a) => a !== amenity));
   };
 
+  const handleApplyFilter = () => {
+    const removeNonDigits = (value) => value.replace(/\D/g, "");
+    const filterParams = Object.fromEntries(
+      Object.entries({
+        minPrice: removeNonDigits(minPrice),
+        maxPrice: removeNonDigits(maxPrice),
+        minLotSize: removeNonDigits(minLotSize),
+        maxLotSize: removeNonDigits(maxLotSize),
+        minHouseSize: removeNonDigits(minHouseSize),
+        maxHouseSize: removeNonDigits(maxHouseSize),
+        amenities: selectedAmenities.join(","),
+      }).filter(([_, value]) => value !== "")
+    );
+
+    console.log({ filterParams });
+
+    api
+      .get("/listing", { params: { isPublic: true, ...filterParams } })
+      .then(({ data: listingsData }) => {
+        console.log({ listingsData });
+        setListing(listingsData);
+      })
+      .catch((error) => {
+        console.error("Could not update listings");
+        alert("Could not update listings");
+        throw new Error(error);
+      });
+
+    setIsFilterOpen(false);
+  };
+
   return (
     <div className="containerPublic">
       <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
@@ -378,7 +409,9 @@ const PublicListings = () => {
                 <input type="text" />
               </div>
             </div>
-            <button className="applyFilterButton">{"save"}</button>
+            <button className="applyFilterButton" onClick={handleApplyFilter}>
+              {"save"}
+            </button>
           </div>
         </>
       )}
