@@ -29,7 +29,7 @@ import {
 import DescriptionMobileNav from "./DescriptionMobileNav";
 
 const ApplicationModal = ({ myselectedListing, onClose }) => {
-  console.log(myselectedListing);
+  const [imageSrc, setImageSrc] = useState(null);
 
   const [activeSection, setActiveSection] = useState("registration");
   const [formData, setFormData] = useState({});
@@ -39,6 +39,19 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
   const [userId, setUserId] = useState({});
   const { user } = useAuth();
   const innerWidth = window.innerWidth;
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const src = await createListingImage(myselectedListing);
+        setImageSrc(src);
+      } catch (error) {
+        console.error("Error fetching image:", error);
+      }
+    };
+
+    fetchImage();
+  }, [myselectedListing]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -144,7 +157,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
           <DescriptionMobileNav myselectedListing={myselectedListing} />
         ) : (
           <SideBarDescriptionContainer>
-            <ImgSideBar src={createListingImage(myselectedListing)} alt="" />
+            <ImgSideBar src={imageSrc} alt="" />
 
             <SideBarDescriptionPrice>
               <div>
