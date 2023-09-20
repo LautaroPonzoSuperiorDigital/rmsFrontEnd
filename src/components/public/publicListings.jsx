@@ -378,6 +378,7 @@ const PublicListings = () => {
                 <input type="text" />
               </div>
             </div>
+            <button className="applyFilterButton">{"save"}</button>
           </div>
         </>
       )}
