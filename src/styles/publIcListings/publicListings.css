@@ -365,7 +365,7 @@ body {
 
   .filterContainer {
     background-color: #fff;
-    height: 75vh;
+    height: 80vh;
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -464,7 +464,7 @@ body {
   }
 
   .filterMin text {
-    position: fixed;
+    position: absolute;
     left: 5%;
     font-size: 1rem;
     letter-spacing: 0;
@@ -474,12 +474,53 @@ body {
   }
 
   .filterMax text {
-    position: fixed;
+    position: absolute;
     left: 55%;
     font-size: 1rem;
     letter-spacing: 0;
     color: #00000075;
     text-transform: uppercase;
     opacity: 1;
+  }
+
+  .amenitiesSection {
+    width: 90%;
+  }
+
+  .amenitiesSection > text {
+    height: 1.543rem;
+    width: 100%;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.125rem;
+    line-height: 1.625rem;
+    font-family: "Proxima Nova", sans-serif;
+    opacity: 1;
+    color: #000000a5;
+    text-transform: capitalize;
+    margin-bottom: 1.169rem;
+  }
+
+  .amenityCheckbox {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 1.2rem 0;
+  }
+
+  .amenityCheckbox input {
+    accent-color: #197572;
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 0;
+  }
+
+  .amenityCheckbox label {
+    margin-left: 0.625rem;
+    font-size: 1.25rem;
+    line-height: 1.25rem;
+    font-family: "Proxima Nova", sans-serif;
   }
 }

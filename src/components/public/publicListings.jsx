@@ -24,11 +24,12 @@ const PublicListings = () => {
   const [maxLotSize, setMaxLotSize] = useState("");
   const [minHouseSize, setMinHouseSize] = useState("");
   const [maxHouseSize, setMaxHouseSize] = useState("");
+  const [amenities, setAmenities] = useState([]);
   const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchListings = async () => {
       try {
         const { data } = await api.get("/listing?isPublic=true");
         setListing(data);
@@ -38,7 +39,9 @@ const PublicListings = () => {
       }
     };
 
-    fetchData();
+    // TODO: update amenities list
+    setAmenities(["Pool", "Gated", "Pond", "Lorem Ipsum", "Dolor Sit Amet"]);
+    fetchListings();
   }, []);
 
   const handleLogoClick = () => {
@@ -331,6 +334,20 @@ const PublicListings = () => {
             </div>
           </div>
           <div className="line" />
+          <div className="amenitiesSection">
+            <text>amenities</text>
+            {amenities.map((amenity, index) => (
+              <div key={index} className="amenityCheckbox">
+                <input
+                  type="checkbox"
+                  id={`amenity-${index}`}
+                  name="amenity"
+                  value={amenity}
+                />
+                <label htmlFor={`amenity-${index}`}>{amenity}</label>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
