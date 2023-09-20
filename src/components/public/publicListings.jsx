@@ -25,6 +25,7 @@ const PublicListings = () => {
   const [minHouseSize, setMinHouseSize] = useState("");
   const [maxHouseSize, setMaxHouseSize] = useState("");
   const [amenities, setAmenities] = useState([]);
+  const [selectedAmenities, setSelectedAmenities] = useState([]);
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -157,6 +158,15 @@ const PublicListings = () => {
   const formatNumberInput = (value) => {
     const numericValue = value.replace(/[^0-9]/g, "").replace(/^0+/, "");
     return `${numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  };
+
+  const handleAmenityChange = (event) => {
+    const amenity = event.target.value;
+    const isChecked = event.target.checked;
+
+    isChecked
+      ? setSelectedAmenities([...selectedAmenities, amenity])
+      : setSelectedAmenities(selectedAmenities.filter((a) => a !== amenity));
   };
 
   return (
@@ -347,6 +357,8 @@ const PublicListings = () => {
                     id={`amenity-${index}`}
                     name="amenity"
                     value={amenity}
+                    onChange={handleAmenityChange}
+                    checked={selectedAmenities.includes(amenity)}
                   />
                   <label htmlFor={`amenity-${index}`}>{amenity}</label>
                 </div>
