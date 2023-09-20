@@ -587,6 +587,7 @@ body {
     color: #00000075;
     text-transform: uppercase;
     opacity: 1;
+    margin-left: 0.25rem;
   }
 
   .roomField input {
