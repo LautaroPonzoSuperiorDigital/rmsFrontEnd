@@ -29,6 +29,8 @@ import {
 import DescriptionMobileNav from "./DescriptionMobileNav";
 
 const ApplicationModal = ({ myselectedListing, onClose }) => {
+  console.log(myselectedListing);
+
   const [activeSection, setActiveSection] = useState("registration");
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState("");
@@ -36,7 +38,6 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
   const [screeningMessage, setScreeningMessage] = useState("");
   const [userId, setUserId] = useState({});
   const { user } = useAuth();
-  console.log(user);
   const innerWidth = window.innerWidth;
 
   const handleChange = (e) => {
