@@ -40,10 +40,14 @@ const PublicListings = () => {
       }
     };
 
+    isFilterOpen
+      ? (document.body.style.overflow = "hidden")
+      : (document.body.style.overflow = "auto");
+
     // TODO: update amenities list
     setAmenities(["Pool", "Gated", "Pond", "Lorem Ipsum", "Dolor Sit Amet"]);
     fetchListings();
-  }, []);
+  }, [isFilterOpen]);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -367,15 +371,11 @@ const PublicListings = () => {
             <div className="roomsSection">
               <div className="roomField">
                 <text>{"bedrooms #"}</text>
-                <input
-                  type="text"
-                />
+                <input type="text" />
               </div>
               <div className="roomField">
                 <text>{"bathrooms #"}</text>
-                <input
-                  type="text"
-                />
+                <input type="text" />
               </div>
             </div>
           </div>

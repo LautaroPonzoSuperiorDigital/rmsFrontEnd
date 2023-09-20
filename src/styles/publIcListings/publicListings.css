@@ -389,6 +389,10 @@ body {
     overflow-y: auto;
   }
 
+  .filterContainer.active {
+    display: flex;
+  }
+
   .filterHeader {
     position: sticky;
     top: 0;
