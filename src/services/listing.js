@@ -1,11 +1,12 @@
-import DefaultImage from "./../assets/img/defaultImage.png";
+import DefaultImage from "../assets/img/defaultImage.png";
+import { api } from "./api";
 
-export const createListingImage = (listing) => {
+export const createListingImage = async (listing) => {
+  const { data } = await api.get(`/listing/${listing.id}/album`);
   let image = DefaultImage;
 
-  if (listing.Sections[0]?.Album?.Images[0]) {
-    const key = listing.Sections[0]?.Album.Images[0].key;
-
+  if (data?.Sections[0]?.Images[0]) {
+    const key = data?.Sections[0]?.Images[0].key;
     image = `https://rms-staging.s3.us-west-1.amazonaws.com/${key}`.replace(
       /\\/g,
       "%5C"
