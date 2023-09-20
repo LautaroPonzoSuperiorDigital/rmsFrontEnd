@@ -14,7 +14,7 @@ const PublicListings = () => {
   const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);
   const [isInputHovered, setIsInputHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [listing, setListing] = useState([]);
+  const [listings, setListings] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -26,6 +26,8 @@ const PublicListings = () => {
   const [maxHouseSize, setMaxHouseSize] = useState("");
   const [amenities, setAmenities] = useState([]);
   const [selectedAmenities, setSelectedAmenities] = useState([]);
+  const [bedrooms, setBedrooms] = useState("");
+  const [bathrooms, setBathrooms] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -33,8 +35,7 @@ const PublicListings = () => {
     const fetchListings = async () => {
       try {
         const { data } = await api.get("/listing?isPublic=true");
-        setListing(data);
-        console.log(data);
+        setListings(data);
       } catch (error) {
         console.error("Error fetching listings:", error);
       }
@@ -108,7 +109,7 @@ const PublicListings = () => {
     api
       .get(`/listing?isPublic=true&location=${searchInputValue}`)
       .then(({ data: listingsData }) => {
-        setListing(listingsData);
+        setListings(listingsData);
       })
       .catch((error) => {
         console.error("Could not update listings");
@@ -164,13 +165,23 @@ const PublicListings = () => {
     return `${numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   };
 
-  const handleAmenityChange = (event) => {
-    const amenity = event.target.value;
-    const isChecked = event.target.checked;
+  const handleAmenityChange = (e) => {
+    const amenity = e.target.value;
+    const isChecked = e.target.checked;
 
     isChecked
       ? setSelectedAmenities([...selectedAmenities, amenity])
       : setSelectedAmenities(selectedAmenities.filter((a) => a !== amenity));
+  };
+
+  const handleBedroomsChange = (e) => {
+    const value = e.target.value;
+    setBedrooms(formatNumberInput(value));
+  };
+
+  const handleBathroomsChange = (e) => {
+    const value = e.target.value;
+    setBathrooms(formatNumberInput(value));
   };
 
   const handleApplyFilter = () => {
@@ -183,17 +194,16 @@ const PublicListings = () => {
         maxLotSize: removeNonDigits(maxLotSize),
         minHouseSize: removeNonDigits(minHouseSize),
         maxHouseSize: removeNonDigits(maxHouseSize),
+        bedrooms: removeNonDigits(bedrooms),
+        bathrooms: removeNonDigits(bathrooms),
         amenities: selectedAmenities.join(","),
       }).filter(([_, value]) => value !== "")
     );
 
-    console.log({ filterParams });
-
     api
       .get("/listing", { params: { isPublic: true, ...filterParams } })
-      .then(({ data: listingsData }) => {
-        console.log({ listingsData });
-        setListing(listingsData);
+      .then(({ data }) => {
+        setListings(data);
       })
       .catch((error) => {
         console.error("Could not update listings");
@@ -296,9 +306,9 @@ const PublicListings = () => {
       <ListingPublicContainer
         style={{ filter: isSearchOpen ? "blur(5px)" : "none" }}
       >
-        <ListingPublic>
-          {listing.map((listing) => {
-            if (listing.isPublic) {
+        {!!listings.length ? (
+          <ListingPublic>
+            {listings.map((listing) => {
               return (
                 <Listing
                   listing={listing}
@@ -306,10 +316,11 @@ const PublicListings = () => {
                   key={listing.id}
                 />
               );
-            }
-            return null;
-          })}
-        </ListingPublic>
+            })}
+          </ListingPublic>
+        ) : (
+          <p>{"No listing to show"}</p>
+        )}
       </ListingPublicContainer>
       {isFilterOpen && (
         <>
@@ -402,13 +413,24 @@ const PublicListings = () => {
             <div className="roomsSection">
               <div className="roomField">
                 <text>{"bedrooms #"}</text>
-                <input type="text" />
+                <input
+                  type="text"
+                  id="bedrooms-filter-input"
+                  value={bedrooms}
+                  onChange={handleBedroomsChange}
+                />
               </div>
               <div className="roomField">
                 <text>{"bathrooms #"}</text>
-                <input type="text" />
+                <input
+                  type="text"
+                  id="bathrooms-filter-input"
+                  value={bathrooms}
+                  onChange={handleBathroomsChange}
+                />
               </div>
             </div>
+
             <button className="applyFilterButton" onClick={handleApplyFilter}>
               {"save"}
             </button>
