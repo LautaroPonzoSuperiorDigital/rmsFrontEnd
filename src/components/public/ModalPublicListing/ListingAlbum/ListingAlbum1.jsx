@@ -22,10 +22,13 @@ export function ListingAlbum1({ handleGoBack, listingSections }) {
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [edit, setEdit] = useState(false);
   const [showImage, setShowImage] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const innerWidth = window.innerWidth;
   const { showFooter, hideFooter, setHeight } = useModal();
 
-  const handleImage = () => {
+  const handleImage = (url) => {
+    setSelectedImage(url);
     setShowImage(!showImage);
   };
 
@@ -92,7 +95,10 @@ export function ListingAlbum1({ handleGoBack, listingSections }) {
 
                   return (
                     <SectionImageContainer key={index}>
-                      <SectionImage src={url} onClick={handleImage} />
+                      <SectionImage
+                        src={url}
+                        onClick={() => handleImage(url)}
+                      />
 
                       {showImage && (
                         <BlackOverlay>
@@ -100,7 +106,7 @@ export function ListingAlbum1({ handleGoBack, listingSections }) {
                             <div>
                               <CloseButton onClick={handleImage}>X</CloseButton>
                             </div>
-                            <SingleImage src={url} />
+                            <SingleImage src={selectedImage} />
                           </div>
                         </BlackOverlay>
                       )}
