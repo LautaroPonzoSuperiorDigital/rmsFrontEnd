@@ -22,6 +22,8 @@ const PublicListings = () => {
   const [maxPrice, setMaxPrice] = useState("");
   const [minLotSize, setMinLotSize] = useState("");
   const [maxLotSize, setMaxLotSize] = useState("");
+  const [minHouseSize, setMinHouseSize] = useState("");
+  const [maxHouseSize, setMaxHouseSize] = useState("");
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -68,9 +70,9 @@ const PublicListings = () => {
     setIsInputHovered(false);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  // const handleCloseModal = () => {
+  //   setIsModalOpen(false);
+  // };
 
   const handleOpenSearch = (e) => {
     e.preventDefault();
@@ -131,15 +133,25 @@ const PublicListings = () => {
 
   const handleMinLotSizeChange = (e) => {
     const value = e.target.value;
-    setMinLotSize(formatLotSizeInput(value));
+    setMinLotSize(formatNumberInput(value));
   };
 
   const handleMaxLotSizeChange = (e) => {
     const value = e.target.value;
-    setMaxLotSize(formatLotSizeInput(value));
+    setMaxLotSize(formatNumberInput(value));
   };
 
-  const formatLotSizeInput = (value) => {
+  const handleMinHouseSizeChange = (e) => {
+    const value = e.target.value;
+    setMinHouseSize(formatNumberInput(value));
+  };
+
+  const handleMaxHouseSizeChange = (e) => {
+    const value = e.target.value;
+    setMaxHouseSize(formatNumberInput(value));
+  };
+
+  const formatNumberInput = (value) => {
     const numericValue = value.replace(/[^0-9]/g, "").replace(/^0+/, "");
     return `${numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   };
@@ -295,6 +307,26 @@ const PublicListings = () => {
                 type="text"
                 value={maxLotSize}
                 onChange={handleMaxLotSizeChange}
+              />
+            </div>
+          </div>
+          <div className="line" />
+          <div className="filterSection">
+            <text className="filterSectionText">{"house size (sq. ft.)"}</text>
+            <div className="filterMin">
+              <text>min</text>
+              <input
+                type="text"
+                value={minHouseSize}
+                onChange={handleMinHouseSizeChange}
+              />
+            </div>
+            <div className="filterMax">
+              <text>max</text>
+              <input
+                type="text"
+                value={maxHouseSize}
+                onChange={handleMaxHouseSizeChange}
               />
             </div>
           </div>
