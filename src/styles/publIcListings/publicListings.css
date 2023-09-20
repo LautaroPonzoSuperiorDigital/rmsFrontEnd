@@ -365,7 +365,7 @@ body {
 
   .filterContainer {
     background-color: #fff;
-    height: 80vh;
+    height: 75vh;
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -374,13 +374,18 @@ body {
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
+    overflow-y: auto;
   }
 
   .filterHeader {
+    position: sticky;
+    top: 0;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    height: 4.5rem;
+    background-color: #fff;
+    z-index: 1;
+    flex: 0 0 5rem;
     width: 90%;
   }
 
