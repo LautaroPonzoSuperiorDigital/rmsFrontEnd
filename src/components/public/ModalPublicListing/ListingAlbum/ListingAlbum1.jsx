@@ -1,12 +1,7 @@
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FiCheck, FiX } from "react-icons/fi";
 import { Tabs } from "react-tabs";
-
-import { toBase64 } from "../../../../services/image";
 import { useModal } from "../../../modal/context";
-
-import { Edit, Trash } from "../../../icons";
 
 import {
   BlackOverlay,
@@ -14,7 +9,6 @@ import {
   GoBackButton,
   ListingAlbumContainer,
   NoPhotosAdded,
-  RemoveImageButton,
   SectionImage,
   SectionImageContainer,
   SectionTab,
@@ -22,63 +16,14 @@ import {
   SectionTabImageGrid,
   SectionTabs,
   SingleImage,
-  UploadPhotosInput,
 } from "./styles";
 
-export function ListingAlbum1({
-  handleGoBack,
-  editable,
-  listingSections,
-  onSectionNameChange,
-  onImagesUploaded,
-  onImageRemoved,
-}) {
+export function ListingAlbum1({ handleGoBack, listingSections }) {
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [edit, setEdit] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const innerWidth = window.innerWidth;
   const { showFooter, hideFooter, setHeight } = useModal();
-
-  const uploadPhotosRef = useRef(null);
-  const editInputRef = useRef(null);
-
-  const onUploaded = useCallback(
-    (event) => {
-      if (!editable && !onImagesUploaded) {
-        return;
-      }
-
-      const filesArray = Array.from(event.target.files);
-      const images = filesArray.map((file) => {
-        const url = URL.createObjectURL(file);
-
-        const image = {
-          url,
-          base64: "",
-        };
-
-        toBase64(file).then((base64) => {
-          image.base64 = base64;
-        });
-
-        return image;
-      });
-
-      onImagesUploaded(activeSectionIndex, images);
-    },
-    [editable, activeSectionIndex, onImagesUploaded]
-  );
-
-  const handleRemoveImage = useCallback(
-    (imageIndex) => {
-      if (!editable || !onImageRemoved) {
-        return;
-      }
-
-      onImageRemoved(activeSectionIndex, imageIndex);
-    },
-    [editable, activeSectionIndex, onImageRemoved]
-  );
 
   const handleImage = () => {
     setShowImage(!showImage);
@@ -158,14 +103,6 @@ export function ListingAlbum1({
                             <SingleImage src={url} />
                           </div>
                         </BlackOverlay>
-                      )}
-                      {editable && (
-                        <RemoveImageButton
-                          type="button"
-                          onClick={() => handleRemoveImage(index)}
-                        >
-                          <Trash />
-                        </RemoveImageButton>
                       )}
                     </SectionImageContainer>
                   );
