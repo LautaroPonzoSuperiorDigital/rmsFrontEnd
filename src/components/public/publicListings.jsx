@@ -319,7 +319,7 @@ const PublicListings = () => {
             })}
           </ListingPublic>
         ) : (
-          <p>{"No listing to show"}</p>
+          <p className="noListingMessage">{"No listing to show"}</p>
         )}
       </ListingPublicContainer>
       {isFilterOpen && (
