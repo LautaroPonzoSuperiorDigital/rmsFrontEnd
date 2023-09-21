@@ -67,6 +67,20 @@ const PublicListings = () => {
   }, []);
 
   useEffect(() => {
+    handleApplyFilter();
+  }, [
+    minPrice,
+    maxPrice,
+    minHouseSize,
+    maxHouseSize,
+    minLotSize,
+    maxLotSize,
+    amenities,
+    bedrooms,
+    bathrooms,
+  ]);
+
+  useEffect(() => {
     document.body.style.overflow = isMobileFilterOpen ? "hidden" : "auto";
   }, [isMobileFilterOpen]);
 
@@ -158,42 +172,36 @@ const PublicListings = () => {
     const value = e.target.value;
 
     setMinPrice(formatPriceInput(value));
-    !isMobile && handleApplyFilter();
   };
 
   const handleMaxPriceChange = (e) => {
     const value = e.target.value;
 
     setMaxPrice(formatPriceInput(value));
-    !isMobile && handleApplyFilter();
   };
 
   const handleMinLotSizeChange = (e) => {
     const value = e.target.value;
 
     setMinLotSize(formatNumberInput(value));
-    !isMobile && handleApplyFilter();
   };
 
   const handleMaxLotSizeChange = (e) => {
     const value = e.target.value;
 
     setMaxLotSize(formatNumberInput(value));
-    !isMobile && handleApplyFilter();
   };
 
   const handleMinHouseSizeChange = (e) => {
     const value = e.target.value;
 
     setMinHouseSize(formatNumberInput(value));
-    !isMobile && handleApplyFilter();
   };
 
   const handleMaxHouseSizeChange = (e) => {
     const value = e.target.value;
 
     setMaxHouseSize(formatNumberInput(value));
-    !isMobile && handleApplyFilter();
   };
 
   const handleAmenityChange = (e) => {
@@ -203,22 +211,18 @@ const PublicListings = () => {
     isChecked
       ? setAmenities([...amenities, amenity])
       : setAmenities(amenities.filter((a) => a !== amenity));
-
-    !isMobile && handleApplyFilter();
   };
 
   const handleBedroomsChange = (e) => {
     const value = e.target.value;
 
     setBedrooms(formatNumberInput(value));
-    !isMobile && handleApplyFilter();
   };
 
   const handleBathroomsChange = (e) => {
     const value = e.target.value;
 
     setBathrooms(formatNumberInput(value));
-    !isMobile && handleApplyFilter();
   };
 
   const formatPriceInput = (value) => {
