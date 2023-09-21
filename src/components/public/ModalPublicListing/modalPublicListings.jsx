@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import "../../../styles/publIcListings/publicListings.css";
+import "../../../styles/publicListings/publicListings.css";
 import { api } from "../../../services/api";
 import ListingCarousel from "../ListingCarousel";
 import ApplicationModal from "../ApplicationModal/ApplicationModal";

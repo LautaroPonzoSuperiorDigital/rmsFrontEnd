@@ -1,14 +1,14 @@
-import "../../styles/publIcListings/publicListings.css";
+import "../../styles/publicListings/publicListings.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ListingPublic, ListingPublicContainer } from "./styles";
+import Listing from "./Listing/Listing";
 import Logo from "../../assets/img/logomark.svg";
 import SearchIconHover from "../../assets/img/SearchIconHover.svg";
 import SearchIcon from "../../assets/img/SearchIcon.svg";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
-import Listing from "./Listing/Listing";
 import { Close } from "../icons";
+import { ListingPublic, ListingPublicContainer } from "./styles";
 
 const PublicListings = () => {
   const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);
@@ -24,7 +24,7 @@ const PublicListings = () => {
   const [maxLotSize, setMaxLotSize] = useState("");
   const [minHouseSize, setMinHouseSize] = useState("");
   const [maxHouseSize, setMaxHouseSize] = useState("");
-  const [amenities, setAmenities] = useState([]);
+  const [amenitiesList, setAmenitiesList] = useState([]);
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
@@ -41,15 +41,13 @@ const PublicListings = () => {
       }
     };
 
-    // TODO: update amenities list
-    setAmenities(["Pool", "Gate", "Pet Friendly", "Air Conditioning"]);
+    // TODO: Update amenities list
+    setAmenitiesList(["Pool", "Gate", "Pet Friendly", "Air Conditioning"]);
     fetchListings();
   }, []);
 
   useEffect(() => {
-    isFilterOpen
-      ? (document.body.style.overflow = "hidden")
-      : (document.body.style.overflow = "auto");
+    document.body.style.overflow = isFilterOpen ? "hidden" : "auto";
   }, [isFilterOpen]);
 
   const handleLogoClick = () => {
@@ -80,10 +78,6 @@ const PublicListings = () => {
   const handleInputLeave = () => {
     setIsInputHovered(false);
   };
-
-  // const handleCloseModal = () => {
-  //   setIsModalOpen(false);
-  // };
 
   const handleOpenSearch = (e) => {
     e.preventDefault();
@@ -225,7 +219,7 @@ const PublicListings = () => {
           />
           <form method="GET" className="container">
             <div
-              className={`inputPublic${isInputHovered ? " inputHovered" : ""}`}
+              className={`inputPublic ${isInputHovered ? "inputHovered" : ""}`}
             >
               <input
                 type="text"
@@ -307,15 +301,13 @@ const PublicListings = () => {
       >
         {listings.length ? (
           <ListingPublic>
-            {listings.map((listing) => {
-              return (
-                <Listing
-                  listing={listing}
-                  handleImageClick={handleImageClick}
-                  key={listing.id}
-                />
-              );
-            })}
+            {listings.map((listing) => (
+              <Listing
+                listing={listing}
+                handleImageClick={handleImageClick}
+                key={listing.id}
+              />
+            ))}
           </ListingPublic>
         ) : (
           <p className="noListingMessage">{"No listing to show"}</p>
@@ -393,7 +385,7 @@ const PublicListings = () => {
             <div className="line" />
             <div className="amenitiesSection">
               <p>amenities</p>
-              {amenities.map((amenity, index) => (
+              {amenitiesList.map((amenity, index) => (
                 <div key={index} className="amenityCheckbox">
                   <input
                     type="checkbox"
@@ -427,7 +419,6 @@ const PublicListings = () => {
                 />
               </div>
             </div>
-
             <button className="applyFilterButton" onClick={handleApplyFilter}>
               {"save"}
             </button>
