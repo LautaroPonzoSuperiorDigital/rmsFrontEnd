@@ -123,13 +123,19 @@ const PublicListings = () => {
     setIsMobileFilterOpen(false);
   };
 
+  const handleSearchKeydown = (e) => {
+    if (e.key === "Enter") return handleSearch();
+  };
+
   const handleSearchChange = (e) => {
     setSearchInputValue(e.target.value);
   };
 
   const handleSearch = () => {
     api
-      .get(`/listing?isPublic=true&location=${searchInputValue}`)
+      .get("/listing", {
+        params: { isPublic: true, location: searchInputValue },
+      })
       .then(({ data }) => setListings(data))
       .catch((error) => {
         console.error("Could not update listings");
@@ -137,7 +143,9 @@ const PublicListings = () => {
         throw new Error(error);
       });
 
-    handleCloseSearch();
+    console.log({ isSearchOpen });
+
+    if (isSearchOpen) handleCloseSearch();
   };
 
   const handleMinPriceChange = (e) => {
@@ -252,6 +260,8 @@ const PublicListings = () => {
                 placeholder="Keyword Or City"
                 onMouseEnter={handleInputHover}
                 onMouseLeave={handleInputLeave}
+                onChange={handleSearchChange}
+                onKeyDown={handleSearchKeydown}
               />
               <img
                 className={`SearchIconListings ${
@@ -265,6 +275,7 @@ const PublicListings = () => {
                 alt="SearchIcon"
                 onMouseEnter={handleSearchIconHover}
                 onMouseLeave={handleSearchIconLeave}
+                onClick={handleSearch}
               />
             </div>
             <button className="open-search" onClick={handleOpenSearch} />
@@ -430,7 +441,10 @@ const PublicListings = () => {
         )}
       </div>
       <ListingPublicContainer
-        style={{ filter: isSearchOpen ? "blur(5px)" : "none" }}
+        style={{
+          filter:
+            isSearchOpen && window.innerWidth <= 768 ? "blur(5px)" : "none",
+        }}
       >
         {listings.length ? (
           <ListingPublic>
