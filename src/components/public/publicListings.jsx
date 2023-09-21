@@ -186,7 +186,7 @@ const PublicListings = () => {
     setBathrooms(formatNumberInput(value));
   };
 
-  const handleApplyFilter = () => {
+  const handleApplyFilter = async () => {
     handleCloseFilter();
 
     const removeNonDigits = (value) => value.replace(/\D/g, "");
@@ -205,14 +205,15 @@ const PublicListings = () => {
       }).filter(([_, value]) => value !== "")
     );
 
-    return api
-      .get("/listing", { params: { isPublic: true, ...filterParams } })
-      .then(({ data }) => setListings(data))
-      .catch((error) => {
-        console.error("Could not update listings");
-        alert("Could not update listings");
-        throw new Error(error);
-      });
+    try {
+      const { data } = await api
+        .get("/listing", { params: { isPublic: true, ...filterParams } });
+      return setListings(data);
+    } catch (error) {
+      console.error("Could not update listings");
+      alert("Could not update listings");
+      throw new Error(error);
+    }
   };
 
   return (
