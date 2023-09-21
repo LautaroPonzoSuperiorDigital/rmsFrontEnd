@@ -104,7 +104,6 @@ body {
   width: 100%;
   padding-left: 1rem;
   border: 1px solid #00000026;
-  opacity: 1;
   text-align: left;
   font-family: "Proxima Nova", sans-serif;
   font-size: 1.125rem;
@@ -130,8 +129,9 @@ body {
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  background-color: white;
+  background: #fdfdfd 0 0 no-repeat padding-box;
   border: 1px solid #197572;
+  opacity: 1;
   row-gap: 1rem;
   padding: 1rem 0.5rem 1.5rem 0.5rem;
 }
@@ -140,6 +140,15 @@ body {
   width: 90%;
   border: unset;
   border-bottom: 1px solid black;
+  text-align: left;
+  font-family: "Proxima Nova", sans-serif;
+  font-size: 1rem;
+  line-height: 1.625rem;
+  font-weight: 300;
+  letter-spacing: 0;
+  color: #00000075;
+  text-transform: uppercase;
+  opacity: 1;
 }
 
 .dropdownMenu {
