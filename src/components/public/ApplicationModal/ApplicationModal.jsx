@@ -25,6 +25,8 @@ import {
   SideBarDescriptionPrice,
   Ulcontainers,
   Li,
+  LogoImg,
+  LogoContainer,
 } from "./styles.js";
 import DescriptionMobileNav from "./DescriptionMobileNav";
 
@@ -133,17 +135,12 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
     <div className="bodyApplication">
       <div className=" d-flex align-items-start justify-content-center">
         <NavContainer>
-          <div className="d-flex align-items-center">
+          <LogoContainer>
             <div>
-              <img
-                src={Logo}
-                alt="Logo"
-                onClick={handleLogoClick}
-                style={{ width: "100%", height: "100%" }}
-              />
+              <LogoImg src={Logo} alt="Logo" onClick={handleLogoClick} />
             </div>
-            <NavText className="Application">Application</NavText>
-          </div>
+            <NavText>Application</NavText>
+          </LogoContainer>
 
           <GoBackContainer onClick={handleGoBack}>
             <HeaderGoBack />
@@ -154,7 +151,10 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
 
       <ApplicationContainer>
         {innerWidth < 768 ? (
-          <DescriptionMobileNav myselectedListing={myselectedListing} />
+          <DescriptionMobileNav
+            myselectedListing={myselectedListing}
+            imageSrc={imageSrc}
+          />
         ) : (
           <SideBarDescriptionContainer>
             <ImgSideBar src={imageSrc} alt="" />
