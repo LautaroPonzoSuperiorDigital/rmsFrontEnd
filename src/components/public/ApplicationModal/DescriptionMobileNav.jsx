@@ -2,13 +2,13 @@ import React from "react";
 import { FieldValue, ImgSideBar } from "./styles";
 import { createListingImage } from "../../../services/listing";
 
-const DescriptionMobileNav = ({ myselectedListing }) => {
+const DescriptionMobileNav = ({ myselectedListing, imageSrc }) => {
   return (
     <div
       style={{ width: "100%", height: "70px", padding: "9px", display: "flex" }}
     >
       <div>
-        <ImgSideBar src={createListingImage(myselectedListing)} alt="" />
+        <ImgSideBar src={imageSrc} alt="" />
       </div>
       <div
         style={{
