@@ -120,6 +120,7 @@ body {
   left: 40%;
   transform: matrix(0, -1, 1, 0, 0, 0);
   opacity: 1;
+  cursor: pointer;
 }
 
 .numericFilter {
