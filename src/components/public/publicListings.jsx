@@ -20,6 +20,7 @@ const PublicListings = () => {
   const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false);
   const [isHouseSizeFilterOpen, setIsHouseSizeFilterOpen] = useState(false);
   const [isLotSizeFilterOpen, setIsLotSizeFilterOpen] = useState(false);
+  const [IsAmenitiesFilterOpen, setIsAmenitiesFilterOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [minPrice, setMinPrice] = useState("");
@@ -106,6 +107,11 @@ const PublicListings = () => {
   const handleToggleLotSizeFilter = (e) => {
     e.preventDefault();
     setIsLotSizeFilterOpen(!isLotSizeFilterOpen);
+  };
+
+  const handleToggleAmenitiesFilter = (e) => {
+    e.preventDefault();
+    setIsAmenitiesFilterOpen(!IsAmenitiesFilterOpen);
   };
 
   const handleOpenMobileFilter = (e) => {
@@ -276,7 +282,7 @@ const PublicListings = () => {
                 </button>
                 <img src={chevronBackward} onClick={handleTogglePriceFilter} />
                 {isPriceFilterOpen && (
-                  <div className="numericFilter" id="priceSelectFields">
+                  <div className="numericFilter">
                     <input
                       type="text"
                       value={minPrice}
@@ -304,7 +310,7 @@ const PublicListings = () => {
                   onClick={handleToggleHouseSizeFilter}
                 />
                 {isHouseSizeFilterOpen && (
-                  <div className="numericFilter" id="houseSizeSelectFields">
+                  <div className="numericFilter">
                     <input
                       type="text"
                       value={minHouseSize}
@@ -332,7 +338,7 @@ const PublicListings = () => {
                   onClick={handleToggleLotSizeFilter}
                 />
                 {isLotSizeFilterOpen && (
-                  <div className="numericFilter" id="lotSizeSelectFields">
+                  <div className="numericFilter">
                     <input
                       type="text"
                       value={minLotSize}
@@ -349,20 +355,33 @@ const PublicListings = () => {
                 )}
               </div>
               <div className="filter">
-                <label>{"amenities"}</label>
-                {amenitiesList.map((amenity, index) => (
-                  <div key={index} className="amenityCheckbox">
-                    <input
-                      type="checkbox"
-                      id={`amenity-${index}`}
-                      name="amenity"
-                      value={amenity}
-                      onChange={handleAmenityChange}
-                      checked={selectedAmenities.includes(amenity)}
-                    />
-                    <label htmlFor={`amenity-${index}`}>{amenity}</label>
+                <button
+                  id="amenitiesFilterButton"
+                  onClick={handleToggleAmenitiesFilter}
+                >
+                  {"amenities"}
+                </button>
+                <img
+                  src={chevronBackward}
+                  onClick={handleToggleAmenitiesFilter}
+                />
+                {IsAmenitiesFilterOpen && (
+                  <div className="checkboxFilter">
+                    {amenitiesList.map((amenity, index) => (
+                      <div key={index} className="amenityRow">
+                        <input
+                          type="checkbox"
+                          id={`amenity-${index}`}
+                          name="amenity"
+                          value={amenity}
+                          onChange={handleAmenityChange}
+                          checked={selectedAmenities.includes(amenity)}
+                        />
+                        <label htmlFor={`amenity-${index}`}>{amenity}</label>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </form>

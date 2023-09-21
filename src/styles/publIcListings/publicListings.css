@@ -152,7 +152,49 @@ body {
   opacity: 1;
 }
 
-.dropdownMenu {
+.checkboxFilter {
+  position: relative;
+  left: 13%;
+  height: fit-content;
+  width: 15rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  background: #fdfdfd 0 0 no-repeat padding-box;
+  border: 1px solid #197572;
+  opacity: 1;
+  row-gap: 1rem;
+  padding: 1.2rem 1.25rem 1.25rem 1.25rem;
+}
+
+.checkboxFilter input {
+  accent-color: #197572;
+  height: 1.125rem;
+  width: 1.125rem;
+  border-radius: 0;
+}
+
+.checkboxFilter label {
+  text-align: left;
+  font-family: "Proxima Nova", sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  letter-spacing: 0;
+  color: #000000a5;
+  text-transform: capitalize;
+  opacity: 1;
+  margin-left: 0.625rem;
+}
+
+.amenityRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+/* .dropdownMenu {
   padding-right: 5%;
   height: 2.5rem;
   width: 10rem;
@@ -161,7 +203,7 @@ body {
   outline: none;
   color: rgba(0, 0, 0, 0.64);
   border: 1px solid rgba(128, 128, 128, 0.219);
-}
+} */
 
 .logInBtn {
   background-color: #197572;
@@ -256,7 +298,7 @@ body {
   margin-right: 1.3rem;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1439px) {
   .LogoPublic {
     width: auto;
     margin-bottom: 1rem;
