@@ -322,10 +322,6 @@ body {
     row-gap: 0.5rem;
   }
 
-  /* .filtersBar form *:not(:first-child) {
-    margin: 0;
-  } */
-
   .inputPublic {
     height: 2.5rem;
     width: 100%;
