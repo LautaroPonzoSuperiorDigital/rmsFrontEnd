@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import "../../../styles/publicListings/application.css";
+import "../../../styles/publIcListings/application.css";
 import Logo from "../../../assets/img/Logo.svg";
 import { api } from "../../../services/api";
 import { env } from "../../../config/env";
