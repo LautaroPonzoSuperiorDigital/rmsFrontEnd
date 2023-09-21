@@ -5,6 +5,7 @@ import Listing from "./Listing/Listing";
 import Logo from "../../assets/img/logomark.svg";
 import SearchIconHover from "../../assets/img/SearchIconHover.svg";
 import SearchIcon from "../../assets/img/SearchIcon.svg";
+import chevronBackward from "../../assets/img/chevron.backward.svg";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import { Close } from "../icons";
@@ -243,26 +244,76 @@ const PublicListings = () => {
             </div>
             <button className="open-search" onClick={handleOpenSearch} />
             <button className="filter-listings" onClick={handleOpenFilter} />
-            <select className="dropdownMenu">
-              <option className="opt" value="price">
-                &nbsp;&nbsp;Price
-              </option>
-            </select>
-            <select className="dropdownMenu">
-              <option className="opt" value="house_size">
-                &nbsp;&nbsp;House Size
-              </option>
-            </select>
-            <select className="dropdownMenu">
-              <option className="opt" value="lot_size">
-                &nbsp;&nbsp;Lot Size
-              </option>
-            </select>
-            <select className="dropdownMenu">
-              <option className="opt" value="Amenities">
-                &nbsp;&nbsp;Amenities
-              </option>
-            </select>
+            {/* New filter input fields */}
+            <div className="filters">
+              <div className="filter">
+                <button id="priceFilterButton">Price</button>
+                <img src={chevronBackward} />
+                <div className="numericFilter" id="priceSelectFields">
+                  <input
+                    type="text"
+                    id="price"
+                    value={minPrice}
+                    placeholder="Min"
+                    onChange={handleMinPriceChange}
+                  />
+                  <input
+                    type="text"
+                    value={maxPrice}
+                    placeholder="Max"
+                    onChange={handleMaxPriceChange}
+                  />
+                </div>
+              </div>
+              <div className="filter">
+                <label htmlFor="house-size">House Size (sq. ft.)</label>
+                <input
+                  type="text"
+                  id="house-size"
+                  value={minHouseSize}
+                  placeholder="Min"
+                  onChange={handleMinHouseSizeChange}
+                />
+                <input
+                  type="text"
+                  value={maxHouseSize}
+                  placeholder="Max"
+                  onChange={handleMaxHouseSizeChange}
+                />
+              </div>
+              <div className="filter">
+                <label htmlFor="lot-size">Lot Size (sq. ft.)</label>
+                <input
+                  type="text"
+                  id="lot-size"
+                  value={minLotSize}
+                  placeholder="Min"
+                  onChange={handleMinLotSizeChange}
+                />
+                <input
+                  type="text"
+                  value={maxLotSize}
+                  placeholder="Max"
+                  onChange={handleMaxLotSizeChange}
+                />
+              </div>
+              <div className="filter">
+                <label>Amenities</label>
+                {amenitiesList.map((amenity, index) => (
+                  <div key={index} className="amenityCheckbox">
+                    <input
+                      type="checkbox"
+                      id={`amenity-${index}`}
+                      name="amenity"
+                      value={amenity}
+                      onChange={handleAmenityChange}
+                      checked={selectedAmenities.includes(amenity)}
+                    />
+                    <label htmlFor={`amenity-${index}`}>{amenity}</label>
+                  </div>
+                ))}
+              </div>
+            </div>
           </form>
           {!user && (
             <div className="buttonContainer">
