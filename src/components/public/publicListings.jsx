@@ -158,12 +158,69 @@ const PublicListings = () => {
 
   const handleMinPriceChange = (e) => {
     const value = e.target.value;
+
     setMinPrice(formatPriceInput(value));
+    !isMobile && handleApplyFilter();
   };
 
   const handleMaxPriceChange = (e) => {
     const value = e.target.value;
+
     setMaxPrice(formatPriceInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleMinLotSizeChange = (e) => {
+    const value = e.target.value;
+
+    setMinLotSize(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleMaxLotSizeChange = (e) => {
+    const value = e.target.value;
+
+    setMaxLotSize(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleMinHouseSizeChange = (e) => {
+    const value = e.target.value;
+
+    setMinHouseSize(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleMaxHouseSizeChange = (e) => {
+    const value = e.target.value;
+
+    setMaxHouseSize(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleAmenityChange = (e) => {
+    const amenity = e.target.value;
+    const isChecked = e.target.checked;
+
+    isChecked
+      ? setSelectedAmenities([...selectedAmenities, amenity])
+      : setSelectedAmenities(selectedAmenities.filter((a) => a !== amenity));
+
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleBedroomsChange = (e) => {
+    const value = e.target.value;
+
+    setBedrooms(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleBathroomsChange = (e) => {
+    const value = e.target.value;
+
+    setBathrooms(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
   };
 
   const formatPriceInput = (value) => {
@@ -176,48 +233,9 @@ const PublicListings = () => {
     return formattedValue.length === 1 ? `` : formattedValue;
   };
 
-  const handleMinLotSizeChange = (e) => {
-    const value = e.target.value;
-    setMinLotSize(formatNumberInput(value));
-  };
-
-  const handleMaxLotSizeChange = (e) => {
-    const value = e.target.value;
-    setMaxLotSize(formatNumberInput(value));
-  };
-
-  const handleMinHouseSizeChange = (e) => {
-    const value = e.target.value;
-    setMinHouseSize(formatNumberInput(value));
-  };
-
-  const handleMaxHouseSizeChange = (e) => {
-    const value = e.target.value;
-    setMaxHouseSize(formatNumberInput(value));
-  };
-
   const formatNumberInput = (value) => {
     const numericValue = value.replace(/[^0-9]/g, "").replace(/^0+/, "");
     return `${numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-  };
-
-  const handleAmenityChange = (e) => {
-    const amenity = e.target.value;
-    const isChecked = e.target.checked;
-
-    isChecked
-      ? setSelectedAmenities([...selectedAmenities, amenity])
-      : setSelectedAmenities(selectedAmenities.filter((a) => a !== amenity));
-  };
-
-  const handleBedroomsChange = (e) => {
-    const value = e.target.value;
-    setBedrooms(formatNumberInput(value));
-  };
-
-  const handleBathroomsChange = (e) => {
-    const value = e.target.value;
-    setBathrooms(formatNumberInput(value));
   };
 
   const handleApplyFilter = () => {
