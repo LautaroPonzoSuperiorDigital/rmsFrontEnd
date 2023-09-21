@@ -430,7 +430,7 @@ body {
     border-bottom: 1px solid #00000026;
   }
 
-  .filterSection {
+  .filterSectionMobile {
     height: fit-content;
     width: 90%;
     display: flex;
@@ -440,7 +440,7 @@ body {
     align-items: center;
   }
 
-  .filterSectionText {
+  .filterSectionMobileText {
     height: 1.543rem;
     width: 100%;
     font-style: normal;
@@ -454,7 +454,7 @@ body {
     margin-bottom: 1.169rem;
   }
 
-  .filterSection div {
+  .filterSectionMobile div {
     width: 45%;
     color: #00000075;
     border-bottom: 1px solid #00000026;
@@ -467,7 +467,7 @@ body {
     flex-wrap: nowrap;
   }
 
-  .filterSection div > input {
+  .filterSectionMobile div > input {
     width: 100%;
     border: unset;
     padding-left: 2rem;

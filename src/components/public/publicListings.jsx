@@ -323,8 +323,8 @@ const PublicListings = () => {
               </button>
               <p>{"filter listings"}</p>
             </div>
-            <div className="filterSection">
-              <p className="filterSectionText">{"price"}</p>
+            <div className="filterSectionMobile">
+              <p className="filterSectionMobileText">{"price"}</p>
               <div className="filterMin">
                 <p>min</p>
                 <input
@@ -343,8 +343,8 @@ const PublicListings = () => {
               </div>
             </div>
             <div className="line" />
-            <div className="filterSection">
-              <p className="filterSectionText">{"lot size (sq. ft.)"}</p>
+            <div className="filterSectionMobile">
+              <p className="filterSectionMobileText">{"lot size (sq. ft.)"}</p>
               <div className="filterMin">
                 <p>min</p>
                 <input
@@ -363,8 +363,10 @@ const PublicListings = () => {
               </div>
             </div>
             <div className="line" />
-            <div className="filterSection">
-              <p className="filterSectionText">{"house size (sq. ft.)"}</p>
+            <div className="filterSectionMobile">
+              <p className="filterSectionMobileText">
+                {"house size (sq. ft.)"}
+              </p>
               <div className="filterMin">
                 <p>min</p>
                 <input
