@@ -44,7 +44,7 @@ const PublicListings = () => {
     // TODO: update amenities list
     setAmenities(["Pool", "Gate", "Pet Friendly", "Air Conditioning"]);
     fetchListings();
-  }, [isFilterOpen]);
+  }, []);
 
   useEffect(() => {
     isFilterOpen
@@ -110,9 +110,7 @@ const PublicListings = () => {
   const handleSearch = () => {
     api
       .get(`/listing?isPublic=true&location=${searchInputValue}`)
-      .then(({ data: listingsData }) => {
-        setListings(listingsData);
-      })
+      .then(({ data }) => setListings(data))
       .catch((error) => {
         console.error("Could not update listings");
         alert("Could not update listings");
@@ -186,7 +184,7 @@ const PublicListings = () => {
     setBathrooms(formatNumberInput(value));
   };
 
-  const handleApplyFilter = async () => {
+  const handleApplyFilter = () => {
     handleCloseFilter();
 
     const removeNonDigits = (value) => value.replace(/\D/g, "");
@@ -205,15 +203,14 @@ const PublicListings = () => {
       }).filter(([_, value]) => value !== "")
     );
 
-    try {
-      const { data } = await api
-        .get("/listing", { params: { isPublic: true, ...filterParams } });
-      return setListings(data);
-    } catch (error) {
-      console.error("Could not update listings");
-      alert("Could not update listings");
-      throw new Error(error);
-    }
+    return api
+      .get("/listing", { params: { isPublic: true, ...filterParams } })
+      .then(({ data }) => setListings(data))
+      .catch((error) => {
+        console.error("Could not update listings");
+        alert("Could not update listings");
+        throw new Error(error);
+      });
   };
 
   return (
