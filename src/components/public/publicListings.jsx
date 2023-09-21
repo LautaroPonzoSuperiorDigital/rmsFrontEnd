@@ -68,6 +68,7 @@ const PublicListings = () => {
 
   useEffect(() => {
     !isMobile && handleApplyFilter();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isMobile,
     minPrice,
