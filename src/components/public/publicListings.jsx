@@ -258,7 +258,7 @@ const PublicListings = () => {
                   <input
                     type="text"
                     value={maxPrice}
-                    placeholder="Max"
+                    placeholder="max"
                     onChange={handleMaxPriceChange}
                   />
                 </div>
@@ -276,26 +276,28 @@ const PublicListings = () => {
                   <input
                     type="text"
                     value={maxHouseSize}
-                    placeholder="Max"
+                    placeholder="max"
                     onChange={handleMaxHouseSizeChange}
                   />
                 </div>
               </div>
               <div className="filter">
-                <label htmlFor="lot-size">{"lot size"}</label>
-                <input
-                  type="text"
-                  id="lot-size"
-                  value={minLotSize}
-                  placeholder="Min"
-                  onChange={handleMinLotSizeChange}
-                />
-                <input
-                  type="text"
-                  value={maxLotSize}
-                  placeholder="Max"
-                  onChange={handleMaxLotSizeChange}
-                />
+                <button id="lotSizeFilterButton">{"lot size"}</button>
+                <img src={chevronBackward} />
+                <div className="numericFilter" id="lotSizeSelectFields">
+                  <input
+                    type="text"
+                    value={minLotSize}
+                    placeholder="min"
+                    onChange={handleMinLotSizeChange}
+                  />
+                  <input
+                    type="text"
+                    value={maxLotSize}
+                    placeholder="max"
+                    onChange={handleMaxLotSizeChange}
+                  />
+                </div>
               </div>
               <div className="filter">
                 <label>{"amenities"}</label>
