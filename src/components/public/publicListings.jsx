@@ -17,6 +17,7 @@ const PublicListings = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [listings, setListings] = useState([]);
+  const [amenitiesList, setAmenitiesList] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false);
   const [isHouseSizeFilterOpen, setIsHouseSizeFilterOpen] = useState(false);
@@ -30,8 +31,7 @@ const PublicListings = () => {
   const [maxLotSize, setMaxLotSize] = useState("");
   const [minHouseSize, setMinHouseSize] = useState("");
   const [maxHouseSize, setMaxHouseSize] = useState("");
-  const [amenitiesList, setAmenitiesList] = useState([]);
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
+  const [amenities, setAmenities] = useState([]);
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const { user } = useAuth();
@@ -142,7 +142,7 @@ const PublicListings = () => {
   const handleSearch = () => {
     api
       .get("/listing", {
-        params: { isPublic: true, location: searchInputValue },
+        params: { isPublic: true, location: searchInputValue.trim() },
       })
       .then(({ data }) => setListings(data))
       .catch((error) => {
@@ -150,8 +150,6 @@ const PublicListings = () => {
         alert("Could not update listings");
         throw new Error(error);
       });
-
-    console.log({ isSearchOpen });
 
     if (isSearchOpen) handleCloseSearch();
   };
@@ -203,8 +201,8 @@ const PublicListings = () => {
     const isChecked = e.target.checked;
 
     isChecked
-      ? setSelectedAmenities([...selectedAmenities, amenity])
-      : setSelectedAmenities(selectedAmenities.filter((a) => a !== amenity));
+      ? setAmenities([...amenities, amenity])
+      : setAmenities(amenities.filter((a) => a !== amenity));
 
     !isMobile && handleApplyFilter();
   };
@@ -252,7 +250,7 @@ const PublicListings = () => {
         maxHouseSize: removeNonDigits(maxHouseSize),
         bedrooms: removeNonDigits(bedrooms),
         bathrooms: removeNonDigits(bathrooms),
-        amenities: selectedAmenities.join(","),
+        amenities: amenities.join(","),
         // eslint-disable-next-line no-unused-vars
       }).filter(([_, value]) => value !== "")
     );
@@ -424,7 +422,7 @@ const PublicListings = () => {
                           name="amenity"
                           value={amenity}
                           onChange={handleAmenityChange}
-                          checked={selectedAmenities.includes(amenity)}
+                          checked={amenities.includes(amenity)}
                         />
                         <label htmlFor={`amenity-${index}`}>{amenity}</label>
                       </div>
@@ -567,7 +565,7 @@ const PublicListings = () => {
                     name="amenity"
                     value={amenity}
                     onChange={handleAmenityChange}
-                    checked={selectedAmenities.includes(amenity)}
+                    checked={amenities.includes(amenity)}
                   />
                   <label htmlFor={`amenity-${index}`}>{amenity}</label>
                 </div>
