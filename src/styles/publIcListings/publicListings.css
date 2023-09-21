@@ -112,6 +112,11 @@ body {
   color: #000000a5;
   text-transform: capitalize;
   opacity: 1;
+  transition: border-color 0.3s ease;
+}
+
+.filter button:hover {
+  border: 2px solid #31af9a;
 }
 
 .filter img {

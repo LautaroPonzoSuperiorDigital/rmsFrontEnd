@@ -277,6 +277,9 @@ const PublicListings = () => {
                 <button
                   id="priceFilterButton"
                   onClick={handleTogglePriceFilter}
+                  style={
+                    isPriceFilterOpen ? { border: "2px solid #31af9a" } : {}
+                  }
                 >
                   {"price"}
                 </button>
@@ -302,6 +305,9 @@ const PublicListings = () => {
                 <button
                   id="houseSizeFilterButton"
                   onClick={handleToggleHouseSizeFilter}
+                  style={
+                    isHouseSizeFilterOpen ? { border: "2px solid #31af9a" } : {}
+                  }
                 >
                   {"house size"}
                 </button>
@@ -330,6 +336,9 @@ const PublicListings = () => {
                 <button
                   id="lotSizeFilterButton"
                   onClick={handleToggleLotSizeFilter}
+                  style={
+                    isLotSizeFilterOpen ? { border: "2px solid #31af9a" } : {}
+                  }
                 >
                   {"lot size"}
                 </button>
@@ -358,6 +367,9 @@ const PublicListings = () => {
                 <button
                   id="amenitiesFilterButton"
                   onClick={handleToggleAmenitiesFilter}
+                  style={
+                    IsAmenitiesFilterOpen ? { border: "2px solid #31af9a" } : {}
+                  }
                 >
                   {"amenities"}
                 </button>
