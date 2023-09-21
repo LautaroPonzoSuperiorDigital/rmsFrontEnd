@@ -5,6 +5,7 @@ import Listing from "./Listing/Listing";
 import Logo from "../../assets/img/logomark.svg";
 import SearchIconHover from "../../assets/img/SearchIconHover.svg";
 import SearchIcon from "../../assets/img/SearchIcon.svg";
+import chevronBackward from "../../assets/img/chevron.backward.svg";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import { Close } from "../icons";
@@ -16,7 +17,11 @@ const PublicListings = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [listings, setListings] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false);
+  const [isHouseSizeFilterOpen, setIsHouseSizeFilterOpen] = useState(false);
+  const [isLotSizeFilterOpen, setIsLotSizeFilterOpen] = useState(false);
+  const [IsAmenitiesFilterOpen, setIsAmenitiesFilterOpen] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -28,6 +33,7 @@ const PublicListings = () => {
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
+
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -47,8 +53,8 @@ const PublicListings = () => {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = isFilterOpen ? "hidden" : "auto";
-  }, [isFilterOpen]);
+    document.body.style.overflow = isMobileFilterOpen ? "hidden" : "auto";
+  }, [isMobileFilterOpen]);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -88,13 +94,33 @@ const PublicListings = () => {
     setIsSearchOpen(false);
   };
 
-  const handleOpenFilter = (e) => {
+  const handleTogglePriceFilter = (e) => {
     e.preventDefault();
-    setIsFilterOpen(true);
+    setIsPriceFilterOpen(!isPriceFilterOpen);
   };
 
-  const handleCloseFilter = () => {
-    setIsFilterOpen(false);
+  const handleToggleHouseSizeFilter = (e) => {
+    e.preventDefault();
+    setIsHouseSizeFilterOpen(!isHouseSizeFilterOpen);
+  };
+
+  const handleToggleLotSizeFilter = (e) => {
+    e.preventDefault();
+    setIsLotSizeFilterOpen(!isLotSizeFilterOpen);
+  };
+
+  const handleToggleAmenitiesFilter = (e) => {
+    e.preventDefault();
+    setIsAmenitiesFilterOpen(!IsAmenitiesFilterOpen);
+  };
+
+  const handleOpenMobileFilter = (e) => {
+    e.preventDefault();
+    setIsMobileFilterOpen(true);
+  };
+
+  const handleCloseMobileFilter = () => {
+    setIsMobileFilterOpen(false);
   };
 
   const handleSearchChange = (e) => {
@@ -179,7 +205,7 @@ const PublicListings = () => {
   };
 
   const handleApplyFilter = () => {
-    handleCloseFilter();
+    handleCloseMobileFilter();
 
     const removeNonDigits = (value) => value.replace(/\D/g, "");
     const filterParams = Object.fromEntries(
@@ -242,27 +268,134 @@ const PublicListings = () => {
               />
             </div>
             <button className="open-search" onClick={handleOpenSearch} />
-            <button className="filter-listings" onClick={handleOpenFilter} />
-            <select className="dropdownMenu">
-              <option className="opt" value="price">
-                &nbsp;&nbsp;Price
-              </option>
-            </select>
-            <select className="dropdownMenu">
-              <option className="opt" value="house_size">
-                &nbsp;&nbsp;House Size
-              </option>
-            </select>
-            <select className="dropdownMenu">
-              <option className="opt" value="lot_size">
-                &nbsp;&nbsp;Lot Size
-              </option>
-            </select>
-            <select className="dropdownMenu">
-              <option className="opt" value="Amenities">
-                &nbsp;&nbsp;Amenities
-              </option>
-            </select>
+            <button
+              className="filter-listings"
+              onClick={handleOpenMobileFilter}
+            />
+            <div className="filters">
+              <div className="filter">
+                <button
+                  id="priceFilterButton"
+                  onClick={handleTogglePriceFilter}
+                  style={
+                    isPriceFilterOpen ? { border: "2px solid #31af9a" } : {}
+                  }
+                >
+                  {"price"}
+                </button>
+                <img src={chevronBackward} onClick={handleTogglePriceFilter} />
+                {isPriceFilterOpen && (
+                  <div className="numericFilter">
+                    <input
+                      type="text"
+                      value={minPrice}
+                      placeholder="min"
+                      onChange={handleMinPriceChange}
+                    />
+                    <input
+                      type="text"
+                      value={maxPrice}
+                      placeholder="max"
+                      onChange={handleMaxPriceChange}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="filter">
+                <button
+                  id="houseSizeFilterButton"
+                  onClick={handleToggleHouseSizeFilter}
+                  style={
+                    isHouseSizeFilterOpen ? { border: "2px solid #31af9a" } : {}
+                  }
+                >
+                  {"house size"}
+                </button>
+                <img
+                  src={chevronBackward}
+                  onClick={handleToggleHouseSizeFilter}
+                />
+                {isHouseSizeFilterOpen && (
+                  <div className="numericFilter">
+                    <input
+                      type="text"
+                      value={minHouseSize}
+                      placeholder="min"
+                      onChange={handleMinHouseSizeChange}
+                    />
+                    <input
+                      type="text"
+                      value={maxHouseSize}
+                      placeholder="max"
+                      onChange={handleMaxHouseSizeChange}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="filter">
+                <button
+                  id="lotSizeFilterButton"
+                  onClick={handleToggleLotSizeFilter}
+                  style={
+                    isLotSizeFilterOpen ? { border: "2px solid #31af9a" } : {}
+                  }
+                >
+                  {"lot size"}
+                </button>
+                <img
+                  src={chevronBackward}
+                  onClick={handleToggleLotSizeFilter}
+                />
+                {isLotSizeFilterOpen && (
+                  <div className="numericFilter">
+                    <input
+                      type="text"
+                      value={minLotSize}
+                      placeholder="min"
+                      onChange={handleMinLotSizeChange}
+                    />
+                    <input
+                      type="text"
+                      value={maxLotSize}
+                      placeholder="max"
+                      onChange={handleMaxLotSizeChange}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="filter">
+                <button
+                  id="amenitiesFilterButton"
+                  onClick={handleToggleAmenitiesFilter}
+                  style={
+                    IsAmenitiesFilterOpen ? { border: "2px solid #31af9a" } : {}
+                  }
+                >
+                  {"amenities"}
+                </button>
+                <img
+                  src={chevronBackward}
+                  onClick={handleToggleAmenitiesFilter}
+                />
+                {IsAmenitiesFilterOpen && (
+                  <div className="checkboxFilter">
+                    {amenitiesList.map((amenity, index) => (
+                      <div key={index} className="amenityRow">
+                        <input
+                          type="checkbox"
+                          id={`amenity-${index}`}
+                          name="amenity"
+                          value={amenity}
+                          onChange={handleAmenityChange}
+                          checked={selectedAmenities.includes(amenity)}
+                        />
+                        <label htmlFor={`amenity-${index}`}>{amenity}</label>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </form>
           {!user && (
             <div className="buttonContainer">
@@ -313,18 +446,18 @@ const PublicListings = () => {
           <p className="noListingMessage">{"No listing to show"}</p>
         )}
       </ListingPublicContainer>
-      {isFilterOpen && (
+      {isMobileFilterOpen && (
         <>
           <div className="overlay" />
           <div className="filterContainer">
             <div className="filterHeader">
-              <button onClick={handleCloseFilter}>
+              <button onClick={handleCloseMobileFilter}>
                 <Close />
               </button>
               <p>{"filter listings"}</p>
             </div>
-            <div className="filterSection">
-              <p className="filterSectionText">{"price"}</p>
+            <div className="filterSectionMobile">
+              <p className="filterSectionMobileText">{"price"}</p>
               <div className="filterMin">
                 <p>min</p>
                 <input
@@ -343,8 +476,8 @@ const PublicListings = () => {
               </div>
             </div>
             <div className="line" />
-            <div className="filterSection">
-              <p className="filterSectionText">{"lot size (sq. ft.)"}</p>
+            <div className="filterSectionMobile">
+              <p className="filterSectionMobileText">{"lot size (sq. ft.)"}</p>
               <div className="filterMin">
                 <p>min</p>
                 <input
@@ -363,8 +496,10 @@ const PublicListings = () => {
               </div>
             </div>
             <div className="line" />
-            <div className="filterSection">
-              <p className="filterSectionText">{"house size (sq. ft.)"}</p>
+            <div className="filterSectionMobile">
+              <p className="filterSectionMobileText">
+                {"house size (sq. ft.)"}
+              </p>
               <div className="filterMin">
                 <p>min</p>
                 <input
