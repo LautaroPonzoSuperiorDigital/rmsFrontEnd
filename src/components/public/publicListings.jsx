@@ -244,17 +244,15 @@ const PublicListings = () => {
             </div>
             <button className="open-search" onClick={handleOpenSearch} />
             <button className="filter-listings" onClick={handleOpenFilter} />
-            {/* New filter input fields */}
             <div className="filters">
               <div className="filter">
-                <button id="priceFilterButton">Price</button>
+                <button id="priceFilterButton">{"price"}</button>
                 <img src={chevronBackward} />
                 <div className="numericFilter" id="priceSelectFields">
                   <input
                     type="text"
-                    id="price"
                     value={minPrice}
-                    placeholder="Min"
+                    placeholder="min"
                     onChange={handleMinPriceChange}
                   />
                   <input
@@ -266,23 +264,25 @@ const PublicListings = () => {
                 </div>
               </div>
               <div className="filter">
-                <label htmlFor="house-size">House Size (sq. ft.)</label>
-                <input
-                  type="text"
-                  id="house-size"
-                  value={minHouseSize}
-                  placeholder="Min"
-                  onChange={handleMinHouseSizeChange}
-                />
-                <input
-                  type="text"
-                  value={maxHouseSize}
-                  placeholder="Max"
-                  onChange={handleMaxHouseSizeChange}
-                />
+                <button id="houseSizeFilterButton">{"house size"}</button>
+                <img src={chevronBackward} />
+                <div className="numericFilter" id="houseSizeSelectFields">
+                  <input
+                    type="text"
+                    value={minHouseSize}
+                    placeholder="min"
+                    onChange={handleMinHouseSizeChange}
+                  />
+                  <input
+                    type="text"
+                    value={maxHouseSize}
+                    placeholder="Max"
+                    onChange={handleMaxHouseSizeChange}
+                  />
+                </div>
               </div>
               <div className="filter">
-                <label htmlFor="lot-size">Lot Size (sq. ft.)</label>
+                <label htmlFor="lot-size">{"lot size"}</label>
                 <input
                   type="text"
                   id="lot-size"
@@ -298,7 +298,7 @@ const PublicListings = () => {
                 />
               </div>
               <div className="filter">
-                <label>Amenities</label>
+                <label>{"amenities"}</label>
                 {amenitiesList.map((amenity, index) => (
                   <div key={index} className="amenityCheckbox">
                     <input
