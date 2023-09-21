@@ -85,8 +85,7 @@ const PublicListings = () => {
     setIsInputHovered(false);
   };
 
-  const handleOpenSearch = (e) => {
-    e.preventDefault();
+  const handleOpenSearch = () => {
     setIsSearchOpen(true);
   };
 
@@ -94,28 +93,23 @@ const PublicListings = () => {
     setIsSearchOpen(false);
   };
 
-  const handleTogglePriceFilter = (e) => {
-    e.preventDefault();
+  const handleTogglePriceFilter = () => {
     setIsPriceFilterOpen(!isPriceFilterOpen);
   };
 
-  const handleToggleHouseSizeFilter = (e) => {
-    e.preventDefault();
+  const handleToggleHouseSizeFilter = () => {
     setIsHouseSizeFilterOpen(!isHouseSizeFilterOpen);
   };
 
-  const handleToggleLotSizeFilter = (e) => {
-    e.preventDefault();
+  const handleToggleLotSizeFilter = () => {
     setIsLotSizeFilterOpen(!isLotSizeFilterOpen);
   };
 
-  const handleToggleAmenitiesFilter = (e) => {
-    e.preventDefault();
+  const handleToggleAmenitiesFilter = () => {
     setIsAmenitiesFilterOpen(!IsAmenitiesFilterOpen);
   };
 
-  const handleOpenMobileFilter = (e) => {
-    e.preventDefault();
+  const handleOpenMobileFilter = () => {
     setIsMobileFilterOpen(true);
   };
 
@@ -251,7 +245,7 @@ const PublicListings = () => {
             alt="Logo"
             onClick={handleLogoClick}
           />
-          <form method="GET" className="container">
+          <div className="container">
             <div
               className={`inputPublic ${isInputHovered ? "inputHovered" : ""}`}
             >
@@ -407,7 +401,7 @@ const PublicListings = () => {
                 )}
               </div>
             </div>
-          </form>
+          </div>
           {!user && (
             <div className="buttonContainer">
               <button className="logInBtn" onClick={handleLoginClick}>

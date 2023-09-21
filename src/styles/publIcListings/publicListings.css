@@ -378,7 +378,14 @@ body {
   }
 
   .container {
+    display: flex;
+    width: max-content;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin: 0;
     column-gap: 0;
+    padding-right: 0;
   }
 
   .filtersBar {
@@ -398,16 +405,7 @@ body {
     padding-top: 1rem;
   }
 
-  .filtersBar form {
-    display: flex;
-    width: max-content;
-    flex-direction: row-reverse;
-    flex-wrap: nowrap;
-    margin: 0;
-    justify-content: center;
-  }
-
-  .filtersBar form > button {
+  .container > button {
     margin-right: 1rem;
     margin-left: 1rem;
   }
