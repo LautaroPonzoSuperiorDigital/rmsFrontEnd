@@ -154,7 +154,10 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
 
       <ApplicationContainer>
         {innerWidth < 768 ? (
-          <DescriptionMobileNav myselectedListing={myselectedListing} />
+          <DescriptionMobileNav
+            myselectedListing={myselectedListing}
+            imageSrc={imageSrc}
+          />
         ) : (
           <SideBarDescriptionContainer>
             <ImgSideBar src={imageSrc} alt="" />

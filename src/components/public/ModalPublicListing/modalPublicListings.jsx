@@ -155,10 +155,15 @@ const ModalPublicListings = () => {
               </ul>
             </div>
             <div>
-              <ul>
+              <ul style={{ padding: 0 }}>
                 {listing.Amenities &&
                   listing.Amenities.slice(3).map((amenity) => (
-                    <FieldValueLi key={amenity.id}>{amenity.name}</FieldValueLi>
+                    <FieldValueLi
+                      key={amenity.id}
+                      style={{ marginLeft: "23px" }}
+                    >
+                      {amenity.name}
+                    </FieldValueLi>
                   ))}
               </ul>
             </div>
