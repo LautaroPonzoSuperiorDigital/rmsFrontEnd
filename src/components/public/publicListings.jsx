@@ -41,13 +41,15 @@ const PublicListings = () => {
       }
     };
 
-    isFilterOpen
-      ? (document.body.style.overflow = "hidden")
-      : (document.body.style.overflow = "auto");
-
     // TODO: update amenities list
     setAmenities(["Pool", "Gate", "Pet Friendly", "Air Conditioning"]);
     fetchListings();
+  }, []);
+
+  useEffect(() => {
+    isFilterOpen
+      ? (document.body.style.overflow = "hidden")
+      : (document.body.style.overflow = "auto");
   }, [isFilterOpen]);
 
   const handleLogoClick = () => {
@@ -108,9 +110,7 @@ const PublicListings = () => {
   const handleSearch = () => {
     api
       .get(`/listing?isPublic=true&location=${searchInputValue}`)
-      .then(({ data: listingsData }) => {
-        setListings(listingsData);
-      })
+      .then(({ data }) => setListings(data))
       .catch((error) => {
         console.error("Could not update listings");
         alert("Could not update listings");
@@ -185,6 +185,8 @@ const PublicListings = () => {
   };
 
   const handleApplyFilter = () => {
+    handleCloseFilter();
+
     const removeNonDigits = (value) => value.replace(/\D/g, "");
     const filterParams = Object.fromEntries(
       Object.entries({
@@ -197,21 +199,18 @@ const PublicListings = () => {
         bedrooms: removeNonDigits(bedrooms),
         bathrooms: removeNonDigits(bathrooms),
         amenities: selectedAmenities.join(","),
+        // eslint-disable-next-line no-unused-vars
       }).filter(([_, value]) => value !== "")
     );
 
-    api
+    return api
       .get("/listing", { params: { isPublic: true, ...filterParams } })
-      .then(({ data }) => {
-        setListings(data);
-      })
+      .then(({ data }) => setListings(data))
       .catch((error) => {
         console.error("Could not update listings");
         alert("Could not update listings");
         throw new Error(error);
       });
-
-    setIsFilterOpen(false);
   };
 
   return (
@@ -306,7 +305,7 @@ const PublicListings = () => {
       <ListingPublicContainer
         style={{ filter: isSearchOpen ? "blur(5px)" : "none" }}
       >
-        {!!listings.length ? (
+        {listings.length ? (
           <ListingPublic>
             {listings.map((listing) => {
               return (
