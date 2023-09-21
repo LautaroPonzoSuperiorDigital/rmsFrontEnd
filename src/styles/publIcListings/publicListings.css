@@ -304,23 +304,24 @@ body {
 }
 
 @media (max-width: 1439px) {
-  .LogoPublic {
-    width: auto;
-    margin-bottom: 1rem;
+  .filtersBar {
+    row-gap: 1rem;
   }
 
-  .filtersBar form {
+  .container {
+    width: 100%;
     display: flex;
-    width: max-content;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-content: space-between;
     justify-content: space-between;
+    align-items: center;
+    row-gap: 0.5rem;
   }
 
-  .filtersBar form *:not(:first-child) {
+  /* .filtersBar form *:not(:first-child) {
     margin: 0;
-  }
+  } */
 
   .inputPublic {
     height: 2.5rem;
@@ -349,18 +350,38 @@ body {
     padding: 1rem 0;
   }
 
-  .buttonContainer {
-    margin-top: 1rem;
+  .filters {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
   }
 
-  .dropdownMenu {
-    width: 24%;
-    padding-right: unset;
-    margin-top: 0.5rem !important;
+  .filter {
+    width: 25%;
+  }
+
+  .numericFilter {
+    width: 100%;
+    z-index: 1;
+  }
+
+  .checkboxFilter {
+    position: unset;
+    width: 100%;
   }
 }
 
 @media (max-width: 768px) {
+  .LogoPublic {
+    width: auto;
+    margin-bottom: 1rem;
+  }
+
+  .container {
+    column-gap: 0;
+  }
+
   .filtersBar {
     display: flex;
     flex-direction: row;
