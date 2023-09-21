@@ -14,8 +14,10 @@ import { ListingPublic, ListingPublicContainer } from "./styles";
 const PublicListings = () => {
   const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);
   const [isInputHovered, setIsInputHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [listings, setListings] = useState([]);
+  const [amenitiesList, setAmenitiesList] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false);
   const [isHouseSizeFilterOpen, setIsHouseSizeFilterOpen] = useState(false);
@@ -29,13 +31,25 @@ const PublicListings = () => {
   const [maxLotSize, setMaxLotSize] = useState("");
   const [minHouseSize, setMinHouseSize] = useState("");
   const [maxHouseSize, setMaxHouseSize] = useState("");
-  const [amenitiesList, setAmenitiesList] = useState([]);
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
+  const [amenities, setAmenities] = useState([]);
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
-
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    function updateModalWidth() {
+      setIsMobile(window.outerWidth <= 768);
+    }
+
+    updateModalWidth();
+
+    window.addEventListener("resize", updateModalWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateModalWidth);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -85,8 +99,7 @@ const PublicListings = () => {
     setIsInputHovered(false);
   };
 
-  const handleOpenSearch = (e) => {
-    e.preventDefault();
+  const handleOpenSearch = () => {
     setIsSearchOpen(true);
   };
 
@@ -94,28 +107,23 @@ const PublicListings = () => {
     setIsSearchOpen(false);
   };
 
-  const handleTogglePriceFilter = (e) => {
-    e.preventDefault();
+  const handleTogglePriceFilter = () => {
     setIsPriceFilterOpen(!isPriceFilterOpen);
   };
 
-  const handleToggleHouseSizeFilter = (e) => {
-    e.preventDefault();
+  const handleToggleHouseSizeFilter = () => {
     setIsHouseSizeFilterOpen(!isHouseSizeFilterOpen);
   };
 
-  const handleToggleLotSizeFilter = (e) => {
-    e.preventDefault();
+  const handleToggleLotSizeFilter = () => {
     setIsLotSizeFilterOpen(!isLotSizeFilterOpen);
   };
 
-  const handleToggleAmenitiesFilter = (e) => {
-    e.preventDefault();
+  const handleToggleAmenitiesFilter = () => {
     setIsAmenitiesFilterOpen(!IsAmenitiesFilterOpen);
   };
 
-  const handleOpenMobileFilter = (e) => {
-    e.preventDefault();
+  const handleOpenMobileFilter = () => {
     setIsMobileFilterOpen(true);
   };
 
@@ -134,7 +142,7 @@ const PublicListings = () => {
   const handleSearch = () => {
     api
       .get("/listing", {
-        params: { isPublic: true, location: searchInputValue },
+        params: { isPublic: true, location: searchInputValue.trim() },
       })
       .then(({ data }) => setListings(data))
       .catch((error) => {
@@ -143,19 +151,74 @@ const PublicListings = () => {
         throw new Error(error);
       });
 
-    console.log({ isSearchOpen });
-
     if (isSearchOpen) handleCloseSearch();
   };
 
   const handleMinPriceChange = (e) => {
     const value = e.target.value;
+
     setMinPrice(formatPriceInput(value));
+    !isMobile && handleApplyFilter();
   };
 
   const handleMaxPriceChange = (e) => {
     const value = e.target.value;
+
     setMaxPrice(formatPriceInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleMinLotSizeChange = (e) => {
+    const value = e.target.value;
+
+    setMinLotSize(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleMaxLotSizeChange = (e) => {
+    const value = e.target.value;
+
+    setMaxLotSize(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleMinHouseSizeChange = (e) => {
+    const value = e.target.value;
+
+    setMinHouseSize(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleMaxHouseSizeChange = (e) => {
+    const value = e.target.value;
+
+    setMaxHouseSize(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleAmenityChange = (e) => {
+    const amenity = e.target.value;
+    const isChecked = e.target.checked;
+
+    isChecked
+      ? setAmenities([...amenities, amenity])
+      : setAmenities(amenities.filter((a) => a !== amenity));
+
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleBedroomsChange = (e) => {
+    const value = e.target.value;
+
+    setBedrooms(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
+  };
+
+  const handleBathroomsChange = (e) => {
+    const value = e.target.value;
+
+    setBathrooms(formatNumberInput(value));
+    !isMobile && handleApplyFilter();
   };
 
   const formatPriceInput = (value) => {
@@ -168,52 +231,13 @@ const PublicListings = () => {
     return formattedValue.length === 1 ? `` : formattedValue;
   };
 
-  const handleMinLotSizeChange = (e) => {
-    const value = e.target.value;
-    setMinLotSize(formatNumberInput(value));
-  };
-
-  const handleMaxLotSizeChange = (e) => {
-    const value = e.target.value;
-    setMaxLotSize(formatNumberInput(value));
-  };
-
-  const handleMinHouseSizeChange = (e) => {
-    const value = e.target.value;
-    setMinHouseSize(formatNumberInput(value));
-  };
-
-  const handleMaxHouseSizeChange = (e) => {
-    const value = e.target.value;
-    setMaxHouseSize(formatNumberInput(value));
-  };
-
   const formatNumberInput = (value) => {
     const numericValue = value.replace(/[^0-9]/g, "").replace(/^0+/, "");
     return `${numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   };
 
-  const handleAmenityChange = (e) => {
-    const amenity = e.target.value;
-    const isChecked = e.target.checked;
-
-    isChecked
-      ? setSelectedAmenities([...selectedAmenities, amenity])
-      : setSelectedAmenities(selectedAmenities.filter((a) => a !== amenity));
-  };
-
-  const handleBedroomsChange = (e) => {
-    const value = e.target.value;
-    setBedrooms(formatNumberInput(value));
-  };
-
-  const handleBathroomsChange = (e) => {
-    const value = e.target.value;
-    setBathrooms(formatNumberInput(value));
-  };
-
   const handleApplyFilter = () => {
-    handleCloseMobileFilter();
+    isMobileFilterOpen && handleCloseMobileFilter();
 
     const removeNonDigits = (value) => value.replace(/\D/g, "");
     const filterParams = Object.fromEntries(
@@ -226,7 +250,7 @@ const PublicListings = () => {
         maxHouseSize: removeNonDigits(maxHouseSize),
         bedrooms: removeNonDigits(bedrooms),
         bathrooms: removeNonDigits(bathrooms),
-        amenities: selectedAmenities.join(","),
+        amenities: amenities.join(","),
         // eslint-disable-next-line no-unused-vars
       }).filter(([_, value]) => value !== "")
     );
@@ -251,7 +275,7 @@ const PublicListings = () => {
             alt="Logo"
             onClick={handleLogoClick}
           />
-          <form method="GET" className="container">
+          <div className="container">
             <div
               className={`inputPublic ${isInputHovered ? "inputHovered" : ""}`}
             >
@@ -398,16 +422,34 @@ const PublicListings = () => {
                           name="amenity"
                           value={amenity}
                           onChange={handleAmenityChange}
-                          checked={selectedAmenities.includes(amenity)}
+                          checked={amenities.includes(amenity)}
                         />
                         <label htmlFor={`amenity-${index}`}>{amenity}</label>
                       </div>
                     ))}
+                    <div className="roomsFilter">
+                      <div className="roomFilter">
+                        <input
+                          type="text"
+                          value={bedrooms}
+                          onChange={handleBedroomsChange}
+                          placeholder={"# bedrooms"}
+                        />
+                      </div>
+                      <div className="roomFilter">
+                        <input
+                          type="text"
+                          value={bathrooms}
+                          onChange={handleBathroomsChange}
+                          placeholder={"# bathrooms"}
+                        />
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
             </div>
-          </form>
+          </div>
           {!user && (
             <div className="buttonContainer">
               <button className="logInBtn" onClick={handleLoginClick}>
@@ -442,8 +484,7 @@ const PublicListings = () => {
       </div>
       <ListingPublicContainer
         style={{
-          filter:
-            isSearchOpen && window.innerWidth <= 768 ? "blur(5px)" : "none",
+          filter: isSearchOpen && isMobile <= 768 ? "blur(5px)" : "none",
         }}
       >
         {listings.length ? (
@@ -542,7 +583,7 @@ const PublicListings = () => {
                     name="amenity"
                     value={amenity}
                     onChange={handleAmenityChange}
-                    checked={selectedAmenities.includes(amenity)}
+                    checked={amenities.includes(amenity)}
                   />
                   <label htmlFor={`amenity-${index}`}>{amenity}</label>
                 </div>

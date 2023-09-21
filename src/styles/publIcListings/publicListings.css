@@ -152,9 +152,12 @@ body {
   line-height: 1.625rem;
   font-weight: 300;
   letter-spacing: 0;
-  color: #00000075;
   text-transform: uppercase;
   opacity: 1;
+}
+
+.numericFilter > input::placeholder {
+  color: #00000075;
 }
 
 .checkboxFilter {
@@ -173,11 +176,40 @@ body {
   padding: 1.2rem 1.25rem 1.25rem 1.25rem;
 }
 
-.checkboxFilter input {
+.checkboxFilter input[type="checkbox"] {
   accent-color: #197572;
   height: 1.125rem;
   width: 1.125rem;
   border-radius: 0;
+}
+
+.roomsFilter {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  row-gap: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.checkboxFilter input[type="text"] {
+  width: 100%;
+  border: unset;
+  border-bottom: 1px solid black;
+
+  text-align: left;
+  font-family: "Proxima Nova", sans-serif;
+  font-size: 1rem;
+  line-height: 1.625rem;
+  font-weight: 300;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  opacity: 1;
+}
+
+.checkboxFilter input[type="text"]::placeholder {
+  color: #00000075;
 }
 
 .checkboxFilter label {
@@ -319,10 +351,6 @@ body {
     row-gap: 0.5rem;
   }
 
-  /* .filtersBar form *:not(:first-child) {
-    margin: 0;
-  } */
-
   .inputPublic {
     height: 2.5rem;
     width: 100%;
@@ -379,7 +407,14 @@ body {
   }
 
   .container {
+    display: flex;
+    width: max-content;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin: 0;
     column-gap: 0;
+    padding-right: 0;
   }
 
   .filtersBar {
@@ -399,16 +434,7 @@ body {
     padding-top: 1rem;
   }
 
-  .filtersBar form {
-    display: flex;
-    width: max-content;
-    flex-direction: row-reverse;
-    flex-wrap: nowrap;
-    margin: 0;
-    justify-content: center;
-  }
-
-  .filtersBar form > button {
+  .container > button {
     margin-right: 1rem;
     margin-left: 1rem;
   }
