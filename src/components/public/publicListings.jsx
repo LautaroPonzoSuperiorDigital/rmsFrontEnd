@@ -204,11 +204,9 @@ const PublicListings = () => {
       }).filter(([_, value]) => value !== "")
     );
 
-    api
+    return api
       .get("/listing", { params: { isPublic: true, ...filterParams } })
-      .then(({ data }) => {
-        setListings(data);
-      })
+      .then(({ data }) => setListings(data))
       .catch((error) => {
         console.error("Could not update listings");
         alert("Could not update listings");
