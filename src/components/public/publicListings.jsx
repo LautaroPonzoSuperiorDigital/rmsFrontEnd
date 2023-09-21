@@ -67,8 +67,9 @@ const PublicListings = () => {
   }, []);
 
   useEffect(() => {
-    handleApplyFilter();
+    !isMobile && handleApplyFilter();
   }, [
+    isMobile,
     minPrice,
     maxPrice,
     minHouseSize,
