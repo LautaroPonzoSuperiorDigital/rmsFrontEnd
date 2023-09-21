@@ -24,9 +24,7 @@ export const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-  @media screen and (max-width: 768px) {
-    gap: 4rem;
-  }
+  cursor: pointer;
 `;
 
 export const NavText = styled.p`
