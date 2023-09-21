@@ -17,7 +17,10 @@ const PublicListings = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [listings, setListings] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false);
+  const [isHouseSizeFilterOpen, setIsHouseSizeFilterOpen] = useState(false);
+  const [isLotSizeFilterOpen, setIsLotSizeFilterOpen] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -29,6 +32,7 @@ const PublicListings = () => {
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
+
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -48,8 +52,8 @@ const PublicListings = () => {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = isFilterOpen ? "hidden" : "auto";
-  }, [isFilterOpen]);
+    document.body.style.overflow = isMobileFilterOpen ? "hidden" : "auto";
+  }, [isMobileFilterOpen]);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -89,13 +93,28 @@ const PublicListings = () => {
     setIsSearchOpen(false);
   };
 
-  const handleOpenFilter = (e) => {
+  const handleTogglePriceFilter = (e) => {
     e.preventDefault();
-    setIsFilterOpen(true);
+    setIsPriceFilterOpen(!isPriceFilterOpen);
   };
 
-  const handleCloseFilter = () => {
-    setIsFilterOpen(false);
+  const handleToggleHouseSizeFilter = (e) => {
+    e.preventDefault();
+    setIsHouseSizeFilterOpen(!isHouseSizeFilterOpen);
+  };
+
+  const handleToggleLotSizeFilter = (e) => {
+    e.preventDefault();
+    setIsLotSizeFilterOpen(!isLotSizeFilterOpen);
+  };
+
+  const handleOpenMobileFilter = (e) => {
+    e.preventDefault();
+    setIsMobileFilterOpen(true);
+  };
+
+  const handleCloseMobileFilter = () => {
+    setIsMobileFilterOpen(false);
   };
 
   const handleSearchChange = (e) => {
@@ -180,7 +199,7 @@ const PublicListings = () => {
   };
 
   const handleApplyFilter = () => {
-    handleCloseFilter();
+    handleCloseMobileFilter();
 
     const removeNonDigits = (value) => value.replace(/\D/g, "");
     const filterParams = Object.fromEntries(
@@ -243,61 +262,91 @@ const PublicListings = () => {
               />
             </div>
             <button className="open-search" onClick={handleOpenSearch} />
-            <button className="filter-listings" onClick={handleOpenFilter} />
+            <button
+              className="filter-listings"
+              onClick={handleOpenMobileFilter}
+            />
             <div className="filters">
               <div className="filter">
-                <button id="priceFilterButton">{"price"}</button>
-                <img src={chevronBackward} />
-                <div className="numericFilter" id="priceSelectFields">
-                  <input
-                    type="text"
-                    value={minPrice}
-                    placeholder="min"
-                    onChange={handleMinPriceChange}
-                  />
-                  <input
-                    type="text"
-                    value={maxPrice}
-                    placeholder="max"
-                    onChange={handleMaxPriceChange}
-                  />
-                </div>
+                <button
+                  id="priceFilterButton"
+                  onClick={handleTogglePriceFilter}
+                >
+                  {"price"}
+                </button>
+                <img src={chevronBackward} onClick={handleTogglePriceFilter} />
+                {isPriceFilterOpen && (
+                  <div className="numericFilter" id="priceSelectFields">
+                    <input
+                      type="text"
+                      value={minPrice}
+                      placeholder="min"
+                      onChange={handleMinPriceChange}
+                    />
+                    <input
+                      type="text"
+                      value={maxPrice}
+                      placeholder="max"
+                      onChange={handleMaxPriceChange}
+                    />
+                  </div>
+                )}
               </div>
               <div className="filter">
-                <button id="houseSizeFilterButton">{"house size"}</button>
-                <img src={chevronBackward} />
-                <div className="numericFilter" id="houseSizeSelectFields">
-                  <input
-                    type="text"
-                    value={minHouseSize}
-                    placeholder="min"
-                    onChange={handleMinHouseSizeChange}
-                  />
-                  <input
-                    type="text"
-                    value={maxHouseSize}
-                    placeholder="max"
-                    onChange={handleMaxHouseSizeChange}
-                  />
-                </div>
+                <button
+                  id="houseSizeFilterButton"
+                  onClick={handleToggleHouseSizeFilter}
+                >
+                  {"house size"}
+                </button>
+                <img
+                  src={chevronBackward}
+                  onClick={handleToggleHouseSizeFilter}
+                />
+                {isHouseSizeFilterOpen && (
+                  <div className="numericFilter" id="houseSizeSelectFields">
+                    <input
+                      type="text"
+                      value={minHouseSize}
+                      placeholder="min"
+                      onChange={handleMinHouseSizeChange}
+                    />
+                    <input
+                      type="text"
+                      value={maxHouseSize}
+                      placeholder="max"
+                      onChange={handleMaxHouseSizeChange}
+                    />
+                  </div>
+                )}
               </div>
               <div className="filter">
-                <button id="lotSizeFilterButton">{"lot size"}</button>
-                <img src={chevronBackward} />
-                <div className="numericFilter" id="lotSizeSelectFields">
-                  <input
-                    type="text"
-                    value={minLotSize}
-                    placeholder="min"
-                    onChange={handleMinLotSizeChange}
-                  />
-                  <input
-                    type="text"
-                    value={maxLotSize}
-                    placeholder="max"
-                    onChange={handleMaxLotSizeChange}
-                  />
-                </div>
+                <button
+                  id="lotSizeFilterButton"
+                  onClick={handleToggleLotSizeFilter}
+                >
+                  {"lot size"}
+                </button>
+                <img
+                  src={chevronBackward}
+                  onClick={handleToggleLotSizeFilter}
+                />
+                {isLotSizeFilterOpen && (
+                  <div className="numericFilter" id="lotSizeSelectFields">
+                    <input
+                      type="text"
+                      value={minLotSize}
+                      placeholder="min"
+                      onChange={handleMinLotSizeChange}
+                    />
+                    <input
+                      type="text"
+                      value={maxLotSize}
+                      placeholder="max"
+                      onChange={handleMaxLotSizeChange}
+                    />
+                  </div>
+                )}
               </div>
               <div className="filter">
                 <label>{"amenities"}</label>
@@ -366,12 +415,12 @@ const PublicListings = () => {
           <p className="noListingMessage">{"No listing to show"}</p>
         )}
       </ListingPublicContainer>
-      {isFilterOpen && (
+      {isMobileFilterOpen && (
         <>
           <div className="overlay" />
           <div className="filterContainer">
             <div className="filterHeader">
-              <button onClick={handleCloseFilter}>
+              <button onClick={handleCloseMobileFilter}>
                 <Close />
               </button>
               <p>{"filter listings"}</p>
