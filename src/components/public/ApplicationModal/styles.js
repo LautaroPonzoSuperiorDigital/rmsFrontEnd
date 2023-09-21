@@ -9,8 +9,23 @@ export const NavContainer = styled.div`
   align-items: center;
   padding: 0 2rem;
   @media screen and (max-width: 768px) {
-    padding: 0 1rem;
+    padding: 0 10px;
     gap: 2rem;
+  }
+`;
+export const LogoImg = styled.img`
+  height: 100%;
+  width: 100%;
+  @media screen and (max-width: 768px) {
+    width: 100px;
+  }
+`;
+export const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  @media screen and (max-width: 768px) {
+    gap: 4rem;
   }
 `;
 
@@ -40,7 +55,7 @@ export const GoBackStyle = styled.div`
     font-size: "100px"
     cursor: "pointer",
     @media screen and (max-width: 768px) {
-        font-size: 5px;
+        font-size: 10px;
       }
   ;`;
 
