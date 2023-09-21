@@ -62,7 +62,7 @@ const PublicListings = () => {
     };
 
     // TODO: Update amenities list
-    setAmenitiesList(["Pool", "Gate", "Pet Friendly", "Air Conditioning"]);
+    setAmenitiesList(["Pool", "Gate", "Pet-Friendly", "Air Conditioning"]);
     fetchListings();
   }, []);
 
