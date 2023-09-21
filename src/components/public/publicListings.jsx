@@ -14,6 +14,7 @@ import { ListingPublic, ListingPublicContainer } from "./styles";
 const PublicListings = () => {
   const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);
   const [isInputHovered, setIsInputHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [listings, setListings] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -33,9 +34,22 @@ const PublicListings = () => {
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
-
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    function updateModalWidth() {
+      setIsMobile(window.outerWidth <= 768);
+    }
+
+    updateModalWidth();
+
+    window.addEventListener("resize", updateModalWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateModalWidth);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -207,7 +221,7 @@ const PublicListings = () => {
   };
 
   const handleApplyFilter = () => {
-    handleCloseMobileFilter();
+    isMobileFilterOpen && handleCloseMobileFilter();
 
     const removeNonDigits = (value) => value.replace(/\D/g, "");
     const filterParams = Object.fromEntries(
@@ -436,8 +450,7 @@ const PublicListings = () => {
       </div>
       <ListingPublicContainer
         style={{
-          filter:
-            isSearchOpen && window.innerWidth <= 768 ? "blur(5px)" : "none",
+          filter: isSearchOpen && isMobile <= 768 ? "blur(5px)" : "none",
         }}
       >
         {listings.length ? (
