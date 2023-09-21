@@ -201,6 +201,7 @@ const PublicListings = () => {
         bedrooms: removeNonDigits(bedrooms),
         bathrooms: removeNonDigits(bathrooms),
         amenities: selectedAmenities.join(","),
+        // eslint-disable-next-line no-unused-vars
       }).filter(([_, value]) => value !== "")
     );
 
