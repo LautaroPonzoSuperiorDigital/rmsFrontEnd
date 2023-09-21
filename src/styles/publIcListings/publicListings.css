@@ -84,7 +84,7 @@ body {
 }
 
 .dropdownMenu {
-  padding-right: 0.3rem;
+  padding-right: 5%;
   height: 2.5rem;
   width: 10rem;
   min-width: max-content;
