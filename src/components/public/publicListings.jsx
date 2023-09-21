@@ -427,6 +427,24 @@ const PublicListings = () => {
                         <label htmlFor={`amenity-${index}`}>{amenity}</label>
                       </div>
                     ))}
+                    <div className="roomsFilter">
+                      <div className="roomFilter">
+                        <input
+                          type="text"
+                          value={bedrooms}
+                          onChange={handleBedroomsChange}
+                          placeholder={"# bedrooms"}
+                        />
+                      </div>
+                      <div className="roomFilter">
+                        <input
+                          type="text"
+                          value={bathrooms}
+                          onChange={handleBathroomsChange}
+                          placeholder={"# bathrooms"}
+                        />
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
