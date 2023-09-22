@@ -21,10 +21,12 @@ import {
   SpinnerContainer,
 } from "./style";
 import { ModalProvider } from "../../modal/context";
+import ChevronLeft from "../../../assets/img/chevron.left (1).svg";
 import { ListingAlbum1 } from "./ListingAlbum/ListingAlbum1";
 import { useNavigate, useParams } from "react-router-dom";
 import DefaultImage from "../../../assets/img/defaultImage.png";
 import Spinner from "../../spinner/Spinner";
+import { BtnBackToSearch } from "../ListingCarousel/styles";
 
 const ModalPublicListings = () => {
   const [showModal, setShowModal] = useState(false);
@@ -109,11 +111,21 @@ const ModalPublicListings = () => {
               handleShowAlbum={handleShowAlbum}
             />
           ) : (
-            <img
-              src={DefaultImage}
-              alt="Default"
-              style={{ width: "100%", height: "100%" }}
-            />
+            <div style={{ width: "100%", height: "100%" }}>
+              <BtnBackToSearch onClick={handleBackToSearch}>
+                <img
+                  src={ChevronLeft}
+                  alt="ChevronLeft"
+                  style={{ width: "8px", marginRight: "9px" }}
+                />
+                Back To Search Results
+              </BtnBackToSearch>
+              <img
+                src={DefaultImage}
+                alt="Default"
+                style={{ width: "100%", height: "100%" }}
+              />
+            </div>
           )}
         </>
       )}
