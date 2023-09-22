@@ -504,7 +504,9 @@ const PublicListings = () => {
             ))}
           </ListingPublic>
         ) : (
-          <p className="noListingMessage">{"No listing to show"}</p>
+          <p className="noListingMessage" data-testid="no-listing-message">
+            {"No listing to show"}
+          </p>
         )}
       </ListingPublicContainer>
       {isMobileFilterOpen && (
