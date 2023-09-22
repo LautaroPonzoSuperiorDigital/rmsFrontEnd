@@ -67,6 +67,7 @@ export const FieldName = styled.p`
   font-weight: 400;
   color: #000000a5;
   margin-top: 1rem;
+  height: 20px;
 `;
 
 export const FieldValue = styled.p`

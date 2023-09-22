@@ -23,6 +23,7 @@ import {
 import { ModalProvider } from "../../modal/context";
 import { ListingAlbum1 } from "./ListingAlbum/ListingAlbum1";
 import { useNavigate, useParams } from "react-router-dom";
+import DefaultImage from "../../../assets/img/defaultImage.png";
 import Spinner from "../../spinner/Spinner";
 
 const ModalPublicListings = () => {
@@ -72,7 +73,9 @@ const ModalPublicListings = () => {
             }
           });
         }
+
         setImage(allImages);
+        console.log("iamges", allImages);
         const sectionsArray = data.Sections.map((section) => ({
           name: section.Images[0]?.AlbumSection.Section.name,
           Album: {
@@ -98,13 +101,22 @@ const ModalPublicListings = () => {
           <Spinner />
         </SpinnerContainer>
       ) : (
-        <ListingCarousel
-          images={images}
-          handleBackToSearch={handleBackToSearch}
-          handleShowAlbum={handleShowAlbum}
-        />
+        <>
+          {images.length > 0 ? (
+            <ListingCarousel
+              images={images}
+              handleBackToSearch={handleBackToSearch}
+              handleShowAlbum={handleShowAlbum}
+            />
+          ) : (
+            <img
+              src={DefaultImage}
+              alt="Default"
+              style={{ width: "100%", height: "100%" }}
+            />
+          )}
+        </>
       )}
-
       <ModalListingDescription>
         <DescriptionContainer>
           <PriceText>
