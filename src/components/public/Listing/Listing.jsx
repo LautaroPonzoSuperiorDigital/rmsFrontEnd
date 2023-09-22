@@ -42,13 +42,7 @@ const Listing = ({ listing, handleImageClick }) => {
       <ListingPublicDescription>
         <ListingPriceLocation>
           <PriceText>
-            $&nbsp;
-            {listing.price
-              ? parseFloat(listing.price).toLocaleString("en", {
-                  useGrouping: true,
-                })
-              : ""}
-            &nbsp;
+            ${listing.price}
             <SpanPrince> per month</SpanPrince>
           </PriceText>
 
