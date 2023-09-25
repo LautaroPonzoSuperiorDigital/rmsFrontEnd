@@ -15,7 +15,11 @@ import { EditButton, DeleteButton } from "../../../components/buttonListings";
 import Pagination from "../../../components/paginations";
 import AddListings from "../../../components/addListing";
 import { Modal } from "../../../components/modal";
-import { ListingDetailsContext, ListingDetailsProvider, ListingDetailsTabs } from "../../../context/listingDetailsContext";
+import {
+  ListingDetailsContext,
+  ListingDetailsProvider,
+  ListingDetailsTabs,
+} from "../../../context/listingDetailsContext";
 import { ListingForm } from "../../../components/listing-form";
 import { ListingDetails } from "../../../components/listing-details";
 import { createListingImage } from "../../../services/listing";
@@ -115,6 +119,21 @@ export default function AdminListings() {
   };
 
   useEffect(() => {
+    Promise.all(listings.map((listing) => createListingImage(listing)))
+      .then((imageUrls) => {
+        setListings((listings) =>
+          listings.map((listing, index) => ({
+            ...listing,
+            image: imageUrls[index],
+          }))
+        );
+      })
+      .catch((error) => {
+        console.error("Error loading listing images:", error);
+      });
+  }, [listings]);
+
+  useEffect(() => {
     function loadAdminDataAndListings() {
       try {
         api
@@ -210,7 +229,7 @@ export default function AdminListings() {
                           <img
                             className="testImg"
                             src={listing.image}
-                            alt="Imagen de Amazon S3"
+                            alt="Listing image"
                           />
                           {listing.id.toString().padStart(6, "0")}
                         </p>
@@ -322,14 +341,14 @@ export default function AdminListings() {
           {({ activeTab }) => (
             <Modal.Root
               ref={listingDetailsModalRef}
-              onModalClosed={() => activeTab.set(ListingDetailsTabs.TENANT_HISTORY)}
+              onModalClosed={() =>
+                activeTab.set(ListingDetailsTabs.TENANT_HISTORY)
+              }
             >
               <Modal.Body width="90%">
                 <Modal.Header showCloseIcon />
                 <Modal.Content>
-                  {listingDetails && (
-                    <ListingDetails />
-                  )}
+                  {listingDetails && <ListingDetails />}
                 </Modal.Content>
               </Modal.Body>
             </Modal.Root>
