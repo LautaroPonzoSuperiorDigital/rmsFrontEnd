@@ -119,21 +119,6 @@ export default function AdminListings() {
   };
 
   useEffect(() => {
-    Promise.all(listings.map((listing) => createListingImage(listing)))
-      .then((imageUrls) => {
-        setListings((listings) =>
-          listings.map((listing, index) => ({
-            ...listing,
-            image: imageUrls[index],
-          }))
-        );
-      })
-      .catch((error) => {
-        console.error("Error loading listing images:", error);
-      });
-  }, [listings]);
-
-  useEffect(() => {
     function loadAdminDataAndListings() {
       try {
         api
@@ -142,12 +127,21 @@ export default function AdminListings() {
             api
               .get(`/listing?adminId=${userData?.Admin.id}`)
               .then(({ data: listings }) => {
-                setListings(
-                  listings.map((listing) => ({
-                    ...listing,
-                    image: createListingImage(listing),
-                  }))
-                );
+                Promise.all(
+                  listings.map((listing) => createListingImage(listing))
+                )
+                  .then((imageUrls) => {
+                    setListings((listings) =>
+                      listings.map((listing, index) => ({
+                        ...listing,
+                        image: imageUrls[index],
+                      }))
+                    );
+                  })
+                  .catch((error) => {
+                    console.error("Error loading listing images:", error);
+                  });
+                setListings(listings);
               })
               .catch((error) => alert("Error loading listings data: ", error));
           })
