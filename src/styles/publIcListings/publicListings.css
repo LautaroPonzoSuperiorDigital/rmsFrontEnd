@@ -21,6 +21,15 @@ body {
   align-items: center;
 }
 
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  column-gap: 1rem;
+}
+
 .filtersBar {
   display: flex;
   flex-direction: row;
@@ -30,17 +39,6 @@ body {
   border-bottom: 1px solid rgba(128, 128, 128, 0.23);
   background-color: white;
   padding: 1rem;
-}
-
-.filtersBar form {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: baseline;
-}
-
-.filtersBar form *:not(:first-child) {
-  margin-right: 1rem;
 }
 
 .LogoPublic {
@@ -58,7 +56,6 @@ body {
   height: 2.5rem;
   width: 100%;
   min-width: fit-content;
-  margin-right: 1rem;
 }
 
 .inputPublic input {
@@ -83,7 +80,158 @@ body {
   margin-bottom: 0.3rem;
 }
 
-.dropdownMenu {
+.filters {
+  height: 2.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  margin: unset;
+  column-gap: 1rem;
+}
+
+.filter {
+  width: 11.875rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.filter button {
+  height: 2.5rem;
+  width: 100%;
+  padding-left: 1rem;
+  border: 1px solid #00000026;
+  text-align: left;
+  font-family: "Proxima Nova", sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  letter-spacing: 0;
+  color: #000000a5;
+  text-transform: capitalize;
+  opacity: 1;
+  transition: border-color 0.3s ease;
+}
+
+.filter button:hover {
+  border: 2px solid #31af9a;
+}
+
+.filter img {
+  position: relative;
+  bottom: 1.75rem;
+  left: 40%;
+  transform: matrix(0, -1, 1, 0, 0, 0);
+  opacity: 1;
+  cursor: pointer;
+}
+
+.numericFilter {
+  height: fit-content;
+  width: 12rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  background: #fdfdfd 0 0 no-repeat padding-box;
+  border: 2px solid #31af9a;
+  opacity: 1;
+  row-gap: 1rem;
+  padding: 1rem 0.5rem 1.5rem 0.5rem;
+}
+
+.numericFilter > input {
+  width: 90%;
+  border: unset;
+  border-bottom: 1px solid black;
+  text-align: left;
+  font-family: "Proxima Nova", sans-serif;
+  font-size: 1rem;
+  line-height: 1.625rem;
+  font-weight: 300;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  opacity: 1;
+}
+
+.numericFilter > input::placeholder {
+  color: #00000075;
+}
+
+.checkboxFilter {
+  position: relative;
+  left: 13%;
+  height: fit-content;
+  width: 15rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  background: #fdfdfd 0 0 no-repeat padding-box;
+  border: 2px solid #31af9a;
+  opacity: 1;
+  row-gap: 1rem;
+  padding: 1.2rem 1.25rem 1.25rem 1.25rem;
+}
+
+.checkboxFilter input[type="checkbox"] {
+  accent-color: #197572;
+  height: 1.125rem;
+  width: 1.125rem;
+  border-radius: 0;
+}
+
+.roomsFilter {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  row-gap: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.checkboxFilter input[type="text"] {
+  width: 100%;
+  border: unset;
+  border-bottom: 1px solid black;
+  text-align: left;
+  font-family: "Proxima Nova", sans-serif;
+  font-size: 1rem;
+  line-height: 1.625rem;
+  font-weight: 300;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  opacity: 1;
+  padding-left: 0.5rem;
+}
+
+.checkboxFilter input[type="text"]::placeholder {
+  color: #00000075;
+}
+
+.checkboxFilter label {
+  text-align: left;
+  font-family: "Proxima Nova", sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  letter-spacing: 0;
+  color: #000000a5;
+  text-transform: capitalize;
+  opacity: 1;
+  margin-left: 0.625rem;
+}
+
+.amenityRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+/* .dropdownMenu {
   padding-right: 5%;
   height: 2.5rem;
   width: 10rem;
@@ -92,7 +240,7 @@ body {
   outline: none;
   color: rgba(0, 0, 0, 0.64);
   border: 1px solid rgba(128, 128, 128, 0.219);
-}
+} */
 
 .logInBtn {
   background-color: #197572;
@@ -187,23 +335,20 @@ body {
   margin-right: 1.3rem;
 }
 
-@media (max-width: 1024px) {
-  .LogoPublic {
-    width: auto;
-    margin-bottom: 1rem;
+@media (max-width: 1439px) {
+  .filtersBar {
+    row-gap: 1rem;
   }
 
-  .filtersBar form {
+  .container {
+    width: 100%;
     display: flex;
-    width: max-content;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-content: space-between;
     justify-content: space-between;
-  }
-
-  .filtersBar form *:not(:first-child) {
-    margin: 0;
+    align-items: center;
+    row-gap: 0.5rem;
   }
 
   .inputPublic {
@@ -233,18 +378,45 @@ body {
     padding: 1rem 0;
   }
 
-  .buttonContainer {
-    margin-top: 1rem;
+  .filters {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
   }
 
-  .dropdownMenu {
-    width: 24%;
-    padding-right: unset;
-    margin-top: 0.5rem !important;
+  .filter {
+    width: 25%;
+  }
+
+  .numericFilter {
+    width: 100%;
+    z-index: 1;
+  }
+
+  .checkboxFilter {
+    position: unset;
+    width: 100%;
   }
 }
 
 @media (max-width: 768px) {
+  .LogoPublic {
+    width: auto;
+    margin-bottom: 1rem;
+  }
+
+  .container {
+    display: flex;
+    width: max-content;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin: 0;
+    column-gap: 0;
+    padding-right: 0;
+  }
+
   .filtersBar {
     display: flex;
     flex-direction: row;
@@ -262,16 +434,7 @@ body {
     padding-top: 1rem;
   }
 
-  .filtersBar form {
-    display: flex;
-    width: max-content;
-    flex-direction: row-reverse;
-    flex-wrap: nowrap;
-    margin: 0;
-    justify-content: center;
-  }
-
-  .filtersBar form > button {
+  .container > button {
     margin-right: 1rem;
     margin-left: 1rem;
   }
@@ -304,7 +467,7 @@ body {
     margin-bottom: 0.3rem;
   }
 
-  .dropdownMenu {
+  .filters {
     display: none;
   }
 
@@ -430,7 +593,7 @@ body {
     border-bottom: 1px solid #00000026;
   }
 
-  .filterSection {
+  .filterSectionMobile {
     height: fit-content;
     width: 90%;
     display: flex;
@@ -440,7 +603,7 @@ body {
     align-items: center;
   }
 
-  .filterSectionText {
+  .filterSectionMobileText {
     height: 1.543rem;
     width: 100%;
     font-style: normal;
@@ -454,7 +617,7 @@ body {
     margin-bottom: 1.169rem;
   }
 
-  .filterSection div {
+  .filterSectionMobile div {
     width: 45%;
     color: #00000075;
     border-bottom: 1px solid #00000026;
@@ -467,7 +630,7 @@ body {
     flex-wrap: nowrap;
   }
 
-  .filterSection div > input {
+  .filterSectionMobile div > input {
     width: 100%;
     border: unset;
     padding-left: 2rem;
