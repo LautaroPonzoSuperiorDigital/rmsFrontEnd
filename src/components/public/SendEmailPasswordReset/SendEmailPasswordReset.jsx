@@ -14,7 +14,7 @@ const ResponsiveTexthide = styled.p`
   }
 `;
 
-export const SendEmailPasswordReset = () => {
+const SendEmailPasswordReset = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
@@ -85,3 +85,5 @@ export const SendEmailPasswordReset = () => {
     </div>
   );
 };
+
+export default SendEmailPasswordReset;
