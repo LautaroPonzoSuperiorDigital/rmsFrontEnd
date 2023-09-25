@@ -22,10 +22,6 @@ const messageList = {
   fontSize: "16px",
 };
 
-const fakeCrentials = {
-  listingId: 1,
-};
-
 const TenantChatRoomContainer = styled.div`
   height: 100%;
 
@@ -36,16 +32,14 @@ const TenantChatRoomContainer = styled.div`
 `;
 
 const TenantChatRoom = () => {
+  const [chatRoomId, setChatRoomId] = useState(null);
   const { user } = useAuth();
-  console.log(user);
 
   const inputRef = useRef(null);
   const ulRef = useRef(null);
 
   const [messages, setMessages] = useState([]);
   const [incoming, setIncoming] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [notification, setNotification] = useState(true);
 
   const handleMessageChange = useCallback(
     (e) => {
@@ -56,23 +50,17 @@ const TenantChatRoom = () => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     const message = {
-      roomChatId: user.listingId,
+      roomChatId: chatRoomId,
       sender: user.name,
       message: messages,
       role: user.role,
-      createdAt: new Date().toISOString(),
-      id: new Date().toISOString(), // temporary id for the message
     };
 
     console.log("Sending message");
 
     await Promise.all([
       socket.emit("event_message", {
-        room: `${user.listingId}`,
-        message,
-      }),
-      socket.emit("notification", {
-        room: `${user.listingId}`,
+        room: `${chatRoomId}`,
         message,
       }),
     ]);
@@ -89,42 +77,35 @@ const TenantChatRoom = () => {
   }, [incoming]);
 
   useEffect(() => {
-    const getChatMessages = async () => {
+    // Define an async function to fetch the chat room ID
+    const getchatRoomId = async () => {
       try {
-        const { data } = await api.get("chat/chat-room-by-id", {
-          params: { id: user.listingId },
-        });
-        console.log(data);
-        setIncoming(data.Chats);
+        const response = await api.get(
+          `chat/chat-room-by-tenant-id/${user.tenantId}`
+        );
+        setChatRoomId(response.data.id);
+
+        // Now that chatRoomId is set, we can establish the WebSocket connection
+        console.log("Joining room", response.data.id);
+        socket.emit("event_join", `${response.data.id}`);
       } catch (err) {
         console.log(err);
       }
     };
-    getChatMessages();
+
+    getchatRoomId();
   }, []);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
-    // Join the room when the component mounts
-    socket.emit("event_join", `${user.listingId}`);
-
-    // Listen for incoming messages from the room
     socket.on("event_message", (data) => {
-      console.log("Received message:", data);
-
-      setIncoming((prevMessages) => [...prevMessages, data]);
+      // Check if the message already exists in incoming messages
+      if (!incoming.some((message) => message.id === data.id)) {
+        setIncoming((prevMessages) => [...prevMessages, data]);
+      }
     });
-    // recieve notification notification of new messages
-    socket.on("notification", (data) => {
-      console.log("notification", data);
-      setNotification(data);
-    });
-
-    // Leave the room when the component unmounts
-    return () => {
-      socket.emit("event_leave", `${user.listingId}`);
-    };
   }, []);
-
   return (
     <TenantChatRoomContainer>
       <div className="flex-grow-1" style={{ overflowY: "auto" }} ref={ulRef}>
