@@ -84,6 +84,10 @@ const TenantChatRoom = () => {
           `chat/chat-room-by-tenant-id/${user.tenantId}`
         );
         setChatRoomId(response.data.id);
+        const messages = await api.get("chat/chat-room-by-id", {
+          params: { id: response.data.id },
+        });
+        setIncoming(messages.data.Chats);
 
         // Now that chatRoomId is set, we can establish the WebSocket connection
         console.log("Joining room", response.data.id);

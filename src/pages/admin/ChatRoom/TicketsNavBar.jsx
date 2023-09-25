@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createListingImage } from "../../../services/listing";
 
 const nameStyle = {
@@ -25,17 +26,31 @@ const ticketContainerStyle = {
 };
 
 const TicketsNavBar = ({ targetChatRoomId, chatRooms }) => {
-  const selectedListing = chatRooms.find(
-    (chatRoom) => chatRoom.id === targetChatRoomId
-  );
+  const [imgSrc, setImageSrc] = useState(null);
+  const [selectedListing, setSelectedListing] = useState(null);
 
+  useEffect(() => {
+    const selectedListing = chatRooms.find(
+      (chatRoom) => chatRoom.id === targetChatRoomId
+    );
+
+    setSelectedListing(selectedListing);
+
+    const fetchImage = async () => {
+      try {
+        const src = await createListingImage(selectedListing);
+        setImageSrc(src);
+      } catch (error) {
+        console.error("Error fetching image:", error);
+      }
+    };
+
+    fetchImage();
+  }, [chatRooms, targetChatRoomId]);
   return (
     <div style={ticketContainerStyle}>
       <div>
-        <img
-          src={createListingImage(selectedListing?.Listing)}
-          style={{ height: "50px", width: "45" }}
-        />
+        <img src={imgSrc} style={{ height: "50px", width: "45" }} />
       </div>
       <div>
         <p style={nameStyle}>{selectedListing?.Tenant.User.name}</p>

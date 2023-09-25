@@ -40,6 +40,7 @@ const AdminChatRoom = ({
   setTickets,
 }) => {
   const [notification, setNotification] = useState(true);
+  const [imageSrc, setImageSrc] = useState(null);
   useEffect(() => {
     socket.emit("event_join", `${chatRoom.id}`);
 
@@ -47,6 +48,19 @@ const AdminChatRoom = ({
       setNotification(data);
     });
   }, [socket, chatRoom.id]);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const src = await createListingImage(chatRoom);
+        setImageSrc(src);
+      } catch (error) {
+        console.error("Error fetching image:", error);
+      }
+    };
+
+    fetchImage();
+  }, []);
 
   return (
     <ChatRoomsStyle onClick={() => setTargetChatRoomId(chatRoom.id)}>
@@ -62,7 +76,7 @@ const AdminChatRoom = ({
               }}
             >
               <img
-                src={createListingImage(chatRoom.Listing)}
+                src={imageSrc}
                 alt="listing"
                 style={{ width: "100%", height: "100%", borderRadius: "50%" }}
               />

@@ -2,6 +2,7 @@ import DefaultImage from "../assets/img/defaultImage.png";
 import { api } from "./api";
 
 export const createListingImage = async (listing) => {
+  console.log(listing);
   const { data } = await api.get(`/listing/${listing.id}/album`);
   let image = DefaultImage;
 
