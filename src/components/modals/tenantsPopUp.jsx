@@ -2,12 +2,8 @@ import "../../styles/PopUp.css";
 import React, { useState, useEffect } from "react";
 import closeListing2 from "../../assets/img/close.svg";
 import closeHover from "../../assets/img/closeHover.svg";
-import Eye from "../../assets/img/Eye.svg";
-import Edit from "../../assets/img/EditPopUp.svg";
-import EditHover from "../../assets/img/EditPopUpHover.svg";
 import SendTemplateIcon from "../../assets/img/SendTemplateIconHover.svg";
 import SendTemplateIconHover from "../../assets/img/SendTemplateIconHover.svg";
-import testImg from "../../assets/img/testImg.jpg";
 import AddDocs from "./addDocumentsModal";
 import { api } from "../../services/api";
 import jwtDecode from "jwt-decode";
@@ -15,12 +11,6 @@ import { ListingAlbumPreview } from "../listing-album-preview";
 import { ListingInspectionHistoryCard } from "../listing-inspection-history/styles";
 import { formatDate } from "../../services/date";
 import { DateTime } from "luxon";
-import {
-  DeleteInspectionButton,
-  EditInspectionButton,
-} from "../buttonInspections";
-import Delete from "../../assets/img/delete.svg";
-import DeleteIconHover from "../../assets/img/deleteIconHover.svg";
 
 const TenantModal = ({ selectedTenant, onClose }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -304,60 +294,60 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
   return (
     <div>
-    <div className="popUpContainer">
-      <div className="popUp d-flex flex-column">
-        <div className="onClose d-flex align-items-center justify-content-end mt-2">
-          {!isHovered ? (
-            <img
-              className="closePopUp"
-              src={closeListing2}
-              onMouseEnter={() => setIsHovered(true)}
-            />
-          ) : (
-            <img
-              className="closePopUp"
-              src={closeHover}
-              onMouseLeave={() => setIsHovered(false)}
-              onClick={onClose}
-            />
-          )}
-        </div>
-        <div className="orderGlobalPopUp d-flex">
-          <div className="tenantInfo d-flex flex-column">
-            <div className="popUpOrderFirstCol FullLName d-flex">
-              <p>FULL LEGAL NAME</p>
-              <span>{selectedTenant.User.name}</span>
-            </div>
-            <div className="popUpOrderFirstCol pNo d-flex">
-              <p>PHONE NO.</p>
-              <span>{selectedTenant.phoneNumber}</span>
-            </div>
-
-            <div className="popUpOrderFirstCol emailpopUp d-flex">
-              <p>EMAIL</p>
-              <span>{selectedTenant.User.email}</span>
-            </div>
-            <div className="popUpOrderFirstCol contractDatesPopUp d-flex">
-              <p>CONTRACT DATES</p>
-              <span>{selectedTenant.contract}</span>
-            </div>
+      <div className="popUpContainer ">
+        <div className="popUp d-flex flex-column ">
+          <div className="onClose d-flex align-items-center justify-content-end mt-2 flex-">
+            {!isHovered ? (
+              <img
+                className="closePopUp"
+                src={closeListing2}
+                onMouseEnter={() => setIsHovered(true)}
+              />
+            ) : (
+              <img
+                className="closePopUp"
+                src={closeHover}
+                onMouseLeave={() => setIsHovered(false)}
+                onClick={onClose}
+              />
+            )}
           </div>
-          <div className="listingInfo d-flex">
-          <ListingAlbumPreview
-            editable={false}
-            listingSections={listingData?.Sections || []}
-          />
-            {/* <div className="imgTestPopUp">
+          <div className="orderGlobalPopUp d-flex">
+            <div className="tenantInfo d-flex flex-column">
+              <div className="popUpOrderFirstCol FullLName d-flex">
+                <p>FULL LEGAL NAME</p>
+                <span>{selectedTenant.User.name}</span>
+              </div>
+              <div className="popUpOrderFirstCol pNo d-flex">
+                <p>PHONE NO.</p>
+                <span>{selectedTenant.phoneNumber}</span>
+              </div>
+
+              <div className="popUpOrderFirstCol emailpopUp d-flex">
+                <p>EMAIL</p>
+                <span>{selectedTenant.User.email}</span>
+              </div>
+              <div className="popUpOrderFirstCol contractDatesPopUp d-flex">
+                <p>CONTRACT DATES</p>
+                <span>{selectedTenant.contract}</span>
+              </div>
+            </div>
+            <div className="listingInfo d-flex">
+              <ListingAlbumPreview
+                editable={false}
+                listingSections={listingData?.Sections || []}
+              />
+              {/* <div className="imgTestPopUp">
               {" "}
 
               <img className="imgTestPopUpInsert" src={`https://rms-staging.s3.us-west-1.amazonaws.com/${listingData?.key}`} alt="" />
 
             </div> */}
-              <img
+              {/* <img
                 className="imgTestPopUpInsert"
                 src={`https://rms-staging.s3.us-west-1.amazonaws.com/${listingData?.key}`}
                 alt=""
-              />
+              /> */}
             </div>
             <div className="listingInfoOrder d-flex flex-column">
               <div className="popUpOrderListings">
@@ -443,7 +433,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
           <div className="renderPopUpSection">
             {renderSectionContent(activeSection)}
           </div>
-          ;{/* Navigable */}
+          {/* Navigable */}
         </div>
       </div>
       {isModalOpen && <AddDocs onClose={() => setIsModalOpen(false)} />}
