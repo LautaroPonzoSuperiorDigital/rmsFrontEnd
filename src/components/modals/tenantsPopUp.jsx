@@ -11,6 +11,7 @@ import { ListingAlbumPreview } from "../listing-album-preview";
 import { ListingInspectionHistoryCard } from "../listing-inspection-history/styles";
 import { formatDate } from "../../services/date";
 import { DateTime } from "luxon";
+import { createListingImage } from "../../services/listing";
 
 const TenantModal = ({ selectedTenant, onClose }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -29,6 +30,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
   const [documentsData, setDocumentsData] = useState([]);
   const [activeSection, setActiveSection] = useState("DOCUMENTS");
+  const [imageSrc, setImageSrc] = useState(null);
 
   const handleHover = (isHovered, setIsHovered, sectionName) => {
     setIsHovered(isHovered);
@@ -190,6 +192,19 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     }
   }, [decodedToken]);
 
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const src = await createListingImage(listingData);
+        setImageSrc(src);
+      } catch (error) {
+        console.error("Error fetching image:", error);
+      }
+    };
+
+    fetchImage();
+  }, [listingData]);
+
   const renderSectionContent = (section) => {
     switch (section) {
       case "DOCUMENTS":
@@ -332,22 +347,20 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 <span>{selectedTenant.contract}</span>
               </div>
             </div>
-            <div className="listingInfo d-flex">
-              <ListingAlbumPreview
-                editable={false}
-                listingSections={listingData?.Sections || []}
-              />
-              {/* <div className="imgTestPopUp">
-              {" "}
-
-              <img className="imgTestPopUpInsert" src={`https://rms-staging.s3.us-west-1.amazonaws.com/${listingData?.key}`} alt="" />
-
-            </div> */}
-              {/* <img
-                className="imgTestPopUpInsert"
-                src={`https://rms-staging.s3.us-west-1.amazonaws.com/${listingData?.key}`}
-                alt=""
-              /> */}
+            <div className="listingInfo ">
+              <div style={{ height: "120px", width: "120px" }}>
+                <img
+                  src={imageSrc}
+                  alt="listing"
+                  className="listingImage"
+                  style={{
+                    height: "120px",
+                    width: "120px",
+                    objectFit: "cover",
+                    aspectRatio: "1 / 1",
+                  }}
+                />
+              </div>
             </div>
             <div className="listingInfoOrder d-flex flex-column">
               <div className="popUpOrderListings">
