@@ -327,7 +327,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
               />
             )}
           </div>
-          <div className="orderGlobalPopUp d-flex">
+          <div className="orderGlobalPopUp d-flex p-5">
             <div className="tenantInfo d-flex flex-column">
               <div className="popUpOrderFirstCol FullLName d-flex">
                 <p>FULL LEGAL NAME</p>
@@ -402,7 +402,6 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 </div> */}
               </div>
             </div>
-            <div className="EditDeletebuttons d-flex flex-column align-items-end"></div>
           </div>
         </div>
         {/* Navegable */}
