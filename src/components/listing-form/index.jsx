@@ -26,6 +26,7 @@ import {
   MainDetail,
   MainDetails,
 } from "./styles";
+import Spinner from "../spinner/Spinner";
 
 const formFields = [
   { field: "street", path: "value" },
@@ -55,21 +56,10 @@ function ListingFormWithRef(
   const modal = useModal();
   const { user } = useAuth();
   const [adminId, setAdminId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const createListingLocation = ({ unitNumber, street, zip, city, state }) =>
     `${unitNumber} ${street}, ${zip}, ${city}, ${state}`;
-
-  useEffect(() => {
-    const fetchAdminId = async () => {
-      try {
-        const response = await api.get(`admin/user/${user.id}`);
-        setAdminId(response.data.Admin.id);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchAdminId();
-  }, []);
 
   const createListing = useCallback(
     async (listingFormData) => {
@@ -109,7 +99,7 @@ function ListingFormWithRef(
 
       return { ...savedListing, image };
     },
-    [user]
+    [user, adminId]
   );
 
   const saveListing = useCallback(
@@ -228,119 +218,140 @@ function ListingFormWithRef(
     onSavingStatusChange(isSaving);
   }, [onSavingStatusChange, isSaving]);
 
+  useEffect(() => {
+    const fetchAdminId = async () => {
+      try {
+        const response = await api.get(`admin/user/${user.id}`);
+        setAdminId(response.data.Admin.id);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAdminId();
+  }, []);
+
   return (
     <ListingFormContainer ref={formRef}>
-      <ListingAlbumPreview
-        ref={listingAlbumRef}
-        listingId={listing?.id}
-        editable={true}
-      />
-
-      <MainDetails>
-        <Input
-          name="street"
-          label="STREET"
-          defaultValue={listing?.street}
-          disabled={isSaving}
-        />
-
-        <MainDetail>
-          <Input
-            name="zip"
-            label="ZIP"
-            defaultValue={listing?.zip}
-            disabled={isSaving}
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <ListingAlbumPreview
+            ref={listingAlbumRef}
+            listingId={listing?.id}
+            editable={true}
           />
 
-          <Input
-            name="unitNumber"
-            label="UNIT NUMBER"
-            defaultValue={listing?.unitNumber}
-            disabled={isSaving}
-          />
-        </MainDetail>
+          <MainDetails>
+            <Input
+              name="street"
+              label="STREET"
+              defaultValue={listing?.street}
+              disabled={isSaving}
+            />
 
-        <MainDetail>
-          <Input
-            name="city"
-            label="CITY"
-            defaultValue={listing?.city}
-            disabled={isSaving}
-          />
+            <MainDetail>
+              <Input
+                name="zip"
+                label="ZIP"
+                defaultValue={listing?.zip}
+                disabled={isSaving}
+              />
 
-          <Input
-            name="state"
-            label="STATE"
-            defaultValue={listing?.state}
-            disabled={isSaving}
-          />
-        </MainDetail>
+              <Input
+                name="unitNumber"
+                label="UNIT NUMBER"
+                defaultValue={listing?.unitNumber}
+                disabled={isSaving}
+              />
+            </MainDetail>
 
-        <Input
-          name="lotSize"
-          label="LOT SIZE"
-          defaultValue={listing?.lotSize}
-          disabled={isSaving}
-        />
+            <MainDetail>
+              <Input
+                name="city"
+                label="CITY"
+                defaultValue={listing?.city}
+                disabled={isSaving}
+              />
 
-        <Input
-          name="houseSize"
-          label="HOUSE SIZE"
-          defaultValue={listing?.houseSize}
-          disabled={isSaving}
-        />
+              <Input
+                name="state"
+                label="STATE"
+                defaultValue={listing?.state}
+                disabled={isSaving}
+              />
+            </MainDetail>
 
-        <Input
-          name="price"
-          label="PRICE"
-          defaultValue={listing?.price}
-          disabled={isSaving}
-        />
+            <Input
+              name="lotSize"
+              label="LOT SIZE"
+              defaultValue={listing?.lotSize}
+              disabled={isSaving}
+            />
 
-        <CheckBoxContainer>
-          <CheckBoxLog
-            name="isPublic"
-            defaultChecked={listing?.isPublic}
-            disabled={isSaving}
-          />
+            <Input
+              name="houseSize"
+              label="HOUSE SIZE"
+              defaultValue={listing?.houseSize}
+              disabled={isSaving}
+            />
 
-          <span>PUBLIC</span>
-        </CheckBoxContainer>
-      </MainDetails>
+            <Input
+              name="price"
+              label="PRICE"
+              defaultValue={listing?.price}
+              disabled={isSaving}
+            />
 
-      <ExtraDetails>
-        <ExtraDetail>
-          <Input
-            name="bedrooms"
-            label="BEDROOMS"
-            defaultValue={listing?.bedrooms}
-            disabled={isSaving}
-          />
+            <CheckBoxContainer>
+              <CheckBoxLog
+                name="isPublic"
+                defaultChecked={listing?.isPublic}
+                disabled={isSaving}
+              />
 
-          <Input
-            name="bathrooms"
-            label="BATHROOMS"
-            defaultValue={listing?.bathrooms}
-            disabled={isSaving}
-          />
-        </ExtraDetail>
+              <span>PUBLIC</span>
+            </CheckBoxContainer>
+          </MainDetails>
 
-        <TextArea
-          name="amenities"
-          label="AMENITIES"
-          defaultValue={listing?.Amenities.map(({ name }) => name).join("\n")}
-          disabled={isSaving}
-        />
+          <ExtraDetails>
+            <ExtraDetail>
+              <Input
+                name="bedrooms"
+                label="BEDROOMS"
+                defaultValue={listing?.bedrooms}
+                disabled={isSaving}
+              />
 
-        <TextArea
-          name="requirements"
-          label="REQUIREMENTS"
-          defaultValue={listing?.Requirements.map(({ name }) => name).join(
-            "\n"
-          )}
-          disabled={isSaving}
-        />
-      </ExtraDetails>
+              <Input
+                name="bathrooms"
+                label="BATHROOMS"
+                defaultValue={listing?.bathrooms}
+                disabled={isSaving}
+              />
+            </ExtraDetail>
+
+            <TextArea
+              name="amenities"
+              label="AMENITIES"
+              defaultValue={listing?.Amenities.map(({ name }) => name).join(
+                "\n"
+              )}
+              disabled={isSaving}
+            />
+
+            <TextArea
+              name="requirements"
+              label="REQUIREMENTS"
+              defaultValue={listing?.Requirements.map(({ name }) => name).join(
+                "\n"
+              )}
+              disabled={isSaving}
+            />
+          </ExtraDetails>
+        </>
+      )}
     </ListingFormContainer>
   );
 }
