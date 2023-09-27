@@ -116,10 +116,6 @@ function ListingFormWithRef(
         return;
       }
 
-      console.log("====================================");
-      console.log("chegou aqui");
-      console.log("====================================");
-
       const { data: savedListing } = await api.patch(`/listing/${listing.id}`, {
         ...listingFormData,
         location: createListingLocation(listingFormData),
@@ -194,7 +190,6 @@ function ListingFormWithRef(
     setIsSaving(true);
 
     try {
-      console.log({ listing });
       const savedListing = listing
         ? await saveListing(listingFormData)
         : await createListing(listingFormData);
