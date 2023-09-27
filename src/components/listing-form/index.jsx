@@ -43,112 +43,139 @@ const formFields = [
   { field: "requirements", path: "value", multiLines: true },
 ];
 
-function ListingFormWithRef({ listing, onSavingStatusChange, onListingSaved }, ref) {  
-  const [isSaving, setIsSaving] = useState(false)
+function ListingFormWithRef(
+  { listing, onSavingStatusChange, onListingSaved },
+  ref
+) {
+  const [isSaving, setIsSaving] = useState(false);
 
-  const formRef = useRef(null)
-  const listingAlbumRef = useRef(null)
+  const formRef = useRef(null);
+  const listingAlbumRef = useRef(null);
 
   const modal = useModal();
   const { user } = useAuth();
+  const [adminId, setAdminId] = useState(null);
 
   const createListingLocation = ({ unitNumber, street, zip, city, state }) =>
-    `${unitNumber} ${street}, ${zip}, ${city}, ${state}`
+    `${unitNumber} ${street}, ${zip}, ${city}, ${state}`;
 
-  const createListing = useCallback(async (listingFormData) => {
-    const album = listingAlbumRef.current?.getAlbum()
+  useEffect(() => {
+    const fetchAdminId = async () => {
+      try {
+        const response = await api.get(`admin/user/${user.id}`);
+        setAdminId(response.data.Admin.id);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAdminId();
+  }, []);
 
-    if (!album) {
-      return
-    }
+  const createListing = useCallback(
+    async (listingFormData) => {
+      const album = listingAlbumRef.current?.getAlbum();
 
-    const { data: newListing } = await api.post('/listing', {
-      ...listingFormData,
-      location: createListingLocation(listingFormData),
-      adminId: user.id,
-    })
+      if (!album) {
+        return;
+      }
 
-    const Sections = []
+      const { data: newListing } = await api.post("/listing", {
+        ...listingFormData,
+        location: createListingLocation(listingFormData),
+        adminId: adminId,
+      });
 
-    for await (const { Section, Images } of album.Sections) {
-      const { data: createdSection } = await api.post(
-        `/listing/${newListing.id}/section`,
-        { name: Section.name }
-      )
+      const Sections = [];
 
-      const images = Images.map(({ base64 }) => ({ base64 }))
+      for await (const { Section, Images } of album.Sections) {
+        const { data: createdSection } = await api.post(
+          `/listing/${newListing.id}/section`,
+          { name: Section.name }
+        );
 
-      const { data: Album } = await api.post(
-        `/listing/${newListing.id}/album/section/${createdSection.id}/image`,
-        { images })
+        const images = Images.map(({ base64 }) => ({ base64 }));
 
-      Sections.push({ ...createdSection, Album })
-    }
+        const { data: Album } = await api.post(
+          `/listing/${newListing.id}/album/section/${createdSection.id}/image`,
+          { images }
+        );
 
-    const savedListing = { ...newListing, Sections }
+        Sections.push({ ...createdSection, Album });
+      }
 
-    const image = createListingImage(savedListing)
+      const savedListing = { ...newListing, Sections };
 
-    return { ...savedListing, image }
-  }, [user])
+      const image = createListingImage(savedListing);
 
-  const saveListing = useCallback(async (listingFormData) => {
-    if (!listing) {
-      return
-    }
+      return { ...savedListing, image };
+    },
+    [user]
+  );
 
-    const album = listingAlbumRef.current?.getAlbum()
+  const saveListing = useCallback(
+    async (listingFormData) => {
+      if (!listing) {
+        return;
+      }
 
-    if (!album) {
-      return
-    }
+      const album = listingAlbumRef.current?.getAlbum();
 
-    const { data: savedListing } = await api.patch(`/listing/${listing.id}`, {
-      ...listingFormData,
-      location: createListingLocation(listingFormData),
-      amenities: undefined,
-      requirements: undefined,
-    })
+      if (!album) {
+        return;
+      }
 
-    const {
-      removedImages,
-      addedImages,
-      changedSections,
-      addedSections,
-    } = album
+      const { data: savedListing } = await api.patch(`/listing/${listing.id}`, {
+        ...listingFormData,
+        location: createListingLocation(listingFormData),
+        amenities: undefined,
+        requirements: undefined,
+      });
 
-    await Promise.all(
-      removedImages.map(({ sectionId, imageId }) => api
-        .delete(`/listing/${listing.id}/album/section/${sectionId}/image/${imageId}`)))
-    
-    await Promise.all(
-      addedImages.map(({ base64, Section }) => api.post(
-        `/listing/${listing.id}/album/section/${Section.id}/image`,
-        { images: [{ base64 }] })))
+      const { removedImages, addedImages, changedSections, addedSections } =
+        album;
 
-    await Promise.all(
-      changedSections.map((changedSection) => api.patch(
-        `/listing/${listing.id}/section/${changedSection.id}`,
-        { name: changedSection.name }
-      ))
-    )
+      await Promise.all(
+        removedImages.map(({ sectionId, imageId }) =>
+          api.delete(
+            `/listing/${listing.id}/album/section/${sectionId}/image/${imageId}`
+          )
+        )
+      );
 
-    for await (const { Section, Images } of addedSections) {
-      const { data: createdSection } = await api.post(
-        `/listing/${listing.id}/section`,
-        { name: Section.name}
-      )
-  
-      const images = Images.map(({ base64 }) => ({ base64 }))
+      await Promise.all(
+        addedImages.map(({ base64, Section }) =>
+          api.post(`/listing/${listing.id}/album/section/${Section.id}/image`, {
+            images: [{ base64 }],
+          })
+        )
+      );
 
-      await api.post(
-        `/listing/${listing.id}/album/section/${createdSection.id}/image`,
-        { images }
-      )
-    }
+      await Promise.all(
+        changedSections.map((changedSection) =>
+          api.patch(`/listing/${listing.id}/section/${changedSection.id}`, {
+            name: changedSection.name,
+          })
+        )
+      );
 
-    return savedListing
-  }, [listing])
+      for await (const { Section, Images } of addedSections) {
+        const { data: createdSection } = await api.post(
+          `/listing/${listing.id}/section`,
+          { name: Section.name }
+        );
+
+        const images = Images.map(({ base64 }) => ({ base64 }));
+
+        await api.post(
+          `/listing/${listing.id}/album/section/${createdSection.id}/image`,
+          { images }
+        );
+      }
+
+      return savedListing;
+    },
+    [listing]
+  );
 
   const handleSubmit = useCallback(async () => {
     if (!formRef.current || !user || isSaving) {
@@ -173,15 +200,15 @@ function ListingFormWithRef({ listing, onSavingStatusChange, onListingSaved }, r
     try {
       const savedListing = listing
         ? await saveListing(listingFormData)
-        : await createListing(listingFormData)
+        : await createListing(listingFormData);
 
-      setIsSaving(false)
-      onListingSaved(savedListing)
-      modal.close()
+      setIsSaving(false);
+      onListingSaved(savedListing);
+      modal.close();
     } catch (err) {
-      console.log(err)
-      alert('Error while saving Listing')
-      setIsSaving(false)
+      console.log(err);
+      alert(`${err.response.data.response.response.message[0]}`);
+      setIsSaving(false);
     }
   }, [
     listing,
@@ -191,7 +218,7 @@ function ListingFormWithRef({ listing, onSavingStatusChange, onListingSaved }, r
     user,
     createListing,
     saveListing,
-  ])
+  ]);
 
   useImperativeHandle(ref, () => ({
     submit: handleSubmit,
@@ -301,14 +328,16 @@ function ListingFormWithRef({ listing, onSavingStatusChange, onListingSaved }, r
         <TextArea
           name="amenities"
           label="AMENITIES"
-          defaultValue={listing?.Amenities.map(({ name }) => name).join('\n')}
+          defaultValue={listing?.Amenities.map(({ name }) => name).join("\n")}
           disabled={isSaving}
         />
 
         <TextArea
           name="requirements"
           label="REQUIREMENTS"
-          defaultValue={listing?.Requirements.map(({ name }) => name).join('\n')}
+          defaultValue={listing?.Requirements.map(({ name }) => name).join(
+            "\n"
+          )}
           disabled={isSaving}
         />
       </ExtraDetails>
