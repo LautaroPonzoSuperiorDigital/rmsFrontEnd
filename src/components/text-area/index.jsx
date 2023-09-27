@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types'
-import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
+import PropTypes from "prop-types";
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 
-import { TextAreaContainer, Label, StyledTextArea } from './styles'
+import { TextAreaContainer, Label, StyledTextArea } from "./styles";
 
 const TextAreaWithRef = (
   {
@@ -17,61 +17,61 @@ const TextAreaWithRef = (
     onBlur,
     onFocus,
   },
-  ref,
+  ref
 ) => {
-  const [focused, setFocused] = useState(false)
-  
-  const textAreaRef = useRef(null)
+  const [focused, setFocused] = useState(false);
+
+  const textAreaRef = useRef(null);
 
   const handleResize = useCallback(() => {
-    let element
+    let element;
 
     if (!ref?.current) {
-      element = textAreaRef.current
+      element = textAreaRef.current;
     } else {
-      element = ref.current
+      element = ref.current;
     }
 
-    element.style.height = 'auto'
-    element.style.height = `${element.scrollHeight}px`
-  }, [ref, textAreaRef])
+    element.style.height = "30px";
+    element.style.height = `${element.scrollHeight}px`;
+  }, [ref, textAreaRef]);
 
   const handleChange = (event) => {
-    handleResize()
+    handleResize();
 
-    onChange?.(event)
-  }
+    onChange?.(event);
+  };
 
   const handleFocus = (event) => {
-    setFocused(true)
+    setFocused(true);
 
-    handleResize()
+    handleResize();
 
-    onFocus?.(event)
-  }
+    onFocus?.(event);
+  };
 
   const handleBlur = (event) => {
-    setFocused(false)
+    setFocused(false);
 
-    onBlur?.(event)
-  }
+    onBlur?.(event);
+  };
 
   useEffect(() => {
     if (defaultValue) {
-      handleResize()
+      handleResize();
     }
-  }, [defaultValue, handleResize])
+  }, [defaultValue, handleResize]);
 
   return (
     <TextAreaContainer focused={focused}>
       {label && <Label>{label}</Label>}
 
       <StyledTextArea
-        ref={element => {
+        ref={(element) => {
           if (!ref) {
-            textAreaRef.current = element
+            textAreaRef.current = element;
           } else {
-            ref.current = element
+            ref.current = element;
           }
         }}
         type={type}
@@ -86,8 +86,8 @@ const TextAreaWithRef = (
         onBlur={handleBlur}
       />
     </TextAreaContainer>
-  )
-}
+  );
+};
 
 TextAreaWithRef.propTypes = {
   type: PropTypes.string,
@@ -101,6 +101,6 @@ TextAreaWithRef.propTypes = {
   onClick: PropTypes.func,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
-}
+};
 
-export const TextArea = forwardRef(TextAreaWithRef)
+export const TextArea = forwardRef(TextAreaWithRef);

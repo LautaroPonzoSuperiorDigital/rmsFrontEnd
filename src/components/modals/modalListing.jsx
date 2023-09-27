@@ -221,7 +221,6 @@ const EditModalListings = ({ renderSectionContent }) => {
                 onMouseLeave={handleImageMouseLeave}
               />
             )}
-
             <div className={`imgOverlay ${isImageHovered ? "hovered" : ""}`}>
               {selectedImage == null ? (
                 <span className="editText">+ Add Photos</span>
