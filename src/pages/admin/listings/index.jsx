@@ -37,6 +37,7 @@ export default function AdminListings() {
   const [searchResults, setSearchResults] = useState([]);
   const [listingDetails, setListingDetails] = useState(null);
   const [savingListingForm, setSavingListingForm] = useState(false);
+  const [isEditingListing, setIsEditingListing] = useState(false);
 
   const createListingModalRef = useRef(null);
   const listingFormRef = useRef(null);
@@ -86,6 +87,10 @@ export default function AdminListings() {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleUpdateListing = () => {
+    setIsEditingListing(true);
   };
 
   const handleDeleteListing = async (listingId) => {
@@ -280,6 +285,7 @@ export default function AdminListings() {
                         <EditButton
                           defaultImage={<img src={Edit} alt="Edit" />}
                           hoverImage={<img src={EditHover} alt="EditHover" />}
+                          onClick={handleUpdateListing}
                         />
                         <DeleteButton
                           className="delete"
@@ -307,6 +313,7 @@ export default function AdminListings() {
               ref={listingFormRef}
               onListingSaved={onListingSaved}
               onSavingStatusChange={setSavingListingForm}
+              isUpdating={isEditingListing}
             />
           </Modal.Content>
 
