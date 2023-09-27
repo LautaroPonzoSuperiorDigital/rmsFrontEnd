@@ -54,9 +54,22 @@ function ListingFormWithRef(
 
   const modal = useModal();
   const { user } = useAuth();
+  const [adminId, setAdminId] = useState(null);
 
   const createListingLocation = ({ unitNumber, street, zip, city, state }) =>
     `${unitNumber} ${street}, ${zip}, ${city}, ${state}`;
+
+  useEffect(() => {
+    const fetchAdminId = async () => {
+      try {
+        const response = await api.get(`admin/user/${user.id}`);
+        setAdminId(response.data.Admin.id);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAdminId();
+  }, []);
 
   const createListing = useCallback(
     async (listingFormData) => {
@@ -69,7 +82,7 @@ function ListingFormWithRef(
       const { data: newListing } = await api.post("/listing", {
         ...listingFormData,
         location: createListingLocation(listingFormData),
-        adminId: user.id,
+        adminId: adminId,
       });
 
       const Sections = [];
