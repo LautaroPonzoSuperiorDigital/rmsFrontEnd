@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import sendMessage from "../../../assets/img/send-email.svg";
+import { useAuth } from "../../../hooks/useAuth";
 
 const inputStyle = {
   width: "100%",
@@ -8,6 +9,7 @@ const inputStyle = {
 };
 
 const ChatSendMessage = ({ socket, chatRoomId }) => {
+  const { user } = useAuth();
   const [text, setText] = useState(null);
   const inputRef = useRef(null);
 
@@ -15,7 +17,7 @@ const ChatSendMessage = ({ socket, chatRoomId }) => {
     e.preventDefault();
     const message = {
       roomChatId: chatRoomId,
-      sender: "admin",
+      sender: user.name,
       message: text,
       role: "ADMIN",
       createdAt: new Date().toISOString(),
