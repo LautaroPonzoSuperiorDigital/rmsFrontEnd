@@ -116,8 +116,8 @@ const ModalAddSub = ({ isOpen, onClose, setUpdate }) => {
       setFormData({});
       onClose();
     } catch (error) {
-      console.log(error);
-      setError("Something went wrong");
+      console.log(error.response.data.response.response.message);
+      setError(`${error.response.data.response.response.message}`);
     }
   };
 

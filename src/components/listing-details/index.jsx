@@ -41,8 +41,9 @@ import { ListingDetailsTabs } from "../../context/listingDetailsContext";
 import { ListingApplicants } from "../listing-applicants";
 import { ListingTenants } from "../listing-tenants";
 import { ListingDocuments } from "../listing-documents";
+import { api } from "../../services/api";
 
-export function ListingDetails() {
+export function ListingDetails({ setUpdateListing }) {
   const expensesRef = useRef(null);
 
   const {
@@ -64,6 +65,17 @@ export function ListingDetails() {
     activeTab.value === ListingDetailsTabs.DOCUMENT_HISTORY;
 
   const openExpenseForm = () => expensesRef.current?.openForm();
+
+  const handleIsPublic = async () => {
+    try {
+      const response = await api.patch(`listing/${listing.id}`, {
+        isPublic: !listing.isPublic,
+      });
+      setUpdateListing(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <ListingDetailsContainer>
@@ -125,7 +137,10 @@ export function ListingDetails() {
           <ExtraDetailsTop>
             <ExtraDetail>
               <span>PUBLIC</span>
-              <CheckBoxLog checked={listing.isPublic} />
+              <CheckBoxLog
+                defaultChecked={listing.isPublic}
+                onChange={handleIsPublic}
+              />
             </ExtraDetail>
 
             <Action type="button" onClick={handleOpenEditListingModal}>
