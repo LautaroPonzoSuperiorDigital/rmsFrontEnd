@@ -57,9 +57,11 @@ export function ListingDetails() {
   const showInspectionActions =
     activeTab.value === ListingDetailsTabs.INSPECTION_HISTORY;
 
-  const showExpensesActions = activeTab.value === ListingDetailsTabs.EXPENSE_HISTORY;
+  const showExpensesActions =
+    activeTab.value === ListingDetailsTabs.EXPENSE_HISTORY;
 
-  const showDocumentsActions = activeTab.value === ListingDetailsTabs.DOCUMENT_HISTORY;
+  const showDocumentsActions =
+    activeTab.value === ListingDetailsTabs.DOCUMENT_HISTORY;
 
   const openExpenseForm = () => expensesRef.current?.openForm();
 
@@ -183,7 +185,10 @@ export function ListingDetails() {
 
           {showInspectionActions && (
             <InspectionsActionsBox>
-              <InspectionAction type="button" onClick={handleOpenInspectionFormModal}>
+              <InspectionAction
+                type="button"
+                onClick={handleOpenInspectionFormModal}
+              >
                 + Add Inspection
               </InspectionAction>
             </InspectionsActionsBox>
@@ -204,9 +209,7 @@ export function ListingDetails() {
 
           {showDocumentsActions && (
             <DocumentsActionsBox>
-              <DocumentAction type="button">
-                + Add Document
-              </DocumentAction>
+              <DocumentAction type="button">+ Add Document</DocumentAction>
             </DocumentsActionsBox>
           )}
         </HistoryTabs>
