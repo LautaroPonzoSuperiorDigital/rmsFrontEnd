@@ -74,7 +74,7 @@ const SubAdmins = () => {
   return (
     <div>
       <Nav />
-      <div className="d-flex w-100 mb-3">
+      <div className="d-flex w-100 mb-1">
         <div className="container tenantsContainer">
           <div className="d-flex align-items-center justify-content-start">
             <h2 className="tenantsText">Sub Admins</h2>
@@ -122,7 +122,7 @@ const SubAdmins = () => {
               item === 0 ? null : (
                 <tr className="tr-hover" key={item.id}>
                   <td className="bor1">
-                    <div className="mt-3 Person" style={{ width: "150px" }}>
+                    <div className="mt-3 " style={{ width: "150px" }}>
                       <p>{item.User.name}</p>
                     </div>
                   </td>

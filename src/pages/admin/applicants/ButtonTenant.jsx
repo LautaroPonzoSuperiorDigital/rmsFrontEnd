@@ -10,7 +10,7 @@ const ButtonTenant = ({
 }) => {
   const listingId = applicantionScreening[0]?.listingId;
   const animationContainerRef = useRef(null);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(null);
 
   const handleMoveToTenant = async () => {
     try {
@@ -31,7 +31,7 @@ const ButtonTenant = ({
       <button className="mttContainer" onClick={handleMoveToTenant}>
         Move To Tenants
       </button>
-      <p className="text-danger">{message}</p>
+      {message && <p className="text-danger">{message}</p>}
     </div>
   );
 };
