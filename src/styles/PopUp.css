@@ -1,120 +1,115 @@
 /* popUp */
 .popUpContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: rgba(0, 0, 0, 0.5); */
 }
 
 .popUp {
-    background-color: white;
-    width: 96%;
-    height: 96%;
+  background-color: white;
+  width: 96%;
+  height: 96%;
 }
 
 .onClose {
-    height: 4%;
+  height: 4%;
 }
 
 .closePopUp {
-    margin-right: 1.5%;
-    cursor: pointer;
+  margin-right: 1.5%;
+  cursor: pointer;
 }
 
 .tenantInfo {
-    margin-left: 4%;
-    height: 40%;
-    width: 32%;
-    margin-top: 1%;
+  margin-left: 4%;
+  height: 40%;
+  width: 32%;
+  margin-top: 1%;
 }
 
 .popUpOrderFirstCol p {
-    white-space: nowrap;
-    color: #00000082;
+  white-space: nowrap;
+  color: #00000082;
 }
 
 .popUpOrderFirstCol span {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 /* orderSquare */
 .FullLName p {
-    width: 100%;
+  width: 100%;
 }
 
 .DriverLicense p {
-    width: 100%;
+  width: 100%;
 }
 
 .BirthDay p {
-    width: 100%;
+  width: 100%;
 }
 
 .pNo p {
-    width: 100%;
+  width: 100%;
 }
 
 .SSImg img {
-    margin-left: 20%;
-    margin-bottom: 18%;
+  margin-left: 20%;
+  margin-bottom: 18%;
 }
 
 .SSImg p {
-    width: 100%;
+  width: 100%;
 }
 
 .emailpopUp p {
-    width: 100%;
+  width: 100%;
 }
 
 .contractDatesPopUp p {
-    width: 100%;
+  width: 100%;
 }
 
 .contractDatesPopUp span {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 /* orderSquare */
 /* orderSquare2 */
 .orderGlobalPopUp {
-    height: 40%;
+  height: 40%;
 }
 
 /* listingInfo */
 .listingInfo {
-    width: 70%;
-    height: 40%;
-    margin-left: 2rem;
+  /* width: 0%; */
+  height: 40%;
+  margin-left: 2rem;
 }
 
 .imgTestPopUp {
-    width: 11rem;
-    height: 10rem;
-    margin-left: 2%;
-    margin-right: 1%;
-    margin-top: 2%;
+  width: 11rem;
+  height: 10rem;
+  margin-left: 2%;
+  margin-right: 1%;
+  margin-top: 2%;
 }
 
 .imgTestPopUpInsert {
-    width: 100%;
-    height: 100%;
-}
-
-.popUpOrderListings {
-    margin-top: 6%;
+  width: 100%;
+  height: 100%;
 }
 
 .listingInfoOrder {
-    margin-left: 1%;
-    width: 50%;
-    margin-left: 3%;
-    margin-top: 1%;
+  width: 50%;
+  margin-left: 3%;
 }
 
 /* listingInfo */
@@ -122,179 +117,181 @@
 /* cols */
 
 .idPopUp p {
-    width: 100%;
+  width: 100%;
 }
 
 .idPopUp span {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .locationPopUp p {
-    width: 100%;
+  width: 100%;
 }
 
 .lotSizePopUp p {
-    width: 100%;
+  width: 100%;
 }
 
 .hsPopUp p {
-    width: 100%;
+  width: 100%;
 }
 
 .pricePopUp p {
-    width: 100%;
+  width: 100%;
 }
 
 .profit {
-    white-space: 100%;
-    width: 50%;
+  white-space: 100%;
+  width: 50%;
 }
 
 .profit p {
-    width: 60%;
+  width: 60%;
 }
 
 .profit span {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 /* cols */
 /* orderSquare2*/
 /* btns */
 .EditDeletebuttons {
-    height: 30%;
-    margin-top: 4%;
-    width: 25%;
+  height: 30%;
+  margin-top: 4%;
+  width: 25%;
 }
 
 .EditButtonPopUpOrder,
 .DeleteButtonPopUpOrder {
-    cursor: pointer;
-    margin-bottom: 10%;
+  cursor: pointer;
+  margin-bottom: 10%;
 }
 
 .EditButtonPopUpOrder span,
 .DeleteButtonPopUpOrder span {
-    color: #197572;
-    font-weight: 600;
-    padding-left: 0.6rem;
+  color: #197572;
+  font-weight: 600;
+  padding-left: 0.6rem;
 }
 
 .EditButtonPopUpOrder span:hover,
 .DeleteButtonPopUpOrder span:hover {
-    color: #31af9a;
+  color: #31af9a;
 }
 
 /* btns */
 /* popUp */
 /* NavegableSect */
 .navOrderPopUp {
-    height: 55%;
+  height: 55%;
+  width: 100%;
 }
 
 .navOrderPopUpNav {
-    border-bottom: 1.2px solid rgba(128, 128, 128, 0.427);
+  border-bottom: 1.2px solid rgba(128, 128, 128, 0.427);
+  border-top: 1.2px solid rgba(128, 128, 128, 0.427);
 }
 
 .navegableSect {
-    white-space: nowrap;
-    width: 80%;
-    margin-top: .6%;
-    height: 2rem;
+  white-space: nowrap;
+  width: 80%;
+  margin-top: 0.6%;
+  height: 3rem;
 }
 
 .navegableSect div {
-    padding-right: 3%;
-    text-transform: uppercase;
-    color: #000000a5;
+  padding-right: 3%;
+  text-transform: uppercase;
+  color: #000000a5;
 }
 
 .navegableSect div:hover {
-    color: #197572;
+  color: #197572;
 }
 
 .navegableSect p {
-    margin-left: 40%;
-    cursor: pointer;
+  margin-left: 40%;
+  cursor: pointer;
 }
 
 .docFile {
-    margin-top: .6%;
-    width: 20%;
-    height: 7%;
+  margin-top: 0.6%;
+  width: 20%;
+  height: 7%;
 }
 
 .addDocBtnPopUp {
-    margin-right: 20%;
-    color: #197572;
+  margin-right: 20%;
+  color: #197572;
 }
 
 .addDocBtnPopUp:hover {
-    color: #31af9a;
+  color: #31af9a;
 }
 
 .renderPopUpSection {
-    height: 92%;
+  height: 92%;
 }
 
 /* NavegableSect */
 /* RenderSect */
 .renderBoxsOrder {
-    height: 100%;
+  height: 100%;
 }
 
 .boxInfoOrderCreate {
-    width: 25%;
-    height: 100%;
+  width: 25%;
+  height: 100%;
 }
 
 .boxInfo {
-    width: 75%;
-    height: 84px;
-    margin-top: 5%;
-    margin-left: 9%;
-    flex-direction: row;
+  width: 75%;
+  height: 84px;
+  margin-top: 5%;
+  margin-left: 9%;
+  flex-direction: row;
 }
 
 .boxInfoOrder {
-    border: 1px solid #00000026;
-    width: 100%;
-    height: 95%;
+  border: 1px solid #00000026;
+  width: 100%;
+  height: 95%;
 }
 
 .boxInfoOrder p {
-    color: black;
-    font-size: 1vw;
-    white-space: noWrap;
+  color: black;
+  font-size: 1vw;
+  white-space: noWrap;
 }
 
 .boxInfoOrder span {
-    color: #000000A5;
-    margin-left: 1rem;
-    white-space: noWrap;
+  color: #000000a5;
+  margin-left: 1rem;
+  white-space: noWrap;
 }
 
 .firstBoxDoc {
-    width: 50%;
+  width: 50%;
 }
 
 .secondBoxDoc {
-    width: 45%;
-    height: 100%;
+  width: 45%;
+  height: 100%;
 }
 
 .imgBtnDocs {
-    height: 19%;
-    margin-top: 10%;
-    margin-left: 6%;
+  height: 19%;
+  margin-top: 10%;
+  margin-left: 6%;
 }
 
 .delBox {
-    height: 20%;
+  height: 20%;
 }
 
 .imgBtnDocs:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* RenderSect */

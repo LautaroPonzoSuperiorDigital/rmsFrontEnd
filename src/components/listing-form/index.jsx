@@ -45,7 +45,7 @@ const formFields = [
 ];
 
 function ListingFormWithRef(
-  { listing, onSavingStatusChange, onListingSaved },
+  { listing, isUpdating, onSavingStatusChange, onListingSaved },
   ref
 ) {
   const [isSaving, setIsSaving] = useState(false);
@@ -69,7 +69,9 @@ function ListingFormWithRef(
         return;
       }
 
-      const { data: newListing } = await api.post("/listing", {
+      const method = isUpdating ? "patch" : "post";
+
+      const { data: newListing } = await api[method]("/listing", {
         ...listingFormData,
         location: createListingLocation(listingFormData),
         adminId: adminId,
@@ -202,6 +204,7 @@ function ListingFormWithRef(
     }
   }, [
     listing,
+    isUpdating,
     onListingSaved,
     isSaving,
     modal,
