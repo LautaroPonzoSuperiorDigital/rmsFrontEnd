@@ -156,7 +156,7 @@ export function ListingAlbum({
                   defaultValue={albumSection.Section.name}
                 />
               ) : (
-                <span>{albumSection.Section.name}</span>
+                <span>{albumSection.Section?.name}</span>
               )}
 
               {editable && index === activeSectionIndex && (

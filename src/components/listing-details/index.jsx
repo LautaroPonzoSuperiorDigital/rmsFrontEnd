@@ -41,8 +41,9 @@ import { ListingDetailsTabs } from "../../context/listingDetailsContext";
 import { ListingApplicants } from "../listing-applicants";
 import { ListingTenants } from "../listing-tenants";
 import { ListingDocuments } from "../listing-documents";
+import { api } from "../../services/api";
 
-export function ListingDetails() {
+export function ListingDetails({ setUpdateListing }) {
   const expensesRef = useRef(null);
 
   const {
@@ -57,11 +58,24 @@ export function ListingDetails() {
   const showInspectionActions =
     activeTab.value === ListingDetailsTabs.INSPECTION_HISTORY;
 
-  const showExpensesActions = activeTab.value === ListingDetailsTabs.EXPENSE_HISTORY;
+  const showExpensesActions =
+    activeTab.value === ListingDetailsTabs.EXPENSE_HISTORY;
 
-  const showDocumentsActions = activeTab.value === ListingDetailsTabs.DOCUMENT_HISTORY;
+  const showDocumentsActions =
+    activeTab.value === ListingDetailsTabs.DOCUMENT_HISTORY;
 
   const openExpenseForm = () => expensesRef.current?.openForm();
+
+  const handleIsPublic = async () => {
+    try {
+      const response = await api.patch(`listing/${listing.id}`, {
+        isPublic: !listing.isPublic,
+      });
+      setUpdateListing(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <ListingDetailsContainer>
@@ -123,7 +137,10 @@ export function ListingDetails() {
           <ExtraDetailsTop>
             <ExtraDetail>
               <span>PUBLIC</span>
-              <CheckBoxLog checked={listing.isPublic} />
+              <CheckBoxLog
+                defaultChecked={listing.isPublic}
+                onChange={handleIsPublic}
+              />
             </ExtraDetail>
 
             <Action type="button" onClick={handleOpenEditListingModal}>
@@ -183,7 +200,10 @@ export function ListingDetails() {
 
           {showInspectionActions && (
             <InspectionsActionsBox>
-              <InspectionAction type="button" onClick={handleOpenInspectionFormModal}>
+              <InspectionAction
+                type="button"
+                onClick={handleOpenInspectionFormModal}
+              >
                 + Add Inspection
               </InspectionAction>
             </InspectionsActionsBox>
@@ -204,9 +224,7 @@ export function ListingDetails() {
 
           {showDocumentsActions && (
             <DocumentsActionsBox>
-              <DocumentAction type="button">
-                + Add Document
-              </DocumentAction>
+              <DocumentAction type="button">+ Add Document</DocumentAction>
             </DocumentsActionsBox>
           )}
         </HistoryTabs>

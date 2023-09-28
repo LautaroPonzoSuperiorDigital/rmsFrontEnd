@@ -1,5 +1,12 @@
 /* eslint-disable react/prop-types */
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
 
 import { api } from "../../services/api";
 
@@ -10,30 +17,24 @@ import { Album, AlbumImage, ViewAlbumButton } from "./styles";
 
 const DEFAULT_NEW_SECTION = {
   isNew: true,
-  Section: { name: 'NEW SECTION' },
-  Images: []
-}
+  Section: { name: "NEW SECTION" },
+  Images: [],
+};
 
-const ListingAlbumPreviewWithRef = (
-  {
-    listingId,
-    editable,
-  },
-  albumRef,
-) => {
+const ListingAlbumPreviewWithRef = ({ listingId, editable }, albumRef) => {
   const [originalAlbum, setOriginalAlbum] = useState(null);
   const [album, setAlbum] = useState(null);
   const [showAlbum, setShowAlbum] = useState(false);
 
   const albumImages = useMemo(() => {
     if (!album) {
-      return []
+      return [];
     }
-    
+
     const sectionsWithImages = album.Sections.filter(
       (section) => section && section.Images
     );
-      
+
     return sectionsWithImages
       .map((section) => section.Images)
       .reduce((a, b) => [...a, ...b], []);
@@ -47,8 +48,10 @@ const ListingAlbumPreviewWithRef = (
     const previewImage = albumImages[0];
 
     if (previewImage.key) {
-      return `https://rms-staging.s3.us-west-1.amazonaws.com/${previewImage.key}`
-        .replace(/\\/g, "%5C");
+      return `https://rms-staging.s3.us-west-1.amazonaws.com/${previewImage.key}`.replace(
+        /\\/g,
+        "%5C"
+      );
     }
 
     return previewImage.url;
@@ -56,15 +59,15 @@ const ListingAlbumPreviewWithRef = (
 
   const toggleAlbum = () => setShowAlbum((old) => !old);
 
-  const handleAddSection = useCallback(() => {  
-    setAlbum(oldState => ({
+  const handleAddSection = useCallback(() => {
+    setAlbum((oldState) => ({
       ...oldState,
-      Sections: [...oldState.Sections, DEFAULT_NEW_SECTION]
-    }))
-  }, [])
+      Sections: [...oldState.Sections, DEFAULT_NEW_SECTION],
+    }));
+  }, []);
 
   const onSectionNameChange = useCallback((albumSectionIndex, newName) => {
-    setAlbum(oldState => ({
+    setAlbum((oldState) => ({
       ...oldState,
       Sections: oldState.Sections.map((section, index) => {
         if (index === albumSectionIndex) {
@@ -72,101 +75,108 @@ const ListingAlbumPreviewWithRef = (
             ...section,
             Section: {
               ...section.Section,
-              name: newName
-            }
-          }
+              name: newName,
+            },
+          };
         }
 
-        return section
-      })
-    }))
-  }, [])
+        return section;
+      }),
+    }));
+  }, []);
 
   const onImagesUploaded = useCallback((albumSectionIndex, newImages) => {
-    setAlbum(oldState => ({
+    setAlbum((oldState) => ({
       ...oldState,
       Sections: oldState.Sections.map((section, index) => {
         if (index === albumSectionIndex) {
           return {
             ...section,
-            Images: [...section.Images, ...newImages]
-          }
+            Images: [...section.Images, ...newImages],
+          };
         }
 
-        return section
-      })
-    }))
-  }, [])
+        return section;
+      }),
+    }));
+  }, []);
 
   const onImageRemoved = useCallback((albumSectionIndex, removedImageIndex) => {
-    setAlbum(oldState => ({
+    setAlbum((oldState) => ({
       ...oldState,
       Sections: oldState.Sections.map((section, index) => {
         if (index === albumSectionIndex) {
           return {
             ...section,
-            Images: section.Images.filter((_, imageIndex) => imageIndex !== removedImageIndex)
-          }
+            Images: section.Images.filter(
+              (_, imageIndex) => imageIndex !== removedImageIndex
+            ),
+          };
         }
 
-        return section
-      })
-    }))
-  }, [])
+        return section;
+      }),
+    }));
+  }, []);
 
   const getAlbum = useCallback(() => {
     if (!originalAlbum) {
-      return album
+      return album;
     }
 
-    const albumSectionsImages = album.Sections
-      .map(({ Section, isNew, Images }) => Images.map(image => ({ ...image, Section, isNew })))
-      .reduce((a, b) => [...a, ...b])
-    const albumImagesIds = albumSectionsImages.map(image => image.id)
+    const albumSectionsImages = album.Sections.map(
+      ({ Section, isNew, Images }) =>
+        Images.map((image) => ({ ...image, Section, isNew }))
+    ).reduce((a, b) => [...a, ...b]);
+    const albumImagesIds = albumSectionsImages.map((image) => image.id);
 
-    const removedImages = originalAlbum.Sections
-    .map(albumSection => albumSection.Images
-      .filter(image => albumImagesIds.indexOf(image.id) === -1)
-      .map(removedImage => ({
+    const removedImages = originalAlbum.Sections.map((albumSection) =>
+      albumSection.Images.filter(
+        (image) => albumImagesIds.indexOf(image.id) === -1
+      ).map((removedImage) => ({
         sectionId: removedImage.AlbumSection.sectionId,
-        imageId: removedImage.id
-      })))
-    .reduce((a, b) => [...a, ...b])
+        imageId: removedImage.id,
+      }))
+    ).reduce((a, b) => [...a, ...b]);
 
-    const addedImages = albumSectionsImages.filter(image => !image.id && !image.isNew)
-    
-    const changedSections = album.Sections
-      .filter(({ Section }, index) => originalAlbum.Sections[index]
-        && originalAlbum.Sections[index].Section.name !== Section.name)
-      .map(({ Section }) => Section)
+    const addedImages = albumSectionsImages.filter(
+      (image) => !image.id && !image.isNew
+    );
 
-    const addedSections = album.Sections
-      .filter((section) => section.isNew)
-      .map(({ Section, Images }) => ({ Section, Images }))
+    const changedSections = originalAlbum.Sections.filter(
+      ({ Section }, index) =>
+        album.Sections[index]?.Section &&
+        Section &&
+        album.Sections[index].Section.name !== Section.name
+    ).map(({ Section }) => Section);
 
-    return { removedImages, addedImages, changedSections, addedSections }
-  }, [originalAlbum, album])
+    const addedSections = album.Sections.filter((section) => section.isNew).map(
+      ({ Section, Images }) => ({ Section, Images })
+    );
 
-  useImperativeHandle(albumRef, () => ({ getAlbum }))
+    return { removedImages, addedImages, changedSections, addedSections };
+  }, [originalAlbum, album]);
+
+  useImperativeHandle(albumRef, () => ({ getAlbum }));
 
   useEffect(() => {
     async function loadListingAlbum() {
       try {
-        const { data } = await api.get(`/listing/${listingId}/album`)
+        const { data } = await api.get(`/listing/${listingId}/album`);
 
-        setOriginalAlbum(data)
-        setAlbum(data)
+        setOriginalAlbum(data);
+        setAlbum(data);
       } catch (err) {
-        alert('Error loading listing album')
+        alert("Error loading listing album");
       }
     }
 
     if (listingId) {
-      loadListingAlbum()
+      loadListingAlbum();
     } else {
-      setAlbum({ Sections: [DEFAULT_NEW_SECTION] })
+      setAlbum({ Sections: [DEFAULT_NEW_SECTION] });
     }
-  }, [listingId])
+  }, [listingId]);
 
   if (showAlbum) {
     return (
@@ -194,10 +204,12 @@ const ListingAlbumPreviewWithRef = (
       >
         {albumImages.length
           ? `${editable ? "Edit Album" : "View Album"} (${albumImages.length})`
-          : editable ? "+ Add Photos" : "No Photos Added"}
+          : editable
+          ? "+ Add Photos"
+          : "No Photos Added"}
       </ViewAlbumButton>
     </Album>
   );
-}
+};
 
-export const ListingAlbumPreview = forwardRef(ListingAlbumPreviewWithRef)
+export const ListingAlbumPreview = forwardRef(ListingAlbumPreviewWithRef);
