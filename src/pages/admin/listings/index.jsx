@@ -38,6 +38,7 @@ export default function AdminListings() {
   const [listingDetails, setListingDetails] = useState(null);
   const [savingListingForm, setSavingListingForm] = useState(false);
   const [isEditingListing, setIsEditingListing] = useState(false);
+  const [updateListing, setUpdateListing] = useState(false);
 
   const createListingModalRef = useRef(null);
   const listingFormRef = useRef(null);
@@ -156,9 +157,9 @@ export default function AdminListings() {
         alert("Error loading admin and listings data: ", err);
       }
     }
-
+    setUpdateListing(false);
     loadAdminDataAndListings();
-  }, []);
+  }, [updateListing]);
 
   return (
     <>
@@ -349,7 +350,9 @@ export default function AdminListings() {
               <Modal.Body width="90%">
                 <Modal.Header showCloseIcon />
                 <Modal.Content>
-                  {listingDetails && <ListingDetails />}
+                  {listingDetails && (
+                    <ListingDetails setUpdateListing={setUpdateListing} />
+                  )}
                 </Modal.Content>
               </Modal.Body>
             </Modal.Root>
