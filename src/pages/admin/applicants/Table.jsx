@@ -88,36 +88,30 @@ const Table = ({
           <p className="deleteText g">DELETE</p>
         </td>
       </thead>
-      {/* {applicant.map((item) => {
-        //i dont want to show nothing if the filteredApplications is empty
-        if (item.filteredApplications.length === 0) {
-          return null;
-        }
-        return <p key={item.id}>{item.applicant.User.name}</p>;
-      })} */}
 
       <tbody style={tBodyStyle}>
         {applicant.map((item) =>
-          // idont want tho show nothing if the filteredApplications is empty
           item.filteredApplications.length === 0 ? null : (
             <tr className="tr-hover" key={item.id}>
               <td className="bor1">
                 <div
-                  className="mt-3   Person"
+                  className="mt-3   Person "
                   style={{ width: "150px", margin: 0 }}
                 >
                   <p>{item.applicant.User.name}</p>
                 </div>
               </td>
-              <td className="bor1">
-                <div className="mt-3 ms-2" style={{ width: "250px" }}>
+              <td className="bor1" style={{ verticalAlign: "middle" }}>
+                <div className=" ms-2" style={{ width: "250px" }}>
                   {item.filteredApplications.map((item) => (
-                    <p key={item.id}>{item.Listing.location}</p>
+                    <p key={item.id} style={{ margin: "0px" }}>
+                      {item.Listing.location}
+                    </p>
                   ))}
                 </div>
               </td>
-              <td className="bor1">
-                <div className="mt-3 ms-5">
+              <td className="bor1" style={{ verticalAlign: "middle" }}>
+                <div className=" ms-5">
                   {item.applicant.approvalStatus && (
                     <TableSelect
                       approbalStatus={item.applicant.approvalStatus}
@@ -129,18 +123,21 @@ const Table = ({
                   )}
                 </div>
               </td>
-              <td className="bor1">
-                <div className="mt-3" style={{ width: "100px" }}>
-                  <p>{item.applicant.User.email}</p>
+              <td className="bor1  " style={{ verticalAlign: "middle" }}>
+                <div
+                  className=" d-flex align-items-center"
+                  style={{ width: "100px" }}
+                >
+                  <p style={{ margin: "0px" }}>{item.applicant.User.email}</p>
                 </div>
               </td>
-              <td className="bor1">
+              <td className="bor1" style={{ verticalAlign: "middle" }}>
                 <div className="mt-3 ms-1">
                   <p>{item.applicant.phoneNumber}</p>
                 </div>
               </td>
-              <td className="bor1">
-                <div className="mtt">
+              <td className="bor1" style={{ verticalAlign: "middle" }}>
+                <div>
                   {item.applicant.approvalStatus ===
                     "LEASE_AGREEMENT_SIGNED" && (
                     <ButtonTenant
