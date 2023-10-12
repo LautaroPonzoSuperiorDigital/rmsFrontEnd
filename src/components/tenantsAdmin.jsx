@@ -1,38 +1,38 @@
-import React from "react";
-import Nav from "./nav";
-import { useState, useEffect } from "react";
-import "../styles/tenants.css";
-import Edit from "../assets/img/Edit.svg";
-import EditHover from "../assets/img/EditHover.svg";
-import Delete from "../assets/img/delete.svg";
-import DeleteIconHover from "../assets/img/deleteIconHover.svg";
-import CheckMark from "../assets/img/checkMark.svg";
-import { EditButton, DeleteButton } from "./Buttons";
-import EditModal from "./modals";
-import CheckBoxLog from "./checkBox";
-import Search from "./search";
-import Pagination from "./paginations";
-import "../styles/modal.css";
-import TenantModal from "./modals/tenantsPopUp";
-import { api } from "../services/api";
-import { useAuth } from "../hooks/useAuth";
+import React from "react"
+import Nav from "./nav"
+import { useState, useEffect } from "react"
+import "../styles/tenants.css"
+import Edit from "../assets/img/Edit.svg"
+import EditHover from "../assets/img/EditHover.svg"
+import Delete from "../assets/img/delete.svg"
+import DeleteIconHover from "../assets/img/deleteIconHover.svg"
+import CheckMark from "../assets/img/checkMark.svg"
+import { EditButton, DeleteButton } from "./Buttons"
+import EditModal from "./modals"
+import CheckBoxLog from "./checkBox"
+import Search from "./search"
+import Pagination from "./paginations"
+import "../styles/modal.css"
+import TenantModal from "./modals/tenantsPopUp"
+import { api } from "../services/api"
+import { useAuth } from "../hooks/useAuth"
 
 const TenantsAdmin = () => {
-  const { user } = useAuth();
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const [editTenant, setEditTenant] = useState(null);
-  const [tenants, setTenants] = useState([]);
-  const [showMissedPayment, setShowMissedPayment] = useState(false);
-  const [selectedTenant, setSelectedTenant] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedTenantId, setSelectedTenantId] = useState(null);
-  const [selectedField, setSelectedField] = useState(null);
-  const [editedTenant, setEditedTenant] = useState(null);
-  const [selectedListingId, setSelectedListingId] = useState(null);
+  const { user } = useAuth()
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [editTenant, setEditTenant] = useState(null)
+  const [tenants, setTenants] = useState([])
+  const [showMissedPayment, setShowMissedPayment] = useState(false)
+  const [selectedTenant, setSelectedTenant] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [selectedTenantId, setSelectedTenantId] = useState(null)
+  const [selectedField, setSelectedField] = useState(null)
+  const [editedTenant, setEditedTenant] = useState(null)
+  const [selectedListingId, setSelectedListingId] = useState(null)
 
-  const PAGE_SIZE = 10;
-  const totalTenants = tenants.length;
-  const totalPages = Math.ceil(totalTenants / PAGE_SIZE);
+  const PAGE_SIZE = 10
+  const totalTenants = tenants.length
+  const totalPages = Math.ceil(totalTenants / PAGE_SIZE)
 
   const filteredTenants = showMissedPayment
     ? tenants.filter(
@@ -40,93 +40,88 @@ const TenantsAdmin = () => {
           tenant.approvalStatus &&
           tenant.approvalStatus.includes("Missed Payment")
       )
-    : tenants;
+    : tenants
 
   const countMissedPaymentTenants = () =>
     tenants.filter(
       (tenant) =>
         tenant.approvalStatus &&
         tenant.approvalStatus.includes("Missed Payment")
-    ).length;
+    ).length
 
   const tenantsPerPage = filteredTenants.slice(
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE
-  );
+  )
 
   /* popUp */
   const handleCellClick = (tenant, field, event) => {
     if (!event.currentTarget.classList.contains("buttonsNoMod")) {
-      setSelectedTenant(tenant);
-      setSelectedField(field);
+      setSelectedTenant(tenant)
+      setSelectedField(field)
     }
-  };
+  }
   /* popUp */
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+    setCurrentPage(pageNumber)
+  }
 
   const handleDeleteTenant = (tenantId) => {
-    const updatedTenants = tenants.filter((tenant) => tenant.id !== tenantId);
-    setTenants(updatedTenants);
+    const updatedTenants = tenants.filter((tenant) => tenant.id !== tenantId)
+    setTenants(updatedTenants)
     api
       .delete(`/tenant/${tenantId}`)
       .then((response) => {
-        console.log("Tenant deleted:", response.data);
+        console.log("Tenant deleted:", response.data)
       })
       .catch((error) => {
-        console.error("Error deleting tenant:", error);
-        setTenants(tenants);
-      });
-  };
+        console.error("Error deleting tenant:", error)
+        setTenants(tenants)
+      })
+  }
 
   const handleCheckBoxChange = (value) => {
-    setShowMissedPayment(value);
-  };
+    setShowMissedPayment(value)
+  }
 
   const handleSearch = (searchResults) => {
-    setTenants(searchResults);
-  };
+    setTenants(searchResults)
+  }
 
   const handleEditClick = (tenant) => {
-    setEditedTenant(tenant);
-    setIsEditOpen(true);
-  };
+    setEditedTenant(tenant)
+    setIsEditOpen(true)
+  }
 
   const handleCloseEditModal = () => {
-    setIsEditOpen(false);
-    setEditTenant(null);
-  };
+    setIsEditOpen(false)
+    setEditTenant(null)
+  }
 
   const handleSaveModal = (updatedTenant) => {
     const updatedTenants = tenants.map((tenant) =>
       tenant.id === updatedTenant.id ? updatedTenant : tenant
-    );
-    setTenants(updatedTenants);
-    setIsEditOpen(false);
-    setEditedTenant(null);
-  };
+    )
+    setTenants(updatedTenants)
+    setIsEditOpen(false)
+    setEditedTenant(null)
+  }
 
   useEffect(() => {
-    api.get(`/admin/user/${user.id}`).then(({ data: userData }) => {
-      api
-        .get(`/listing?adminId=${userData.Admin.id}`)
-        .then(({ data: listings }) => {
-          listings.map((listing) => {
-            api
-              .get(`/listing/${listing.id}/current-tenant`)
-              .then(({ data }) => {
-                const tenantObj = {
-                  ...data["Tenant"],
-                  listingId: listing.id,
-                };
+    api.get(`/listing`).then(({ data: listings }) => {
+      listings.map((listing, index) => {
+        console.log(listing, index)
+        api.get(`/listing/${listing.id}/current-tenant`).then(({ data }) => {
+          const tenantObj = {
+            ...data["Tenant"],
+            listingId: listing.id
+          }
 
-                setTenants([tenantObj, ...tenants]);
-              });
-          });
-        });
-    });
-  }, []);
+          setTenants((prevTenants) => [...prevTenants, tenantObj])
+        })
+      })
+    })
+  }, [])
 
   return (
     <>
@@ -202,7 +197,7 @@ const TenantsAdmin = () => {
                         showMissedPayment &&
                         !tenant.approvalStatus.includes("Missed Payment")
                       ) {
-                        return null;
+                        return null
                       }
                       return (
                         <tr key={`tenant-${tenant.id}`} className="tr-hover">
@@ -296,7 +291,7 @@ const TenantsAdmin = () => {
                             />
                           </td>
                         </tr>
-                      );
+                      )
                     })}
                 </tbody>
               </table>
@@ -320,7 +315,7 @@ const TenantsAdmin = () => {
         />
       )}
     </>
-  );
-};
+  )
+}
 
-export default TenantsAdmin;
+export default TenantsAdmin
