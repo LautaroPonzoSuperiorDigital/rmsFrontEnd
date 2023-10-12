@@ -1,29 +1,29 @@
-import { useEffect, useRef, useState } from "react";
-import AdminChatRoom from "./AdminChatRoom/AdminChatRoom";
-import Nav from "../../../components/nav";
-import AdminChatRoomMessages from "./AdminChatRoomMessages";
-import ChatSendMessage from "./ChatSendMessage";
-import { socket } from "../../../components/socketManajer/socket";
-import { api } from "../../../services/api";
-import TicketsInfomartion from "./TicketsInformation/TicketsInfomartion";
-import AdminChatRoomNavBar from "./AdminChatRoomNavBar";
-import TicketsNavBar from "./TicketsNavBar";
-import { useAuth } from "../../../hooks/useAuth";
+import { useEffect, useRef, useState } from "react"
+import AdminChatRoom from "./AdminChatRoom/AdminChatRoom"
+import Nav from "../../../components/nav"
+import AdminChatRoomMessages from "./AdminChatRoomMessages"
+import ChatSendMessage from "./ChatSendMessage"
+import { socket } from "../../../components/socketManajer/socket"
+import { api } from "../../../services/api"
+import TicketsInfomartion from "./TicketsInformation/TicketsInfomartion"
+import AdminChatRoomNavBar from "./AdminChatRoomNavBar"
+import TicketsNavBar from "./TicketsNavBar"
+import { useAuth } from "../../../hooks/useAuth"
 
 const chatRoomStyle = {
   width: "33%",
 
   overflowY: "auto",
-  maxHeight: "100vh",
-};
+  maxHeight: "100vh"
+}
 const chatContaienrStyle = {
   borderLeft: "1px solid #00000026",
   borderRight: "1px solid #00000026",
   height: "100%",
 
   overflowY: "auto",
-  width: "33%",
-};
+  width: "33%"
+}
 
 const AdminChatRoomMessagesStyle = {
   display: "flex",
@@ -31,90 +31,74 @@ const AdminChatRoomMessagesStyle = {
   justifyContent: "flex-end",
   padding: "10px 0px",
   height: "64vh",
-  maxHeight: "64vh",
-};
+  maxHeight: "64vh"
+}
 
 const TicketsInfomartionStyle = {
   display: "flex",
   maxHeight: "100vh",
   padding: "20px 20px",
-  width: "33%",
-};
+  width: "33%"
+}
 
 const Chats = () => {
-  const { user } = useAuth();
-  const chatContainerRef = useRef(null);
-  const [messages, setMessages] = useState([]); ///this state recieve all message from server
-  const [filterMessages, setFilterMessages] = useState([]); // this state filter message by chat room id
-  const [targetChatRoomId, setTargetChatRoomId] = useState(null);
-  const [chatRooms, setChatRooms] = useState([]);
-  const [ticketActiveRooms, setTicketActiveRooms] = useState(chatRooms);
-  const [key, setKey] = useState(false);
+  const chatContainerRef = useRef(null)
+  const [messages, setMessages] = useState([]) ///this state recieve all message from server
+  const [filterMessages, setFilterMessages] = useState([]) // this state filter message by chat room id
+  const [targetChatRoomId, setTargetChatRoomId] = useState(null)
+  const [chatRooms, setChatRooms] = useState([])
+  const [ticketActiveRooms, setTicketActiveRooms] = useState(chatRooms)
+  const [key, setKey] = useState(false)
 
   const scrollToLastMessage = () => {
     if (chatContainerRef.current) {
-      const lastMessageElement = chatContainerRef.current.lastElementChild;
+      const lastMessageElement = chatContainerRef.current.lastElementChild
       if (lastMessageElement) {
-        lastMessageElement.scrollIntoView({ behavior: "smooth" });
+        lastMessageElement.scrollIntoView({ behavior: "smooth" })
       }
     }
-  };
+  }
   // Scroll to the last message when messages update
   useEffect(() => {
-    scrollToLastMessage();
-  }, [filterMessages]);
+    scrollToLastMessage()
+  }, [filterMessages])
   // recieve all incoming messages from server
   useEffect(() => {
     socket.on("event_message", (data) => {
-      console.log("Received message:", data);
+      console.log("Received message:", data)
       // Update the state of the incoming messages variable
-      setMessages((prevMessages) => [...prevMessages, data]);
-    });
-  }, [socket]);
+      setMessages((prevMessages) => [...prevMessages, data])
+    })
+  }, [socket])
   //filter by chat room id
   useEffect(() => {
     const filterMessage = messages.filter(
       (message) => message.roomChatId === targetChatRoomId
-    );
-    setFilterMessages(filterMessage);
-  }, [targetChatRoomId, messages]);
+    )
+    setFilterMessages(filterMessage)
+  }, [targetChatRoomId, messages])
   //  get all chat rooms
   useEffect(() => {
     const getChatRooms = async () => {
       try {
-        const { data } = await api.get("/chat/chat-rooms");
-        const { data: adminData } = await api.get(`/admin/user/${user.id}`);
-        const adminListings = await api.get(
-          `/listing?adminId=${adminData.Admin.id}`
-        );
-        if (adminListings.data.length > 0) {
-          // Extract the matching listingId values
-          const matchingListings = data
-            .filter((chatroom) =>
-              adminListings.data.some(
-                (adminListing) => adminListing.id === chatroom.listingId
-              )
-            )
-            .map((chatroom) => chatroom);
+        const { data } = await api.get("/chat/chat-rooms")
+        if (data.length > 0) {
+          setChatRooms(data)
+          const chatRoomsMessage = data.map((chatRoom) => chatRoom.Chats)
 
-          const chatRoomsMessage = matchingListings.map(
-            (chatRoom) => chatRoom.Chats
-          );
-          console.log(matchingListings);
-          setChatRooms(matchingListings);
-          setTicketActiveRooms(data);
-          setMessages(chatRoomsMessage.flat());
+          setTicketActiveRooms(data)
+          setMessages(chatRoomsMessage.flat())
         } else {
-          console.log("adminListings its empty");
-          setChatRooms([]);
+          console.log("adminListings its empty")
+          setChatRooms([])
         }
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
-    };
-    getChatRooms();
-    setKey(false);
-  }, [targetChatRoomId, key]);
+    }
+    getChatRooms()
+    setKey(false)
+  }, [targetChatRoomId, key])
 
   return (
     <div className="vh-100 d-flex flex-column w-100 ">
@@ -138,7 +122,7 @@ const Chats = () => {
                 setFilterMessages={setFilterMessages}
                 messages={messages}
               />
-            );
+            )
           })}
         </div>
         <div style={chatContaienrStyle} className="flex-grow-1">
@@ -156,7 +140,7 @@ const Chats = () => {
                   display: "flex",
                   flexDirection: "column",
                   overflow: "auto",
-                  flexGrow: "1",
+                  flexGrow: "1"
                 }}
               >
                 {filterMessages.map((message) => (
@@ -189,7 +173,7 @@ const Chats = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Chats;
+export default Chats
