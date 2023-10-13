@@ -31,37 +31,7 @@ const Table = ({
     }
   }
   useEffect(() => {
-    console.log(applicants)
-    // want the applicants that has applicant.User.ApplicationScreening with something in it
-    // const filteredApplicants = applicants.filter((applicant) => {
-    //   return applicant.User.ApplicationScreening.length !== 0
-    // })
     setApplicant(applicants)
-
-    // const fetchAdminListing = async () => {
-    //   try {
-    //     const { data: adminData } = await api.get(`/admin/user/${user.id}`);
-    //     const res = await api.get(`/listing?adminId=${adminData.Admin.id}`);
-    //     const adminListing = res.data;
-    //     console.log(adminListing);
-
-    //     const myFilter = filteredApplicants.map((applicant) => ({
-    //       applicant: applicant,
-    //       filteredApplications: applicant.User.ApplicationScreening.filter(
-    //         (application) =>
-    //           adminListing.some(
-    //             (listing) => listing.id === application.listingId
-    //           )
-    //       ),
-    //     }));
-
-    //     setApplicant(myFilter);
-    //     console.log(myFilter);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // };
-    // fetchAdminListing();
   }, [applicants])
 
   return (
