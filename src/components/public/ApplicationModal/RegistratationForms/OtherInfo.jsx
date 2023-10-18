@@ -56,8 +56,8 @@ const OtherInfo = () => {
   return (
     <div className=" d-flex flex-column align-items-center w-100 ">
       <h2 className="mb-5">Other Information</h2>
-      <div className="orderInfo d-flex align-items-center">
-        <div className="leftBox d-flex align-items-start justify-content-center">
+      <div className="orderInfo ">
+        <div className="formContainer " style={{ marginLeft: 0 }}>
           <div className="leftSideInfo d-flex">
             <p className="infoP">Have You Ever Been Evicted?</p>
             <div className="form-check form-switch">
@@ -112,7 +112,7 @@ const OtherInfo = () => {
               />
             )}
           </div>
-          {/* half */}
+
           <div className="leftSideInfo d-flex">
             <p className="infoP">Have You Ever Filed For Bankruptcy?</p>
             <div className="form-check form-switch">
@@ -142,7 +142,8 @@ const OtherInfo = () => {
             )}
           </div>
         </div>
-        <div className="rightBox d-flex align-items-start justify-content-center">
+        {/* half */}
+        <div className="smokeContainer d-flex align-items-start justify-content-center">
           <div className="rightSideInfo d-flex">
             <p className="infoP">Do You Currently Smoke?</p>
             <div className="form-check form-switch">
@@ -173,7 +174,7 @@ const OtherInfo = () => {
           </div>
           <div className="inputInfoH">
             {formData.pets.checked && (
-              <span className="pets">
+              <span className="">
                 PLEASE LIST EACH TYPE, BREED & APPROX. WEIGHT
               </span>
             )}
@@ -189,7 +190,7 @@ const OtherInfo = () => {
           </div>
           <div className="inputR mt-5">
             <input
-              className="inputReset4 rightF"
+              className="howDidInput "
               type="text"
               placeholder="HOW DID YOU LEARN ABOUT US?"
               value={formData.learnAboutUs}
@@ -199,7 +200,7 @@ const OtherInfo = () => {
         </div>
       </div>
       <button
-        className="bgButton d-flex align-items-center justify-content-center"
+        className="submitOther d-flex align-items-center justify-content-center"
         onClick={handleSubmit}
       >
         <span className="submitBtn">Submit</span>
