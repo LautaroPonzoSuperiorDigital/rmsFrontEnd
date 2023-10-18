@@ -371,7 +371,7 @@
 .rmText {
   margin-bottom: 5rem;
   white-space: nowrap;
-  font-size: 1.8vw;
+  font-size: 24px;
   width: 15%;
 }
 .orderInputRoom {
@@ -407,7 +407,7 @@
 }
 .addRoommate {
   color: #197572;
-  font-size: 0.9vw;
+  font-size: 20px;
   margin-left: 8%;
 }
 .addRoommate:hover {
@@ -418,15 +418,51 @@
   color: white;
 }
 .bgButton2 {
-  position: fixed;
-  bottom: 13%;
   background-color: #197572;
-  width: 36.375rem;
-  height: 2.438rem;
+  width: 100%;
+  height: 45px;
+  max-width: 500px;
+  margin-top: 10%;
 }
 .bgButton2:hover {
   background-color: #31af9a;
 }
+@media (max-width: 768px) {
+  .formRoommatesOrder {
+    margin: 0;
+  }
+  .orderInputRoom {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .inputReset2 {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.34);
+    background: transparent;
+    border-radius: 0;
+    height: 30%;
+    margin-top: 1.5rem;
+    width: 100%; /* Make the input fields full width for mobile */
+  }
+  .labelDetails {
+    display: none; /* Hide the label container on mobile screens */
+  }
+  /* Remove the margins for individual fields for mobile version */
+  .roomName,
+  .roomBirth,
+  .roomRela {
+    margin: 0;
+  }
+  .addRoommate {
+    color: #197572;
+    font-size: 16px;
+    margin-left: 0;
+  }
+}
+
 /* ROOMMATES FORM END*/
 /* RENTAL HISTORY FORM START */
 .rentalContainer {
@@ -441,10 +477,10 @@
 }
 .rentalText {
   margin-top: 2rem;
-  font-size: 1.8vw;
+  font-size: 32px;
 }
 .rentalP {
-  font-size: 0.9vw;
+  font-size: 20px;
   margin-top: 0.1rem;
 }
 .rentalOrder {
@@ -484,7 +520,6 @@
   box-shadow: none;
 }
 .cA1 {
-  margin-top: 2rem;
   font-size: 1.3vw;
 }
 .submitBtn3 {
@@ -502,9 +537,49 @@
   margin-top: 3rem;
   margin-bottom: 2rem;
 }
+@media (max-width: 768px) {
+  .rentalOrder {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .inputReset3 {
+    width: 100%;
+  }
+  .formRentalHistory {
+    width: 100%;
+  }
+  .leftRentalForm {
+    width: 90%;
+    height: 100%;
+    margin-left: 0;
+  }
+  .cA {
+    font-size: 20px;
+  }
+  .cA1 {
+    font-size: 20px;
+  }
+  .cA3 {
+    font-size: 20px;
+  }
+  .rentalP {
+    font-size: 12px !important;
+  }
+  .rightRentalForm {
+    margin-top: 20px;
+    width: 90%;
+    height: 100%;
+    margin-left: 0;
+  }
+}
 
 /* RENTAL HISTORY FORM END */
 /* INCOME FORM */
+.incomeOrder {
+  display: flex;
+}
 .incomeContainer {
   display: flex;
   flex-direction: column;
@@ -518,6 +593,22 @@
 .incomeSeparation {
   margin-top: 3rem;
   margin-bottom: 2rem;
+}
+@media (max-width: 768px) {
+  .incomeOrder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .rentalText {
+    margin: 0;
+    font-size: 30px;
+  }
+  .rentalP {
+    margin: 0;
+    font-size: 1px;
+    text-align: center;
+  }
 }
 
 /* INCOME FORM */
@@ -538,7 +629,12 @@
 .bgButton4:hover {
   background-color: #31af9a;
 }
-
+@media (max-width: 768px) {
+  .ECText {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+}
 /* EMERGENCY CONTACT END*/
 /* VEHICLE START */
 .VehicleText {

@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
-import "../../../styles/publIcListings/application.css";
-import Logo from "../../../assets/img/Logo.svg";
-import { api } from "../../../services/api";
-import { env } from "../../../config/env";
-import { HeaderGoBack } from "../../icons/tenants";
-import { useAuth } from "../../../hooks/useAuth";
-import { Link } from "react-router-dom";
-import { createListingImage } from "../../../services/listing";
+import { useState, useEffect } from "react"
+import "../../../styles/publIcListings/application.css"
+import Logo from "../../../assets/img/Logo.svg"
+import { api } from "../../../services/api"
+import { env } from "../../../config/env"
+import { HeaderGoBack } from "../../icons/tenants"
+import { useAuth } from "../../../hooks/useAuth"
+import { createListingImage } from "../../../services/listing"
 import {
   NavContainer,
   NavText,
@@ -27,63 +26,70 @@ import {
   Li,
   LogoImg,
   LogoContainer,
-} from "./styles.js";
-import DescriptionMobileNav from "./DescriptionMobileNav";
+  NavTextContainer
+} from "./styles.js"
+import DescriptionMobileNav from "./DescriptionMobileNav"
+import Roomates from "./RegistratationForms/Roomates"
+import RentalHistory from "./RegistratationForms/RentalHistory"
+import Income from "./RegistratationForms/Income"
+import EmergencyContact from "./RegistratationForms/EmergencyContact"
+import Vehicles from "./RegistratationForms/Vehicles"
+import OtherInfo from "./RegistratationForms/OtherInfo"
 
 const ApplicationModal = ({ myselectedListing, onClose }) => {
-  const [imageSrc, setImageSrc] = useState(null);
+  const [imageSrc, setImageSrc] = useState(null)
 
-  const [activeSection, setActiveSection] = useState("registration");
-  const [formData, setFormData] = useState({});
-  const [message, setMessage] = useState("");
-  const [isStartScreening, setIsStartScreening] = useState(false);
-  const [screeningMessage, setScreeningMessage] = useState("");
-  const [userId, setUserId] = useState({});
-  const { user } = useAuth();
-  const innerWidth = window.innerWidth;
+  const [activeSection, setActiveSection] = useState("otherInfo")
+  const [formData, setFormData] = useState({})
+  const [message, setMessage] = useState("")
+  const [isStartScreening, setIsStartScreening] = useState(false)
+  const [screeningMessage, setScreeningMessage] = useState("")
+  const [userId, setUserId] = useState({})
+  const { user } = useAuth()
+  const innerWidth = window.innerWidth
 
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        const src = await createListingImage(myselectedListing);
-        setImageSrc(src);
+        const src = await createListingImage(myselectedListing)
+        setImageSrc(src)
       } catch (error) {
-        console.error("Error fetching image:", error);
+        console.error("Error fetching image:", error)
       }
-    };
+    }
 
-    fetchImage();
-  }, [myselectedListing]);
+    fetchImage()
+  }, [myselectedListing])
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     if (name === "phoneNumber") {
       const formattedValue = value
         .replace(/\D/g, "") // Remove non-numeric characters
-        .replace(/^(\d{3})(\d{1,3})?(\d{1,4})?/, "$1-$2-$3"); // Insert hyphens
-      setFormData({ ...formData, [name]: formattedValue });
+        .replace(/^(\d{3})(\d{1,3})?(\d{1,4})?/, "$1-$2-$3") // Insert hyphens
+      setFormData({ ...formData, [name]: formattedValue })
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData({ ...formData, [name]: value })
     }
-  };
+  }
   const submitRegistration = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
       const response = await api.post("/user/tenant", {
         ...formData,
-        approvalStatus: "SCREENING_IN_PROCESS",
-      });
-      console.log(response);
-      setUserId(response.data.id);
-      setMessage("Registration successful!");
-      setIsStartScreening(true);
+        approvalStatus: "SCREENING_IN_PROCESS"
+      })
+      console.log(response)
+      setUserId(response.data.id)
+      setMessage("Registration successful!")
+      setIsStartScreening(true)
     } catch (err) {
-      console.log(err.response);
-      setMessage(err.response.data.message);
+      console.log(err.response)
+      setMessage(err.response.data.message)
     }
-  };
+  }
   const handleStartScreening = async () => {
-    let data;
+    let data
 
     if (user) {
       data = {
@@ -93,8 +99,8 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
         status: "PENDING",
         name: user.name,
         email: user.email,
-        phoneNumber: user.phoneNumber,
-      };
+        phoneNumber: user.phoneNumber
+      }
     } else {
       data = {
         userId: userId,
@@ -103,33 +109,33 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
         location: myselectedListing.location,
         name: formData.name,
         email: formData.email,
-        phoneNumber: formData.phoneNumber,
-      };
+        phoneNumber: formData.phoneNumber
+      }
     }
 
     try {
-      const response = await api.post("/application-screening", data);
-      window.open(env.rentSpreeLink, "_blank");
-      setIsStartScreening(false);
-      setScreeningMessage("Screening its gonna start soon");
+      const response = await api.post("/application-screening", data)
+      window.open(env.rentSpreeLink, "_blank")
+      setIsStartScreening(false)
+      setScreeningMessage("Screening its gonna start soon")
     } catch (err) {
-      console.log(err.response);
+      console.log(err.response)
     }
-  };
+  }
 
   const handleLogoClick = () => {
-    onClose();
-    window.location.href = "/";
-  };
+    onClose()
+    window.location.href = "/"
+  }
 
   const handleGoBack = () => {
-    onClose();
+    onClose()
     if (user) {
-      window.location.href = "/tenants/public-listings";
+      window.location.href = "/tenants/public-listings"
     } else {
-      window.location.href = "/";
+      window.location.href = "/"
     }
-  };
+  }
 
   return (
     <div className="bodyApplication">
@@ -142,10 +148,66 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             <NavText>Application</NavText>
           </LogoContainer>
 
-          <GoBackContainer onClick={handleGoBack}>
-            <HeaderGoBack />
-            <GoBackStyle>GO BACK</GoBackStyle>
-          </GoBackContainer>
+          <nav className="navBar1 d-flex align-items-center w-100">
+            <ul className="w-100">
+              <li
+                className={`registration custom-item1 nav-item ${
+                  activeSection === "registration" ? "active" : ""
+                }`}
+                // onClick={() => handleSectionClick("registration")}
+              >
+                REGISTRATION
+              </li>
+              <li
+                className={`roommates custom-item1 nav-item ${
+                  activeSection === "roommates" ? "active" : ""
+                }`}
+                // onClick={() => handleSectionClick("roommates")}
+              >
+                ROOMMATES
+              </li>
+              <li
+                className={`rh custom-item1 nav-item ${
+                  activeSection === "rentalHistory" ? "active" : ""
+                }`}
+                // onClick={() => handleSectionClick("rentalHistory")}
+              >
+                RENTAL HISTORY
+              </li>
+              <li
+                className={`income custom-item1 nav-item ${
+                  activeSection === "income" ? "active" : ""
+                }`}
+                // onClick={() => handleSectionClick("income")}
+              >
+                INCOME
+              </li>
+              <li
+                className={`ec custom-item1 nav-item ${
+                  activeSection === "emergencyContact" ? "active" : ""
+                }`}
+                // onClick={() => handleSectionClick("emergencyContact")}
+              >
+                EMERGENCY CONTACT
+              </li>
+              <li
+                className={`vehicles custom-item1 nav-item ${
+                  activeSection === "vehicles" ? "active" : ""
+                }`}
+                // onClick={() => handleSectionClick("vehicles")}
+              >
+                VEHICLES
+              </li>
+              <li
+                className={`otherInfo custom-item1 nav-item ${
+                  activeSection === "otherInfo" ? "active" : ""
+                }`}
+                // onClick={() => handleSectionClick("otherInfo")}
+              >
+                OTHER INFO
+              </li>
+            </ul>
+          </nav>
         </NavContainer>
       </div>
 
@@ -174,7 +236,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   style={{
                     color: "#272727",
                     fontSize: "25px",
-                    fontWeight: "bold",
+                    fontWeight: "bold"
                   }}
                 >
                   ${" "}
@@ -210,7 +272,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                       {" "}
                       {myselectedListing.houseSize
                         ? myselectedListing.houseSize.toLocaleString("EN", {
-                            maximumFractionDigits: 0,
+                            maximumFractionDigits: 0
                           })
                         : ""}
                       &nbsp;Sq. Ft. per county
@@ -226,7 +288,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   <FieldValue className="desc2">
                     {myselectedListing.lotSize
                       ? myselectedListing.lotSize.toLocaleString("EN", {
-                          maximumFractionDigits: 0,
+                          maximumFractionDigits: 0
                         })
                       : ""}{" "}
                     &nbsp;Sq. Ft. per county
@@ -271,83 +333,87 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             </AmenitiesContainer>
           </SideBarDescriptionContainer>
         )}
-        <div className="forms redside d-flex justify-content-center align-items-center ">
-          {activeSection === "registration" && (
-            <div className="registrationContainer d-flex justify-content-center align-items-center">
-              <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
-                {!user && (
-                  <>
-                    <h2 className="d-flex justify-content-center registrationText">
-                      Registration
-                    </h2>
-                    <form className="resetForm" onSubmit={submitRegistration}>
-                      <input
-                        className="form-control inputReset"
-                        type="text"
-                        placeholder="FULL LEGAL NAME"
-                        name="name"
-                        required
-                        onChange={handleChange}
-                      />
-                      <input
-                        className="form-control inputReset"
-                        type="text"
-                        placeholder="PHONE NO 123-456-7890 "
-                        name="phoneNumber"
-                        required
-                        onChange={handleChange}
-                        value={formData.phoneNumber || ""}
-                      />
-                      <input
-                        className="form-control inputReset"
-                        type="email"
-                        placeholder="EMAIL"
-                        name="email"
-                        required
-                        onChange={handleChange}
-                      />
-                      <input
-                        className="form-control inputReset"
-                        type="password"
-                        placeholder="PASSWORD"
-                        name="password"
-                        required
-                        onChange={handleChange}
-                      />
+        <div className="forms redside d-flex align-items-center ">
+          <div className="registrationContainer w-100 ">
+            <div className=" d-flex justify-content-center  w-100">
+              {/* {!user && (
+                <div className="w-50">
+                  <h2 className="d-flex justify-content-center registrationText">
+                    Registration
+                  </h2>
+                  <form className="resetForm" onSubmit={submitRegistration}>
+                    <input
+                      className="form-control inputReset"
+                      type="text"
+                      placeholder="FULL LEGAL NAME"
+                      name="name"
+                      required
+                      onChange={handleChange}
+                    />
+                    <input
+                      className="form-control inputReset"
+                      type="text"
+                      placeholder="PHONE NO 123-456-7890 "
+                      name="phoneNumber"
+                      required
+                      onChange={handleChange}
+                      value={formData.phoneNumber || ""}
+                    />
+                    <input
+                      className="form-control inputReset"
+                      type="email"
+                      placeholder="EMAIL"
+                      name="email"
+                      required
+                      onChange={handleChange}
+                    />
+                    <input
+                      className="form-control inputReset"
+                      type="password"
+                      placeholder="PASSWORD"
+                      name="password"
+                      required
+                      onChange={handleChange}
+                    />
 
-                      <button className="bgButton d-flex align-items-center justify-content-center w-100">
-                        <span className="submitBtn">Submit</span>
-                      </button>
-                      <p style={{ color: "#31af9a" }}>{message}</p>
-                    </form>
-                  </>
-                )}
-                {isStartScreening && (
-                  <div
-                    style={{
-                      height: "100%",
-                      maxHeight: "45px",
-                      width: "100%",
-                      maxWidth: "580px",
-                    }}
-                  >
-                    <button
-                      className=" bgButton  d-flex align-items-center justify-content-center w-100"
-                      onClick={handleStartScreening}
-                      style={{ margin: "0px" }}
-                    >
-                      <span className="submitBtn">Start Screening</span>
+                    <button className="bgButton d-flex align-items-center justify-content-center w-100">
+                      <span className="submitBtn">Submit</span>
                     </button>
-                    <p>{screeningMessage}</p>
-                  </div>
-                )}
-              </div>
+                    <p style={{ color: "#31af9a" }}>{message}</p>
+                  </form>
+                </div>
+              )} */}
+              {isStartScreening && (
+                <div
+                  style={{
+                    height: "100%",
+                    maxHeight: "45px",
+                    width: "100%",
+                    maxWidth: "580px"
+                  }}
+                >
+                  <button
+                    className=" bgButton  d-flex align-items-center justify-content-center w-100"
+                    onClick={handleStartScreening}
+                    style={{ margin: "0px" }}
+                  >
+                    <span className="submitBtn">Start Screening</span>
+                  </button>
+                  <p>{screeningMessage}</p>
+                </div>
+              )}
+              {activeSection === "roommates" && <Roomates />}
+              {activeSection === "rentalHistory" && <RentalHistory />}
+              {activeSection === "income" && <Income />}
+              {activeSection === "emergencyContact" && <EmergencyContact />}
+              {activeSection === "vehicles" && <Vehicles />}
+              {activeSection === "otherInfo" && <OtherInfo />}
             </div>
-          )}
+          </div>
         </div>
       </ApplicationContainer>
     </div>
-  );
-};
+  )
+}
 
-export default ApplicationModal;
+export default ApplicationModal
