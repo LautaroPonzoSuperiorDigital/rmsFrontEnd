@@ -1,165 +1,158 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react"
 
-import CheckMarkListing from "../../../assets/img/checkMark.svg";
-import Edit from "../../../assets/img/Edit.svg";
-import EditHover from "../../../assets/img/EditHover.svg";
-import Delete from "../../../assets/img/delete.svg";
-import DeleteIconHover from "../../../assets/img/deleteIconHover.svg";
+import CheckMarkListing from "../../../assets/img/checkMark.svg"
+import Edit from "../../../assets/img/Edit.svg"
+import EditHover from "../../../assets/img/EditHover.svg"
+import Delete from "../../../assets/img/delete.svg"
+import DeleteIconHover from "../../../assets/img/deleteIconHover.svg"
 
-import { api } from "../../../services/api";
+import { api } from "../../../services/api"
 
-import Nav from "../../../components/nav";
-import CheckBoxLog from "../../../components/checkBox";
-import SearchListings from "../../../components/searchListings";
-import { EditButton, DeleteButton } from "../../../components/buttonListings";
-import Pagination from "../../../components/paginations";
-import AddListings from "../../../components/addListing";
-import { Modal } from "../../../components/modal";
+import Nav from "../../../components/nav"
+import CheckBoxLog from "../../../components/checkBox"
+import SearchListings from "../../../components/searchListings"
+import { EditButton, DeleteButton } from "../../../components/buttonListings"
+import Pagination from "../../../components/paginations"
+import AddListings from "../../../components/addListing"
+import { Modal } from "../../../components/modal"
 import {
   ListingDetailsContext,
   ListingDetailsProvider,
-  ListingDetailsTabs,
-} from "../../../context/listingDetailsContext";
-import { ListingForm } from "../../../components/listing-form";
-import { ListingDetails } from "../../../components/listing-details";
-import { createListingImage } from "../../../services/listing";
-import { useAuth } from "../../../hooks/useAuth";
+  ListingDetailsTabs
+} from "../../../context/listingDetailsContext"
+import { ListingForm } from "../../../components/listing-form"
+import { ListingDetails } from "../../../components/listing-details"
+import { createListingImage } from "../../../services/listing"
+import { useAuth } from "../../../hooks/useAuth"
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 10
 
 export default function AdminListings() {
-  const { user } = useAuth();
+  const { user } = useAuth()
 
-  const [listings, setListings] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false);
-  const [searchId, setSearchId] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [listingDetails, setListingDetails] = useState(null);
-  const [savingListingForm, setSavingListingForm] = useState(false);
-  const [isEditingListing, setIsEditingListing] = useState(false);
-  const [updateListing, setUpdateListing] = useState(false);
+  const [listings, setListings] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false)
+  const [searchId, setSearchId] = useState("")
+  const [searchResults, setSearchResults] = useState([])
+  const [listingDetails, setListingDetails] = useState(null)
+  const [savingListingForm, setSavingListingForm] = useState(false)
+  const [isEditingListing, setIsEditingListing] = useState(false)
+  const [updateListing, setUpdateListing] = useState(false)
 
-  const createListingModalRef = useRef(null);
-  const listingFormRef = useRef(null);
-  const listingDetailsModalRef = useRef(null);
+  const createListingModalRef = useRef(null)
+  const listingFormRef = useRef(null)
+  const listingDetailsModalRef = useRef(null)
 
-  const totalListings = listings.length;
-  const totalPages = Math.ceil(totalListings / PAGE_SIZE);
+  const totalListings = listings.length
+  const totalPages = Math.ceil(totalListings / PAGE_SIZE)
 
   const filteredListings = useMemo(() => {
     if (searchId) {
-      return searchResults;
+      return searchResults
     }
 
     if (showOnlyPublicListings) {
-      return listings.filter((listing) => listing.isPublic);
+      return listings.filter((listing) => listing.isPublic)
     }
 
-    return listings;
-  }, [searchId, searchResults, listings, showOnlyPublicListings]);
+    return listings
+  }, [searchId, searchResults, listings, showOnlyPublicListings])
 
   const onListingSaved = useCallback((savedListing) => {
-    setListings((oldState) => [...oldState, savedListing]);
-  }, []);
+    setListings((oldState) => [...oldState, savedListing])
+  }, [])
 
   const handleSearch = (searchValue) => {
-    setSearchId(searchValue);
+    setSearchId(searchValue)
 
     if (searchValue === "") {
-      setSearchResults([]);
-      return;
+      setSearchResults([])
+      return
     }
 
     const filteredListings = listings.filter((listing) => {
-      const paddedId = listing.id.toString().padStart(6, "0");
+      const paddedId = listing.id.toString().padStart(6, "0")
       return (
         paddedId === searchValue ||
         listing.location.toLowerCase().includes(searchValue.toLowerCase())
-      );
-    });
+      )
+    })
 
-    setSearchResults(filteredListings);
-  };
+    setSearchResults(filteredListings)
+  }
 
   const handleAddListing = () => {
-    createListingModalRef.current.open();
-  };
+    createListingModalRef.current.open()
+  }
 
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+    setCurrentPage(pageNumber)
+  }
 
   const handleUpdateListing = () => {
-    setIsEditingListing(true);
-  };
+    setIsEditingListing(true)
+  }
 
   const handleDeleteListing = async (listingId) => {
     const shouldRemove = confirm(
       "Are you sure you want to remove this listing? This action cannot be undone."
-    );
+    )
 
     if (!shouldRemove) {
-      return;
+      return
     }
 
     try {
-      await api.delete(`/listing/${listingId}`);
+      await api.delete(`/listing/${listingId}`)
 
       const updatedListing = listings.filter(
         (listing) => listing.id !== listingId
-      );
-      setListings(updatedListing);
+      )
+      setListings(updatedListing)
     } catch (err) {
-      alert("Failed to delete listing");
+      alert("Failed to delete listing")
     }
-  };
+  }
 
   const handleCheckBoxChange = () => {
-    setShowOnlyPublicListings(!showOnlyPublicListings);
-  };
+    setShowOnlyPublicListings(!showOnlyPublicListings)
+  }
 
   const handleOpenListingDetails = (listing) => {
-    setListingDetails(listing);
-    listingDetailsModalRef.current?.open();
-  };
+    setListingDetails(listing)
+    listingDetailsModalRef.current?.open()
+  }
 
   useEffect(() => {
     function loadAdminDataAndListings() {
       try {
         api
-          .get(`/admin/user/${user.id}`)
-          .then(({ data: userData }) => {
-            api
-              .get(`/listing?adminId=${userData?.Admin.id}`)
-              .then(({ data: listings }) => {
-                Promise.all(
-                  listings.map((listing) => createListingImage(listing))
+          .get(`/listing`)
+          .then(({ data: listings }) => {
+            Promise.all(listings.map((listing) => createListingImage(listing)))
+              .then((imageUrls) => {
+                setListings((listings) =>
+                  listings.map((listing, index) => ({
+                    ...listing,
+                    image: imageUrls[index]
+                  }))
                 )
-                  .then((imageUrls) => {
-                    setListings((listings) =>
-                      listings.map((listing, index) => ({
-                        ...listing,
-                        image: imageUrls[index],
-                      }))
-                    );
-                  })
-                  .catch((error) => {
-                    console.error("Error loading listing images:", error);
-                  });
-                setListings(listings);
               })
-              .catch((error) => alert("Error loading listings data: ", error));
+              .catch((error) => {
+                console.error("Error loading listing images:", error)
+              })
+            setListings(listings)
           })
-          .catch((error) => alert("Error loading admin data: ", error));
+          .catch((error) => alert("Error loading listings data: ", error))
       } catch (err) {
-        console.log(err);
-        alert("Error loading admin and listings data: ", err);
+        console.log(err)
+        alert("Error loading admin and listings data: ", err)
       }
     }
-    setUpdateListing(false);
-    loadAdminDataAndListings();
-  }, [updateListing]);
+    setUpdateListing(false)
+    loadAdminDataAndListings()
+  }, [updateListing])
 
   return (
     <>
@@ -243,7 +236,7 @@ export default function AdminListings() {
                         <p className="alignText d-flex align-items-center">
                           {listing.lotSize
                             ? listing.lotSize.toLocaleString("EN", {
-                                maximumFractionDigits: 0,
+                                maximumFractionDigits: 0
                               })
                             : ""}
                           &nbsp;&nbsp;Sq. Ft. Per County
@@ -253,7 +246,7 @@ export default function AdminListings() {
                         <p className="alignText d-flex align-items-center">
                           {listing.houseSize
                             ? listing.houseSize.toLocaleString("EN", {
-                                maximumFractionDigits: 0,
+                                maximumFractionDigits: 0
                               })
                             : ""}
                           &nbsp;&nbsp;Sq. Ft. Per County
@@ -264,7 +257,7 @@ export default function AdminListings() {
                           $
                           {listing.price
                             ? parseFloat(listing.price).toLocaleString("en", {
-                                useGrouping: true,
+                                useGrouping: true
                               })
                             : ""}
                           / mo
@@ -367,5 +360,5 @@ export default function AdminListings() {
         onPageChange={handlePageChange}
       />
     </>
-  );
+  )
 }

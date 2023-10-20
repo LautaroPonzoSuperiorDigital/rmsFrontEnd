@@ -1,80 +1,79 @@
-import { useEffect, useState } from "react";
-import Nav from "../../../components/nav";
+import { useEffect, useState } from "react"
+import Nav from "../../../components/nav"
 import {
   BtnPlusSub,
   Table1,
   TableContainer,
   TableTd,
   TableTdEmail,
-  TableThead,
-} from "./styles";
-import DeleteIconHover from "../../../assets/img/deleteIconHover.svg";
-import Delete from "../../../assets/img/delete.svg";
-import ModalAddSub from "./ModalAddSub";
-import { api } from "../../../services/api";
-import { useAuth } from "../../../hooks/useAuth";
-import { DeleteButton } from "../../../components/buttonApplicants";
-import Pencil from "./../../../assets/img/pencil.svg";
-import ModalUpdateSub from "./ModalUpdateSub";
-import SearchListings from "../../../components/searchListings";
+  TableThead
+} from "./styles"
+import DeleteIconHover from "../../../assets/img/deleteIconHover.svg"
+import Delete from "../../../assets/img/delete.svg"
+import ModalAddSub from "./ModalAddSub"
+import { api } from "../../../services/api"
+import { useAuth } from "../../../hooks/useAuth"
+import { DeleteButton } from "../../../components/buttonApplicants"
+import Pencil from "./../../../assets/img/pencil.svg"
+import ModalUpdateSub from "./ModalUpdateSub"
+import SearchListings from "../../../components/searchListings"
 
 const tBodyStyle = {
-  height: "50px",
-};
+  height: "50px"
+}
 
 const SubAdmins = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isUpdateModal, setUpdatemodal] = useState(false);
-  const [subAdmins, setSubAdmins] = useState([]);
-  const [subAdminTable, setSubAdminTable] = useState([]);
-  const [update, setUpdate] = useState(false);
-  const { user } = useAuth();
+  const [isModalOpen, setModalOpen] = useState(false)
+  const [isUpdateModal, setUpdatemodal] = useState(false)
+  const [subAdmins, setSubAdmins] = useState([])
+  const [subAdminTable, setSubAdminTable] = useState([])
+  const [update, setUpdate] = useState(false)
+  const { user } = useAuth()
 
   const updateModalOpen = () => {
-    setUpdatemodal(true);
-  };
+    setUpdatemodal(true)
+  }
   const updateModalClose = () => {
-    setUpdatemodal(false);
-  };
+    setUpdatemodal(false)
+  }
 
   const openModal = () => {
-    setModalOpen(true);
-  };
+    setModalOpen(true)
+  }
 
   const closeModal = () => {
-    setModalOpen(false);
-  };
+    setModalOpen(false)
+  }
 
   const handleDelete = async (id) => {
     try {
-      const res = await api.delete(`/sub-admin/${id}`);
-      console.log(res);
-      setUpdate(true);
+      const res = await api.delete(`/sub-admin/${id}`)
+      console.log(res)
+      setUpdate(true)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   useEffect(() => {
     const fetchSubAdmin = async () => {
       try {
-        const adminId = await api.get(`/admin/user/${user.id}`);
-        const response = await api.get(`/sub-admin/${adminId.data.Admin.id}`);
-        setSubAdmins(response.data);
-        setSubAdminTable(response.data);
-        console.log(response.data);
-        setUpdate(false);
+        const response = await api.get(`/sub-admin`)
+        setSubAdmins(response.data)
+        setSubAdminTable(response.data)
+        console.log(response.data)
+        setUpdate(false)
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
-    };
-    fetchSubAdmin();
-  }, [update]);
+    }
+    fetchSubAdmin()
+  }, [update])
 
   return (
     <div>
       <Nav />
-      <div className="d-flex w-100 mb-3">
+      <div className="d-flex w-100 mb-1">
         <div className="container tenantsContainer">
           <div className="d-flex align-items-center justify-content-start">
             <h2 className="tenantsText">Sub Admins</h2>
@@ -122,7 +121,7 @@ const SubAdmins = () => {
               item === 0 ? null : (
                 <tr className="tr-hover" key={item.id}>
                   <td className="bor1">
-                    <div className="mt-3 Person" style={{ width: "150px" }}>
+                    <div className="mt-3 " style={{ width: "150px" }}>
                       <p>{item.User.name}</p>
                     </div>
                   </td>
@@ -186,7 +185,7 @@ const SubAdmins = () => {
         setUpdate={setUpdate}
       />
     </div>
-  );
-};
+  )
+}
 
-export default SubAdmins;
+export default SubAdmins

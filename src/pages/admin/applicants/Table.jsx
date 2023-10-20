@@ -12,12 +12,15 @@ import ApplicantsModal from "./ApplicantsModal/ApplicantsModal"
 const tBodyStyle = {
   height: "50px"
 }
+  height: "50px"
+}
 
 const Table = ({
   applicants,
   setNewTanant,
   setApplicants,
   setTableApplicants,
+  setDeleteTenant
   setDeleteTenant
 }) => {
   const [moveToTenant, setMoveToTenant] = useState([])
@@ -36,9 +39,13 @@ const Table = ({
     try {
       const res = await api.delete(`tenant/${id}`)
       setDeleteTenant(true)
+      const res = await api.delete(`tenant/${id}`)
+      setDeleteTenant(true)
     } catch (err) {
       console.log(err)
+      console.log(err)
     }
+  }
   }
   useEffect(() => {
     console.log(applicants)
@@ -98,13 +105,6 @@ const Table = ({
           <p className="deleteText g">DELETE</p>
         </td>
       </thead>
-      {/* {applicant.map((item) => {
-        //i dont want to show nothing if the filteredApplications is empty
-        if (item.filteredApplications.length === 0) {
-          return null;
-        }
-        return <p key={item.id}>{item.applicant.User.name}</p>;
-      })} */}
 
       <tbody style={tBodyStyle}>
         {applicant.map((item) =>
@@ -191,5 +191,8 @@ const Table = ({
     </table>
   )
 }
+  )
+}
 
+export default Table
 export default Table
