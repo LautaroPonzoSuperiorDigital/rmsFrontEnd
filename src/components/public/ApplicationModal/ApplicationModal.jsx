@@ -35,7 +35,7 @@ import Income from "./RegistratationForms/Income"
 import EmergencyContact from "./RegistratationForms/EmergencyContact"
 import Vehicles from "./RegistratationForms/Vehicles"
 import OtherInfo from "./RegistratationForms/OtherInfo"
-import BackgroundScreening from "./RegistratationForms/backgroundScreening"
+import BackgroundScreening from "./RegistratationForms/BackgroundScreening"
 
 const ApplicationModal = ({ myselectedListing, onClose }) => {
   const [imageSrc, setImageSrc] = useState(null)
