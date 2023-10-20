@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { api } from "../../../../services/api"
 
 const EmergencyContact = ({ tenantId, setActiveSection }) => {
@@ -13,14 +13,13 @@ const EmergencyContact = ({ tenantId, setActiveSection }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const reponse = await api.post("/emergency-contact", emergencyContact)
-      console.log(reponse.data)
+      const response = await api.post("/emergency-contact", emergencyContact)
+      console.log(response.data)
       setActiveSection("vehicles")
     } catch (error) {
       console.error("Error submitting emergency contact:", error)
     }
   }
-}
 
   return (
     <div className="registrationContainer d-flex justify-content-center">

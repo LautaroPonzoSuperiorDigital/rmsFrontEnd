@@ -60,7 +60,7 @@ const ScrenningFinished = () => {
           and information needed as a tenant.
         </div>
         <button onClick={handleClick} style={buttonStyle}>
-          HOME
+          HOME!
         </button>
       </div>
     </div>

@@ -12,15 +12,12 @@ import ApplicantsModal from "./ApplicantsModal/ApplicantsModal"
 const tBodyStyle = {
   height: "50px"
 }
-  height: "50px"
-}
 
 const Table = ({
   applicants,
   setNewTanant,
   setApplicants,
   setTableApplicants,
-  setDeleteTenant
   setDeleteTenant
 }) => {
   const [moveToTenant, setMoveToTenant] = useState([])
@@ -39,14 +36,12 @@ const Table = ({
     try {
       const res = await api.delete(`tenant/${id}`)
       setDeleteTenant(true)
-      const res = await api.delete(`tenant/${id}`)
-      setDeleteTenant(true)
     } catch (err) {
       console.log(err)
       console.log(err)
     }
   }
-  }
+
   useEffect(() => {
     console.log(applicants)
     // want the applicants that has applicant.User.ApplicationScreening with something in it
@@ -191,8 +186,5 @@ const Table = ({
     </table>
   )
 }
-  )
-}
 
-export default Table
 export default Table
