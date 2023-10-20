@@ -181,3 +181,8 @@ export const NavTextContainer = styled.div`
 
   align-items: center;
 `
+
+export const ScreeningText = styled.p`
+  font-size: 35px;
+  font-weight: 600;
+`

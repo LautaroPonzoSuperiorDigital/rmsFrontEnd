@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from "styled-components"
 
 export const ListingPublic = styled.div`
   display: flex;
@@ -11,11 +11,11 @@ export const ListingPublic = styled.div`
     padding: 10px 20px;
     justify-content: center;
   }
-`;
+`
 
 export const ListingPublicContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
   justify-content: center;
-`;
+`

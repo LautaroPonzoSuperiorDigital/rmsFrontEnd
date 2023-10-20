@@ -1,6 +1,7 @@
 import { useState } from "react"
+import { api } from "../../../../services/api"
 
-const Income = () => {
+const Income = ({ tenantId, setActiveSection }) => {
   const [currentEmployer, setCurrentEmployer] = useState({
     employedBy: "",
     position: "",
@@ -8,7 +9,8 @@ const Income = () => {
     monthlyIncome: "",
     supervisorName: "",
     supervisorPhone: "",
-    address: ""
+    address: "",
+    tenantId
   })
   const [previousEmployer1, setPreviousEmployer1] = useState({
     employedBy: "",
@@ -17,7 +19,8 @@ const Income = () => {
     monthlyIncome: "",
     supervisorName: "",
     supervisorPhone: "",
-    address: ""
+    address: "",
+    tenantId
   })
 
   const [previousEmployer, setPreviousEmployer] = useState({
@@ -27,23 +30,55 @@ const Income = () => {
     monthlyIncome: "",
     supervisorName: "",
     supervisorPhone: "",
-    address: ""
+    address: "",
+    tenantId
   })
 
   const [otherIncome, setOtherIncome] = useState({
     type: "",
     monthlyIncome: "",
-    providerAddress1: "",
-    providerAddress2: ""
+    address: "",
+    tenantId
   })
 
-  const handleSubmit = () => {
-    // You can access the form data from the state variables
-    console.log("Current Employer:", currentEmployer)
-    console.log("Previous Employer:1", previousEmployer1)
-    console.log("Previous Employer:", previousEmployer)
-    console.log("Other Income Sources:", otherIncome)
-    // Add your logic here to handle the form data (e.g., send it to a server)
+  const postIncome = async (currentEmployer) => {
+    if (currentEmployer.name !== "") {
+      const response = await api.post("/tenant-income", currentEmployer)
+      console.log("Employee submitted:", response.data)
+    }
+  }
+  const postOtherIncome = async (otherIncome) => {
+    if (otherIncome.name !== "") {
+      const response = await api.post(
+        "/tenant-income/additional-income",
+        otherIncome
+      )
+      console.log("Employee submitted:", response.data)
+    }
+  }
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit() // Call your submit function
+    }
+  }
+
+  const handleSubmit = async () => {
+    try {
+      await postIncome(currentEmployer)
+      if (previousEmployer.employedBy !== "") {
+        await postIncome(previousEmployer)
+      }
+      if (previousEmployer1.employedBy !== "") {
+        await postIncome(previousEmployer1)
+      }
+      if (otherIncome.type !== "") {
+        await postOtherIncome(otherIncome)
+      }
+
+      setActiveSection("emergencyContact")
+    } catch (error) {
+      console.error("Error submitting rental history:", error)
+    }
   }
 
   return (
@@ -62,6 +97,7 @@ const Income = () => {
               type="text"
               placeholder="EMPLOYED BY"
               value={currentEmployer.employedBy}
+              required
               onChange={(e) =>
                 setCurrentEmployer({
                   ...currentEmployer,
@@ -74,6 +110,7 @@ const Income = () => {
               type="text"
               placeholder="POSITION"
               value={currentEmployer.position}
+              required
               onChange={(e) =>
                 setCurrentEmployer({
                   ...currentEmployer,
@@ -86,6 +123,7 @@ const Income = () => {
               type="text"
               placeholder="DATES OF EMPLOYMENT (FROM..TO)"
               value={currentEmployer.datesOfEmployment}
+              required
               onChange={(e) =>
                 setCurrentEmployer({
                   ...currentEmployer,
@@ -98,6 +136,7 @@ const Income = () => {
               type="text"
               placeholder="MONTHLY INCOME"
               value={currentEmployer.monthlyIncome}
+              required
               onChange={(e) =>
                 setCurrentEmployer({
                   ...currentEmployer,
@@ -110,6 +149,7 @@ const Income = () => {
               type="text"
               placeholder="NAME OF SUPERVISOR"
               value={currentEmployer.supervisorName}
+              required
               onChange={(e) =>
                 setCurrentEmployer({
                   ...currentEmployer,
@@ -121,6 +161,7 @@ const Income = () => {
               className="inputReset3"
               type="text"
               placeholder="SUPERVISOR’S PHONE #"
+              required
               value={currentEmployer.supervisorPhone}
               onChange={(e) =>
                 setCurrentEmployer({
@@ -349,23 +390,11 @@ const Income = () => {
               className="inputReset3"
               type="text"
               placeholder="PROVIDER ADDRESS - STREET, CITY, STATE, ZIP"
-              value={otherIncome.providerAddress1}
+              value={otherIncome.address}
               onChange={(e) =>
                 setOtherIncome({
                   ...otherIncome,
-                  providerAddress1: e.target.value
-                })
-              }
-            />
-            <input
-              className="inputReset3"
-              type="text"
-              placeholder="PROVIDER ADDRESS - STREET, CITY, STATE, ZIP"
-              value={otherIncome.providerAddress2}
-              onChange={(e) =>
-                setOtherIncome({
-                  ...otherIncome,
-                  providerAddress2: e.target.value
+                  address: e.target.value
                 })
               }
             />
@@ -376,6 +405,7 @@ const Income = () => {
         <button
           className="bgButton3 d-flex align-items-center justify-content-center"
           onClick={handleSubmit}
+          onKeyPress={handleKeyPress}
         >
           <span className="submitBtn3">Submit</span>
         </button>

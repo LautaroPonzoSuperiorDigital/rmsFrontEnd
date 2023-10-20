@@ -25,8 +25,8 @@
 }
 .navBar1 {
   height: 6rem;
-  width: 90%;
-  font-size: 0.75vw;
+  width: 100%;
+  font-size: 18px;
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -34,35 +34,16 @@
 .navBar1 ul {
   list-style: none;
   margin-top: 0.5rem;
-  margin-right: -1rem;
+  margin-right: 0rem;
   width: 60%;
 }
 .navBar1 li {
   display: inline-block;
   margin-top: 0.4rem;
   color: rgba(0, 0, 0, 0.524);
+  margin-right: 14px;
 }
-.registration {
-  margin-right: -1rem;
-}
-.roommates {
-  margin-right: -2rem;
-}
-.rh {
-  margin-right: -0.2rem;
-}
-.income {
-  margin-right: -5rem;
-}
-.ec {
-  margin-right: 2.8rem;
-}
-.vehicles {
-  margin-right: -4rem;
-}
-.otherInfo {
-  margin-right: -3rem;
-}
+
 .registration,
 .agreement,
 .roommates,

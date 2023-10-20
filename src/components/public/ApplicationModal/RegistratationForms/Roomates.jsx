@@ -1,8 +1,9 @@
-import React, { useState } from "react"
+import { useState } from "react"
+import { api } from "../../../../services/api"
 
-const Roomates = () => {
+const Roomates = ({ tenantId, setActiveSection }) => {
   const [roommates, setRoommates] = useState([
-    { name: "", birthDate: "", relationship: "" }
+    { name: "", birthday: "", relationWithTenant: "" }
   ])
   const handleInputChange = (index, event) => {
     const { name, value } = event.target
@@ -12,13 +13,34 @@ const Roomates = () => {
   }
 
   const addRoommate = () => {
-    setRoommates([...roommates, { name: "", birthDate: "", relationship: "" }])
+    setRoommates([
+      ...roommates,
+      { name: "", birthday: "", relationWithTenant: "" }
+    ])
   }
-  const handleSubmit = (event) => {
-    event.preventDefault() // Prevent the default form submission behavior
-    // Here, you can handle the form submission, e.g., send data to a server or perform validation.
-    // You can access the form data from the 'roommates' state.
-    console.log(roommates) // You can replace this with your submission logic.
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    console.log(roommates)
+    try {
+      const roomates = roommates.map(async (roommate) => {
+        const response = await api.post("/roommate", {
+          ...roommate,
+          tenantId
+        })
+        return response.data
+      })
+      // Wait for all the promises to resolve
+      const savedRoommates = await Promise.all(roomates)
+      console.log(savedRoommates)
+      setActiveSection("rentalHistory")
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handleKeyPress = async (e) => {
+    if (e.key === "Enter") {
+      await handleSubmit() // Call your submit function
+    }
   }
 
   return (
@@ -28,7 +50,7 @@ const Roomates = () => {
           Roommates / Other Occupants
         </h2>
         <form
-          className="resetForm2 w-100 align-items-center "
+          className="resetForm2 w-100 align-items-center d-flex flex-column "
           action="submit"
           onSubmit={handleSubmit}
         >
@@ -38,7 +60,7 @@ const Roomates = () => {
             <p className="roomOrderRela">RELATIONSHIP TO YOU</p>
           </div> */}
           {roommates.map((roommate, index) => (
-            <div className="orderInputRoom d-flex " key={index}>
+            <div className="orderInputRoom d-flex w-100  " key={index}>
               <input
                 className="inputReset2 roomName"
                 type="text"
@@ -46,32 +68,41 @@ const Roomates = () => {
                 name="name"
                 value={roommate.name}
                 onChange={(e) => handleInputChange(index, e)}
+                required
               />
               <input
                 className="inputReset2 roomBirth"
                 type="text"
                 placeholder="Birth Date"
-                name="birthDate"
-                value={roommate.birthDate}
+                name="birthday"
+                value={roommate.birthday}
                 onChange={(e) => handleInputChange(index, e)}
+                required
               />
               <input
                 className="inputReset2 roomRela"
                 type="text"
                 placeholder="Relationship"
-                name="relationship"
-                value={roommate.relationship}
+                name="relationWithTenant"
+                value={roommate.relationWithTenant}
                 onChange={(e) => handleInputChange(index, e)}
+                required
               />
             </div>
           ))}
-          <button className="addRoommate" type="button" onClick={addRoommate}>
-            + Add Roommate / Other Occupant
+          <div className="d-flex w-100">
+            <button className="addRoommate" type="button" onClick={addRoommate}>
+              + Add Roommate / Other Occupant
+            </button>
+          </div>
+
+          <button
+            className="bgButton2 d-flex align-items-center justify-content-center"
+            onKeyPress={handleKeyPress}
+          >
+            <span className="submitBtn2">Submit</span>
           </button>
         </form>
-        <button className="bgButton2 d-flex align-items-center justify-content-center">
-          <span className="submitBtn2">Submit</span>
-        </button>
       </div>
     </div>
   )

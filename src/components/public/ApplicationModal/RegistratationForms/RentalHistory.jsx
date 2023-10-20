@@ -1,37 +1,61 @@
 import { useState } from "react"
+import { api } from "../../../../services/api"
 
-const RentalHistory = () => {
+const RentalHistory = ({ tenantId, setActiveSection }) => {
   const [currentAddress, setCurrentAddress] = useState({
-    streetAddress: "",
-    cityStateZip: "",
-    howLongAtAddress: "",
-    managerOwnerName: "",
-    managerOwnerPhone: ""
+    street: "",
+    city: "",
+    duration: "",
+    managerName: "",
+    managerPhone: "",
+    tenantId
   })
 
   const [previousAddress1, setPreviousAddress1] = useState({
-    streetAddress: "",
-    cityStateZip: "",
-    howLongAtAddress: "",
-    managerOwnerName: "",
-    managerOwnerPhone: ""
+    street: "",
+    city: "",
+    duration: "",
+    managerName: "",
+    managerPhone: "",
+    tenantId
   })
 
   const [previousAddress2, setPreviousAddress2] = useState({
-    streetAddress: "",
-    cityStateZip: "",
-    howLongAtAddress: "",
-    managerOwnerName: "",
-    managerOwnerPhone: ""
+    street: "",
+    city: "",
+    duration: "",
+    managerName: "",
+    managerPhone: "",
+    tenantId
   })
-
-  const handleSubmit = () => {
-    // You can access the form data from the state variables
-    console.log("Current Address:", currentAddress)
-    console.log("Previous Address 1:", previousAddress1)
-    console.log("Previous Address 2:", previousAddress2)
-    // Add your logic here to handle the form data (e.g., send it to a server)
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit() // Call your submit function
+    }
   }
+  const postRentalHistory = async (addressData) => {
+    if (addressData.name !== "") {
+      const response = await api.post("/rental-history", addressData)
+      console.log("Rental history submitted:", response.data)
+    }
+  }
+
+  const handleSubmit = async () => {
+    try {
+      await postRentalHistory(currentAddress)
+      if (previousAddress1.name !== "") {
+        await postRentalHistory(previousAddress1)
+      }
+      if (previousAddress2.name !== "") {
+        await postRentalHistory(previousAddress2)
+      }
+
+      setActiveSection("income")
+    } catch (error) {
+      console.error("Error submitting rental history:", error)
+    }
+  }
+
   return (
     <div className="rentalContainer align-items-center">
       <h2 className="rentalText align-items-center">Rental History</h2>
@@ -46,11 +70,12 @@ const RentalHistory = () => {
               className="inputReset3"
               type="text"
               placeholder="STREET ADDRESS / UNIT NO.                                                 206 Alexa Ct, Paso Robles"
-              value={currentAddress.streetAddress}
+              value={currentAddress.street}
+              required
               onChange={(e) =>
                 setCurrentAddress({
                   ...currentAddress,
-                  streetAddress: e.target.value
+                  street: e.target.value
                 })
               }
             />
@@ -59,10 +84,11 @@ const RentalHistory = () => {
               type="text"
               placeholder="CITY, STATE, ZIP                                                                       Ca 32480"
               value={currentAddress.cityStateZip}
+              required
               onChange={(e) =>
                 setCurrentAddress({
                   ...currentAddress,
-                  cityStateZip: e.target.value
+                  city: e.target.value
                 })
               }
             />
@@ -70,11 +96,12 @@ const RentalHistory = () => {
               className="inputReset3"
               type="text"
               placeholder="HOW LONG AT THIS ADDRESS                                                1 Year"
-              value={currentAddress.howLongAtAddress}
+              value={currentAddress.duration}
+              required
               onChange={(e) =>
                 setCurrentAddress({
                   ...currentAddress,
-                  howLongAtAddress: e.target.value
+                  duration: e.target.value
                 })
               }
             />
@@ -83,10 +110,11 @@ const RentalHistory = () => {
               type="text"
               placeholder="MANAGER/OWNER NAME                                                     Janey Vianne"
               value={currentAddress.managerOwnerName}
+              required
               onChange={(e) =>
                 setCurrentAddress({
                   ...currentAddress,
-                  managerOwnerName: e.target.value
+                  managerName: e.target.value
                 })
               }
             />
@@ -94,11 +122,12 @@ const RentalHistory = () => {
               className="inputReset3"
               type="text"
               placeholder="MANAGER/OWNER PHONE                                                    530-521-7450"
-              value={currentAddress.managerOwnerPhone}
+              value={currentAddress.managerPhone}
+              required
               onChange={(e) =>
                 setCurrentAddress({
                   ...currentAddress,
-                  managerOwnerPhone: e.target.value
+                  managerPhone: e.target.value
                 })
               }
             />
@@ -109,11 +138,12 @@ const RentalHistory = () => {
               className="inputReset3"
               type="text"
               placeholder="STREET ADDRESS / UNIT NO.                                                1236 Post Farm Road"
-              value={previousAddress1.streetAddress}
+              value={previousAddress1.street}
+              required
               onChange={(e) =>
                 setPreviousAddress1({
                   ...previousAddress1,
-                  streetAddress: e.target.value
+                  street: e.target.value
                 })
               }
             />
@@ -122,10 +152,11 @@ const RentalHistory = () => {
               type="text"
               placeholder="CITY, STATE, ZIP                                                                      Ca 33644"
               value={previousAddress1.cityStateZip}
+              required
               onChange={(e) =>
                 setPreviousAddress1({
                   ...previousAddress1,
-                  cityStateZip: e.target.value
+                  city: e.target.value
                 })
               }
             />
@@ -133,11 +164,12 @@ const RentalHistory = () => {
               className="inputReset3"
               type="text"
               placeholder="HOW LONG AT THIS ADDRESS                                               2 Years"
-              value={previousAddress1.howLongAtAddress}
+              value={previousAddress1.duration}
+              required
               onChange={(e) =>
                 setPreviousAddress1({
                   ...previousAddress1,
-                  howLongAtAddress: e.target.value
+                  duration: e.target.value
                 })
               }
             />
@@ -146,10 +178,11 @@ const RentalHistory = () => {
               type="text"
               placeholder="MANAGER/OWNER NAME                                                      Becca Aleta"
               value={previousAddress1.managerOwnerName}
+              required
               onChange={(e) =>
                 setPreviousAddress1({
                   ...previousAddress1,
-                  managerOwnerName: e.target.value
+                  managerName: e.target.value
                 })
               }
             />
@@ -157,11 +190,12 @@ const RentalHistory = () => {
               className="inputReset3"
               type="text"
               placeholder="MANAGER/OWNER PHONE                                                    530-521-7450"
-              value={previousAddress1.managerOwnerPhone}
+              value={previousAddress1.managerPhone}
+              required
               onChange={(e) =>
                 setPreviousAddress1({
                   ...previousAddress1,
-                  managerOwnerPhone: e.target.value
+                  managerPhone: e.target.value
                 })
               }
             />
@@ -174,11 +208,12 @@ const RentalHistory = () => {
               className="inputReset3"
               type="text"
               placeholder="STREET ADDRESS / UNIT NO.                                                          4478 Euclid Avenue"
-              value={previousAddress2.streetAddress}
+              value={previousAddress2.street}
+              required
               onChange={(e) =>
                 setPreviousAddress2({
                   ...previousAddress2,
-                  streetAddress: e.target.value
+                  street: e.target.value
                 })
               }
             />
@@ -187,10 +222,11 @@ const RentalHistory = () => {
               type="text"
               placeholder="CITY, STATE, ZIP                                                                               Ca 32480"
               value={previousAddress2.cityStateZip}
+              required
               onChange={(e) =>
                 setPreviousAddress2({
                   ...previousAddress2,
-                  cityStateZip: e.target.value
+                  city: e.target.value
                 })
               }
             />
@@ -198,11 +234,12 @@ const RentalHistory = () => {
               className="inputReset3"
               type="text"
               placeholder="HOW LONG AT THIS ADDRESS                                                      5 Years"
-              value={previousAddress2.howLongAtAddress}
+              value={previousAddress2.duration}
+              required
               onChange={(e) =>
                 setPreviousAddress2({
                   ...previousAddress2,
-                  howLongAtAddress: e.target.value
+                  duration: e.target.value
                 })
               }
             />
@@ -211,10 +248,11 @@ const RentalHistory = () => {
               type="text"
               placeholder="MANAGER/OWNER NAME                                                          Kevan Kenyon"
               value={previousAddress2.managerOwnerName}
+              required
               onChange={(e) =>
                 setPreviousAddress2({
                   ...previousAddress2,
-                  managerOwnerName: e.target.value
+                  managerName: e.target.value
                 })
               }
             />
@@ -222,23 +260,25 @@ const RentalHistory = () => {
               className="inputReset3"
               type="text"
               placeholder="MANAGER/OWNER PHONE                                                         530-521-7450"
-              value={previousAddress2.managerOwnerPhone}
+              value={previousAddress2.managerPhone}
+              required
               onChange={(e) =>
                 setPreviousAddress2({
                   ...previousAddress2,
-                  managerOwnerPhone: e.target.value
+                  managerPhone: e.target.value
                 })
               }
             />
           </form>
         </div>
       </div>
-
-      <div className="rentalSeparation">
+      <div
+        className="rentalSeparation"
+        onClick={handleSubmit}
+        onKeyPress={handleKeyPress}
+      >
         <button className="bgButton3 d-flex align-items-center justify-content-center">
-          <span className="submitBtn3" onClick={handleSubmit}>
-            Submit
-          </span>
+          <span className="submitBtn3">Submit</span>
         </button>
       </div>
     </div>

@@ -1,14 +1,21 @@
-import React, { useState } from "react"
+import { useState } from "react"
+import { api } from "../../../../services/api"
 
-const Vehicles = () => {
+const Vehicles = ({ tenantId, setActiveSection }) => {
   const [vehicles, setVehicles] = useState([
-    { makeModel: "", year: "", color: "", plate: "", state: "" }
+    { MakeAndModel: "", year: "", color: "", plate: "", state: "" }
   ])
 
   const handleAddVehicle = () => {
     setVehicles([
       ...vehicles,
-      { makeModel: "", year: "", color: "", plate: "", state: "" }
+      {
+        MakeAndModel: "",
+        year: "",
+        color: "",
+        plate: "",
+        state: ""
+      }
     ])
   }
 
@@ -18,11 +25,24 @@ const Vehicles = () => {
     setVehicles(newVehicles)
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log(vehicles)
+    try {
+      const vehiclePromises = vehicles.map(async (vehicle) => {
+        const response = await api.post("/vehicles", {
+          ...vehicle,
+          tenantId
+        })
+        return response.data
+      })
+      // Wait for all the promises to resolve
+      const savedVehicles = await Promise.all(vehiclePromises)
+      console.log(savedVehicles)
+      setActiveSection("otherInfo")
+    } catch (error) {
+      console.log(error)
+    }
   }
-
   return (
     <div className="registrationContainer d-flex justify-content-center">
       <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
@@ -37,9 +57,9 @@ const Vehicles = () => {
                 className="form-control inputReset"
                 type="text"
                 placeholder="MAKE & MODEL"
-                value={vehicle.makeModel}
+                value={vehicle.MakeAndModel}
                 onChange={(event) =>
-                  handleInputChange(index, event, "makeModel")
+                  handleInputChange(index, event, "MakeAndModel")
                 }
               />
               <input

@@ -35,16 +35,17 @@ import Income from "./RegistratationForms/Income"
 import EmergencyContact from "./RegistratationForms/EmergencyContact"
 import Vehicles from "./RegistratationForms/Vehicles"
 import OtherInfo from "./RegistratationForms/OtherInfo"
+import BackgroundScreening from "./RegistratationForms/backgroundScreening"
 
 const ApplicationModal = ({ myselectedListing, onClose }) => {
   const [imageSrc, setImageSrc] = useState(null)
-
-  const [activeSection, setActiveSection] = useState("otherInfo")
+  const [userId, setUserId] = useState(null)
+  // backgroundSreening
+  const [activeSection, setActiveSection] = useState("registration")
   const [formData, setFormData] = useState({})
   const [message, setMessage] = useState("")
-  const [isStartScreening, setIsStartScreening] = useState(false)
-  const [screeningMessage, setScreeningMessage] = useState("")
-  const [userId, setUserId] = useState({})
+
+  const [tenantId, setTenantId] = useState({})
   const { user } = useAuth()
   const innerWidth = window.innerWidth
 
@@ -74,67 +75,28 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
   }
   const submitRegistration = async (e) => {
     e.preventDefault()
+
     try {
       const response = await api.post("/user/tenant", {
         ...formData,
         approvalStatus: "SCREENING_IN_PROCESS"
       })
-      console.log(response)
-      setUserId(response.data.id)
+
+      const userId = response.data.id
+      setUserId(userId)
+      const tenant = await api.get(`tenant/user/${userId}`)
+      setTenantId(tenant.data.id)
       setMessage("Registration successful!")
-      setIsStartScreening(true)
+      setActiveSection("roommates")
     } catch (err) {
       console.log(err.response)
       setMessage(err.response.data.message)
-    }
-  }
-  const handleStartScreening = async () => {
-    let data
-
-    if (user) {
-      data = {
-        userId: user.id,
-        listingId: myselectedListing.id,
-        location: myselectedListing.location,
-        status: "PENDING",
-        name: user.name,
-        email: user.email,
-        phoneNumber: user.phoneNumber
-      }
-    } else {
-      data = {
-        userId: userId,
-        listingId: myselectedListing.id,
-        status: "PENDING",
-        location: myselectedListing.location,
-        name: formData.name,
-        email: formData.email,
-        phoneNumber: formData.phoneNumber
-      }
-    }
-
-    try {
-      const response = await api.post("/application-screening", data)
-      window.open(env.rentSpreeLink, "_blank")
-      setIsStartScreening(false)
-      setScreeningMessage("Screening its gonna start soon")
-    } catch (err) {
-      console.log(err.response)
     }
   }
 
   const handleLogoClick = () => {
     onClose()
     window.location.href = "/"
-  }
-
-  const handleGoBack = () => {
-    onClose()
-    if (user) {
-      window.location.href = "/tenants/public-listings"
-    } else {
-      window.location.href = "/"
-    }
   }
 
   return (
@@ -149,7 +111,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
           </LogoContainer>
 
           <nav className="navBar1 d-flex align-items-center w-100">
-            <ul className="w-100">
+            <ul className="w-100 d-flex justify-content-between">
               <li
                 className={`registration custom-item1 nav-item ${
                   activeSection === "registration" ? "active" : ""
@@ -205,6 +167,14 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 // onClick={() => handleSectionClick("otherInfo")}
               >
                 OTHER INFO
+              </li>
+              <li
+                className={`otherInfo custom-item1 nav-item ${
+                  activeSection === "otherInfo" ? "active" : ""
+                }`}
+                // onClick={() => handleSectionClick("otherInfo")}
+              >
+                BACKGROUND SCREENING
               </li>
             </ul>
           </nav>
@@ -336,7 +306,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
         <div className="forms redside d-flex align-items-center ">
           <div className="registrationContainer w-100 ">
             <div className=" d-flex justify-content-center  w-100">
-              {/* {!user && (
+              {!user && activeSection === "registration" && (
                 <div className="w-50">
                   <h2 className="d-flex justify-content-center registrationText">
                     Registration
@@ -382,8 +352,8 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                     <p style={{ color: "#31af9a" }}>{message}</p>
                   </form>
                 </div>
-              )} */}
-              {isStartScreening && (
+              )}
+              {/* {isStartScreening && (
                 <div
                   style={{
                     height: "100%",
@@ -401,13 +371,53 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   </button>
                   <p>{screeningMessage}</p>
                 </div>
+              )} */}
+              {activeSection === "roommates" && (
+                <Roomates
+                  tenantId={tenantId}
+                  setActiveSection={setActiveSection}
+                />
               )}
-              {activeSection === "roommates" && <Roomates />}
-              {activeSection === "rentalHistory" && <RentalHistory />}
-              {activeSection === "income" && <Income />}
-              {activeSection === "emergencyContact" && <EmergencyContact />}
-              {activeSection === "vehicles" && <Vehicles />}
-              {activeSection === "otherInfo" && <OtherInfo />}
+              {activeSection === "rentalHistory" && (
+                <RentalHistory
+                  tenantId={tenantId}
+                  setActiveSection={setActiveSection}
+                />
+              )}
+              {activeSection === "income" && (
+                <Income
+                  tenantId={tenantId}
+                  setActiveSection={setActiveSection}
+                />
+              )}
+              {activeSection === "emergencyContact" && (
+                <EmergencyContact
+                  tenantId={tenantId}
+                  setActiveSection={setActiveSection}
+                />
+              )}
+              {activeSection === "vehicles" && (
+                <Vehicles
+                  tenantId={tenantId}
+                  setActiveSection={setActiveSection}
+                />
+              )}
+              {activeSection === "otherInfo" && (
+                <OtherInfo
+                  tenantId={tenantId}
+                  setActiveSection={setActiveSection}
+                />
+              )}
+              {activeSection === "backgroundSreening" && (
+                <BackgroundScreening
+                  tenantId={tenantId}
+                  setActiveSection={setActiveSection}
+                  myselectedListing={myselectedListing}
+                  userId={userId}
+                  formData={formData}
+                  imageSrc={imageSrc}
+                />
+              )}
             </div>
           </div>
         </div>

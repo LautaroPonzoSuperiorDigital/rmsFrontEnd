@@ -1,18 +1,26 @@
 import { useState } from "react"
+import { api } from "../../../../services/api"
 
-const EmergencyContact = () => {
+const EmergencyContact = ({ tenantId, setActiveSection }) => {
   const [emergencyContact, setEmergencyContact] = useState({
     name: "",
     phone: "",
     relationship: "",
-    address: ""
+    address: "",
+    tenantId
   })
 
-  const handleSubmit = () => {
-    // You can access the form data from the state variable
-    console.log("Emergency Contact Information:", emergencyContact)
-    // Add your logic here to handle the form data (e.g., send it to a server)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const reponse = await api.post("/emergency-contact", emergencyContact)
+      console.log(reponse.data)
+      setActiveSection("vehicles")
+    } catch (error) {
+      console.error("Error submitting emergency contact:", error)
+    }
   }
+}
 
   return (
     <div className="registrationContainer d-flex justify-content-center">
@@ -20,12 +28,17 @@ const EmergencyContact = () => {
         <h2 className="d-flex justify-content-center mt-3 ECText">
           Emergency Contact Information
         </h2>
-        <form className="resetForm" action="submit">
+        <form
+          className="resetForm"
+          action="submit"
+          onSubmit={(e) => handleSubmit(e)}
+        >
           <input
             className="form-control inputReset"
             type="text"
             placeholder="NAME"
             value={emergencyContact.name}
+            required
             onChange={(e) =>
               setEmergencyContact({
                 ...emergencyContact,
@@ -38,6 +51,7 @@ const EmergencyContact = () => {
             type="text"
             placeholder="PHONE #"
             value={emergencyContact.phone}
+            required
             onChange={(e) =>
               setEmergencyContact({
                 ...emergencyContact,
@@ -50,6 +64,7 @@ const EmergencyContact = () => {
             type="text"
             placeholder="RELATIONSHIP"
             value={emergencyContact.relationship}
+            required
             onChange={(e) =>
               setEmergencyContact({
                 ...emergencyContact,
@@ -61,6 +76,7 @@ const EmergencyContact = () => {
             className="form-control inputReset"
             type="text"
             placeholder="ADDRESS - STREET, CITY, STATE, ZIP"
+            required
             value={emergencyContact.address}
             onChange={(e) =>
               setEmergencyContact({
@@ -69,13 +85,10 @@ const EmergencyContact = () => {
               })
             }
           />
+          <button className="bgButton4 d-flex align-items-center justify-content-center">
+            <span className="submitBtn4">Submit</span>
+          </button>
         </form>
-        <button
-          className="bgButton4 d-flex align-items-center justify-content-center"
-          onClick={handleSubmit}
-        >
-          <span className="submitBtn4">Submit</span>
-        </button>
       </div>
     </div>
   )

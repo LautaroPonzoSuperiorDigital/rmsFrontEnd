@@ -1,32 +1,31 @@
 import React, { useState } from "react"
+import { api } from "../../../../services/api"
 
-const OtherInfo = () => {
+const OtherInfo = ({ tenantId, setActiveSection }) => {
   const [formData, setFormData] = useState({
-    evicted: { checked: false, details: "" },
-    convicted: { checked: false, details: "" },
-    bankruptcy: { checked: false, details: "" },
-    smoke: { checked: false },
-    pets: { checked: false, petDetails: "" },
-    learnAboutUs: ""
+    isEvicted: false,
+    evicted: "",
+    isConvicted: false,
+    convicted: "",
+    isBankrupt: false,
+    bankrupt: "",
+    isSmoken: false,
+    isPets: false,
+    pets: "",
+    aboutUS: ""
   })
 
   const handleCheckboxChange = (name, isChecked) => {
     setFormData({
       ...formData,
-      [name]: {
-        ...formData[name],
-        checked: isChecked
-      }
+      [name]: isChecked
     })
   }
 
   const handleDetailsChange = (name, value) => {
     setFormData({
       ...formData,
-      [name]: {
-        ...formData[name],
-        details: value
-      }
+      [name]: value
     })
   }
 
@@ -47,10 +46,17 @@ const OtherInfo = () => {
     })
   }
 
-  const handleSubmit = () => {
-    // You can access the form data in the `formData` state object
-    console.log(formData)
-    // Perform any further actions, like sending the data to a server
+  const handleSubmit = async () => {
+    try {
+      const reponse = await api.post("/other-info", {
+        ...formData,
+        tenantId
+      })
+      console.log(reponse.data)
+      setActiveSection("backgroundSreening")
+    } catch (error) {
+      console.error("Error submitting emergency contact:", error)
+    }
   }
 
   return (
@@ -66,20 +72,20 @@ const OtherInfo = () => {
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault1"
-                checked={formData.evicted.checked}
+                checked={formData.isEvicted}
                 onChange={(e) =>
-                  handleCheckboxChange("evicted", e.target.checked)
+                  handleCheckboxChange("isEvicted", e.target.checked)
                 }
               />
             </div>
           </div>
           <div className="inputInfoH">
-            {formData.evicted.checked && (
+            {formData.isEvicted && (
               <input
                 className="inputReset4"
                 type="text"
                 placeholder="WHEN & WHY"
-                value={formData.evicted.details}
+                value={formData.evicted}
                 onChange={(e) => handleDetailsChange("evicted", e.target.value)}
               />
             )}
@@ -92,20 +98,20 @@ const OtherInfo = () => {
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault2"
-                checked={formData.convicted.checked}
+                checked={formData.isConvicted}
                 onChange={(e) =>
-                  handleCheckboxChange("convicted", e.target.checked)
+                  handleCheckboxChange("isConvicted", e.target.checked)
                 }
               />
             </div>
           </div>
           <div className="inputInfoH">
-            {formData.convicted.checked && (
+            {formData.isConvicted && (
               <input
                 className="inputReset4"
                 type="text"
                 placeholder="WHEN & WHY"
-                value={formData.convicted.details}
+                value={formData.convicted}
                 onChange={(e) =>
                   handleDetailsChange("convicted", e.target.value)
                 }
@@ -121,22 +127,22 @@ const OtherInfo = () => {
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault3"
-                checked={formData.bankruptcy.checked}
+                checked={formData.isBankrupt}
                 onChange={(e) =>
-                  handleCheckboxChange("bankruptcy", e.target.checked)
+                  handleCheckboxChange("isBankrupt", e.target.checked)
                 }
               />
             </div>
           </div>
           <div className="inputInfoH">
-            {formData.bankruptcy.checked && (
+            {formData.isBankrupt && (
               <input
                 className="inputReset4"
                 type="text"
                 placeholder="WHEN & WHY"
-                value={formData.bankruptcy.details}
+                value={formData.bankrupt}
                 onChange={(e) =>
-                  handleDetailsChange("bankruptcy", e.target.value)
+                  handleDetailsChange("bankrupt", e.target.value)
                 }
               />
             )}
@@ -152,9 +158,9 @@ const OtherInfo = () => {
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault4"
-                checked={formData.smoke.checked}
+                checked={formData.isSmoken}
                 onChange={(e) =>
-                  handleCheckboxChange("smoke", e.target.checked)
+                  handleCheckboxChange("isSmoken", e.target.checked)
                 }
               />
             </div>
@@ -167,24 +173,26 @@ const OtherInfo = () => {
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault5"
-                checked={formData.pets.checked}
-                onChange={(e) => handleCheckboxChange("pets", e.target.checked)}
+                checked={formData.isPets}
+                onChange={(e) =>
+                  handleCheckboxChange("isPets", e.target.checked)
+                }
               />
             </div>
           </div>
           <div className="inputInfoH">
-            {formData.pets.checked && (
+            {formData.isPets && (
               <span className="">
                 PLEASE LIST EACH TYPE, BREED & APPROX. WEIGHT
               </span>
             )}
-            {formData.pets.checked && (
+            {formData.isPets && (
               <input
                 className="inputReset4 pet "
                 type="text"
                 placeholder="Cat, Persian, 3.6 Kg"
-                value={formData.pets.petDetails}
-                onChange={(e) => handlePetDetailsChange(e.target.value)}
+                value={formData.pets}
+                onChange={(e) => handleDetailsChange("pets", e.target.value)}
               />
             )}
           </div>
@@ -193,8 +201,8 @@ const OtherInfo = () => {
               className="howDidInput "
               type="text"
               placeholder="HOW DID YOU LEARN ABOUT US?"
-              value={formData.learnAboutUs}
-              onChange={(e) => handleLearnAboutUsChange(e.target.value)}
+              value={formData.aboutUS}
+              onChange={(e) => handleDetailsChange("aboutUS", e.target.value)}
             />
           </div>
         </div>
