@@ -1,18 +1,21 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { Navigate, createBrowserRouter } from "react-router-dom"
+import { Suspense, lazy } from "react"
 const LazySendEmailPasswordReset = lazy(() =>
   import("../components/public/SendEmailPasswordReset/SendEmailPasswordReset")
-);
+)
 const LazyResetPassword = lazy(() =>
   import("../components/public/Reset-Password/ResetPassword")
-);
-const LazyLogin = lazy(() => import("../components/login"));
+)
+const LazyLogin = lazy(() => import("../components/login"))
 const LazyPublicListings = lazy(() =>
   import("../components/public/publicListings")
-);
+)
 const LazyModalPublicListings = lazy(() =>
   import("../components/public/ModalPublicListing/modalPublicListings")
-);
+)
+const LazyScreeningFinished = lazy(() =>
+  import("../components/public/ScreeningFinished/ScrenningFinished")
+)
 
 const publicRoutes = [
   {
@@ -21,7 +24,7 @@ const publicRoutes = [
       <Suspense fallback={<div>Loading...</div>}>
         <LazySendEmailPasswordReset />
       </Suspense>
-    ),
+    )
   },
   {
     path: "/reset-password/:id",
@@ -29,7 +32,7 @@ const publicRoutes = [
       <Suspense>
         <LazyResetPassword />
       </Suspense>
-    ),
+    )
   },
   {
     path: "/login",
@@ -37,7 +40,7 @@ const publicRoutes = [
       <Suspense>
         <LazyLogin />
       </Suspense>
-    ),
+    )
   },
   {
     path: "/",
@@ -45,7 +48,7 @@ const publicRoutes = [
       <Suspense>
         <LazyPublicListings />
       </Suspense>
-    ),
+    )
   },
   {
     path: "/listing/:id",
@@ -53,11 +56,19 @@ const publicRoutes = [
       <Suspense>
         <LazyModalPublicListings />
       </Suspense>
-    ),
+    )
   },
-  { path: "*", element: <Navigate to="/login" replace /> },
-];
+  {
+    path: "/screeningFinished",
+    element: (
+      <Suspense>
+        <LazyScreeningFinished />
+      </Suspense>
+    )
+  },
+  { path: "*", element: <Navigate to="/login" replace /> }
+]
 
-const publicRouter = createBrowserRouter(publicRoutes);
+const publicRouter = createBrowserRouter(publicRoutes)
 
-export const createPublicRouter = () => publicRouter;
+export const createPublicRouter = () => publicRouter

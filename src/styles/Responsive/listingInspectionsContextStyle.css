@@ -2,6 +2,13 @@ div.container-fluid.row.footer.d-flex {
   display: none !important;
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 0;
+    max-width: 100%;
+  }
+}
+
 .inspection-row {
   .form-container {
     width: 50%;
@@ -46,9 +53,10 @@ div.container-fluid.row.footer.d-flex {
     }
 
     .form-container form {
-      width: 100%;
+      /* width: 100%; */
+      max-width: 100%;
       display: grid;
-      grid-template-columns: 60% 40% 100%;
+      grid-template-columns: 55% 45% 100%;
       grid-auto-rows: auto;
       gap: 2rem 0;
     }
@@ -56,10 +64,12 @@ div.container-fluid.row.footer.d-flex {
     .form-container form label {
       border-bottom: 0;
       margin: unset;
+      width: 100%;
     }
 
     .form-container form label:nth-child(2) {
-      margin-left: 1rem;
+      margin: 0 1rem;
+      max-width: 90%;
     }
 
     .form-container form label:nth-child(3) {

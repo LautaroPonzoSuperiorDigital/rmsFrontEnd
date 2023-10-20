@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components"
 
 export const NavContainer = styled.div`
   border-bottom: 1px solid rgba(128, 128, 128, 0.533);
@@ -12,31 +12,31 @@ export const NavContainer = styled.div`
     padding: 0 10px;
     gap: 2rem;
   }
-`;
+`
 export const LogoImg = styled.img`
   height: 100%;
   width: 100%;
   @media screen and (max-width: 768px) {
     width: 100px;
   }
-`;
+`
 export const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
   cursor: pointer;
-`;
+`
 
 export const NavText = styled.p`
   margin: 0;
   font-size: 25px;
   font-weight: 600;
-  color: #272727;
+  color: #000000a5;
 
   @media screen and (max-width: 768px) {
     font-size: 20px;
   }
-`;
+`
 
 export const GoBackContainer = styled.div`
   display: flex;
@@ -46,7 +46,7 @@ export const GoBackContainer = styled.div`
   @media screen and (max-width: 768px) {
     gap: 0.5rem;
   }
-`;
+`
 
 export const GoBackStyle = styled.div`
     margin: 0,
@@ -55,7 +55,7 @@ export const GoBackStyle = styled.div`
     @media screen and (max-width: 768px) {
         font-size: 10px;
       }
-  ;`;
+  ;`
 
 export const ApplicationContainer = styled.div`
   display: flex;
@@ -65,7 +65,7 @@ export const ApplicationContainer = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
   }
-`;
+`
 
 export const SideBarDescriptionContainer = styled.div`
   display: flex;
@@ -80,7 +80,7 @@ export const SideBarDescriptionContainer = styled.div`
     padding: 9px;
     height: 85px;
   }
-`;
+`
 
 export const ImgSideBar = styled.img`
 margin: 0 !important;,
@@ -95,13 +95,13 @@ margin: 0 !important;,
       height: 67px;
     }
   
-`;
+`
 
 export const SideBarDescription = styled.div`
   display: flex;
 
   justify-content: space-between;
-`;
+`
 export const SideBarDescriptionPrice = styled.div`
   display: flex;
   justify-content: space-between;
@@ -110,12 +110,12 @@ export const SideBarDescriptionPrice = styled.div`
   @media (max-width: 768px) {
     display: flex;
   }
-`;
+`
 
 export const Text = styled.p`
   margin: 0;
   padding: 0;
-`;
+`
 
 export const FieldText = styled(Text)`
   color: #000000a5;
@@ -125,7 +125,7 @@ export const FieldText = styled(Text)`
   @media (max-width: 768px) {
     font-size: 16px;
   }
-`;
+`
 export const FieldValue = styled(Text)`
   color: #000000;
   font-size: 20px;
@@ -135,7 +135,7 @@ export const FieldValue = styled(Text)`
   @media (max-width: 768px) {
     font-size: 16px;
   }
-`;
+`
 export const PriceText = styled(Text)`
     margin: 0;
     padding: 0;
@@ -143,13 +143,13 @@ export const PriceText = styled(Text)`
   font-size: 25px
   font-weight: 600;
   
-`;
+`
 
 export const AmenitiesContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-`;
+`
 export const Ulcontainers = styled.div`
   display: flex;
   justify-content: space-between;
@@ -157,7 +157,7 @@ export const Ulcontainers = styled.div`
   width: 100%;
   gap: 60px;
   margin-left: 20px;
-`;
+`
 
 export const Ul = styled.ul`
   width: 100%;
@@ -167,10 +167,22 @@ export const Ul = styled.ul`
   flex-direction: column;
   flex-wrap: wrap;
   gap: 0px;
-`;
+`
 
 export const Li = styled.li`
   font-size: 20px;
   color: #000000;
   font-weight: 600;
-`;
+`
+
+export const NavTextContainer = styled.div`
+  display: flex;
+  height: 100%;
+
+  align-items: center;
+`
+
+export const ScreeningText = styled.p`
+  font-size: 35px;
+  font-weight: 600;
+`
