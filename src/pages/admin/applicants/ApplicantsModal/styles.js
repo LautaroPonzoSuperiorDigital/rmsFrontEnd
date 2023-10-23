@@ -34,7 +34,7 @@ export const ModalHeader = styled.div`
 export const CloseButton = styled.button`
   background: none;
   border: none;
-  color: #fff;
+  color: black;
   cursor: pointer;
   font-size: 16px;
 `

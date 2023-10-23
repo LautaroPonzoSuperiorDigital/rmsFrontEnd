@@ -4,7 +4,7 @@ const RoommatesApplicant = ({ roommates }) => {
   return (
     <div>
       <h1>Roommates</h1>
-      {roommates.map((item, index) => (
+      {roommates?.map((item, index) => (
         <div className="d-flex" key={item.id}>
           <input
             className="inputReset2 roomName"

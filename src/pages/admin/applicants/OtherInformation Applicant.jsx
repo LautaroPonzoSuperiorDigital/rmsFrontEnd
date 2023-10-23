@@ -4,7 +4,7 @@ const OtherInformationApplicant = ({ otherInfo }) => {
   return (
     <div className=" d-flex flex-column align-items-center w-100 ">
       <h2 className="mb-5">Other Information</h2>
-      {otherInfo.map((item, index) => (
+      {otherInfo?.map((item, index) => (
         <div className="orderInfo " key={item.id}>
           <div className="formContainer " style={{ marginLeft: 0 }}>
             <div className="leftSideInfo d-flex">
