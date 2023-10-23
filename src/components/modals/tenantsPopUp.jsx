@@ -321,6 +321,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
         applicant={tenantData}
         isOpen={openApplicantForm}
         onClose={() => setApplicatonForm(false)}
+        title={"Tanant"}
       />
       <div className="popUpContainer ">
         <div className="popUp d-flex flex-column ">

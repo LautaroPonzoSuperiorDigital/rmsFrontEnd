@@ -5,7 +5,7 @@ const VehiclesApplicant = ({ vehicles }) => {
     <div className="mt-5">
       <div className="">
         <form className="resetForm">
-          {vehicles.map((vehicle, index) => (
+          {vehicles?.map((vehicle, index) => (
             <div key={index}>
               <h3 className="Vtext">Vehicle {index + 1}</h3>
               <input

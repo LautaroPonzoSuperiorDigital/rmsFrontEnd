@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { ScreeningText } from "../styles"
-import { useAuth } from "../../../../hooks/useAuth"
+
 import { api } from "../../../../services/api"
 import { env } from "../../../../config/env"
 import { useNavigate } from "react-router-dom"
