@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   ModalOverlay,
   ModalContent,
@@ -14,16 +14,22 @@ import RoommatesApplicant from "./RoommatesApplicant"
 import VehiclesApplicant from "./VehiclesApplicant"
 import OtherInformationApplicant from "../OtherInformation Applicant"
 
-const ApplicantsModal = ({ isOpen, onClose, applicant }) => {
-  console.log("applicant", applicant)
+const ApplicantsModal = ({
+  isOpen,
+  onClose,
+  applicant,
+  selectedId,
+  title = "Applicants"
+}) => {
+  console.log(applicant)
   if (!isOpen) return null
 
   return (
     <ModalOverlay>
       <ModalContent>
         <ModalHeader>
-          <h2>Applicants Information</h2>
-          <CloseButton onClick={onClose}>Close</CloseButton>
+          <h2>{title} Information</h2>
+          <CloseButton onClick={onClose}>X</CloseButton>
         </ModalHeader>
 
         <ModalBody>
