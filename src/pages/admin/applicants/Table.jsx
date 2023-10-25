@@ -52,6 +52,7 @@ const Table = ({
     // })
 
     setApplicant(applicants)
+    console.log(applicants)
     // const fetchAdminListing = async () => {
     //   try {
     //     const { data: adminData } = await api.get(`/admin/user/${user.id}`)
@@ -106,7 +107,8 @@ const Table = ({
 
       <tbody style={tBodyStyle}>
         {applicant.map((item) =>
-          item.length === 0 ? null : (
+          item.length === 0 ||
+          item.User.ApplicationScreening.length == 0 ? null : (
             <>
               <tr className="tr-hover" key={item.id}>
                 <td
@@ -122,9 +124,9 @@ const Table = ({
                 </td>
                 <td className="bor1">
                   <div className="mt-3 ms-2" style={{ width: "250px" }}>
-                    {/* <p key={item.id} style={{ margin: "0px" }}>
-                      {item.User.Listing.location}
-                    </p> */}
+                    <p key={item.id} style={{ margin: "0px" }}>
+                      {item.User?.ApplicationScreening[0]?.Listing?.location}
+                    </p>
                   </div>
                 </td>
                 <td className="bor1">

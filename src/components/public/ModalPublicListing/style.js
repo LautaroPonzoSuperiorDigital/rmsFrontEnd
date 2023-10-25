@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from "styled-components"
 
 export const ModalListingContainer = styled.div`
   position: fixed;
@@ -15,7 +15,7 @@ export const ModalListingContainer = styled.div`
     flex-direction: column;
     overflow-y: scroll;
   }
-`;
+`
 
 export const ModalListingDescription = styled.div`
   background-color: white;
@@ -23,20 +23,20 @@ export const ModalListingDescription = styled.div`
   max-width: 670px;
   height: 100%;
   padding: 20px 48px;
-  justify-content: space-between;
+  justify-content: flex-start;
   display: flex;
   flex-direction: column;
   @media (max-width: 768px) {
     padding: 0px 10px;
   }
-`;
+`
 export const DescriptionContainer = styled.div`
   display: flex;
   justify-content: space-between;
   @media (max-width: 768px) {
     margin-top: 0rem;
   }
-`;
+`
 export const SpectDescriptioContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -44,21 +44,21 @@ export const SpectDescriptioContainer = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
   }
-`;
+`
 export const Text = styled.div`
   display: inline;
   margin: 0;
   padding: 0;
-`;
+`
 
 export const PriceText = styled(Text)`
   font-size: 45px;
   font-weight: 600;
-`;
+`
 export const PriceSpan = styled.span`
   font-size: 25px;
   font-weight: 400;
-`;
+`
 
 export const FieldName = styled.p`
   margin: 0;
@@ -68,21 +68,21 @@ export const FieldName = styled.p`
   color: #000000a5;
   margin-top: 1rem;
   height: 20px;
-`;
+`
 
 export const FieldValue = styled.p`
   margin: 0;
   font-size: 20px;
   font-weight: 600;
   color: #131313;
-`;
+`
 
 export const FieldValueLi = styled.li`
   margin: 0;
   font-size: 20px;
   font-weight: 600;
   color: #131313;
-`;
+`
 
 export const BlackOverlay = styled.div`
   position: fixed;
@@ -97,7 +97,7 @@ export const BlackOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+`
 
 export const AmenitiesContainer = styled.div`
   display: flex;
@@ -106,7 +106,7 @@ export const AmenitiesContainer = styled.div`
     flex-direction: column;
     gap: 0px;
   }
-`;
+`
 
 export const BtnApply = styled.button`
   background-color: #197572;
@@ -116,7 +116,7 @@ export const BtnApply = styled.button`
   width: 100%;
   max-width: 580px;
   margin-top: auto;
-`;
+`
 
 export const FieldContainer = styled.div`
   @media (max-width: 768px) {
@@ -130,7 +130,7 @@ export const FieldContainer = styled.div`
       margin: 0;
     }
   }
-`;
+`
 
 export const SpinnerContainer = styled.div`
   display: flex;
@@ -142,4 +142,12 @@ export const SpinnerContainer = styled.div`
     max-width: 100%;
     max-height: 290px;
   }
-`;
+`
+
+export const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  margin-bottom: 20px; /* Add a margin to separate it from the Apply button */
+`

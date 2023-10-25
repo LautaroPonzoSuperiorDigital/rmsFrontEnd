@@ -126,7 +126,7 @@ const TenantsAdmin = () => {
   return (
     <>
       <Nav />
-      <div className="container-fluid">
+      <div className="container-fluid p-0">
         {selectedTenant && (
           <TenantModal
             isOpen={true}
@@ -157,14 +157,19 @@ const TenantsAdmin = () => {
           </div>
           <Search onSearch={handleSearch} tenants={tenants} />
         </div>
-        <div className="container-fluid d-flex justify-content-start">
+        <div className="container-fluid d-flex justify-content-start p-0">
           <div className="row container-fluid">
             <div className="col table-container">
               <table className="table mt-4 w-100">
                 <thead>
                   <tr>
                     <td>
-                      <p className="lead name td p1">NAME</p>
+                      <p
+                        className="lead name td p1"
+                        style={{ margin: 0, padding: 0 }}
+                      >
+                        NAME
+                      </p>
                     </td>
                     <td>
                       <p className="lead listings1 td p1">LISTINGS</p>
@@ -173,19 +178,19 @@ const TenantsAdmin = () => {
                       <p className="lead status td p1">PAYMENT STATUS</p>
                     </td>
                     <td>
-                      <p className="lead email td p1">EMAIL</p>
+                      <p className="lead  td p1">EMAIL</p>
                     </td>
                     <td>
-                      <p className="lead phone td p1">PHONE</p>
+                      <p className="lead  td p1">PHONE</p>
                     </td>
                     <td>
-                      <p className="lead contract td p1">CONTRACT DATES</p>
+                      <p className="leadtd p1">CONTRACT DATES</p>
                     </td>
                     <td>
-                      <p className="lead bgcheck td p1">BACKGROUND CHECK</p>
+                      <p className="lead td p1">BACKGROUND CHECK</p>
                     </td>
                     <td>
-                      <p className="lead actions td p1">ACTIONS</p>
+                      <p className="lead  td p1">ACTIONS</p>
                     </td>
                   </tr>
                 </thead>
@@ -205,8 +210,10 @@ const TenantsAdmin = () => {
                             onClick={(event) =>
                               handleCellClick(tenant, "name", event)
                             }
+                            className="p-0"
+                            style={{ width: "150px !important", margin: 0 }}
                           >
-                            <p className="p1 h">{tenant.User.name}</p>
+                            <p className=" h">{tenant.User.name}</p>
                           </td>
                           <td
                             onClick={(event) =>

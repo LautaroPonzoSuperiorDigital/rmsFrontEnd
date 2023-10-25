@@ -21,7 +21,6 @@ const ApplicantsModal = ({
   selectedId,
   title = "Applicants"
 }) => {
-  console.log(applicant)
   if (!isOpen) return null
 
   return (

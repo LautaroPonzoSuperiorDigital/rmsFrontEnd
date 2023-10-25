@@ -42,13 +42,14 @@ const Income = ({ tenantId, setActiveSection }) => {
   })
 
   const postIncome = async (currentEmployer) => {
-    if (currentEmployer.name !== "") {
+    console.log("currentEmployer", currentEmployer)
+    if (currentEmployer.employedBy !== "") {
       const response = await api.post("/tenant-income", currentEmployer)
       console.log("Employee submitted:", response.data)
     }
   }
   const postOtherIncome = async (otherIncome) => {
-    if (otherIncome.name !== "") {
+    if (otherIncome.employedBy !== "") {
       const response = await api.post(
         "/tenant-income/additional-income",
         otherIncome
@@ -58,11 +59,13 @@ const Income = ({ tenantId, setActiveSection }) => {
   }
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleSubmit() // Call your submit function
+      e.preventDefault() // Prevent the default form submission behavior
+      handleSubmit()
     }
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     try {
       await postIncome(currentEmployer)
       if (previousEmployer.employedBy !== "") {
@@ -82,7 +85,10 @@ const Income = ({ tenantId, setActiveSection }) => {
   }
 
   return (
-    <div className="incomeContainer align-items-center">
+    <form
+      className="incomeContainer align-items-center"
+      onSubmit={(e) => handleSubmit(e)}
+    >
       <h2 className="rentalText align-items-center">Income</h2>
       <p className="rentalP">
         Please list employment from the past five years & other sources of
@@ -90,7 +96,7 @@ const Income = ({ tenantId, setActiveSection }) => {
       </p>
       <div className="incomeOrder  ">
         <div className="leftRentalForm">
-          <form action="">
+          <div action="">
             <h2 className="cA">Current Employer</h2>
             <input
               className="inputReset3"
@@ -182,8 +188,8 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
-          </form>
-          <form action="">
+          </div>
+          <div action="">
             <h2 className="cA">Previous Employer</h2>
             <input
               className="inputReset3"
@@ -269,10 +275,10 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
-          </form>
+          </div>
         </div>
         <div className="rightRentalForm">
-          <form action="">
+          <div action="">
             <h2 className="cA1">Previous Employer</h2>
             <input
               className="inputReset3"
@@ -358,10 +364,10 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
-          </form>
+          </div>
 
-          <form action="">
-            <h2 className="cA2">Other Income Sources</h2>
+          <div action="">
+            <h2 className="cA1">Other Income Sources</h2>
             <input
               className="inputReset3"
               type="text"
@@ -398,19 +404,18 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
-          </form>
+          </div>
         </div>
       </div>
       <div className="incomeSeparation">
         <button
           className="bgButton3 d-flex align-items-center justify-content-center"
-          onClick={handleSubmit}
           onKeyPress={handleKeyPress}
         >
           <span className="submitBtn3">Submit</span>
         </button>
       </div>
-    </div>
+    </form>
   )
 }
 

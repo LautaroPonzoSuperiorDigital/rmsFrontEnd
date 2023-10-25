@@ -192,7 +192,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             <ImgSideBar src={imageSrc} alt="" />
 
             <SideBarDescriptionPrice>
-              <div>
+              <div style={{ marginTop: "15px" }}>
                 <FieldText>ID</FieldText>
 
                 {myselectedListing && (
@@ -201,7 +201,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   </FieldValue>
                 )}
               </div>
-              <div>
+              <div style={{ marginTop: "15px" }}>
                 <p
                   style={{
                     color: "#272727",
@@ -295,9 +295,9 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
               <Ul>
                 {myselectedListing.Requirements &&
                   myselectedListing.Requirements.map((requirement) => (
-                    <li key={requirement.id}>
+                    <Li key={requirement.id} style={{ marginLeft: "20px" }}>
                       <FieldValue>{requirement.name}</FieldValue>
-                    </li>
+                    </Li>
                   ))}
               </Ul>
             </AmenitiesContainer>
