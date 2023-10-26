@@ -1,18 +1,11 @@
-import "../../styles/PopUp.css"
+import "./../../../../../styles/PopUp.css"
 import React, { useState, useEffect } from "react"
-import closeListing2 from "../../assets/img/close.svg"
-import closeHover from "../../assets/img/closeHover.svg"
-import SendTemplateIcon from "../../assets/img/SendTemplateIconHover.svg"
-import SendTemplateIconHover from "../../assets/img/SendTemplateIconHover.svg"
-import AddDocs from "./addDocumentsModal"
-import { api } from "../../services/api"
+import closeListing2 from "./../../../../../assets/img/close.svg"
+import closeHover from "./../../../../../assets/img/closeHover.svg"
+import SendTemplateIcon from "./../../../../../assets/img/SendTemplateIconHover.svg"
+import SendTemplateIconHover from "./../../../../../assets/img/SendTemplateIconHover.svg"
+import AddDocs from "./../../../../../components/modals/addDocumentsModal"
 import jwtDecode from "jwt-decode"
-import { ListingAlbumPreview } from "../listing-album-preview"
-import { ListingInspectionHistoryCard } from "../listing-inspection-history/styles"
-import { formatDate } from "../../services/date"
-import { DateTime } from "luxon"
-import { createListingImage } from "../../services/listing"
-import ApplicantsModal from "../../pages/admin/applicants/ApplicantsModal/ApplicantsModal"
 import {
   ApplicationContainer,
   BoxDocuments,
@@ -20,15 +13,18 @@ import {
   ModalContainer,
   ModalOverlayTenant,
   TitleDocuments
-} from "./style"
-import EmergencyContactaApplicant from "../../pages/admin/applicants/ApplicantsModal/EmergencyContactaApplicant"
-import IncomeApplicants from "../../pages/admin/applicants/ApplicantsModal/IncomeApplicants"
-import RentalHistoryApplicant from "../../pages/admin/applicants/ApplicantsModal/RentalHistory"
-import RoommatesApplicant from "../../pages/admin/applicants/ApplicantsModal/RoommatesApplicant"
-import VehiclesApplicant from "../../pages/admin/applicants/ApplicantsModal/VehiclesApplicant"
-import OtherInformationApplicant from "../../pages/admin/applicants/OtherInformation Applicant"
+} from "./../../../../../components/modals/style"
+import { api } from "../../../../../services/api"
+import { formatDate } from "../../../../../services/date"
+import EmergencyContactaApplicant from "../EmergencyContactaApplicant"
+import IncomeApplicants from "../IncomeApplicants"
+import RentalHistoryApplicant from "../RentalHistory"
+import RoommatesApplicant from "../RoommatesApplicant"
+import VehiclesApplicant from "../VehiclesApplicant"
+import OtherInformationApplicant from "../../OtherInformation Applicant"
+import { createListingImage } from "../../../../../services/listing"
 
-const TenantModal = ({ selectedTenant, onClose }) => {
+const ApplicantModal = ({ selectedTenant, onClose }) => {
   const [isHovered, setIsHovered] = useState(false)
   const [isHoveredEdit, setIsHoveredEdit] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -101,71 +97,71 @@ const TenantModal = ({ selectedTenant, onClose }) => {
       })
   }
 
-  async function handleSendPandadocClick(
-    documentId,
-    isHovered,
-    localAdminData
-  ) {
-    let responseDocumentId
-    let name_split = String(localAdminData.name).split(" ")
-    let f_name = name_split[0]
-    let l_name = name_split.slice(1).join(" ")
-    let requestCreateData = {
-      templateUuid: documentId,
-      name: `California S. R. L. Agreement - ${localAdminData.name} and ${tenantData.User.name}`,
-      recipients: [
-        {
-          email: localAdminData.email,
-          first_name: f_name,
-          last_name: l_name,
-          role: "ADMIN"
-        },
-        {
-          email: tenantData.User.email,
-          first_name: String(tenantData.User.name).split(" ")[0],
-          last_name: String(tenantData.User.name).split(" ")[1] || null,
-          role: "TENANT"
-        }
-      ],
-      tags: ["rms-frontend"]
-    }
-    if (!requestCreateData.recipients[0].email) {
-      throw new Error("Bad Admin Data.")
-    }
+  // async function handleSendPandadocClick(
+  //   documentId,
+  //   isHovered,
+  //   localAdminData
+  // ) {
+  //   let responseDocumentId
+  //   let name_split = String(localAdminData.name).split(" ")
+  //   let f_name = name_split[0]
+  //   let l_name = name_split.slice(1).join(" ")
+  //   let requestCreateData = {
+  //     templateUuid: documentId,
+  //     name: `California S. R. L. Agreement - ${localAdminData.name} and ${tenantData.User.name}`,
+  //     recipients: [
+  //       {
+  //         email: localAdminData.email,
+  //         first_name: f_name,
+  //         last_name: l_name,
+  //         role: "ADMIN"
+  //       },
+  //       {
+  //         email: tenantData.User.email,
+  //         first_name: String(tenantData.User.name).split(" ")[0],
+  //         last_name: String(tenantData.User.name).split(" ")[1] || null,
+  //         role: "TENANT"
+  //       }
+  //     ],
+  //     tags: ["rms-frontend"]
+  //   }
+  //   if (!requestCreateData.recipients[0].email) {
+  //     throw new Error("Bad Admin Data.")
+  //   }
 
-    await api
-      .post(
-        `/tenant/${selectedTenant.id}/document-template/create-document`,
-        requestCreateData
-      )
-      .then((response) => {
-        if (response.status > 201) throw new Error("Could not create document")
-        responseDocumentId = response.data.id
-      })
-      .catch((e) => {
-        throw new Error(e)
-      })
+  //   await api
+  //     .post(
+  //       `/tenant/${selectedTenant.id}/document-template/create-document`,
+  //       requestCreateData
+  //     )
+  //     .then((response) => {
+  //       if (response.status > 201) throw new Error("Could not create document")
+  //       responseDocumentId = response.data.id
+  //     })
+  //     .catch((e) => {
+  //       throw new Error(e)
+  //     })
 
-    // don't delete this timing line, it's for pandadoc API send template
-    await new Promise((resolve) => setTimeout(resolve, 5000))
+  //   // don't delete this timing line, it's for pandadoc API send template
+  //   await new Promise((resolve) => setTimeout(resolve, 5000))
 
-    const requestSendData = {
-      subject: "Listing document sign",
-      message: "You were invited to sign the following document:",
-      silent: false
-    }
-    await api
-      .post(
-        `/tenant/${selectedTenant.id}/document/${responseDocumentId}/send`,
-        requestSendData
-      )
-      .then((response) => {
-        if (response.status > 201) throw new Error("Could not create document")
-      })
-      .catch((e) => {
-        throw new Error(e)
-      })
-  }
+  //   const requestSendData = {
+  //     subject: "Listing document sign",
+  //     message: "You were invited to sign the following document:",
+  //     silent: false
+  //   }
+  //   await api
+  //     .post(
+  //       `/tenant/${selectedTenant.id}/document/${responseDocumentId}/send`,
+  //       requestSendData
+  //     )
+  //     .then((response) => {
+  //       if (response.status > 201) throw new Error("Could not create document")
+  //     })
+  //     .catch((e) => {
+  //       throw new Error(e)
+  //     })
+  // }
 
   async function loadDocuments() {
     try {
@@ -181,21 +177,12 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     }
   }
 
-  async function loadInspections() {
-    try {
-      const response = api.get(
-        `/listing/${selectedTenant.listingId}/inspection`
-      )
-
-      setInspections((await response).data)
-    } catch (err) {
-      alert("Error fetching inspections", err)
-    }
-  }
-
   const fetchListings = async () => {
     try {
-      const response = await api.get(`/listing/${selectedTenant.listingId}`)
+      const response = await api.get(
+        `/listing/${selectedTenant.User.ApplicationScreening[0].Listing.id}`
+      )
+      console.log("response", response)
       const listingData = response.data
       setListingData(listingData)
     } catch (error) {
@@ -210,7 +197,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
       getTenantData()
       fetchListings()
       loadDocuments()
-      loadInspections()
+      // loadInspections()
     }
   }, [decodedToken])
 
@@ -303,42 +290,24 @@ const TenantModal = ({ selectedTenant, onClose }) => {
           </div>
         )
 
-      case "PAYMENT HISTORY":
-        return <></>
-      case "INSPECTION HISTORY":
-        return (
-          <ListingInspectionHistoryCard className="mx-5 my-4">
-            <div className="inspection-card-container">
-              {inspections.map((inspection) => (
-                <div className="inspection-card" key={inspection.id}>
-                  <div className="inspectionContent">
-                    <p>{inspection.name}</p>
-                    <span>
-                      {formatDate({
-                        date: inspection.date,
-                        formatOptions: DateTime.DATE_MED
-                      })}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </ListingInspectionHistoryCard>
-        )
       case "APPLICATION FORM":
         return (
           <ApplicationContainer>
             <EmergencyContactaApplicant
-              contact={tenantData.EmergencyContacts}
+              contact={selectedTenant.EmergencyContacts}
             />
             <IncomeApplicants
-              income={tenantData.Incomes}
-              otherIncomes={tenantData.OtherIncomes}
+              income={selectedTenant.Incomes}
+              otherIncomes={selectedTenant.OtherIncomes}
             />
-            <RentalHistoryApplicant rentalHistory={tenantData.OtherAddresses} />
-            <RoommatesApplicant roommates={tenantData.RoomMates} />
-            <VehiclesApplicant vehicles={tenantData.Vehicles} />
-            <OtherInformationApplicant otherInfo={tenantData.AdditionalInfos} />
+            <RentalHistoryApplicant
+              rentalHistory={selectedTenant.OtherAddresses}
+            />
+            <RoommatesApplicant roommates={selectedTenant.RoomMates} />
+            <VehiclesApplicant vehicles={selectedTenant.Vehicles} />
+            <OtherInformationApplicant
+              otherInfo={selectedTenant.AdditionalInfos}
+            />
           </ApplicationContainer>
         )
       default:
@@ -348,12 +317,6 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
   return (
     <ModalOverlayTenant>
-      {/* <ApplicantsModal
-        applicant={tenantData}
-        isOpen={openApplicantForm}
-        onClose={() => setApplicatonForm(false)}
-        title={"Tanant"}
-      /> */}
       <ModalContainer>
         <div className="popUp d-flex flex-column " style={{ width: "90%" }}>
           <div className="onClose d-flex align-items-center justify-content-end mt-2 flex-">
@@ -405,10 +368,6 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 <p>EMAIL</p>
                 <span>{selectedTenant.User.email}</span>
               </div>
-              <div className="popUpOrderFirstCol contractDatesPopUp d-flex">
-                <p>CONTRACT DATES</p>
-                <span>{selectedTenant.contract}</span>
-              </div>
             </div>
 
             <div className="listingInfoOrder d-flex flex-column">
@@ -416,39 +375,48 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 <div className="popUpOrderFirstCol idPopUp d-flex">
                   <p>ID</p>
                   <span>
-                    {String(selectedTenant.listingId).padStart(6, "0")}
+                    {String(
+                      selectedTenant.User.ApplicationScreening[0].Listing.id
+                    ).padStart(6, "0")}
                   </span>
                 </div>
                 <div className="popUpOrderFirstCol locationPopUp d-flex">
                   <p>LOCATION</p>
-                  <span>{listingData && listingData.location}</span>
+                  <span>
+                    {
+                      selectedTenant.User.ApplicationScreening[0].Listing
+                        .location
+                    }
+                  </span>
                 </div>
                 <div className="popUpOrderFirstCol lotSizePopUp d-flex">
                   <p>LOT SIZE</p>
                   <span>
-                    {listingData && listingData.lotSize} Sq. Ft. Per County
+                    {
+                      selectedTenant.User.ApplicationScreening[0].Listing
+                        .lotSize
+                    }{" "}
+                    Sq. Ft. Per County
                   </span>
                 </div>
                 <div className="popUpOrderFirstCol hsPopUp d-flex">
                   <p>HOUSE SIZE</p>
                   <span>
-                    {listingData && listingData.houseSize} Sq. Ft. Per County
+                    {
+                      selectedTenant.User.ApplicationScreening[0].Listing
+                        .houseSize
+                    }{" "}
+                    Sq. Ft. Per County
                   </span>
                 </div>
                 <div className="popUpOrderFirstCol pricePopUp d-flex">
                   <p>PRICE</p>
-                  <span>$ {listingData && listingData.price} / Mo</span>
+                  <span>
+                    ${" "}
+                    {selectedTenant.User.ApplicationScreening[0].Listing.price}{" "}
+                    / Mo
+                  </span>
                 </div>
-                {/* <div className="popUpOrderFirstCol totalProf d-flex">
-                  <div className="d-flex profit justify-content-start">
-                    <p>TOTAL PROFIT</p>
-                    <span>$ 364,675</span>
-                  </div>
-                  <div className="d-flex profit justify-content-end">
-                    <p>TOTAL LOSS</p>
-                    <span>$ 54,000</span>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>
@@ -465,20 +433,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 >
                   <p> Documents</p>
                 </div>
-                <div
-                  onClick={() =>
-                    handleHover(true, setActiveSection, "PAYMENT HISTORY")
-                  }
-                >
-                  <p> Payment History</p>
-                </div>
-                <div
-                  onClick={() =>
-                    handleHover(true, setActiveSection, "INSPECTION HISTORY")
-                  }
-                >
-                  <p> Inspection History</p>
-                </div>
+
                 <div
                   onClick={() =>
                     handleApplicationForm(
@@ -509,4 +464,4 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   )
 }
 
-export default TenantModal
+export default ApplicantModal

@@ -9,7 +9,7 @@ const IncomeApplicants = ({ income, otherIncomes }) => {
             Income {index + 1}
           </h2>
           <div className="w-100">
-            <form action="w-100">
+            <form action="" className="w-100 d-flex flex-column">
               <input
                 className="inputReset3"
                 type="text"
@@ -21,36 +21,42 @@ const IncomeApplicants = ({ income, otherIncomes }) => {
                 type="text"
                 placeholder="POSITION"
                 value={item.position}
+                style={{ maxWidth: "500px" }}
               />
               <input
                 className="inputReset3"
                 type="text"
                 placeholder="DATES OF EMPLOYMENT (FROM..TO)"
                 value={item.datesOfEmployment}
+                style={{ maxWidth: "500px" }}
               />
               <input
                 className="inputReset3"
                 type="text"
                 placeholder="MONTHLY INCOME"
                 value={item.monthlyIncome}
+                style={{ maxWidth: "500px" }}
               />
               <input
                 className="inputReset3"
                 type="text"
                 placeholder="NAME OF SUPERVISOR"
                 value={item.supervisorName}
+                style={{ maxWidth: "500px" }}
               />
               <input
                 className="inputReset3"
                 type="text"
                 placeholder="SUPERVISOR’S PHONE #"
                 value={item.supervisorPhone}
+                style={{ maxWidth: "500px" }}
               />
               <input
                 className="inputReset3"
                 type="text"
                 placeholder="ADDRESS STREET, CITY, STATE, ZIP"
                 value={item.address}
+                style={{ maxWidth: "500px" }}
               />
             </form>
           </div>
@@ -65,18 +71,21 @@ const IncomeApplicants = ({ income, otherIncomes }) => {
             type="text"
             placeholder="TYPE"
             value={item.type}
+            style={{ maxWidth: "500px" }}
           />
           <input
             className="inputReset3"
             type="text"
             placeholder="MONTHLY INCOME"
             value={item.monthlyIncome}
+            style={{ maxWidth: "500px" }}
           />
           <input
             className="inputReset3"
             type="text"
             placeholder="PROVIDER ADDRESS - STREET, CITY, STATE, ZIP"
             value={item.address}
+            style={{ maxWidth: "500px" }}
           />
         </div>
       ))}
