@@ -7,7 +7,9 @@ import TableSelect from "./TableSelect"
 import ButtonTenant from "./ButtonTenant"
 import { api } from "../../../services/api"
 import { useAuth } from "../../../hooks/useAuth"
-import ApplicantsModal from "./ApplicantsModal/ApplicantsModal"
+
+import TenantModal from "../../../components/modals/tenantsPopUp"
+import ApplicantModal from "./ApplicantsModal/Applicant-modal/Applicant-modal"
 
 const tBodyStyle = {
   height: "50px"
@@ -45,7 +47,6 @@ const Table = ({
   }
 
   useEffect(() => {
-    console.log(applicants)
     // want the applicants that has applicant.User.ApplicationScreening with something in it
     // const filteredApplicants = applicants.filter((applicant) => {
     //   return applicant.User.ApplicationScreening.length !== 0
@@ -79,113 +80,122 @@ const Table = ({
   }, [applicants])
 
   return (
-    <table className="table table-responsive-lg">
-      <thead className="tables">
-        <td className=" NAME1">
-          <p className="mb-2 g" style={{ width: "150px", margin: 0 }}>
-            NAME
-          </p>
-        </td>
-        <td className="bor LISTING1">
-          <p className="mb-2 g">LISTINGS</p>
-        </td>
-        <td className="bor">
-          <p className="mb-2 ms-5 g">APPROVAL STATUS</p>
-        </td>
-        <td className="bor EMAIL1">
-          <p className="mb-2 g">EMAIL</p>
-        </td>
-        <td className="bor">
-          <p className="mb-2 g">PHONE</p>
-        </td>
-        <td className="bor whiteSpace"></td>
-        <td className="bor">
-          <p className="deleteText g">DELETE</p>
-        </td>
-      </thead>
+    <>
+      {" "}
+      <table className="table table-responsive-lg">
+        <thead className="tables">
+          <td className=" NAME1">
+            <p className="mb-2 g" style={{ width: "150px", margin: 0 }}>
+              NAME
+            </p>
+          </td>
+          <td className="bor LISTING1">
+            <p className="mb-2 g">LISTINGS</p>
+          </td>
+          <td className="bor">
+            <p className="mb-2 ms-5 g">APPROVAL STATUS</p>
+          </td>
+          <td className="bor EMAIL1">
+            <p className="mb-2 g">EMAIL</p>
+          </td>
+          <td className="bor">
+            <p className="mb-2 g">PHONE</p>
+          </td>
+          <td className="bor whiteSpace"></td>
+          <td className="bor">
+            <p className="deleteText g">DELETE</p>
+          </td>
+        </thead>
 
-      <tbody style={tBodyStyle}>
-        {applicant.map((item) =>
-          item.length === 0 ? null : (
-            <>
-              <tr className="tr-hover" key={item.id}>
-                <td
-                  className="bor1"
-                  onClick={() => handleOpenApplicantModal(item.id)}
-                >
-                  <div
-                    className="mt-3   Person"
-                    style={{ width: "150px", margin: 0 }}
+        <tbody style={tBodyStyle}>
+          {applicant.map((item) =>
+            item.length === 0 ? null : (
+              <>
+                <tr className="tr-hover" key={item.id}>
+                  <td
+                    className="bor1"
+                    onClick={() => handleOpenApplicantModal(item.id)}
                   >
-                    <p>{item.User.name}</p>
-                  </div>
-                </td>
-                <td className="bor1">
-                  <div className="mt-3 ms-2" style={{ width: "250px" }}>
-                    {/* <p key={item.id} style={{ margin: "0px" }}>
+                    <div
+                      className="mt-3   Person"
+                      style={{ width: "150px", margin: 0 }}
+                    >
+                      <p>{item.User.name}</p>
+                    </div>
+                  </td>
+                  <td className="bor1">
+                    <div className="mt-3 ms-2" style={{ width: "250px" }}>
+                      {/* <p key={item.id} style={{ margin: "0px" }}>
                       {item.User.Listing.location}
                     </p> */}
-                  </div>
-                </td>
-                <td className="bor1">
-                  <div className="mt-3 ms-5">
-                    {item.approvalStatus && (
-                      <TableSelect
-                        approbalStatus={item.approvalStatus}
-                        key={item.id}
-                        tenantId={item.id}
-                        setMoveToTenant={setMoveToTenant}
-                        setApplicants={setTableApplicants}
+                    </div>
+                  </td>
+                  <td className="bor1">
+                    <div className="mt-3 ms-5">
+                      {item.approvalStatus && (
+                        <TableSelect
+                          approbalStatus={item.approvalStatus}
+                          key={item.id}
+                          tenantId={item.id}
+                          setMoveToTenant={setMoveToTenant}
+                          setApplicants={setTableApplicants}
+                        />
+                      )}
+                    </div>
+                  </td>
+                  <td className="bor1">
+                    <div className="mt-3" style={{ width: "100px" }}>
+                      <p style={{ margin: "0px" }}>{item.User.email}</p>
+                    </div>
+                  </td>
+                  <td className="bor1">
+                    <div className="mt-3 ms-1">
+                      <p>{item.phoneNumber}</p>
+                    </div>
+                  </td>
+                  <td className="bor1">
+                    <div className="mtt">
+                      {item.approvalStatus === "LEASE_AGREEMENT_SIGNED" && (
+                        <ButtonTenant
+                          key={item.id}
+                          applicantionScreening={item.User.ApplicationScreening}
+                          tenantId={item.id}
+                          approvalStatus={item.approvalStatus}
+                          setNewTanant={setNewTanant}
+                        />
+                      )}
+                    </div>
+                  </td>
+                  <td className="bor1">
+                    <div className="deleteBtn1">
+                      <DeleteButton
+                        info={"Tenant"}
+                        onClick={() => HandleDelete(item.id)}
+                        defaultImage={<img src={Delete} alt="Delete" />}
+                        hoverImage={
+                          <img src={DeleteIconHover} alt="DeleteIconHover" />
+                        }
                       />
-                    )}
-                  </div>
-                </td>
-                <td className="bor1">
-                  <div className="mt-3" style={{ width: "100px" }}>
-                    <p style={{ margin: "0px" }}>{item.User.email}</p>
-                  </div>
-                </td>
-                <td className="bor1">
-                  <div className="mt-3 ms-1">
-                    <p>{item.phoneNumber}</p>
-                  </div>
-                </td>
-                <td className="bor1">
-                  <div className="mtt">
-                    {item.approvalStatus === "LEASE_AGREEMENT_SIGNED" && (
-                      <ButtonTenant
-                        key={item.id}
-                        applicantionScreening={item.User.ApplicationScreening}
-                        tenantId={item.id}
-                        approvalStatus={item.approvalStatus}
-                        setNewTanant={setNewTanant}
-                      />
-                    )}
-                  </div>
-                </td>
-                <td className="bor1">
-                  <div className="deleteBtn1">
-                    <DeleteButton
-                      info={"Tenant"}
-                      onClick={() => HandleDelete(item.id)}
-                      defaultImage={<img src={Delete} alt="Delete" />}
-                      hoverImage={
-                        <img src={DeleteIconHover} alt="DeleteIconHover" />
-                      }
-                    />
-                  </div>
-                </td>
-              </tr>
-            </>
-          )
-        )}
-      </tbody>
-      <ApplicantsModal
-        isOpen={isApplicantModal}
-        onClose={handleCloseApplicantModal}
-        applicant={selectedApplicant}
-      />
-    </table>
+                    </div>
+                  </td>
+                </tr>
+              </>
+            )
+          )}
+        </tbody>
+        {/* <ApplicantsModal
+      // isOpen={isApplicantModal}
+      // onClose={handleCloseApplicantModal}
+      // applicant={selectedApplicant}
+    /> */}
+      </table>
+      {isApplicantModal && (
+        <ApplicantModal
+          selectedTenant={selectedApplicant}
+          onClose={handleCloseApplicantModal}
+        />
+      )}
+    </>
   )
 }
 
