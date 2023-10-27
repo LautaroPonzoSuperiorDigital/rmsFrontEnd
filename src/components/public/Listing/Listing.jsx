@@ -1,6 +1,6 @@
-import bath from "../../../assets/img/bath.svg";
-import bed from "../../../assets/img/bed.svg";
-import PropTypes from "prop-types";
+import bath from "../../../assets/img/bath.svg"
+import bed from "../../../assets/img/bed.svg"
+import PropTypes from "prop-types"
 import {
   PublicListing,
   ListingPublicImg,
@@ -11,26 +11,26 @@ import {
   SpanPrince,
   LocationText,
   FieldName,
-  FieldValue,
-} from "./styles.js";
-import { useEffect, useState } from "react";
-import { createListingImage } from "../../../services/listing";
+  FieldValue
+} from "./styles.js"
+import { useEffect, useState } from "react"
+import { createListingImage } from "../../../services/listing"
 
 const Listing = ({ listing, handleImageClick }) => {
-  const [imageSrc, setImageSrc] = useState(null);
+  const [imageSrc, setImageSrc] = useState(null)
 
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        const src = await createListingImage(listing);
-        setImageSrc(src);
+        const src = await createListingImage(listing)
+        setImageSrc(src)
       } catch (error) {
-        console.error("Error fetching image:", error);
+        console.error("Error fetching image:", error)
       }
-    };
+    }
 
-    fetchImage();
-  }, [listing]);
+    fetchImage()
+  }, [listing])
 
   return (
     <PublicListing>
@@ -63,11 +63,11 @@ const Listing = ({ listing, handleImageClick }) => {
         <div>
           <ListingPriceLocation>
             <FieldName>
-              HOUSE{" "}
+              HOUSE
               <FieldValue className="strong">
                 {listing.houseSize
                   ? listing.houseSize.toLocaleString("EN", {
-                      maximumFractionDigits: 0,
+                      maximumFractionDigits: 0
                     })
                   : ""}
                 &nbsp;SQ. FT.
@@ -86,7 +86,7 @@ const Listing = ({ listing, handleImageClick }) => {
               <FieldValue>
                 {listing.lotSize
                   ? listing.lotSize.toLocaleString("EN", {
-                      maximumFractionDigits: 0,
+                      maximumFractionDigits: 0
                     })
                   : ""}{" "}
                 &nbsp;SQ. FT.
@@ -97,12 +97,12 @@ const Listing = ({ listing, handleImageClick }) => {
         </div>
       </ListingPublicDescription>
     </PublicListing>
-  );
-};
+  )
+}
 
-export default Listing;
+export default Listing
 
 Listing.propTypes = {
   listing: PropTypes.object.isRequired,
-  handleImageClick: PropTypes.func.isRequired,
-};
+  handleImageClick: PropTypes.func.isRequired
+}

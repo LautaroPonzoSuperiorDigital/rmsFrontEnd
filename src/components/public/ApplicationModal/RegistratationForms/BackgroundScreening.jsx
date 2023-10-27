@@ -12,7 +12,7 @@ const BackgroundScreening = ({
   imageSrc
 }) => {
   const navigate = useNavigate()
-  console.log("component", userId)
+
   const handleStartScreening = async () => {
     let data = {
       userId: userId,
@@ -36,8 +36,11 @@ const BackgroundScreening = ({
   }
 
   return (
-    <div>
-      <ScreeningText>background Screening</ScreeningText>
+    <div
+      className="h-100 d-flex flex-column justify-content-center "
+      style={{ marginTop: "160px" }}
+    >
+      <ScreeningText>Background Screening</ScreeningText>
       <div
         style={{
           height: "100%",

@@ -1,9 +1,10 @@
 import { useState } from "react"
 import { api } from "../../../../services/api"
+import Thrash from "./../../../../assets/img/delete.svg"
 
 const Vehicles = ({ tenantId, setActiveSection }) => {
   const [vehicles, setVehicles] = useState([
-    { MakeAndModel: "", year: "", color: "", plate: "", state: "" }
+    { MakeAndModel: " ", year: " ", color: " ", plate: " ", state: " " }
   ])
 
   const handleAddVehicle = () => {
@@ -35,13 +36,18 @@ const Vehicles = ({ tenantId, setActiveSection }) => {
         })
         return response.data
       })
-      // Wait for all the promises to resolve
+
       const savedVehicles = await Promise.all(vehiclePromises)
       console.log(savedVehicles)
       setActiveSection("otherInfo")
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const HandleDeleteVehicle = (index) => {
+    const updatedVehicles = vehicles.filter((vehicle, i) => i !== index)
+    setVehicles(updatedVehicles)
   }
   return (
     <div className="registrationContainer d-flex justify-content-center">
@@ -52,7 +58,21 @@ const Vehicles = ({ tenantId, setActiveSection }) => {
         <form className="resetForm" onSubmit={handleSubmit}>
           {vehicles.map((vehicle, index) => (
             <div key={index}>
-              <h3 className="Vtext">Vehicle {index + 1}</h3>
+              <h3 className="Vtext">
+                Vehicle {index + 1}
+                {index > 0 && (
+                  <img
+                    src={Thrash}
+                    alt="tharsh"
+                    style={{
+                      marginLeft: "10px",
+                      marginBottom: "6px",
+                      cursor: "pointer"
+                    }}
+                    onClick={() => HandleDeleteVehicle(index)}
+                  />
+                )}
+              </h3>
               <input
                 className="form-control inputReset"
                 type="text"

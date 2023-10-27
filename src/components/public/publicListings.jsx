@@ -1,73 +1,78 @@
-import "../../styles/publIcListings/publicListings.css";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Listing from "./Listing/Listing";
-import Logo from "../../assets/img/logomark.svg";
-import SearchIconHover from "../../assets/img/SearchIconHover.svg";
-import SearchIcon from "../../assets/img/SearchIcon.svg";
-import chevronBackward from "../../assets/img/chevron.backward.svg";
-import { api } from "../../services/api";
-import { useAuth } from "../../hooks/useAuth";
-import { Close } from "../icons";
-import { ListingPublic, ListingPublicContainer } from "./styles";
+import "../../styles/publIcListings/publicListings.css"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import Listing from "./Listing/Listing"
+import Logo from "../../assets/img/logomark.svg"
+import SearchIconHover from "../../assets/img/SearchIconHover.svg"
+import SearchIcon from "../../assets/img/SearchIcon.svg"
+import chevronBackward from "../../assets/img/chevron.backward.svg"
+import { api } from "../../services/api"
+import { useAuth } from "../../hooks/useAuth"
+import { Close } from "../icons"
+import {
+  ListingPublic,
+  ListingPublicContainer,
+  LoginBtnMobile,
+  NavButtonLogin
+} from "./styles"
 
 const PublicListings = () => {
-  const [isSearchIconHovered, setIsSearchIconHovered] = useState(false);
-  const [isInputHovered, setIsInputHovered] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [listings, setListings] = useState([]);
-  const [amenitiesList, setAmenitiesList] = useState([]);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false);
-  const [isHouseSizeFilterOpen, setIsHouseSizeFilterOpen] = useState(false);
-  const [isLotSizeFilterOpen, setIsLotSizeFilterOpen] = useState(false);
-  const [IsAmenitiesFilterOpen, setIsAmenitiesFilterOpen] = useState(false);
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [searchInputValue, setSearchInputValue] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [minLotSize, setMinLotSize] = useState("");
-  const [maxLotSize, setMaxLotSize] = useState("");
-  const [minHouseSize, setMinHouseSize] = useState("");
-  const [maxHouseSize, setMaxHouseSize] = useState("");
-  const [amenities, setAmenities] = useState([]);
-  const [bedrooms, setBedrooms] = useState("");
-  const [bathrooms, setBathrooms] = useState("");
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
+  const [isSearchIconHovered, setIsSearchIconHovered] = useState(false)
+  const [isInputHovered, setIsInputHovered] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [listings, setListings] = useState([])
+  const [amenitiesList, setAmenitiesList] = useState([])
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false)
+  const [isHouseSizeFilterOpen, setIsHouseSizeFilterOpen] = useState(false)
+  const [isLotSizeFilterOpen, setIsLotSizeFilterOpen] = useState(false)
+  const [IsAmenitiesFilterOpen, setIsAmenitiesFilterOpen] = useState(false)
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
+  const [searchInputValue, setSearchInputValue] = useState("")
+  const [minPrice, setMinPrice] = useState("")
+  const [maxPrice, setMaxPrice] = useState("")
+  const [minLotSize, setMinLotSize] = useState("")
+  const [maxLotSize, setMaxLotSize] = useState("")
+  const [minHouseSize, setMinHouseSize] = useState("")
+  const [maxHouseSize, setMaxHouseSize] = useState("")
+  const [amenities, setAmenities] = useState([])
+  const [bedrooms, setBedrooms] = useState("")
+  const [bathrooms, setBathrooms] = useState("")
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  const innerWidth = window.innerWidth
   useEffect(() => {
     function updateModalWidth() {
-      setIsMobile(window.outerWidth <= 768);
+      setIsMobile(window.outerWidth <= 768)
     }
 
-    updateModalWidth();
+    updateModalWidth()
 
-    window.addEventListener("resize", updateModalWidth);
+    window.addEventListener("resize", updateModalWidth)
 
     return () => {
-      window.removeEventListener("resize", updateModalWidth);
-    };
-  }, []);
+      window.removeEventListener("resize", updateModalWidth)
+    }
+  }, [])
 
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const { data } = await api.get("/listing?isPublic=true");
-        setListings(data);
+        const { data } = await api.get("/listing?isPublic=true")
+        setListings(data)
       } catch (error) {
-        console.error("Error fetching listings:", error);
+        console.error("Error fetching listings:", error)
       }
-    };
+    }
 
     // TODO: Update amenities list
-    setAmenitiesList(["Pool", "Gate", "Pet-Friendly", "Air Conditioning"]);
-    fetchListings();
-  }, []);
+    setAmenitiesList(["Pool", "Gate", "Pet-Friendly", "Air Conditioning"])
+    fetchListings()
+  }, [])
 
   useEffect(() => {
-    !isMobile && handleApplyFilter();
+    !isMobile && handleApplyFilter()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isMobile,
@@ -79,173 +84,173 @@ const PublicListings = () => {
     maxLotSize,
     amenities,
     bedrooms,
-    bathrooms,
-  ]);
+    bathrooms
+  ])
 
   useEffect(() => {
-    document.body.style.overflow = isMobileFilterOpen ? "hidden" : "auto";
-  }, [isMobileFilterOpen]);
+    document.body.style.overflow = isMobileFilterOpen ? "hidden" : "auto"
+  }, [isMobileFilterOpen])
 
   const handleLogoClick = () => {
-    navigate("/");
-    setIsModalOpen(false);
-  };
+    navigate("/")
+    setIsModalOpen(false)
+  }
 
   const handleLoginClick = () => {
-    navigate("/login");
-  };
+    navigate("/login")
+  }
 
   const handleImageClick = (id) => {
-    navigate(`/listing/${id}`);
-  };
+    navigate(`/listing/${id}`)
+  }
 
   const handleSearchIconHover = () => {
-    setIsSearchIconHovered(true);
-  };
+    setIsSearchIconHovered(true)
+  }
 
   const handleSearchIconLeave = () => {
-    setIsSearchIconHovered(false);
-  };
+    setIsSearchIconHovered(false)
+  }
 
   const handleInputHover = () => {
-    setIsInputHovered(true);
-  };
+    setIsInputHovered(true)
+  }
 
   const handleInputLeave = () => {
-    setIsInputHovered(false);
-  };
+    setIsInputHovered(false)
+  }
 
   const handleOpenSearch = () => {
-    setIsSearchOpen(true);
-  };
+    setIsSearchOpen(true)
+  }
 
   const handleCloseSearch = () => {
-    setIsSearchOpen(false);
-  };
+    setIsSearchOpen(false)
+  }
 
   const handleTogglePriceFilter = () => {
-    setIsPriceFilterOpen(!isPriceFilterOpen);
-  };
+    setIsPriceFilterOpen(!isPriceFilterOpen)
+  }
 
   const handleToggleHouseSizeFilter = () => {
-    setIsHouseSizeFilterOpen(!isHouseSizeFilterOpen);
-  };
+    setIsHouseSizeFilterOpen(!isHouseSizeFilterOpen)
+  }
 
   const handleToggleLotSizeFilter = () => {
-    setIsLotSizeFilterOpen(!isLotSizeFilterOpen);
-  };
+    setIsLotSizeFilterOpen(!isLotSizeFilterOpen)
+  }
 
   const handleToggleAmenitiesFilter = () => {
-    setIsAmenitiesFilterOpen(!IsAmenitiesFilterOpen);
-  };
+    setIsAmenitiesFilterOpen(!IsAmenitiesFilterOpen)
+  }
 
   const handleOpenMobileFilter = () => {
-    setIsMobileFilterOpen(true);
-  };
+    setIsMobileFilterOpen(true)
+  }
 
   const handleCloseMobileFilter = () => {
-    setIsMobileFilterOpen(false);
-  };
+    setIsMobileFilterOpen(false)
+  }
 
   const handleSearchKeydown = (e) => {
-    if (e.key === "Enter") return handleSearch();
-  };
+    if (e.key === "Enter") return handleSearch()
+  }
 
   const handleSearchChange = (e) => {
-    setSearchInputValue(e.target.value);
-  };
+    setSearchInputValue(e.target.value)
+  }
 
   const handleSearch = () => {
     api
       .get("/listing", {
-        params: { isPublic: true, location: searchInputValue.trim() },
+        params: { isPublic: true, location: searchInputValue.trim() }
       })
       .then(({ data }) => setListings(data))
       .catch((error) => {
-        console.error("Could not update listings");
-        alert("Could not update listings");
-        throw new Error(error);
-      });
+        console.error("Could not update listings")
+        alert("Could not update listings")
+        throw new Error(error)
+      })
 
-    if (isSearchOpen) handleCloseSearch();
-  };
+    if (isSearchOpen) handleCloseSearch()
+  }
 
   const handleMinPriceChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value
 
-    setMinPrice(formatPriceInput(value));
-  };
+    setMinPrice(formatPriceInput(value))
+  }
 
   const handleMaxPriceChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value
 
-    setMaxPrice(formatPriceInput(value));
-  };
+    setMaxPrice(formatPriceInput(value))
+  }
 
   const handleMinLotSizeChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value
 
-    setMinLotSize(formatNumberInput(value));
-  };
+    setMinLotSize(formatNumberInput(value))
+  }
 
   const handleMaxLotSizeChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value
 
-    setMaxLotSize(formatNumberInput(value));
-  };
+    setMaxLotSize(formatNumberInput(value))
+  }
 
   const handleMinHouseSizeChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value
 
-    setMinHouseSize(formatNumberInput(value));
-  };
+    setMinHouseSize(formatNumberInput(value))
+  }
 
   const handleMaxHouseSizeChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value
 
-    setMaxHouseSize(formatNumberInput(value));
-  };
+    setMaxHouseSize(formatNumberInput(value))
+  }
 
   const handleAmenityChange = (e) => {
-    const amenity = e.target.value;
-    const isChecked = e.target.checked;
+    const amenity = e.target.value
+    const isChecked = e.target.checked
 
     isChecked
       ? setAmenities([...amenities, amenity])
-      : setAmenities(amenities.filter((a) => a !== amenity));
-  };
+      : setAmenities(amenities.filter((a) => a !== amenity))
+  }
 
   const handleBedroomsChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value
 
-    setBedrooms(formatNumberInput(value));
-  };
+    setBedrooms(formatNumberInput(value))
+  }
 
   const handleBathroomsChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value
 
-    setBathrooms(formatNumberInput(value));
-  };
+    setBathrooms(formatNumberInput(value))
+  }
 
   const formatPriceInput = (value) => {
-    const numericValue = value.replace(/[^0-9]/g, "").replace(/^0+/, "");
+    const numericValue = value.replace(/[^0-9]/g, "").replace(/^0+/, "")
     const formattedValue = `$${numericValue.replace(
       /\B(?=(\d{3})+(?!\d))/g,
       ","
-    )}`;
+    )}`
 
-    return formattedValue.length === 1 ? `` : formattedValue;
-  };
+    return formattedValue.length === 1 ? `` : formattedValue
+  }
 
   const formatNumberInput = (value) => {
-    const numericValue = value.replace(/[^0-9]/g, "").replace(/^0+/, "");
-    return `${numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-  };
+    const numericValue = value.replace(/[^0-9]/g, "").replace(/^0+/, "")
+    return `${numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+  }
 
   const handleApplyFilter = () => {
-    isMobileFilterOpen && handleCloseMobileFilter();
+    isMobileFilterOpen && handleCloseMobileFilter()
 
-    const removeNonDigits = (value) => value.replace(/\D/g, "");
+    const removeNonDigits = (value) => value.replace(/\D/g, "")
     const filterParams = Object.fromEntries(
       Object.entries({
         minPrice: removeNonDigits(minPrice),
@@ -256,24 +261,29 @@ const PublicListings = () => {
         maxHouseSize: removeNonDigits(maxHouseSize),
         bedrooms: removeNonDigits(bedrooms),
         bathrooms: removeNonDigits(bathrooms),
-        amenities: amenities.join(","),
+        amenities: amenities.join(",")
         // eslint-disable-next-line no-unused-vars
       }).filter(([_, value]) => value !== "")
-    );
+    )
 
     return api
       .get("/listing", { params: { isPublic: true, ...filterParams } })
       .then(({ data }) => setListings(data))
       .catch((error) => {
-        console.error("Could not update listings");
-        alert("Could not update listings");
-        throw new Error(error);
-      });
-  };
+        console.error("Could not update listings")
+        alert("Could not update listings")
+        throw new Error(error)
+      })
+  }
 
   return (
     <div className="containerPublic">
       <div className={`position-sticky ${isModalOpen ? "modal-open" : ""}`}>
+        {innerWidth < 768 && (
+          <NavButtonLogin>
+            <LoginBtnMobile onClick={handleLoginClick}>Log In</LoginBtnMobile>
+          </NavButtonLogin>
+        )}
         <div className={`filtersBar ${isSearchOpen ? "hideFiltersBar" : ""}`}>
           <img
             className="LogoPublic"
@@ -281,6 +291,7 @@ const PublicListings = () => {
             alt="Logo"
             onClick={handleLogoClick}
           />
+
           <div className="container">
             <div
               className={`inputPublic ${isInputHovered ? "inputHovered" : ""}`}
@@ -490,7 +501,7 @@ const PublicListings = () => {
       </div>
       <ListingPublicContainer
         style={{
-          filter: isSearchOpen && isMobile <= 768 ? "blur(5px)" : "none",
+          filter: isSearchOpen && isMobile <= 768 ? "blur(5px)" : "none"
         }}
       >
         {listings.length ? (
@@ -624,7 +635,7 @@ const PublicListings = () => {
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PublicListings;
+export default PublicListings

@@ -355,7 +355,10 @@ const TenantModal = ({ selectedTenant, onClose }) => {
         title={"Tanant"}
       /> */}
       <ModalContainer>
-        <div className="popUp d-flex flex-column " style={{ width: "90%" }}>
+        <div
+          className="popUp d-flex flex-column "
+          style={{ width: "90%", borderRadius: "4px" }}
+        >
           <div className="onClose d-flex align-items-center justify-content-end mt-2 flex-">
             {!isHovered ? (
               <img

@@ -20,6 +20,7 @@ const Applicants = () => {
     const fetchApplicants = async () => {
       try {
         const applicants = await api.get("/application-screening/get-all")
+
         setApplicants(applicants.data)
         setTableApplicants(applicants.data)
         setNewTanant(false)
