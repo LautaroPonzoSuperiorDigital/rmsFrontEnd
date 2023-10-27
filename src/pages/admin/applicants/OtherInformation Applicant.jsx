@@ -2,7 +2,10 @@ import React from "react"
 
 const OtherInformationApplicant = ({ otherInfo }) => {
   return (
-    <div className=" d-flex flex-column align-items-center w-100 ">
+    <div
+      className=" d-flex flex-column align-items-center w-100 "
+      style={{ marginBottom: "60px" }}
+    >
       <h2 className="mb-5">Other Information</h2>
       {otherInfo?.map((item, index) => (
         <div className="orderInfo " key={item.id}>
@@ -77,7 +80,7 @@ const OtherInformationApplicant = ({ otherInfo }) => {
           </div>
           {/* half */}
           <div className="smokeContainer ">
-            <div className="rightSideInfo d-flex" style={{ marginTop: "90px" }}>
+            <div className="rightSideInfo d-flex">
               <p className="infoP">Do You Currently Smoke?</p>
               <div className="form-check form-switch">
                 <input

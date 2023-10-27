@@ -1,5 +1,7 @@
 import { useState } from "react"
 import { api } from "../../../../services/api"
+import { RedDot } from "../styles"
+import CustomSelect from "./CustomSelect"
 
 const Income = ({ tenantId, setActiveSection }) => {
   const [currentEmployer, setCurrentEmployer] = useState({
@@ -66,6 +68,7 @@ const Income = ({ tenantId, setActiveSection }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    console.log("currentEmployer", currentEmployer)
     try {
       await postIncome(currentEmployer)
       if (previousEmployer.employedBy !== "") {
@@ -111,6 +114,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
+            <RedDot style={{ color: "red" }}>*</RedDot>
             <input
               className="inputReset3"
               type="text"
@@ -124,19 +128,21 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
-            <input
-              className="inputReset3"
-              type="text"
-              placeholder="DATES OF EMPLOYMENT (FROM..TO)"
-              value={currentEmployer.datesOfEmployment}
-              required
-              onChange={(e) =>
-                setCurrentEmployer({
-                  ...currentEmployer,
-                  datesOfEmployment: e.target.value
-                })
-              }
-            />
+            <RedDot style={{ color: "red" }}>*</RedDot>
+            <div className="d-flex">
+              <CustomSelect
+                options={[
+                  "Less than 1 year",
+                  "More than 1 year",
+                  "More than 3 years",
+                  "More than 5 years"
+                ]}
+                onChange={setCurrentEmployer}
+                currentEmployer={currentEmployer}
+              />
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            </div>
+
             <input
               className="inputReset3"
               type="text"
@@ -150,6 +156,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
+            <RedDot style={{ color: "red" }}>*</RedDot>
             <input
               className="inputReset3"
               type="text"
@@ -163,6 +170,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
+            <RedDot style={{ color: "red" }}>*</RedDot>
             <input
               className="inputReset3"
               type="text"
@@ -176,6 +184,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
+            <RedDot style={{ color: "red" }}>*</RedDot>
             <input
               className="inputReset3"
               type="text"
@@ -188,6 +197,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
+            <RedDot style={{ color: "red" }}>*</RedDot>
           </div>
           <div action="">
             <h2 className="cA">Previous Employer</h2>
@@ -202,7 +212,17 @@ const Income = ({ tenantId, setActiveSection }) => {
                   employedBy: e.target.value
                 })
               }
+              required={
+                currentEmployer.datesOfEmployment === "Less than 1 year" ||
+                currentEmployer.datesOfEmployment === "More than 1 year"
+              }
             />
+            {currentEmployer.datesOfEmployment === "Less than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
+            {currentEmployer.datesOfEmployment === "More than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
             <input
               className="inputReset3"
               type="text"
@@ -214,19 +234,36 @@ const Income = ({ tenantId, setActiveSection }) => {
                   position: e.target.value
                 })
               }
-            />
-            <input
-              className="inputReset3"
-              type="text"
-              placeholder="DATES OF EMPLOYMENT (FROM..TO)"
-              value={previousEmployer1.datesOfEmployment}
-              onChange={(e) =>
-                setPreviousEmployer1({
-                  ...previousEmployer1,
-                  datesOfEmployment: e.target.value
-                })
+              required={
+                currentEmployer.datesOfEmployment === "Less than 1 year" ||
+                currentEmployer.datesOfEmployment === "More than 1 year"
               }
             />
+            {currentEmployer.datesOfEmployment === "Less than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
+            {currentEmployer.datesOfEmployment === "More than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
+
+            <div className="d-flex">
+              <CustomSelect
+                options={[
+                  "Less than 1 year",
+                  "More than 1 year",
+                  "More than 3 years",
+                  "More than 5 years"
+                ]}
+                onChange={setPreviousEmployer1}
+                currentEmployer={previousEmployer1}
+              />
+              {currentEmployer.datesOfEmployment === "Less than 1 year" && (
+                <RedDot style={{ color: "red" }}>*</RedDot>
+              )}
+              {currentEmployer.datesOfEmployment === "More than 1 year" && (
+                <RedDot style={{ color: "red" }}>*</RedDot>
+              )}
+            </div>
             <input
               className="inputReset3"
               type="text"
@@ -239,6 +276,12 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
+            {currentEmployer.datesOfEmployment === "Less than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
+            {currentEmployer.datesOfEmployment === "More than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
             <input
               className="inputReset3"
               type="text"
@@ -250,7 +293,17 @@ const Income = ({ tenantId, setActiveSection }) => {
                   supervisorName: e.target.value
                 })
               }
+              required={
+                currentEmployer.datesOfEmployment === "Less than 1 year" ||
+                currentEmployer.datesOfEmployment === "More than 1 year"
+              }
             />
+            {currentEmployer.datesOfEmployment === "Less than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
+            {currentEmployer.datesOfEmployment === "More than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
             <input
               className="inputReset3"
               type="text"
@@ -262,7 +315,17 @@ const Income = ({ tenantId, setActiveSection }) => {
                   supervisorPhone: e.target.value
                 })
               }
+              required={
+                currentEmployer.datesOfEmployment === "Less than 1 year" ||
+                currentEmployer.datesOfEmployment === "More than 1 year"
+              }
             />
+            {currentEmployer.datesOfEmployment === "Less than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
+            {currentEmployer.datesOfEmployment === "More than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
             <input
               className="inputReset3"
               type="text"
@@ -274,7 +337,17 @@ const Income = ({ tenantId, setActiveSection }) => {
                   address: e.target.value
                 })
               }
+              required={
+                currentEmployer.datesOfEmployment === "Less than 1 year" ||
+                currentEmployer.datesOfEmployment === "More than 1 year"
+              }
             />
+            {currentEmployer.datesOfEmployment === "Less than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
+            {currentEmployer.datesOfEmployment === "More than 1 year" && (
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            )}
           </div>
         </div>
         <div className="rightRentalForm">
@@ -304,17 +377,15 @@ const Income = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
-            <input
-              className="inputReset3"
-              type="text"
-              placeholder="DATES OF EMPLOYMENT (FROM..TO)"
-              value={previousEmployer.datesOfEmployment}
-              onChange={(e) =>
-                setPreviousEmployer({
-                  ...previousEmployer,
-                  datesOfEmployment: e.target.value
-                })
-              }
+            <CustomSelect
+              options={[
+                "Less than 1 year",
+                "More than 1 year",
+                "More than 3 years",
+                "More than 5 years"
+              ]}
+              onChange={setPreviousEmployer}
+              currentEmployer={previousEmployer}
             />
             <input
               className="inputReset3"
