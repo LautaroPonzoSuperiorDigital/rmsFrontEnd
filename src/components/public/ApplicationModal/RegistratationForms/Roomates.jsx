@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { api } from "../../../../services/api"
+import Thrash from "./../../../../assets/img/delete.svg"
 
 const Roomates = ({ tenantId, setActiveSection }) => {
   const [roommates, setRoommates] = useState([
@@ -20,7 +21,7 @@ const Roomates = ({ tenantId, setActiveSection }) => {
   }
   const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log(roommates)
+
     try {
       const roomates = roommates.map(async (roommate) => {
         const response = await api.post("/roommate", {
@@ -29,7 +30,6 @@ const Roomates = ({ tenantId, setActiveSection }) => {
         })
         return response.data
       })
-      // Wait for all the promises to resolve
       const savedRoommates = await Promise.all(roomates)
       console.log(savedRoommates)
       setActiveSection("rentalHistory")
@@ -42,13 +42,14 @@ const Roomates = ({ tenantId, setActiveSection }) => {
       await handleSubmit() // Call your submit function
     }
   }
+  const HandleDeleteRoomate = (index, room) => {
+    const updatedRoommates = roommates.filter((roommate, i) => i !== index)
+    setRoommates(updatedRoommates)
+  }
 
   return (
     <div className="roommatesContainer d-flex justify-content-center w-100">
       <div className="formRoommatesOrder d-flex flex-column justify-content-start align-items-center w-100">
-        <h2 className="rmText d-flex justify-content-center mt-3">
-          Roommates / Other Occupants
-        </h2>
         <form
           className="resetForm2 w-100 align-items-center d-flex flex-column "
           action="submit"
@@ -60,35 +61,49 @@ const Roomates = ({ tenantId, setActiveSection }) => {
             <p className="roomOrderRela">RELATIONSHIP TO YOU</p>
           </div> */}
           {roommates.map((roommate, index) => (
-            <div className="orderInputRoom d-flex w-100  " key={index}>
-              <input
-                className="inputReset2 roomName"
-                type="text"
-                placeholder="Full Name"
-                name="name"
-                value={roommate.name}
-                onChange={(e) => handleInputChange(index, e)}
-                required
-              />
-              <input
-                className="inputReset2 roomBirth"
-                type="text"
-                placeholder="Birth Date"
-                name="birthday"
-                value={roommate.birthday}
-                onChange={(e) => handleInputChange(index, e)}
-                required
-              />
-              <input
-                className="inputReset2 roomRela"
-                type="text"
-                placeholder="Relationship"
-                name="relationWithTenant"
-                value={roommate.relationWithTenant}
-                onChange={(e) => handleInputChange(index, e)}
-                required
-              />
-            </div>
+            <>
+              <h2 className="rmText d-flex justify-content-center mt-3">
+                Roommates / Other Occupants {index > 0 && index + 1}
+                {index > 0 && (
+                  <img
+                    src={Thrash}
+                    alt="tharsh"
+                    style={{
+                      marginLeft: "10px",
+                      marginBottom: "6px",
+                      cursor: "pointer"
+                    }}
+                    onClick={() => HandleDeleteRoomate(index)}
+                  />
+                )}
+              </h2>
+              <div className="orderInputRoom d-flex w-100  " key={index}>
+                <input
+                  className="inputReset2 roomName"
+                  type="text"
+                  placeholder="Full Name"
+                  name="name"
+                  value={roommate.name}
+                  onChange={(e) => handleInputChange(index, e)}
+                />
+                <input
+                  className="inputReset2 roomBirth"
+                  type="text"
+                  placeholder="Birth Date"
+                  name="birthday"
+                  value={roommate.birthday}
+                  onChange={(e) => handleInputChange(index, e)}
+                />
+                <input
+                  className="inputReset2 roomRela"
+                  type="text"
+                  placeholder="Relationship"
+                  name="relationWithTenant"
+                  value={roommate.relationWithTenant}
+                  onChange={(e) => handleInputChange(index, e)}
+                />
+              </div>
+            </>
           ))}
           <div className="d-flex w-100">
             <button className="addRoommate" type="button" onClick={addRoommate}>

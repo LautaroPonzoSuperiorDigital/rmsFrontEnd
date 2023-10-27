@@ -7,10 +7,7 @@ import TableSelect from "./TableSelect"
 import ButtonTenant from "./ButtonTenant"
 import { api } from "../../../services/api"
 import { useAuth } from "../../../hooks/useAuth"
-
-import TenantModal from "../../../components/modals/tenantsPopUp"
 import ApplicantModal from "./ApplicantsModal/Applicant-modal/Applicant-modal"
-
 const tBodyStyle = {
   height: "50px"
 }
@@ -36,7 +33,9 @@ const Table = ({
   const handleCloseApplicantModal = () => {
     setApplicantModal(false)
   }
-  const HandleDelete = async (id) => {
+  const HandleDelete = async (id, e) => {
+    console.log(id)
+    e.stopPropagation()
     try {
       const res = await api.delete(`tenant/${id}`)
       setDeleteTenant(true)
@@ -47,36 +46,8 @@ const Table = ({
   }
 
   useEffect(() => {
-    // want the applicants that has applicant.User.ApplicationScreening with something in it
-    // const filteredApplicants = applicants.filter((applicant) => {
-    //   return applicant.User.ApplicationScreening.length !== 0
-    // })
-
+    console.log(applicants)
     setApplicant(applicants)
-    // const fetchAdminListing = async () => {
-    //   try {
-    //     const { data: adminData } = await api.get(`/admin/user/${user.id}`)
-    //     const res = await api.get(`/listing?adminId=${adminData.Admin.id}`)
-    //     const adminListing = res.data
-    //     console.log(adminListing)
-
-    //     const myFilter = filteredApplicants.map((applicant) => ({
-    //       applicant: applicant,
-    //       filteredApplications: applicant.User.ApplicationScreening.filter(
-    //         (application) =>
-    //           adminListing.some(
-    //             (listing) => listing.id === application.listingId
-    //           )
-    //       )
-    //     }))
-
-    //     setApplicant(myFilter)
-    //     console.log(myFilter)
-    //   } catch (err) {
-    //     console.log(err)
-    //   }
-    // }
-    // fetchAdminListing()
   }, [applicants])
 
   return (
@@ -109,13 +80,17 @@ const Table = ({
 
         <tbody style={tBodyStyle}>
           {applicant.map((item) =>
-            item.length === 0 ? null : (
+            item.length === 0 ||
+            item.User.ApplicationScreening.length == 0 ? null : (
               <>
-                <tr className="tr-hover" key={item.id}>
-                  <td
-                    className="bor1"
-                    onClick={() => handleOpenApplicantModal(item.id)}
-                  >
+                <tr
+                  className="tr-hover"
+                  key={item.id}
+                  onClick={(event) => {
+                    handleOpenApplicantModal(item.id)
+                  }}
+                >
+                  <td className="bor1">
                     <div
                       className="mt-3   Person"
                       style={{ width: "150px", margin: 0 }}
@@ -125,9 +100,9 @@ const Table = ({
                   </td>
                   <td className="bor1">
                     <div className="mt-3 ms-2" style={{ width: "250px" }}>
-                      {/* <p key={item.id} style={{ margin: "0px" }}>
-                      {item.User.Listing.location}
-                    </p> */}
+                      <p key={item.id} style={{ margin: "0px" }}>
+                        {item.User?.ApplicationScreening[0]?.Listing?.location}
+                      </p>
                     </div>
                   </td>
                   <td className="bor1">
@@ -170,7 +145,7 @@ const Table = ({
                     <div className="deleteBtn1">
                       <DeleteButton
                         info={"Tenant"}
-                        onClick={() => HandleDelete(item.id)}
+                        onClick={(e) => HandleDelete(item.id, e)}
                         defaultImage={<img src={Delete} alt="Delete" />}
                         hoverImage={
                           <img src={DeleteIconHover} alt="DeleteIconHover" />
@@ -183,11 +158,6 @@ const Table = ({
             )
           )}
         </tbody>
-        {/* <ApplicantsModal
-      // isOpen={isApplicantModal}
-      // onClose={handleCloseApplicantModal}
-      // applicant={selectedApplicant}
-    /> */}
       </table>
       {isApplicantModal && (
         <ApplicantModal

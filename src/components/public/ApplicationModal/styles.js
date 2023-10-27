@@ -186,3 +186,13 @@ export const ScreeningText = styled.p`
   font-size: 35px;
   font-weight: 600;
 `
+
+export const RedDot = styled.div`
+ color:red
+ background-color: red;
+  height: 3px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-top: ${(props) => (props.marginTop ? props.marginTop : "30px")};
+  margin-left: 2px; 
+`

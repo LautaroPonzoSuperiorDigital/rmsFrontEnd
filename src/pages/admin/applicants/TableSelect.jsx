@@ -15,7 +15,7 @@ const TableSelect = ({
       const response = await api.patch(`/tenant/${tenantId}`, {
         approvalStatus: value
       })
-      console.log(response)
+
       setStatusValue(value)
       setApplicants((prevApplicants) =>
         prevApplicants.map((applicant) =>
@@ -28,6 +28,9 @@ const TableSelect = ({
       console.log(err)
     }
   }
+  const handleSelectClick = (e) => {
+    e.stopPropagation() // Prevent click event from propagating
+  }
 
   return (
     <select
@@ -35,6 +38,7 @@ const TableSelect = ({
       aria-label="status selecet"
       value={statusValue}
       onChange={(e) => handleStatuChange(e.target.value)}
+      onClick={handleSelectClick}
     >
       <option value="SCREENING_IN_PROCESS">Screening in progress</option>
       <option value="TENANT_APPLIED">Tenant applied</option>

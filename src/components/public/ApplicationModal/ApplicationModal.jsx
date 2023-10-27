@@ -109,75 +109,84 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             </div>
             <NavText>Application</NavText>
           </LogoContainer>
-
-          <nav className="navBar1 d-flex align-items-center w-100">
-            <ul className="w-100 d-flex justify-content-between">
-              <li
-                className={`registration custom-item1 nav-item ${
-                  activeSection === "registration" ? "active" : ""
-                }`}
-                // onClick={() => handleSectionClick("registration")}
-              >
-                REGISTRATION
-              </li>
-              <li
-                className={`roommates custom-item1 nav-item ${
-                  activeSection === "roommates" ? "active" : ""
-                }`}
-                // onClick={() => handleSectionClick("roommates")}
-              >
-                ROOMMATES
-              </li>
-              <li
-                className={`rh custom-item1 nav-item ${
-                  activeSection === "rentalHistory" ? "active" : ""
-                }`}
-                // onClick={() => handleSectionClick("rentalHistory")}
-              >
-                RENTAL HISTORY
-              </li>
-              <li
-                className={`income custom-item1 nav-item ${
-                  activeSection === "income" ? "active" : ""
-                }`}
-                // onClick={() => handleSectionClick("income")}
-              >
-                INCOME
-              </li>
-              <li
-                className={`ec custom-item1 nav-item ${
-                  activeSection === "emergencyContact" ? "active" : ""
-                }`}
-                // onClick={() => handleSectionClick("emergencyContact")}
-              >
-                EMERGENCY CONTACT
-              </li>
-              <li
-                className={`vehicles custom-item1 nav-item ${
-                  activeSection === "vehicles" ? "active" : ""
-                }`}
-                // onClick={() => handleSectionClick("vehicles")}
-              >
-                VEHICLES
-              </li>
-              <li
-                className={`otherInfo custom-item1 nav-item ${
-                  activeSection === "otherInfo" ? "active" : ""
-                }`}
-                // onClick={() => handleSectionClick("otherInfo")}
-              >
-                OTHER INFO
-              </li>
-              <li
-                className={`otherInfo custom-item1 nav-item ${
-                  activeSection === "otherInfo" ? "active" : ""
-                }`}
-                // onClick={() => handleSectionClick("otherInfo")}
-              >
-                BACKGROUND SCREENING
-              </li>
-            </ul>
-          </nav>
+          {innerWidth > 768 && (
+            <nav className="navBar1 d-flex align-items-center w-100">
+              <ul className="w-100 d-flex justify-content-between">
+                <li
+                  style={{ fontSize: "18px" }}
+                  className={`registration custom-item1 nav-item ${
+                    activeSection === "registration" ? "active" : ""
+                  }`}
+                  // onClick={() => handleSectionClick("registration")}
+                >
+                  REGISTRATION
+                </li>
+                <li
+                  style={{ fontSize: "18px" }}
+                  className={`roommates custom-item1 nav-item ${
+                    activeSection === "roommates" ? "active" : ""
+                  }`}
+                  // onClick={() => handleSectionClick("roommates")}
+                >
+                  ROOMMATES
+                </li>
+                <li
+                  style={{ fontSize: "18px" }}
+                  className={`rh custom-item1 nav-item ${
+                    activeSection === "rentalHistory" ? "active" : ""
+                  }`}
+                  // onClick={() => handleSectionClick("rentalHistory")}
+                >
+                  RENTAL HISTORY
+                </li>
+                <li
+                  style={{ fontSize: "18px" }}
+                  className={`income custom-item1 nav-item ${
+                    activeSection === "income" ? "active" : ""
+                  }`}
+                  // onClick={() => handleSectionClick("income")}
+                >
+                  INCOME
+                </li>
+                <li
+                  style={{ fontSize: "18px" }}
+                  className={`ec custom-item1 nav-item ${
+                    activeSection === "emergencyContact" ? "active" : ""
+                  }`}
+                  // onClick={() => handleSectionClick("emergencyContact")}
+                >
+                  EMERGENCY CONTACT
+                </li>
+                <li
+                  style={{ fontSize: "18px" }}
+                  className={`vehicles custom-item1 nav-item ${
+                    activeSection === "vehicles" ? "active" : ""
+                  }`}
+                  // onClick={() => handleSectionClick("vehicles")}
+                >
+                  VEHICLES
+                </li>
+                <li
+                  style={{ fontSize: "18px" }}
+                  className={`otherInfo custom-item1 nav-item ${
+                    activeSection === "otherInfo" ? "active" : ""
+                  }`}
+                  // onClick={() => handleSectionClick("otherInfo")}
+                >
+                  OTHER INFO
+                </li>
+                <li
+                  style={{ fontSize: "18px" }}
+                  className={`otherInfo custom-item1 nav-item ${
+                    activeSection === "otherInfo" ? "active" : ""
+                  }`}
+                  // onClick={() => handleSectionClick("otherInfo")}
+                >
+                  BACKGROUND SCREENING
+                </li>
+              </ul>
+            </nav>
+          )}
         </NavContainer>
       </div>
 
@@ -192,7 +201,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             <ImgSideBar src={imageSrc} alt="" />
 
             <SideBarDescriptionPrice>
-              <div>
+              <div style={{ marginTop: "15px" }}>
                 <FieldText>ID</FieldText>
 
                 {myselectedListing && (
@@ -201,7 +210,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   </FieldValue>
                 )}
               </div>
-              <div>
+              <div style={{ marginTop: "15px" }}>
                 <p
                   style={{
                     color: "#272727",
@@ -295,9 +304,9 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
               <Ul>
                 {myselectedListing.Requirements &&
                   myselectedListing.Requirements.map((requirement) => (
-                    <li key={requirement.id}>
+                    <Li key={requirement.id} style={{ marginLeft: "20px" }}>
                       <FieldValue>{requirement.name}</FieldValue>
-                    </li>
+                    </Li>
                   ))}
               </Ul>
             </AmenitiesContainer>

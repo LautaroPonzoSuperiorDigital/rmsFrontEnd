@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { api } from "../../../../services/api"
+import { RedDot } from "../styles"
 
 const RentalHistory = ({ tenantId, setActiveSection }) => {
   const [currentAddress, setCurrentAddress] = useState({
@@ -34,19 +35,21 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
     }
   }
   const postRentalHistory = async (addressData) => {
+    console.log(addressData)
     if (addressData.name !== "") {
       const response = await api.post("/rental-history", addressData)
       console.log("Rental history submitted:", response.data)
     }
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     try {
       await postRentalHistory(currentAddress)
-      if (previousAddress1.name !== "") {
+      if (previousAddress1.street !== "") {
         await postRentalHistory(previousAddress1)
       }
-      if (previousAddress2.name !== "") {
+      if (previousAddress2.street !== "") {
         await postRentalHistory(previousAddress2)
       }
 
@@ -57,32 +60,35 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
   }
 
   return (
-    <div className="rentalContainer align-items-center">
+    <form className="rentalContainer align-items-center">
       <h2 className="rentalText align-items-center">Rental History</h2>
       <p className="rentalP">
         Please list your three most recent addresses or from past five years.
       </p>
       <div className="rentalOrder d-flex ">
         <div className="leftRentalForm">
-          <form action="" className="formRentalHistory">
+          <div action="" className="formRentalHistory">
             <h2 className="cA">Current Address</h2>
+            <div className="position-relative d-flex">
+              <input
+                className="inputReset3 "
+                type="text"
+                placeholder="STREET ADDRESS / UNIT NO.                    123 Anywhere, Ave"
+                value={currentAddress.street}
+                required
+                onChange={(e) =>
+                  setCurrentAddress({
+                    ...currentAddress,
+                    street: e.target.value
+                  })
+                }
+              />
+              <RedDot style={{ color: "red" }}>*</RedDot>
+            </div>
             <input
               className="inputReset3"
               type="text"
-              placeholder="STREET ADDRESS / UNIT NO.                                                 206 Alexa Ct, Paso Robles"
-              value={currentAddress.street}
-              required
-              onChange={(e) =>
-                setCurrentAddress({
-                  ...currentAddress,
-                  street: e.target.value
-                })
-              }
-            />
-            <input
-              className="inputReset3"
-              type="text"
-              placeholder="CITY, STATE, ZIP                                                                       Ca 32480"
+              placeholder="CITY, STATE, ZIP                                           Ca 12345"
               value={currentAddress.cityStateZip}
               required
               onChange={(e) =>
@@ -92,10 +98,11 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
+            <RedDot style={{ color: "red" }}>*</RedDot>
             <input
               className="inputReset3"
               type="text"
-              placeholder="HOW LONG AT THIS ADDRESS                                                1 Year"
+              placeholder="HOW LONG AT THIS ADDRESS                   Year"
               value={currentAddress.duration}
               required
               onChange={(e) =>
@@ -105,10 +112,11 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
+            <RedDot style={{ color: "red" }}>*</RedDot>
             <input
               className="inputReset3"
               type="text"
-              placeholder="MANAGER/OWNER NAME                                                     Janey Vianne"
+              placeholder="MANAGER/OWNER NAME                         Jane Doe"
               value={currentAddress.managerOwnerName}
               required
               onChange={(e) =>
@@ -118,10 +126,11 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
+            <RedDot style={{ color: "red" }}>*</RedDot>
             <input
               className="inputReset3"
               type="text"
-              placeholder="MANAGER/OWNER PHONE                                                    530-521-7450"
+              placeholder="MANAGER/OWNER PHONE                       123-123-1234"
               value={currentAddress.managerPhone}
               required
               onChange={(e) =>
@@ -131,15 +140,15 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
-          </form>
-          <form action="">
+            <RedDot style={{ color: "red" }}>*</RedDot>
+          </div>
+          <div action="">
             <h2 className="cA1">Previous Address</h2>
             <input
               className="inputReset3"
               type="text"
-              placeholder="STREET ADDRESS / UNIT NO.                                                1236 Post Farm Road"
+              placeholder="STREET ADDRESS / UNIT NO.                    123 Anywhere, Ave"
               value={previousAddress1.street}
-              required
               onChange={(e) =>
                 setPreviousAddress1({
                   ...previousAddress1,
@@ -150,9 +159,8 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
             <input
               className="inputReset3"
               type="text"
-              placeholder="CITY, STATE, ZIP                                                                      Ca 33644"
+              placeholder="CITY, STATE, ZIP                                           Ca 12345"
               value={previousAddress1.cityStateZip}
-              required
               onChange={(e) =>
                 setPreviousAddress1({
                   ...previousAddress1,
@@ -163,9 +171,8 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
             <input
               className="inputReset3"
               type="text"
-              placeholder="HOW LONG AT THIS ADDRESS                                               2 Years"
+              placeholder="HOW LONG AT THIS ADDRESS                   Year"
               value={previousAddress1.duration}
-              required
               onChange={(e) =>
                 setPreviousAddress1({
                   ...previousAddress1,
@@ -176,9 +183,8 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
             <input
               className="inputReset3"
               type="text"
-              placeholder="MANAGER/OWNER NAME                                                      Becca Aleta"
+              placeholder="MANAGER/OWNER NAME                         Jane Doe"
               value={previousAddress1.managerOwnerName}
-              required
               onChange={(e) =>
                 setPreviousAddress1({
                   ...previousAddress1,
@@ -189,9 +195,8 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
             <input
               className="inputReset3"
               type="text"
-              placeholder="MANAGER/OWNER PHONE                                                    530-521-7450"
+              placeholder="MANAGER/OWNER PHONE                       123-123-1234"
               value={previousAddress1.managerPhone}
-              required
               onChange={(e) =>
                 setPreviousAddress1({
                   ...previousAddress1,
@@ -199,17 +204,16 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
-          </form>
+          </div>
         </div>
         <div className="rightRentalForm">
-          <form action="">
+          <div action="">
             <h2 className="cA">Previous Address</h2>
             <input
               className="inputReset3"
               type="text"
-              placeholder="STREET ADDRESS / UNIT NO.                                                          4478 Euclid Avenue"
+              placeholder="STREET ADDRESS / UNIT NO.                    123 Anywhere, Ave"
               value={previousAddress2.street}
-              required
               onChange={(e) =>
                 setPreviousAddress2({
                   ...previousAddress2,
@@ -220,9 +224,8 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
             <input
               className="inputReset3"
               type="text"
-              placeholder="CITY, STATE, ZIP                                                                               Ca 32480"
+              placeholder="CITY, STATE, ZIP                                           Ca 12345"
               value={previousAddress2.cityStateZip}
-              required
               onChange={(e) =>
                 setPreviousAddress2({
                   ...previousAddress2,
@@ -233,9 +236,8 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
             <input
               className="inputReset3"
               type="text"
-              placeholder="HOW LONG AT THIS ADDRESS                                                      5 Years"
+              placeholder="HOW LONG AT THIS ADDRESS                   Year"
               value={previousAddress2.duration}
-              required
               onChange={(e) =>
                 setPreviousAddress2({
                   ...previousAddress2,
@@ -246,9 +248,8 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
             <input
               className="inputReset3"
               type="text"
-              placeholder="MANAGER/OWNER NAME                                                          Kevan Kenyon"
+              placeholder="MANAGER/OWNER NAME                         Jane Doe"
               value={previousAddress2.managerOwnerName}
-              required
               onChange={(e) =>
                 setPreviousAddress2({
                   ...previousAddress2,
@@ -259,9 +260,8 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
             <input
               className="inputReset3"
               type="text"
-              placeholder="MANAGER/OWNER PHONE                                                         530-521-7450"
+              placeholder="MANAGER/OWNER PHONE                       123-123-1234"
               value={previousAddress2.managerPhone}
-              required
               onChange={(e) =>
                 setPreviousAddress2({
                   ...previousAddress2,
@@ -269,19 +269,19 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
                 })
               }
             />
-          </form>
+          </div>
         </div>
       </div>
       <div
         className="rentalSeparation"
-        onClick={handleSubmit}
+        onClick={(e) => handleSubmit(e)}
         onKeyPress={handleKeyPress}
       >
         <button className="bgButton3 d-flex align-items-center justify-content-center">
           <span className="submitBtn3">Submit</span>
         </button>
       </div>
-    </div>
+    </form>
   )
 }
 
