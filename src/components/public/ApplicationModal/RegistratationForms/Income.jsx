@@ -92,15 +92,32 @@ const Income = ({ tenantId, setActiveSection }) => {
       className="incomeContainer align-items-center"
       onSubmit={(e) => handleSubmit(e)}
     >
-      <h2 className="rentalText align-items-center">Income</h2>
-      <p className="rentalP">
+      <h2
+        className="rentalText align-items-center"
+        style={{
+          fontFamily: "proxima-nova",
+          fontWeight: "regular",
+          fontSize: "35px"
+        }}
+      >
+        Income
+      </h2>
+      <p
+        className="rentalP"
+        style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+      >
         Please list employment from the past five years & other sources of
         income.
       </p>
       <div className="incomeOrder  ">
         <div className="leftRentalForm">
           <div action="">
-            <h2 className="cA">Current Employer</h2>
+            <h2
+              className="cA"
+              style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+            >
+              Current Employer
+            </h2>
             <input
               className="inputReset3"
               type="text"
@@ -113,6 +130,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   employedBy: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <RedDot style={{ color: "red" }}>*</RedDot>
             <input
@@ -127,6 +145,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   position: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <RedDot style={{ color: "red" }}>*</RedDot>
             <div className="d-flex">
@@ -155,6 +174,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   monthlyIncome: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <RedDot style={{ color: "red" }}>*</RedDot>
             <input
@@ -169,6 +189,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   supervisorName: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <RedDot style={{ color: "red" }}>*</RedDot>
             <input
@@ -183,6 +204,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   supervisorPhone: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <RedDot style={{ color: "red" }}>*</RedDot>
             <input
@@ -196,11 +218,17 @@ const Income = ({ tenantId, setActiveSection }) => {
                   address: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <RedDot style={{ color: "red" }}>*</RedDot>
           </div>
           <div action="">
-            <h2 className="cA">Previous Employer</h2>
+            <h2
+              className="cA mt-5"
+              style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+            >
+              Previous Employer
+            </h2>
             <input
               className="inputReset3"
               type="text"
@@ -216,6 +244,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                 currentEmployer.datesOfEmployment === "Less than 1 year" ||
                 currentEmployer.datesOfEmployment === "More than 1 year"
               }
+              style={{ width: "90%" }}
             />
             {currentEmployer.datesOfEmployment === "Less than 1 year" && (
               <RedDot style={{ color: "red" }}>*</RedDot>
@@ -238,6 +267,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                 currentEmployer.datesOfEmployment === "Less than 1 year" ||
                 currentEmployer.datesOfEmployment === "More than 1 year"
               }
+              style={{ width: "90%" }}
             />
             {currentEmployer.datesOfEmployment === "Less than 1 year" && (
               <RedDot style={{ color: "red" }}>*</RedDot>
@@ -275,6 +305,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   monthlyIncome: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             {currentEmployer.datesOfEmployment === "Less than 1 year" && (
               <RedDot style={{ color: "red" }}>*</RedDot>
@@ -319,6 +350,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                 currentEmployer.datesOfEmployment === "Less than 1 year" ||
                 currentEmployer.datesOfEmployment === "More than 1 year"
               }
+              style={{ width: "90%" }}
             />
             {currentEmployer.datesOfEmployment === "Less than 1 year" && (
               <RedDot style={{ color: "red" }}>*</RedDot>
@@ -352,7 +384,12 @@ const Income = ({ tenantId, setActiveSection }) => {
         </div>
         <div className="rightRentalForm">
           <div action="">
-            <h2 className="cA1">Previous Employer</h2>
+            <h2
+              className="cA1  "
+              style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+            >
+              Previous Employer
+            </h2>
             <input
               className="inputReset3"
               type="text"
@@ -364,6 +401,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   employedBy: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <input
               className="inputReset3"
@@ -376,6 +414,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   position: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <CustomSelect
               options={[
@@ -398,6 +437,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   monthlyIncome: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <input
               className="inputReset3"
@@ -410,6 +450,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   supervisorName: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <input
               className="inputReset3"
@@ -422,6 +463,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   supervisorPhone: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <input
               className="inputReset3"
@@ -434,11 +476,17 @@ const Income = ({ tenantId, setActiveSection }) => {
                   address: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
           </div>
 
           <div action="">
-            <h2 className="cA1">Other Income Sources</h2>
+            <h2
+              className="cA1 mt-5"
+              style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+            >
+              Other Income Sources
+            </h2>
             <input
               className="inputReset3"
               type="text"
@@ -462,6 +510,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   monthlyIncome: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
             <input
               className="inputReset3"
@@ -474,6 +523,7 @@ const Income = ({ tenantId, setActiveSection }) => {
                   address: e.target.value
                 })
               }
+              style={{ width: "90%" }}
             />
           </div>
         </div>

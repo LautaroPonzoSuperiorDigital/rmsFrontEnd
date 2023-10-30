@@ -61,14 +61,31 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
 
   return (
     <form className="rentalContainer align-items-center">
-      <h2 className="rentalText align-items-center">Rental History</h2>
-      <p className="rentalP">
+      <h2
+        className="rentalText align-items-center"
+        style={{
+          fontFamily: "proxima-nova",
+          fontWeight: "regular",
+          fontSize: "35px"
+        }}
+      >
+        Rental History
+      </h2>
+      <p
+        className="rentalP"
+        style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+      >
         Please list your three most recent addresses or from past five years.
       </p>
       <div className="rentalOrder d-flex ">
         <div className="leftRentalForm">
           <div action="" className="formRentalHistory">
-            <h2 className="cA">Current Address</h2>
+            <h2
+              className="cA"
+              style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+            >
+              Current Address
+            </h2>
             <div className="position-relative d-flex">
               <input
                 className="inputReset3 "
@@ -143,7 +160,12 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
             <RedDot style={{ color: "red" }}>*</RedDot>
           </div>
           <div action="">
-            <h2 className="cA1">Previous Address</h2>
+            <h2
+              className="cA1"
+              style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+            >
+              Previous Address
+            </h2>
             <input
               className="inputReset3"
               type="text"
@@ -208,7 +230,12 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
         </div>
         <div className="rightRentalForm">
           <div action="">
-            <h2 className="cA">Previous Address</h2>
+            <h2
+              className="cA"
+              style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+            >
+              Previous Address
+            </h2>
             <input
               className="inputReset3"
               type="text"

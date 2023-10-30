@@ -51,7 +51,7 @@ const Option = styled.li`
 
 const CustomSelect = ({ options, onChange, currentEmployer }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState(null)
+  const [selectedOption, setSelectedOption] = useState("YEARS OF EMPLOYMENT")
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen)
