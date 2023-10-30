@@ -4,7 +4,7 @@ import Thrash from "./../../../../assets/img/delete.svg"
 
 const Vehicles = ({ tenantId, setActiveSection }) => {
   const [vehicles, setVehicles] = useState([
-    { MakeAndModel: " ", year: " ", color: " ", plate: " ", state: " " }
+    { MakeAndModel: "", year: "", color: "", plate: "", state: "" }
   ])
 
   const handleAddVehicle = () => {
@@ -29,6 +29,15 @@ const Vehicles = ({ tenantId, setActiveSection }) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
+      if (
+        vehicles[0].MakeAndModel === "" &&
+        vehicles[0].year === "" &&
+        vehicles[0].color === "" &&
+        vehicles[0].plate === "" &&
+        vehicles[0].state === ""
+      ) {
+        setActiveSection("otherInfo")
+      }
       const vehiclePromises = vehicles.map(async (vehicle) => {
         const response = await api.post("/vehicles", {
           ...vehicle,
@@ -52,7 +61,10 @@ const Vehicles = ({ tenantId, setActiveSection }) => {
   return (
     <div className="registrationContainer d-flex justify-content-center">
       <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
-        <h2 className="d-flex justify-content-center mt-3 VehicleText">
+        <h2
+          className="d-flex justify-content-center mt-3 VehicleText"
+          style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+        >
           Vehicles
         </h2>
         <form className="resetForm" onSubmit={handleSubmit}>

@@ -25,7 +25,10 @@ const EmergencyContact = ({ tenantId, setActiveSection }) => {
   return (
     <div className="registrationContainer d-flex justify-content-center">
       <div className="formRegistrationOrder d-flex flex-column justify-content-start align-items-center">
-        <h2 className="d-flex justify-content-center mt-3 ECText">
+        <h2
+          className="d-flex justify-content-center mt-3 ECText"
+          style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+        >
           Emergency Contact Information
         </h2>
         <form
