@@ -41,7 +41,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
   const [imageSrc, setImageSrc] = useState(null)
   const [userId, setUserId] = useState(null)
   // backgroundSreening
-  const [activeSection, setActiveSection] = useState("registration")
+  const [activeSection, setActiveSection] = useState("income")
   const [formData, setFormData] = useState({})
   const [message, setMessage] = useState("")
 
@@ -113,7 +113,11 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             <nav className="navBar1 d-flex align-items-center w-100">
               <ul className="w-100 d-flex justify-content-between">
                 <li
-                  style={{ fontSize: "18px" }}
+                  style={{
+                    fontSize: "18px",
+                    fontFamily: "proxima-nova",
+                    fontWeight: "lighter"
+                  }}
                   className={`registration custom-item1 nav-item ${
                     activeSection === "registration" ? "active" : ""
                   }`}
@@ -122,7 +126,11 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   REGISTRATION
                 </li>
                 <li
-                  style={{ fontSize: "18px" }}
+                  style={{
+                    fontSize: "18px",
+                    fontFamily: "proxima-nova",
+                    fontWeight: "lighter"
+                  }}
                   className={`roommates custom-item1 nav-item ${
                     activeSection === "roommates" ? "active" : ""
                   }`}
@@ -131,7 +139,11 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   ROOMMATES
                 </li>
                 <li
-                  style={{ fontSize: "18px" }}
+                  style={{
+                    fontSize: "18px",
+                    fontFamily: "proxima-nova",
+                    fontWeight: "lighter"
+                  }}
                   className={`rh custom-item1 nav-item ${
                     activeSection === "rentalHistory" ? "active" : ""
                   }`}
@@ -140,7 +152,11 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   RENTAL HISTORY
                 </li>
                 <li
-                  style={{ fontSize: "18px" }}
+                  style={{
+                    fontSize: "18px",
+                    fontFamily: "proxima-nova",
+                    fontWeight: "lighter"
+                  }}
                   className={`income custom-item1 nav-item ${
                     activeSection === "income" ? "active" : ""
                   }`}
@@ -149,7 +165,11 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   INCOME
                 </li>
                 <li
-                  style={{ fontSize: "18px" }}
+                  style={{
+                    fontSize: "18px",
+                    fontFamily: "proxima-nova",
+                    fontWeight: "lighter"
+                  }}
                   className={`ec custom-item1 nav-item ${
                     activeSection === "emergencyContact" ? "active" : ""
                   }`}
@@ -158,7 +178,11 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   EMERGENCY CONTACT
                 </li>
                 <li
-                  style={{ fontSize: "18px" }}
+                  style={{
+                    fontSize: "18px",
+                    fontFamily: "proxima-nova",
+                    fontWeight: "lighter"
+                  }}
                   className={`vehicles custom-item1 nav-item ${
                     activeSection === "vehicles" ? "active" : ""
                   }`}
@@ -167,7 +191,11 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   VEHICLES
                 </li>
                 <li
-                  style={{ fontSize: "18px" }}
+                  style={{
+                    fontSize: "18px",
+                    fontFamily: "proxima-nova",
+                    fontWeight: "lighter"
+                  }}
                   className={`otherInfo custom-item1 nav-item ${
                     activeSection === "otherInfo" ? "active" : ""
                   }`}
@@ -176,7 +204,11 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   OTHER INFO
                 </li>
                 <li
-                  style={{ fontSize: "18px" }}
+                  style={{
+                    fontSize: "18px",
+                    fontFamily: "proxima-nova",
+                    fontWeight: "lighter"
+                  }}
                   className={`otherInfo custom-item1 nav-item ${
                     activeSection === "otherInfo" ? "active" : ""
                   }`}
@@ -317,7 +349,13 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             <div className=" d-flex justify-content-center  w-100">
               {!user && activeSection === "registration" && (
                 <div className="w-50">
-                  <h2 className="d-flex justify-content-center registrationText">
+                  <h2
+                    className="d-flex justify-content-center registrationText"
+                    style={{
+                      fontFamily: "proxima-nova",
+                      fontWeight: "regular"
+                    }}
+                  >
                     Registration
                   </h2>
                   <form className="resetForm" onSubmit={submitRegistration}>

@@ -1,11 +1,13 @@
 import { useState } from "react"
 import { api } from "../../../../services/api"
 import Thrash from "./../../../../assets/img/delete.svg"
+import { StyledTitle } from "../styles"
 
 const Roomates = ({ tenantId, setActiveSection }) => {
   const [roommates, setRoommates] = useState([
     { name: "", birthday: "", relationWithTenant: "" }
   ])
+  const windowsWidth = window.innerWidth
   const handleInputChange = (index, event) => {
     const { name, value } = event.target
     const updatedRoommates = [...roommates]
@@ -55,28 +57,14 @@ const Roomates = ({ tenantId, setActiveSection }) => {
           action="submit"
           onSubmit={handleSubmit}
         >
-          {/* <div className="d-flex align-items-center justify-content-between w-100 labelDateails">
-            <p className="roomOrderName ">FULL NAME - FIRST, MIDDLE, LAST</p>
-            <p className="roomOrderBirth">BIRTH DATE</p>
-            <p className="roomOrderRela">RELATIONSHIP TO YOU</p>
-          </div> */}
+          <StyledTitle
+            className=" d-flex justify-content-center mt-3"
+            style={{ fontSize: "35px", textAlign: "center" }}
+          >
+            Roommates / Other Occupants
+          </StyledTitle>
           {roommates.map((roommate, index) => (
             <>
-              <h2 className="rmText d-flex justify-content-center mt-3">
-                Roommates / Other Occupants {index > 0 && index + 1}
-                {index > 0 && (
-                  <img
-                    src={Thrash}
-                    alt="tharsh"
-                    style={{
-                      marginLeft: "10px",
-                      marginBottom: "6px",
-                      cursor: "pointer"
-                    }}
-                    onClick={() => HandleDeleteRoomate(index)}
-                  />
-                )}
-              </h2>
               <div className="orderInputRoom d-flex w-100  " key={index}>
                 <input
                   className="inputReset2 roomName"
@@ -102,6 +90,21 @@ const Roomates = ({ tenantId, setActiveSection }) => {
                   value={roommate.relationWithTenant}
                   onChange={(e) => handleInputChange(index, e)}
                 />
+                {index > 0 && (
+                  <img
+                    src={Thrash}
+                    alt="tharsh"
+                    style={{
+                      marginLeft: "10px",
+                      marginBottom: "6px",
+                      cursor: "pointer",
+                      marginTop: "25px",
+                      width: "20px",
+                      height: "20px"
+                    }}
+                    onClick={() => HandleDeleteRoomate(index)}
+                  />
+                )}
               </div>
             </>
           ))}

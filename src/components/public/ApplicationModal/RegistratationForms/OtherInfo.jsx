@@ -61,7 +61,12 @@ const OtherInfo = ({ tenantId, setActiveSection }) => {
 
   return (
     <div className=" d-flex flex-column align-items-center w-100 ">
-      <h2 className="mb-5">Other Information</h2>
+      <h2
+        className="mb-5"
+        style={{ fontFamily: "proxima-nova", fontWeight: "regular" }}
+      >
+        Other Information
+      </h2>
       <div className="orderInfo ">
         <div className="formContainer " style={{ marginLeft: 0 }}>
           <div className="leftSideInfo d-flex">

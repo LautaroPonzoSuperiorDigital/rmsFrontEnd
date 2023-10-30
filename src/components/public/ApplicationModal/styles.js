@@ -119,6 +119,8 @@ export const Text = styled.p`
 
 export const FieldText = styled(Text)`
   color: #000000a5;
+  font-family: "proxima-nova", sans-serif;
+  font-weight: lighter;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5rem;
@@ -129,13 +131,16 @@ export const FieldText = styled(Text)`
 export const FieldValue = styled(Text)`
   color: #000000;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: bold;
   line-height: 0rem;
   overflow-wrap: break-word;
+  font-family: "proxima-nova", sans-serif;
+
   @media (max-width: 768px) {
     font-size: 16px;
   }
 `
+
 export const PriceText = styled(Text)`
     margin: 0;
     padding: 0;
@@ -185,6 +190,8 @@ export const NavTextContainer = styled.div`
 export const ScreeningText = styled.p`
   font-size: 35px;
   font-weight: 600;
+  font-family: "proxima-nova", sans-serif;
+  font-weight: lighter;
 `
 
 export const RedDot = styled.div`
@@ -195,4 +202,10 @@ export const RedDot = styled.div`
   display: inline-block;
   margin-top: ${(props) => (props.marginTop ? props.marginTop : "30px")};
   margin-left: 2px; 
+`
+
+export const StyledTitle = styled.div`
+  font-family: "proxima-nova";
+  font-weight: "regular";
+  font-size: "35px";
 `

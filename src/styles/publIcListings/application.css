@@ -628,7 +628,7 @@
 
 .addVehicle {
   color: #197572;
-  font-size: 0.9vw;
+  font-size: 20px;
 }
 .addVehicle:hover {
   color: #31af9a;
