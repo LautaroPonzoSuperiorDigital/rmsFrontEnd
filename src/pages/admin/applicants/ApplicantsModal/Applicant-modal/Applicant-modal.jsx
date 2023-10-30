@@ -97,71 +97,71 @@ const ApplicantModal = ({ selectedTenant, onClose }) => {
       })
   }
 
-  // async function handleSendPandadocClick(
-  //   documentId,
-  //   isHovered,
-  //   localAdminData
-  // ) {
-  //   let responseDocumentId
-  //   let name_split = String(localAdminData.name).split(" ")
-  //   let f_name = name_split[0]
-  //   let l_name = name_split.slice(1).join(" ")
-  //   let requestCreateData = {
-  //     templateUuid: documentId,
-  //     name: `California S. R. L. Agreement - ${localAdminData.name} and ${tenantData.User.name}`,
-  //     recipients: [
-  //       {
-  //         email: localAdminData.email,
-  //         first_name: f_name,
-  //         last_name: l_name,
-  //         role: "ADMIN"
-  //       },
-  //       {
-  //         email: tenantData.User.email,
-  //         first_name: String(tenantData.User.name).split(" ")[0],
-  //         last_name: String(tenantData.User.name).split(" ")[1] || null,
-  //         role: "TENANT"
-  //       }
-  //     ],
-  //     tags: ["rms-frontend"]
-  //   }
-  //   if (!requestCreateData.recipients[0].email) {
-  //     throw new Error("Bad Admin Data.")
-  //   }
+  async function handleSendPandadocClick(
+    documentId,
+    isHovered,
+    localAdminData
+  ) {
+    let responseDocumentId
+    let name_split = String(localAdminData.name).split(" ")
+    let f_name = name_split[0]
+    let l_name = name_split.slice(1).join(" ")
+    let requestCreateData = {
+      templateUuid: documentId,
+      name: `California S. R. L. Agreement - ${localAdminData.name} and ${tenantData.User.name}`,
+      recipients: [
+        {
+          email: localAdminData.email,
+          first_name: f_name,
+          last_name: l_name,
+          role: "ADMIN"
+        },
+        {
+          email: tenantData.User.email,
+          first_name: String(tenantData.User.name).split(" ")[0],
+          last_name: String(tenantData.User.name).split(" ")[1] || null,
+          role: "TENANT"
+        }
+      ],
+      tags: ["rms-frontend"]
+    }
+    if (!requestCreateData.recipients[0].email) {
+      throw new Error("Bad Admin Data.")
+    }
 
-  //   await api
-  //     .post(
-  //       `/tenant/${selectedTenant.id}/document-template/create-document`,
-  //       requestCreateData
-  //     )
-  //     .then((response) => {
-  //       if (response.status > 201) throw new Error("Could not create document")
-  //       responseDocumentId = response.data.id
-  //     })
-  //     .catch((e) => {
-  //       throw new Error(e)
-  //     })
+    await api
+      .post(
+        `/tenant/${selectedTenant.id}/document-template/create-document`,
+        requestCreateData
+      )
+      .then((response) => {
+        if (response.status > 201) throw new Error("Could not create document")
+        responseDocumentId = response.data.id
+      })
+      .catch((e) => {
+        throw new Error(e)
+      })
 
-  //   // don't delete this timing line, it's for pandadoc API send template
-  //   await new Promise((resolve) => setTimeout(resolve, 5000))
+    // don't delete this timing line, it's for pandadoc API send template
+    await new Promise((resolve) => setTimeout(resolve, 5000))
 
-  //   const requestSendData = {
-  //     subject: "Listing document sign",
-  //     message: "You were invited to sign the following document:",
-  //     silent: false
-  //   }
-  //   await api
-  //     .post(
-  //       `/tenant/${selectedTenant.id}/document/${responseDocumentId}/send`,
-  //       requestSendData
-  //     )
-  //     .then((response) => {
-  //       if (response.status > 201) throw new Error("Could not create document")
-  //     })
-  //     .catch((e) => {
-  //       throw new Error(e)
-  //     })
-  // }
+    const requestSendData = {
+      subject: "Listing document sign",
+      message: "You were invited to sign the following document:",
+      silent: false
+    }
+    await api
+      .post(
+        `/tenant/${selectedTenant.id}/document/${responseDocumentId}/send`,
+        requestSendData
+      )
+      .then((response) => {
+        if (response.status > 201) throw new Error("Could not create document")
+      })
+      .catch((e) => {
+        throw new Error(e)
+      })
+  }
 
   async function loadDocuments() {
     try {
