@@ -10,6 +10,7 @@ import { api } from '../../services/api'
 import { useAuth } from '../../hooks/useAuth'
 import { Close } from '../icons'
 import {
+  ContainerPublic,
   ListingPublic,
   ListingPublicContainer,
   LoginBtnMobile,
@@ -278,7 +279,7 @@ const PublicListings = () => {
   }
 
   return (
-    <div className="containerPublic">
+    <ContainerPublic>
       <div className={`position-sticky ${isModalOpen ? 'modal-open' : ''}`}>
         {innerWidth < 768 && (
           <NavButtonLogin>
@@ -520,8 +521,8 @@ const PublicListings = () => {
             {'No listing to show'}
           </p>
         )}
-        <Footer />
       </ListingPublicContainer>
+      <Footer />
       {isMobileFilterOpen && (
         <>
           <div className="overlay" />
@@ -636,7 +637,7 @@ const PublicListings = () => {
           </div>
         </>
       )}
-    </div>
+    </ContainerPublic>
   )
 }
 

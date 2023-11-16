@@ -44,9 +44,7 @@ export const FooterContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 40px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  margin-top: auto;
   width: 100%;
 `
 
@@ -56,4 +54,11 @@ export const HrefStyle = styled.a`
   &:hover {
     color: #f9d5bb;
   }
+`
+
+export const ContainerPublic = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  flex: 1;
 `
