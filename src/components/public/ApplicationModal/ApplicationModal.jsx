@@ -41,7 +41,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
   const [imageSrc, setImageSrc] = useState(null)
   const [userId, setUserId] = useState(null)
   // backgroundSreening
-  const [activeSection, setActiveSection] = useState("income")
+  const [activeSection, setActiveSection] = useState("registration")
   const [formData, setFormData] = useState({})
   const [message, setMessage] = useState("")
 
