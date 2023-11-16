@@ -1,4 +1,4 @@
-import { styled } from "styled-components"
+import { styled } from 'styled-components'
 
 export const ListingPublic = styled.div`
   display: flex;
@@ -32,4 +32,28 @@ export const LoginBtnMobile = styled.button`
   height: 100%;
   background-color: #197572;
   color: white;
+`
+
+export const FooterContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  height: 50px;
+  background-color: #197572;
+  width: 100%;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+`
+
+export const HrefStyle = styled.a`
+  color: white;
+  text-decoration: none;
+  &:hover {
+    color: #f9d5bb;
+  }
 `
