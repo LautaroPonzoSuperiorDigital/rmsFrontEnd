@@ -7,6 +7,7 @@ const Footer = () => {
       <div>Certify My Rent LLC</div>
       <div>Eddie Sapien</div>
       <div>(805) 710-8800</div>
+      <div>10620 West Front Road Atascadero 93422</div>
       <HrefStyle href={Pdf} download>
         Privacy Policy
       </HrefStyle>
