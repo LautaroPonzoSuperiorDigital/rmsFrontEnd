@@ -39,13 +39,19 @@ export const FooterContainer = styled.div`
   flex-wrap: wrap;
   height: 50px;
   background-color: #197572;
-  width: 100%;
   color: white;
   justify-content: center;
   align-items: center;
   gap: 40px;
   margin-top: auto;
   width: 100%;
+
+  @media (max-width: 900px) {
+    height: 200px;
+    flex-direction: column;
+    gap: 0px;
+    justify-content: space-around;
+  }
 `
 
 export const HrefStyle = styled.a`
