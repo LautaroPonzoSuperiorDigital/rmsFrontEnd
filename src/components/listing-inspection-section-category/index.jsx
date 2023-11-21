@@ -1,11 +1,11 @@
-import PropTypes from "prop-types";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { FiCheck, FiPlus, FiTrash2, FiX } from "react-icons/fi";
-import placeholder from "../../assets/img/defaultImage.png";
-import { useListingInspections } from "../../hooks/useListingInspections";
-import { api } from "../../services/api";
-import { toBase64 } from "../../services/image";
-import { Input } from "../input";
+import PropTypes from 'prop-types'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { FiCheck, FiPlus, FiTrash2, FiX } from 'react-icons/fi'
+import placeholder from '../../assets/img/defaultImage.png'
+import { useListingInspections } from '../../hooks/useListingInspections'
+import { api } from '../../services/api'
+import { toBase64 } from '../../services/image'
+import { Input } from '../input'
 import {
   Action,
   Header,
@@ -15,71 +15,72 @@ import {
   UploadInput,
   LoadingBox,
   ImagePreviewMobile,
-} from "./styles";
+} from './styles'
 
 export function ListingInspectionSectionCategory({
   category,
   onCategoryRemoved,
   onCategoryUpdated,
 }) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [isRemoving, setIsRemoving] = useState(false);
-  const [requestRemove, setRequestRemove] = useState(false);
-  const [edit, setEdit] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isUploading, setIsUploading] = useState(false)
+  const [isRemoving, setIsRemoving] = useState(false)
+  const [requestRemove, setRequestRemove] = useState(false)
+  const [edit, setEdit] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const { editingInspection, handleOpenCategoryImagesModal } =
-    useListingInspections();
+    useListingInspections()
 
-  const uploadInputRef = useRef(null);
-  const nameInputRef = useRef(null);
+  const uploadInputRef = useRef(null)
+  const nameInputRef = useRef(null)
 
-  const isLoading = isRemoving || isUploading || isSaving;
+  const isLoading = isRemoving || isUploading || isSaving
   const loadingText = isRemoving
-    ? "Removing"
+    ? 'Removing'
     : isUploading
-    ? "Uploading"
+    ? 'Uploading'
     : isSaving
-    ? "Saving"
-    : null;
+    ? 'Saving'
+    : null
 
   const imageUrl = useMemo(() => {
     if (editingInspection) {
       const inspectionSection = category.InspectionSections?.find(
-        (inspectedSection) => inspectedSection.Images?.length
-      );
+        (inspectedSection) => inspectedSection.Images?.length,
+      )
 
       if (inspectionSection && inspectionSection.Images.length > 0) {
         const imagesForCurrentInspection = inspectionSection.Images.filter(
           (image) =>
             editingInspection.id ===
-            image.InspectionSectionCategory.InspectionSection.Inspection.id
-        );
+            image.InspectionSectionCategory.InspectionSection.Inspection.id,
+        )
 
         if (imagesForCurrentInspection.length > 0) {
           return `https://rms-staging.s3.us-west-1.amazonaws.com/${imagesForCurrentInspection[0].key}`.replace(
             /\\/g,
-            "%5C"
-          );
+            '%5C',
+          )
         }
       }
     }
 
-    return null;
-  }, [category, editingInspection]);
+    return null
+  }, [category, editingInspection])
 
   const openUploadInput = () => {
-    if (isUploading) return;
+    if (isUploading) return
 
-    uploadInputRef.current?.click();
-  };
+    uploadInputRef.current?.click()
+  }
 
   const handleSaveImages = async (images) => {
-    setIsUploading(true);
+    setIsUploading(true)
 
     try {
-      const url = `/inspection/${editingInspection.id}/section/${category.sectionId}/category/${category.id}/image`;
-      const { data } = await api.post(url, { images });
+      const url = `/inspection/${editingInspection.id}/section/${category.sectionId}/category/${category.id}/image`
+      const { data } = await api.post(url, { images })
+      console.log(url)
 
       const InspectionSections = category.InspectionSections?.length
         ? [
@@ -94,117 +95,115 @@ export function ListingInspectionSectionCategory({
               sectionId: category.sectionId,
               Images: data,
             },
-          ];
+          ]
 
       onCategoryUpdated({
         ...category,
         InspectionSections,
-      });
+      })
     } catch (err) {
-      console.log(err);
-      alert("Error saving category images");
+      console.log(err)
+      alert('Error saving category images')
     }
 
-    setIsUploading(false);
-  };
+    setIsUploading(false)
+  }
 
   const handleRemoveCategory = async () => {
     if (!requestRemove) {
-      setRequestRemove(true);
+      setRequestRemove(true)
 
       setTimeout(() => {
-        setRequestRemove(false);
-      }, 5000); // 5 sec after set to false
+        setRequestRemove(false)
+      }, 5000) // 5 sec after set to false
 
-      return;
+      return
     }
 
-    setIsRemoving(true);
+    setIsRemoving(true)
 
     try {
-      await api.delete(
-        `/section/${category.sectionId}/category/${category.id}`
-      );
+      await api.delete(`/section/${category.sectionId}/category/${category.id}`)
 
-      setIsRemoving(false);
-      onCategoryRemoved(category.id);
+      setIsRemoving(false)
+      onCategoryRemoved(category.id)
     } catch (err) {
-      console.log(err);
-      alert("Error while removing category.");
+      console.log(err)
+      alert('Error while removing category.')
 
-      setIsRemoving(false);
+      setIsRemoving(false)
     }
-  };
+  }
 
   const onUploaded = async (event) => {
-    const filesArray = Array.from(event.target.files);
+    const filesArray = Array.from(event.target.files)
 
-    const images = await Promise.all(filesArray.map(toBase64));
+    const images = await Promise.all(filesArray.map(toBase64))
 
-    handleSaveImages(images);
-  };
+    handleSaveImages(images)
+  }
 
-  const toggleEdit = () => setEdit((old) => !old);
+  const toggleEdit = () => setEdit((old) => !old)
 
   const handleContextMenu = (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    toggleEdit();
-  };
+    toggleEdit()
+  }
 
   const handleSaveName = async () => {
     if (!nameInputRef.current?.value) {
-      return;
+      return
     }
 
-    setIsSaving(true);
+    setIsSaving(true)
 
     try {
       await api.patch(
         `/section/${category.sectionId}/category/${category.id}`,
         {
           name: nameInputRef.current.value,
-        }
-      );
+        },
+      )
 
-      setIsSaving(false);
-      setEdit(false);
+      setIsSaving(false)
+      setEdit(false)
       onCategoryUpdated({
         ...category,
         name: nameInputRef.current.value,
-      });
+      })
     } catch (err) {
-      console.log(err);
-      alert("Error saving category name");
-      setIsSaving(false);
+      console.log(err)
+      alert('Error saving category name')
+      setIsSaving(false)
     }
-  };
+  }
 
   const handleOpenImages = () => {
-    if (!imageUrl) return;
+    if (!imageUrl) return
 
-    handleOpenCategoryImagesModal(category);
-  };
+    handleOpenCategoryImagesModal(category)
+  }
 
   useEffect(() => {
     if (edit) {
-      nameInputRef.current?.focus();
+      nameInputRef.current?.focus()
     }
-  }, [edit]);
+  }, [edit])
 
   useEffect(() => {
     function updateModalWidth() {
-      setIsMobile(window.outerWidth <= 768);
+      setIsMobile(window.outerWidth <= 768)
     }
 
-    updateModalWidth();
+    updateModalWidth()
 
-    window.addEventListener("resize", updateModalWidth);
+    window.addEventListener('resize', updateModalWidth)
 
     return () => {
-      window.removeEventListener("resize", updateModalWidth);
-    };
-  }, []);
+      window.removeEventListener('resize', updateModalWidth)
+    }
+  }, [])
 
   return (
     <ListingInspectionSectionCategoryContainer>
@@ -214,7 +213,7 @@ export function ListingInspectionSectionCategory({
             ref={nameInputRef}
             defaultValue={category.name}
             label="NAME"
-            containerStyle={{ marginRight: "1rem" }}
+            containerStyle={{ marginRight: '1rem' }}
           />
         ) : (
           <span onContextMenu={handleContextMenu} onDoubleClick={toggleEdit}>
@@ -238,7 +237,7 @@ export function ListingInspectionSectionCategory({
             </Action>
 
             <Action onClick={handleRemoveCategory} disabled={isLoading}>
-              <FiTrash2 color={requestRemove ? "#ff0000" : "unset"} />
+              <FiTrash2 color={requestRemove ? '#ff0000' : 'unset'} />
             </Action>
           </>
         )}
@@ -269,11 +268,11 @@ export function ListingInspectionSectionCategory({
         </LoadingBox>
       )}
     </ListingInspectionSectionCategoryContainer>
-  );
+  )
 }
 
 ListingInspectionSectionCategory.propTypes = {
   category: PropTypes.object.isRequired,
   onCategoryRemoved: PropTypes.func.isRequired,
   onCategoryUpdated: PropTypes.func.isRequired,
-};
+}
