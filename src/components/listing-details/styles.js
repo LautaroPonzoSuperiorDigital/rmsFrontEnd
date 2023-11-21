@@ -1,10 +1,18 @@
-import { Tab, TabList, TabPanel } from "react-tabs";
-import { styled } from "styled-components";
+import { Tab, TabList, TabPanel } from 'react-tabs'
+import { styled } from 'styled-components'
 
 export const ListingDetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
-`;
+`
+
+export const ImageContainer = styled.div`
+  @media (max-width: 768px) {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+`
 
 export const DetailsBox = styled.div`
   display: flex;
@@ -12,7 +20,12 @@ export const DetailsBox = styled.div`
   gap: 7rem;
 
   padding: 1rem;
-`;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 0px;
+    gap: 0px;
+  }
+`
 
 export const MainDetails = styled.div`
   display: flex;
@@ -20,7 +33,11 @@ export const MainDetails = styled.div`
   gap: 1.25rem;
 
   width: 40%;
-`;
+  @media (max-width: 768px) {
+    width: 100%;
+    text-align: center;
+  }
+`
 
 export const MainDetail = styled.div`
   display: flex;
@@ -38,7 +55,15 @@ export const MainDetail = styled.div`
     font-weight: bold;
     color: #000;
   }
-`;
+  @media (max-width: 768px) {
+    padding: 0px 1rem;
+    > span:last-child {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #000;
+    }
+  }
+`
 
 export const ProfitAndLossBox = styled.div`
   display: flex;
@@ -51,7 +76,11 @@ export const ProfitAndLossBox = styled.div`
   > div {
     flex: 1;
   }
-`;
+  @media (max-width: 768px) {
+    justify-content: start;
+    gap: 0rem;
+  }
+`
 
 export const ExtraDetailsBox = styled.div`
   display: flex;
@@ -60,7 +89,10 @@ export const ExtraDetailsBox = styled.div`
   gap: 1.25rem;
 
   width: 40%;
-`;
+  @media (max-width: 768px) {
+    padding: 0px 1rem;
+  }
+`
 
 export const ExtraDetailsTop = styled.div`
   display: flex;
@@ -68,7 +100,10 @@ export const ExtraDetailsTop = styled.div`
   gap: 3rem;
 
   margin-bottom: 1.5rem;
-`;
+  @media (max-width: 768px) {
+    gap: 1rem;
+  }
+`
 
 export const Action = styled.button`
   background: transparent;
@@ -93,7 +128,7 @@ export const Action = styled.button`
       fill: #31af9a;
     }
   }
-`;
+`
 
 export const ExtraDetail = styled.div`
   display: flex;
@@ -114,7 +149,40 @@ export const ExtraDetail = styled.div`
     font-weight: bold;
     color: #000;
   }
-`;
+  @media (max-width: 768px) {
+  }
+`
+export const ExtraDetail2 = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 3rem;
+
+  > span:first-child {
+    width: 30%;
+
+    font-size: 1rem;
+    font-weight: normal;
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  > span:last-child {
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: #000;
+  }
+  @media (max-width: 768px) {
+    width: 200px;
+    > span:first-child {
+      width: 100%;
+      font-size: 1rem;
+
+      font-size: 1rem;
+      font-weight: normal;
+      color: rgba(0, 0, 0, 0.65);
+    }
+  }
+`
 
 export const Amenities = styled.ul`
   display: flex;
@@ -123,7 +191,10 @@ export const Amenities = styled.ul`
 
   padding-left: 1.25rem;
   margin: 0;
-`;
+  @media (max-width: 768px) {
+    padding-left: 5.25rem;
+  }
+`
 
 export const Requirements = styled.ul`
   display: flex;
@@ -132,7 +203,9 @@ export const Requirements = styled.ul`
 
   padding-left: 1.25rem;
   margin: 0;
-`;
+  @media (max-width: 768px) {
+    padding-left: 2.80rem;
+`
 
 export const HistoryTabs = styled(TabList)`
   margin-top: 2.5rem;
@@ -148,7 +221,11 @@ export const HistoryTabs = styled(TabList)`
   gap: 2.5rem;
 
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-`;
+  @media (max-width: 768px) {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+`
 
 export const HistoryTab = styled(Tab)`
   position: relative;
@@ -166,7 +243,7 @@ export const HistoryTab = styled(Tab)`
     color: #197572;
 
     &::before {
-      content: "";
+      content: '';
 
       position: absolute;
       left: 0;
@@ -186,13 +263,22 @@ export const HistoryTab = styled(Tab)`
   &:last-child {
     margin-right: 3rem;
   }
-`;
+  @media (max-width: 768px) {
+    &:first-child {
+      margin-left: 1rem;
+    }
+
+    &:last-child {
+      margin-right: 1rem;
+    }
+  }
+`
 
 export const HistoryTabContent = styled(TabPanel)`
   &.active {
     padding: 2rem 3rem;
   }
-`;
+`
 
 export const InspectionsActionsBox = styled.div`
   display: flex;
@@ -202,7 +288,7 @@ export const InspectionsActionsBox = styled.div`
 
   margin-left: auto;
   margin-right: 3rem;
-`;
+`
 
 export const ExpensesActionsBox = styled.div`
   display: flex;
@@ -212,7 +298,7 @@ export const ExpensesActionsBox = styled.div`
 
   margin-left: auto;
   margin-right: 3rem;
-`;
+`
 
 export const DocumentsActionsBox = ExpensesActionsBox
 
@@ -235,7 +321,7 @@ export const InspectionAction = styled.button`
       fill: #197572;
     }
   }
-`;
+`
 
 export const ExpenseAction = styled.button`
   color: #197572;
@@ -256,6 +342,6 @@ export const ExpenseAction = styled.button`
       fill: #197572;
     }
   }
-`;
+`
 
 export const DocumentAction = ExpenseAction
