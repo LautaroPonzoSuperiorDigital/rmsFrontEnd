@@ -1,17 +1,17 @@
-import { useRef } from "react";
-import { Tabs } from "react-tabs";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import { useRef } from 'react'
+import { Tabs } from 'react-tabs'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
-import { formatPrice } from "../../services/price";
-import { useListingDetails } from "../../hooks/useListingDetails";
+import { formatPrice } from '../../services/price'
+import { useListingDetails } from '../../hooks/useListingDetails'
 
-import { ListingInspectionHistory } from "../listing-inspection-history";
-import { ListingExpenseHistory } from "../listing-expense-history";
-import { ListingPaymentHistory } from "../listing-payment-history";
+import { ListingInspectionHistory } from '../listing-inspection-history'
+import { ListingExpenseHistory } from '../listing-expense-history'
+import { ListingPaymentHistory } from '../listing-payment-history'
 
-import CheckBoxLog from "../checkBox";
-import { Edit, Export, Trash } from "../icons";
+import CheckBoxLog from '../checkBox'
+import { Edit, Export, Trash } from '../icons'
 
 import {
   DetailsBox,
@@ -34,17 +34,19 @@ import {
   InspectionAction,
   DocumentsActionsBox,
   DocumentAction,
-} from "./styles";
-import { ListingAlbumPreview } from "../listing-album-preview";
-import { useListingInspections } from "../../hooks/useListingInspections";
-import { ListingDetailsTabs } from "../../context/listingDetailsContext";
-import { ListingApplicants } from "../listing-applicants";
-import { ListingTenants } from "../listing-tenants";
-import { ListingDocuments } from "../listing-documents";
-import { api } from "../../services/api";
+  ExtraDetail2,
+  ImageContainer,
+} from './styles'
+import { ListingAlbumPreview } from '../listing-album-preview'
+import { useListingInspections } from '../../hooks/useListingInspections'
+import { ListingDetailsTabs } from '../../context/listingDetailsContext'
+import { ListingApplicants } from '../listing-applicants'
+import { ListingTenants } from '../listing-tenants'
+import { ListingDocuments } from '../listing-documents'
+import { api } from '../../services/api'
 
 export function ListingDetails({ setUpdateListing }) {
-  const expensesRef = useRef(null);
+  const expensesRef = useRef(null)
 
   const {
     activeTab,
@@ -52,30 +54,30 @@ export function ListingDetails({ setUpdateListing }) {
     isLoadingPNL,
     handleOpenEditListingModal,
     handleOpenDeleteListingModal,
-  } = useListingDetails();
-  const { handleOpenInspectionFormModal } = useListingInspections();
+  } = useListingDetails()
+  const { handleOpenInspectionFormModal } = useListingInspections()
 
   const showInspectionActions =
-    activeTab.value === ListingDetailsTabs.INSPECTION_HISTORY;
+    activeTab.value === ListingDetailsTabs.INSPECTION_HISTORY
 
   const showExpensesActions =
-    activeTab.value === ListingDetailsTabs.EXPENSE_HISTORY;
+    activeTab.value === ListingDetailsTabs.EXPENSE_HISTORY
 
   const showDocumentsActions =
-    activeTab.value === ListingDetailsTabs.DOCUMENT_HISTORY;
+    activeTab.value === ListingDetailsTabs.DOCUMENT_HISTORY
 
-  const openExpenseForm = () => expensesRef.current?.openForm();
+  const openExpenseForm = () => expensesRef.current?.openForm()
 
   const handleIsPublic = async () => {
     try {
       const response = await api.patch(`listing/${listing.id}`, {
         isPublic: !listing.isPublic,
-      });
-      setUpdateListing(true);
+      })
+      setUpdateListing(true)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   return (
     <ListingDetailsContainer>
@@ -113,7 +115,7 @@ export function ListingDetails({ setUpdateListing }) {
           </MainDetail>
 
           <ProfitAndLossBox>
-            <MainDetail>
+            <MainDetail style={{ padding: '10px' }}>
               <span>TOTAL PROFIT</span>
               {isLoadingPNL ? (
                 <Skeleton height="1rem" width={100} />
@@ -122,7 +124,7 @@ export function ListingDetails({ setUpdateListing }) {
               )}
             </MainDetail>
 
-            <MainDetail>
+            <MainDetail style={{ padding: '10px' }}>
               <span>TOTAL LOSS</span>
               {isLoadingPNL ? (
                 <Skeleton height="1rem" width={100} />
@@ -154,33 +156,33 @@ export function ListingDetails({ setUpdateListing }) {
             </Action>
           </ExtraDetailsTop>
 
-          <ExtraDetail>
+          <ExtraDetail2>
             <span># BEEDROOMS</span>
             <span>{listing.bedrooms}</span>
-          </ExtraDetail>
+          </ExtraDetail2>
 
-          <ExtraDetail>
+          <ExtraDetail2>
             <span># BATHROOMS</span>
             <span>{listing.bathrooms}</span>
-          </ExtraDetail>
+          </ExtraDetail2>
 
-          <ExtraDetail>
+          <ExtraDetail2>
             <span>AMENITIES</span>
             <Amenities>
               {listing.Amenities?.map((amenity, index) => (
                 <li key={index}>{amenity.name}</li>
               ))}
             </Amenities>
-          </ExtraDetail>
+          </ExtraDetail2>
 
-          <ExtraDetail>
+          <ExtraDetail2>
             <span>REQUIREMENTS</span>
             <Requirements>
               {listing.Requirements?.map((requirement, index) => (
                 <li key={index}>{requirement.name}</li>
               ))}
             </Requirements>
-          </ExtraDetail>
+          </ExtraDetail2>
         </ExtraDetailsBox>
       </DetailsBox>
 
@@ -254,5 +256,5 @@ export function ListingDetails({ setUpdateListing }) {
         </HistoryTabContent>
       </Tabs>
     </ListingDetailsContainer>
-  );
+  )
 }
