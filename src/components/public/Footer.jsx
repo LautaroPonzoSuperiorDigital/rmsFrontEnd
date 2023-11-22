@@ -7,7 +7,10 @@ const Footer = () => {
       <div>Certify My Rent LLC</div>
       <div>Eddie Sapien</div>
       <div>(805) 710-8800</div>
-      <div>10620 West Front Road Atascadero 93422</div>
+      <div>eddiesapien@yahoo.com</div>
+      <div className="text-center">
+        10620 West Front Road Atascadero 93422 CA, United States
+      </div>
       <HrefStyle href={Pdf} download>
         Privacy Policy
       </HrefStyle>
