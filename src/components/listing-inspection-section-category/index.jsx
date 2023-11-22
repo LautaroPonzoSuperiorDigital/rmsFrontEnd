@@ -80,7 +80,7 @@ export function ListingInspectionSectionCategory({
     try {
       const url = `/inspection/${editingInspection.id}/section/${category.sectionId}/category/${category.id}/image`
       const { data } = await api.post(url, { images })
-      console.log(url)
+      console.log(data)
 
       const InspectionSections = category.InspectionSections?.length
         ? [

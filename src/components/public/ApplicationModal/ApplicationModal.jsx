@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react"
-import "../../../styles/publIcListings/application.css"
-import Logo from "../../../assets/img/Logo.svg"
-import { api } from "../../../services/api"
-import { env } from "../../../config/env"
-import { HeaderGoBack } from "../../icons/tenants"
-import { useAuth } from "../../../hooks/useAuth"
-import { createListingImage } from "../../../services/listing"
+import { useState, useEffect } from 'react'
+import '../../../styles/publIcListings/application.css'
+import Logo from '../../../assets/img/Logo.svg'
+import { api } from '../../../services/api'
+import { env } from '../../../config/env'
+import { HeaderGoBack } from '../../icons/tenants'
+import { useAuth } from '../../../hooks/useAuth'
+import { createListingImage } from '../../../services/listing'
 import {
   NavContainer,
   NavText,
@@ -26,24 +26,25 @@ import {
   Li,
   LogoImg,
   LogoContainer,
-  NavTextContainer
-} from "./styles.js"
-import DescriptionMobileNav from "./DescriptionMobileNav"
-import Roomates from "./RegistratationForms/Roomates"
-import RentalHistory from "./RegistratationForms/RentalHistory"
-import Income from "./RegistratationForms/Income"
-import EmergencyContact from "./RegistratationForms/EmergencyContact"
-import Vehicles from "./RegistratationForms/Vehicles"
-import OtherInfo from "./RegistratationForms/OtherInfo"
-import BackgroundScreening from "./RegistratationForms/BackgroundScreening"
+  NavTextContainer,
+} from './styles.js'
+import DescriptionMobileNav from './DescriptionMobileNav'
+import Roomates from './RegistratationForms/Roomates'
+import RentalHistory from './RegistratationForms/RentalHistory'
+import Income from './RegistratationForms/Income'
+import EmergencyContact from './RegistratationForms/EmergencyContact'
+import Vehicles from './RegistratationForms/Vehicles'
+import OtherInfo from './RegistratationForms/OtherInfo'
+import BackgroundScreening from './RegistratationForms/BackgroundScreening'
+import Footer from '../Footer.jsx'
 
 const ApplicationModal = ({ myselectedListing, onClose }) => {
   const [imageSrc, setImageSrc] = useState(null)
   const [userId, setUserId] = useState(null)
   // backgroundSreening
-  const [activeSection, setActiveSection] = useState("registration")
+  const [activeSection, setActiveSection] = useState('registration')
   const [formData, setFormData] = useState({})
-  const [message, setMessage] = useState("")
+  const [message, setMessage] = useState('')
 
   const [tenantId, setTenantId] = useState({})
   const { user } = useAuth()
@@ -55,7 +56,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
         const src = await createListingImage(myselectedListing)
         setImageSrc(src)
       } catch (error) {
-        console.error("Error fetching image:", error)
+        console.error('Error fetching image:', error)
       }
     }
 
@@ -64,10 +65,10 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    if (name === "phoneNumber") {
+    if (name === 'phoneNumber') {
       const formattedValue = value
-        .replace(/\D/g, "") // Remove non-numeric characters
-        .replace(/^(\d{3})(\d{1,3})?(\d{1,4})?/, "$1-$2-$3") // Insert hyphens
+        .replace(/\D/g, '') // Remove non-numeric characters
+        .replace(/^(\d{3})(\d{1,3})?(\d{1,4})?/, '$1-$2-$3') // Insert hyphens
       setFormData({ ...formData, [name]: formattedValue })
     } else {
       setFormData({ ...formData, [name]: value })
@@ -77,17 +78,17 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
     e.preventDefault()
 
     try {
-      const response = await api.post("/user/tenant", {
+      const response = await api.post('/user/tenant', {
         ...formData,
-        approvalStatus: "SCREENING_IN_PROCESS"
+        approvalStatus: 'SCREENING_IN_PROCESS',
       })
 
       const userId = response.data.id
       setUserId(userId)
       const tenant = await api.get(`tenant/user/${userId}`)
       setTenantId(tenant.data.id)
-      setMessage("Registration successful!")
-      setActiveSection("roommates")
+      setMessage('Registration successful!')
+      setActiveSection('roommates')
     } catch (err) {
       console.log(err.response)
       setMessage(err.response.data.message)
@@ -96,7 +97,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
 
   const handleLogoClick = () => {
     onClose()
-    window.location.href = "/"
+    window.location.href = '/'
   }
 
   return (
@@ -114,12 +115,12 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
               <ul className="w-100 d-flex justify-content-between">
                 <li
                   style={{
-                    fontSize: "18px",
-                    fontFamily: "proxima-nova",
-                    fontWeight: "lighter"
+                    fontSize: '18px',
+                    fontFamily: 'proxima-nova',
+                    fontWeight: 'lighter',
                   }}
                   className={`registration custom-item1 nav-item ${
-                    activeSection === "registration" ? "active" : ""
+                    activeSection === 'registration' ? 'active' : ''
                   }`}
                   // onClick={() => handleSectionClick("registration")}
                 >
@@ -127,12 +128,12 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 </li>
                 <li
                   style={{
-                    fontSize: "18px",
-                    fontFamily: "proxima-nova",
-                    fontWeight: "lighter"
+                    fontSize: '18px',
+                    fontFamily: 'proxima-nova',
+                    fontWeight: 'lighter',
                   }}
                   className={`roommates custom-item1 nav-item ${
-                    activeSection === "roommates" ? "active" : ""
+                    activeSection === 'roommates' ? 'active' : ''
                   }`}
                   // onClick={() => handleSectionClick("roommates")}
                 >
@@ -140,12 +141,12 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 </li>
                 <li
                   style={{
-                    fontSize: "18px",
-                    fontFamily: "proxima-nova",
-                    fontWeight: "lighter"
+                    fontSize: '18px',
+                    fontFamily: 'proxima-nova',
+                    fontWeight: 'lighter',
                   }}
                   className={`rh custom-item1 nav-item ${
-                    activeSection === "rentalHistory" ? "active" : ""
+                    activeSection === 'rentalHistory' ? 'active' : ''
                   }`}
                   // onClick={() => handleSectionClick("rentalHistory")}
                 >
@@ -153,12 +154,12 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 </li>
                 <li
                   style={{
-                    fontSize: "18px",
-                    fontFamily: "proxima-nova",
-                    fontWeight: "lighter"
+                    fontSize: '18px',
+                    fontFamily: 'proxima-nova',
+                    fontWeight: 'lighter',
                   }}
                   className={`income custom-item1 nav-item ${
-                    activeSection === "income" ? "active" : ""
+                    activeSection === 'income' ? 'active' : ''
                   }`}
                   // onClick={() => handleSectionClick("income")}
                 >
@@ -166,12 +167,12 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 </li>
                 <li
                   style={{
-                    fontSize: "18px",
-                    fontFamily: "proxima-nova",
-                    fontWeight: "lighter"
+                    fontSize: '18px',
+                    fontFamily: 'proxima-nova',
+                    fontWeight: 'lighter',
                   }}
                   className={`ec custom-item1 nav-item ${
-                    activeSection === "emergencyContact" ? "active" : ""
+                    activeSection === 'emergencyContact' ? 'active' : ''
                   }`}
                   // onClick={() => handleSectionClick("emergencyContact")}
                 >
@@ -179,12 +180,12 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 </li>
                 <li
                   style={{
-                    fontSize: "18px",
-                    fontFamily: "proxima-nova",
-                    fontWeight: "lighter"
+                    fontSize: '18px',
+                    fontFamily: 'proxima-nova',
+                    fontWeight: 'lighter',
                   }}
                   className={`vehicles custom-item1 nav-item ${
-                    activeSection === "vehicles" ? "active" : ""
+                    activeSection === 'vehicles' ? 'active' : ''
                   }`}
                   // onClick={() => handleSectionClick("vehicles")}
                 >
@@ -192,12 +193,12 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 </li>
                 <li
                   style={{
-                    fontSize: "18px",
-                    fontFamily: "proxima-nova",
-                    fontWeight: "lighter"
+                    fontSize: '18px',
+                    fontFamily: 'proxima-nova',
+                    fontWeight: 'lighter',
                   }}
                   className={`otherInfo custom-item1 nav-item ${
-                    activeSection === "otherInfo" ? "active" : ""
+                    activeSection === 'otherInfo' ? 'active' : ''
                   }`}
                   // onClick={() => handleSectionClick("otherInfo")}
                 >
@@ -205,12 +206,12 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 </li>
                 <li
                   style={{
-                    fontSize: "18px",
-                    fontFamily: "proxima-nova",
-                    fontWeight: "lighter"
+                    fontSize: '18px',
+                    fontFamily: 'proxima-nova',
+                    fontWeight: 'lighter',
                   }}
                   className={`otherInfo custom-item1 nav-item ${
-                    activeSection === "otherInfo" ? "active" : ""
+                    activeSection === 'otherInfo' ? 'active' : ''
                   }`}
                   // onClick={() => handleSectionClick("otherInfo")}
                 >
@@ -233,30 +234,30 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             <ImgSideBar src={imageSrc} alt="" />
 
             <SideBarDescriptionPrice>
-              <div style={{ marginTop: "15px" }}>
+              <div style={{ marginTop: '15px' }}>
                 <FieldText>ID</FieldText>
 
                 {myselectedListing && (
                   <FieldValue>
-                    {myselectedListing.id.toString().padStart(6, "0")}
+                    {myselectedListing.id.toString().padStart(6, '0')}
                   </FieldValue>
                 )}
               </div>
-              <div style={{ marginTop: "15px" }}>
+              <div style={{ marginTop: '15px' }}>
                 <p
                   style={{
-                    color: "#272727",
-                    fontSize: "25px",
-                    fontWeight: "bold"
+                    color: '#272727',
+                    fontSize: '25px',
+                    fontWeight: 'bold',
                   }}
                 >
-                  ${" "}
+                  ${' '}
                   {myselectedListing && myselectedListing.price
                     ? parseFloat(myselectedListing.price).toLocaleString(
-                        "en",
-                        {}
+                        'en',
+                        {},
                       )
-                    : ""}
+                    : ''}
                   /mo
                 </p>
               </div>
@@ -267,9 +268,9 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 {myselectedListing && (
                   <FieldValue>
                     {myselectedListing.location
-                      .split(", ")
+                      .split(', ')
                       .slice(-2)
-                      .join(", ")}
+                      .join(', ')}
                   </FieldValue>
                 )}
               </div>
@@ -280,12 +281,12 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 <FieldValue>
                   {myselectedListing && (
                     <span>
-                      {" "}
+                      {' '}
                       {myselectedListing.houseSize
-                        ? myselectedListing.houseSize.toLocaleString("EN", {
-                            maximumFractionDigits: 0
+                        ? myselectedListing.houseSize.toLocaleString('EN', {
+                            maximumFractionDigits: 0,
                           })
-                        : ""}
+                        : ''}
                       &nbsp;Sq. Ft. per county
                     </span>
                   )}
@@ -298,10 +299,10 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                 {myselectedListing && (
                   <FieldValue className="desc2">
                     {myselectedListing.lotSize
-                      ? myselectedListing.lotSize.toLocaleString("EN", {
-                          maximumFractionDigits: 0
+                      ? myselectedListing.lotSize.toLocaleString('EN', {
+                          maximumFractionDigits: 0,
                         })
-                      : ""}{" "}
+                      : ''}{' '}
                     &nbsp;Sq. Ft. per county
                   </FieldValue>
                 )}
@@ -336,7 +337,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
               <Ul>
                 {myselectedListing.Requirements &&
                   myselectedListing.Requirements.map((requirement) => (
-                    <Li key={requirement.id} style={{ marginLeft: "20px" }}>
+                    <Li key={requirement.id} style={{ marginLeft: '20px' }}>
                       <FieldValue>{requirement.name}</FieldValue>
                     </Li>
                   ))}
@@ -347,13 +348,13 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
         <div className="forms redside d-flex align-items-center ">
           <div className="registrationContainer w-100 ">
             <div className=" d-flex justify-content-center  w-100">
-              {!user && activeSection === "registration" && (
+              {!user && activeSection === 'registration' && (
                 <div className="w-50">
                   <h2
                     className="d-flex justify-content-center registrationText"
                     style={{
-                      fontFamily: "proxima-nova",
-                      fontWeight: "regular"
+                      fontFamily: 'proxima-nova',
+                      fontWeight: 'regular',
                     }}
                   >
                     Registration
@@ -374,7 +375,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                       name="phoneNumber"
                       required
                       onChange={handleChange}
-                      value={formData.phoneNumber || ""}
+                      value={formData.phoneNumber || ''}
                     />
                     <input
                       className="form-control inputReset"
@@ -396,7 +397,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                     <button className="bgButton d-flex align-items-center justify-content-center w-100">
                       <span className="submitBtn">Submit</span>
                     </button>
-                    <p style={{ color: "#31af9a" }}>{message}</p>
+                    <p style={{ color: '#31af9a' }}>{message}</p>
                   </form>
                 </div>
               )}
@@ -419,43 +420,43 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   <p>{screeningMessage}</p>
                 </div>
               )} */}
-              {activeSection === "roommates" && (
+              {activeSection === 'roommates' && (
                 <Roomates
                   tenantId={tenantId}
                   setActiveSection={setActiveSection}
                 />
               )}
-              {activeSection === "rentalHistory" && (
+              {activeSection === 'rentalHistory' && (
                 <RentalHistory
                   tenantId={tenantId}
                   setActiveSection={setActiveSection}
                 />
               )}
-              {activeSection === "income" && (
+              {activeSection === 'income' && (
                 <Income
                   tenantId={tenantId}
                   setActiveSection={setActiveSection}
                 />
               )}
-              {activeSection === "emergencyContact" && (
+              {activeSection === 'emergencyContact' && (
                 <EmergencyContact
                   tenantId={tenantId}
                   setActiveSection={setActiveSection}
                 />
               )}
-              {activeSection === "vehicles" && (
+              {activeSection === 'vehicles' && (
                 <Vehicles
                   tenantId={tenantId}
                   setActiveSection={setActiveSection}
                 />
               )}
-              {activeSection === "otherInfo" && (
+              {activeSection === 'otherInfo' && (
                 <OtherInfo
                   tenantId={tenantId}
                   setActiveSection={setActiveSection}
                 />
               )}
-              {activeSection === "backgroundSreening" && (
+              {activeSection === 'backgroundSreening' && (
                 <BackgroundScreening
                   tenantId={tenantId}
                   setActiveSection={setActiveSection}
@@ -469,6 +470,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
           </div>
         </div>
       </ApplicationContainer>
+      <Footer />
     </div>
   )
 }

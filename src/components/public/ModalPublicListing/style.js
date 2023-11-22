@@ -1,15 +1,30 @@
-import { styled } from "styled-components"
+import { styled } from 'styled-components'
 
 export const ModalListingContainer = styled.div`
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  width: 100%;
+  height: 95%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    overflow-y: scroll;
+  }
+`
+export const ModalListingContainer2 = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: white;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: between;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -120,12 +135,12 @@ export const BtnApply = styled.button`
 
 export const FieldContainer = styled.div`
   @media (max-width: 768px) {
-    display: ${(props) => (props.amenities ? "" : "flex")}
+    display: ${(props) => (props.amenities ? '' : 'flex')}
     justify-content: space-between;
-    align-items: ${(props) => (props.location ? "flex-start" : "center")}
-    flex-direction: ${(props) => (props.location ? "column" : "row")};
+    align-items: ${(props) => (props.location ? 'flex-start' : 'center')}
+    flex-direction: ${(props) => (props.location ? 'column' : 'row')};
     padding: 0px 10px;
-    margin-bottom: ${(props) => (props.location ? "1rem" : "0px")};
+    margin-bottom: ${(props) => (props.location ? '1rem' : '0px')};
     & > p {
       margin: 0;
     }
