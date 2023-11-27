@@ -9,7 +9,7 @@ const Footer = () => {
       <div>(805) 710-8800</div>
       <div>eddiesapien@yahoo.com</div>
       <div className="text-center">
-        10620 West Front Road Atascadero 93422 CA, United States
+        10620 West Front Road, Atascadero ,CA, 93422, United States
       </div>
       <HrefStyle href={Pdf} download>
         Privacy Policy
