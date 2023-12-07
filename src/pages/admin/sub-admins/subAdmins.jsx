@@ -1,25 +1,26 @@
-import { useEffect, useState } from "react"
-import Nav from "../../../components/nav"
+import { useEffect, useState } from 'react'
+import Nav from '../../../components/nav'
 import {
   BtnPlusSub,
   Table1,
   TableContainer,
   TableTd,
   TableTdEmail,
-  TableThead
-} from "./styles"
-import DeleteIconHover from "../../../assets/img/deleteIconHover.svg"
-import Delete from "../../../assets/img/delete.svg"
-import ModalAddSub from "./ModalAddSub"
-import { api } from "../../../services/api"
-import { useAuth } from "../../../hooks/useAuth"
-import { DeleteButton } from "../../../components/buttonApplicants"
-import Pencil from "./../../../assets/img/pencil.svg"
-import ModalUpdateSub from "./ModalUpdateSub"
-import SearchListings from "../../../components/searchListings"
+  TableThead,
+} from './styles'
+import DeleteIconHover from '../../../assets/img/deleteIconHover.svg'
+import Delete from '../../../assets/img/delete.svg'
+import ModalAddSub from './ModalAddSub'
+import { api } from '../../../services/api'
+import { useAuth } from '../../../hooks/useAuth'
+import { DeleteButton } from '../../../components/buttonApplicants'
+import Pencil from './../../../assets/img/pencil.svg'
+import ModalUpdateSub from './ModalUpdateSub'
+import SearchListings from '../../../components/searchListings'
+import Footer from '../../../components/public/Footer'
 
 const tBodyStyle = {
-  height: "50px"
+  height: '50px',
 }
 
 const SubAdmins = () => {
@@ -71,7 +72,9 @@ const SubAdmins = () => {
   }, [update])
 
   return (
-    <div>
+    <div
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+    >
       <Nav />
       <div className="d-flex w-100 mb-1">
         <div className="container tenantsContainer">
@@ -86,7 +89,7 @@ const SubAdmins = () => {
             applicants={subAdmins}
             setTableApplicants={setSubAdminTable}
           />
-          {user.role === "ADMIN" && (
+          {user.role === 'ADMIN' && (
             <BtnPlusSub onClick={openModal}> + add sub admin</BtnPlusSub>
           )}
         </div>
@@ -95,18 +98,18 @@ const SubAdmins = () => {
         <Table1>
           <TableThead>
             <TableTd className="bor NAME1">
-              <p className="mb-2 g" style={{ width: "150px", margin: 0 }}>
+              <p className="mb-2 g" style={{ width: '150px', margin: 0 }}>
                 NAME
               </p>
             </TableTd>
             <TableTd className=" bor LISTING1">
-              <p className="mb-2 g" style={{ width: "150px" }}>
+              <p className="mb-2 g" style={{ width: '150px' }}>
                 ROLE
               </p>
             </TableTd>
 
             <TableTdEmail className="bor EMAIL1">
-              <p className="mb-2 g" style={{ width: "150px" }}>
+              <p className="mb-2 g" style={{ width: '150px' }}>
                 EMAIL
               </p>
             </TableTdEmail>
@@ -121,28 +124,28 @@ const SubAdmins = () => {
               item === 0 ? null : (
                 <tr className="tr-hover" key={item.id}>
                   <td className="bor1">
-                    <div className="mt-3 " style={{ width: "150px" }}>
+                    <div className="mt-3 " style={{ width: '150px' }}>
                       <p>{item.User.name}</p>
                     </div>
                   </td>
 
                   <td className="bor1">
-                    <div className="mt-3 " style={{ width: "150px" }}>
+                    <div className="mt-3 " style={{ width: '150px' }}>
                       <p>
                         {item.User.role
-                          .replace(/_/g, " ")
+                          .replace(/_/g, ' ')
                           .replace(/^\w/, (c) => c.toUpperCase())}
                       </p>
                     </div>
                   </td>
                   <td className="bor1">
-                    <div className="mt-3" style={{ width: "150px" }}>
+                    <div className="mt-3" style={{ width: '150px' }}>
                       <p>{item.User.email}</p>
                     </div>
                   </td>
                   <td className="bor1">
                     <div className="d-flex align-items-center">
-                      {user.role === "ADMIN" && (
+                      {user.role === 'ADMIN' && (
                         <>
                           <button className="btn-sm">
                             <img
@@ -159,7 +162,7 @@ const SubAdmins = () => {
                             id={item.User.id}
                           />
                           <DeleteButton
-                            info={"Sub Admin"}
+                            info={'Sub Admin'}
                             onClick={() => handleDelete(item.User.id)}
                             defaultImage={<img src={Delete} alt="Delete" />}
                             hoverImage={
@@ -174,7 +177,7 @@ const SubAdmins = () => {
                     </div>
                   </td>
                 </tr>
-              )
+              ),
             )}
           </tbody>
         </Table1>
@@ -184,6 +187,7 @@ const SubAdmins = () => {
         onClose={closeModal}
         setUpdate={setUpdate}
       />
+      <Footer />
     </div>
   )
 }

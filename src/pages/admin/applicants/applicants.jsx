@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from "react"
-import Nav from "../../../components/nav"
-import "../../../styles/Applicants/applicants.css"
-import SearchListings from "../../../components/searchListings"
-import Pagination from "../../../components/paginations"
-import Animation from "../../../assets/img//animation.json"
-import lottie from "lottie-web"
-import { api } from "../../../services/api"
-import Table from "./Table"
+import { useState, useEffect, useRef } from 'react'
+import Nav from '../../../components/nav'
+import '../../../styles/Applicants/applicants.css'
+import SearchListings from '../../../components/searchListings'
+import Pagination from '../../../components/paginations'
+import Animation from '../../../assets/img//animation.json'
+import lottie from 'lottie-web'
+import { api } from '../../../services/api'
+import Table from './Table'
+import Footer from '../../../components/public/Footer'
 
 const Applicants = () => {
   const [showAnimation, setShowAnimation] = useState(false)
@@ -19,7 +20,7 @@ const Applicants = () => {
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
-        const applicants = await api.get("/application-screening/get-all")
+        const applicants = await api.get('/application-screening/get-all')
 
         setApplicants(applicants.data)
         setTableApplicants(applicants.data)
@@ -36,12 +37,12 @@ const Applicants = () => {
     if (showAnimation) {
       const animation = lottie.loadAnimation({
         container: animationContainerRef.current,
-        renderer: "svg",
+        renderer: 'svg',
         loop: false,
         autoplay: true,
-        animationData: Animation
+        animationData: Animation,
       })
-      animation.addEventListener("complete", () => {
+      animation.addEventListener('complete', () => {
         setShowAnimation(false)
       })
       return () => {
@@ -51,7 +52,9 @@ const Applicants = () => {
   }, [showAnimation])
 
   return (
-    <>
+    <div
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+    >
       <Nav />
       <div className="container-fluid">
         <div className="d-flex w-100 mb-3">
@@ -77,9 +80,9 @@ const Applicants = () => {
           setDeleteTenant={setDeleteTenant}
         />
       </div>
-
-      <Pagination />
-    </>
+      <Footer />
+      {/* <Pagination /> */}
+    </div>
   )
 }
 
