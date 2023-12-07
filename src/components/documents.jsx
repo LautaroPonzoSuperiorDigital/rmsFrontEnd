@@ -1,34 +1,35 @@
-import React, { useEffect, useState } from "react";
-import Nav from "./nav";
-import "../styles/Documents/documents.css";
-import SearchListings from "./searchListings";
-import { EditButton, DeleteButton } from "./buttonDocuments";
-import { format } from "date-fns";
-import { enUS } from "date-fns/locale";
-import Pagination from "./paginations";
-import Edit from "../assets/img/Edit.svg";
-import EditHover from "../assets/img/EditHover.svg";
-import Delete from "../assets/img/delete.svg";
-import DeleteIconHover from "../assets/img/deleteIconHover.svg";
-import AddDocuments from "./AddDocuments";
-import AddDocs from "./modals/addDocumentsModal";
-import { api } from "../services/api";
-import { useAuth } from "../hooks/useAuth";
+import React, { useEffect, useState } from 'react'
+import Nav from './nav'
+import '../styles/Documents/documents.css'
+import SearchListings from './searchListings'
+import { EditButton, DeleteButton } from './buttonDocuments'
+import { format } from 'date-fns'
+import { enUS } from 'date-fns/locale'
+import Pagination from './paginations'
+import Edit from '../assets/img/Edit.svg'
+import EditHover from '../assets/img/EditHover.svg'
+import Delete from '../assets/img/delete.svg'
+import DeleteIconHover from '../assets/img/deleteIconHover.svg'
+import AddDocuments from './AddDocuments'
+import AddDocs from './modals/addDocumentsModal'
+import { api } from '../services/api'
+import { useAuth } from '../hooks/useAuth'
+import Footer from './public/Footer'
 
 const Documents = () => {
-  const { user } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [documentsData, setDocumentsData] = useState([]);
-  const [listingsData, setListingsData] = useState([]);
-  const [tenantsData, setTenantsData] = useState([]);
+  const { user } = useAuth()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [documentsData, setDocumentsData] = useState([])
+  const [listingsData, setListingsData] = useState([])
+  const [tenantsData, setTenantsData] = useState([])
 
   const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
   useEffect(() => {
     api.get(`/admin/user/${user.id}`).then(({ data: userData }) => {
@@ -37,15 +38,15 @@ const Documents = () => {
         .then(({ data: listings }) => {
           listings.map(({ id }) => {
             api.get(`/listing/${id}/document`).then(({ data }) => {
-              setDocumentsData([...data, ...documentsData]);
-            });
-          });
+              setDocumentsData([...data, ...documentsData])
+            })
+          })
         })
         .catch((error) => {
-          console.error("Error fetching documents data:", error);
-        });
-    });
-  }, []);
+          console.error('Error fetching documents data:', error)
+        })
+    })
+  }, [])
 
   const handleDelete = async (listingId, documentId) => {
     try {
@@ -53,17 +54,19 @@ const Documents = () => {
         .delete(`listing/${listingId}/document/${documentId}`)
         .then(() => {
           const updatedDocuments = documentsData.filter(
-            (document) => document.id !== documentId
-          );
-          setDocumentsData(updatedDocuments);
-        });
+            (document) => document.id !== documentId,
+          )
+          setDocumentsData(updatedDocuments)
+        })
     } catch (error) {
-      console.error("Error deleting document:", error);
+      console.error('Error deleting document:', error)
     }
-  };
+  }
 
   return (
-    <>
+    <div
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+    >
       <Nav />
       <div className="container-fluid">
         <div className="d-flex w-100 mb-3">
@@ -116,7 +119,7 @@ const Documents = () => {
                       </td>
                       <td className="h p1 td td2">
                         <p className="LISTING2 h">
-                          {String(document.listingId).padStart(6, "0")}
+                          {String(document.listingId).padStart(6, '0')}
                         </p>
                       </td>
                       <td className="h p1 td td2 tdFix">
@@ -124,7 +127,7 @@ const Documents = () => {
                       </td>
                       <td className="h p1 td td2 tdFix">
                         <p className="date2">
-                          {format(new Date(), "MMM d, yyyy", {
+                          {format(new Date(), 'MMM d, yyyy', {
                             locale: enUS,
                           })}
                         </p>
@@ -158,12 +161,13 @@ const Documents = () => {
           </div>
         </div>
       </div>
+      <Footer />
       {isModalOpen && (
         <AddDocs onClose={handleCloseModal} listingsData={listingsData} />
       )}
       <Pagination />
-    </>
-  );
-};
+    </div>
+  )
+}
 
-export default Documents;
+export default Documents

@@ -1,29 +1,30 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react"
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 
-import CheckMarkListing from "../../../assets/img/checkMark.svg"
-import Edit from "../../../assets/img/Edit.svg"
-import EditHover from "../../../assets/img/EditHover.svg"
-import Delete from "../../../assets/img/delete.svg"
-import DeleteIconHover from "../../../assets/img/deleteIconHover.svg"
+import CheckMarkListing from '../../../assets/img/checkMark.svg'
+import Edit from '../../../assets/img/Edit.svg'
+import EditHover from '../../../assets/img/EditHover.svg'
+import Delete from '../../../assets/img/delete.svg'
+import DeleteIconHover from '../../../assets/img/deleteIconHover.svg'
 
-import { api } from "../../../services/api"
+import { api } from '../../../services/api'
 
-import Nav from "../../../components/nav"
-import CheckBoxLog from "../../../components/checkBox"
-import SearchListings from "../../../components/searchListings"
-import { EditButton, DeleteButton } from "../../../components/buttonListings"
-import Pagination from "../../../components/paginations"
-import AddListings from "../../../components/addListing"
-import { Modal } from "../../../components/modal"
+import Nav from '../../../components/nav'
+import CheckBoxLog from '../../../components/checkBox'
+import SearchListings from '../../../components/searchListings'
+import { EditButton, DeleteButton } from '../../../components/buttonListings'
+import Pagination from '../../../components/paginations'
+import AddListings from '../../../components/addListing'
+import { Modal } from '../../../components/modal'
 import {
   ListingDetailsContext,
   ListingDetailsProvider,
-  ListingDetailsTabs
-} from "../../../context/listingDetailsContext"
-import { ListingForm } from "../../../components/listing-form"
-import { ListingDetails } from "../../../components/listing-details"
-import { createListingImage } from "../../../services/listing"
-import { useAuth } from "../../../hooks/useAuth"
+  ListingDetailsTabs,
+} from '../../../context/listingDetailsContext'
+import { ListingForm } from '../../../components/listing-form'
+import { ListingDetails } from '../../../components/listing-details'
+import { createListingImage } from '../../../services/listing'
+import { useAuth } from '../../../hooks/useAuth'
+import Footer from '../../../components/public/Footer'
 
 const PAGE_SIZE = 10
 
@@ -33,7 +34,7 @@ export default function AdminListings() {
   const [listings, setListings] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false)
-  const [searchId, setSearchId] = useState("")
+  const [searchId, setSearchId] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [listingDetails, setListingDetails] = useState(null)
   const [savingListingForm, setSavingListingForm] = useState(false)
@@ -66,13 +67,13 @@ export default function AdminListings() {
   const handleSearch = (searchValue) => {
     setSearchId(searchValue)
 
-    if (searchValue === "") {
+    if (searchValue === '') {
       setSearchResults([])
       return
     }
 
     const filteredListings = listings.filter((listing) => {
-      const paddedId = listing.id.toString().padStart(6, "0")
+      const paddedId = listing.id.toString().padStart(6, '0')
       return (
         paddedId === searchValue ||
         listing.location.toLowerCase().includes(searchValue.toLowerCase())
@@ -96,7 +97,7 @@ export default function AdminListings() {
 
   const handleDeleteListing = async (listingId) => {
     const shouldRemove = confirm(
-      "Are you sure you want to remove this listing? This action cannot be undone."
+      'Are you sure you want to remove this listing? This action cannot be undone.',
     )
 
     if (!shouldRemove) {
@@ -107,11 +108,11 @@ export default function AdminListings() {
       await api.delete(`/listing/${listingId}`)
 
       const updatedListing = listings.filter(
-        (listing) => listing.id !== listingId
+        (listing) => listing.id !== listingId,
       )
       setListings(updatedListing)
     } catch (err) {
-      alert("Failed to delete listing")
+      alert('Failed to delete listing')
     }
   }
 
@@ -135,19 +136,19 @@ export default function AdminListings() {
                 setListings((listings) =>
                   listings.map((listing, index) => ({
                     ...listing,
-                    image: imageUrls[index]
-                  }))
+                    image: imageUrls[index],
+                  })),
                 )
               })
               .catch((error) => {
-                console.error("Error loading listing images:", error)
+                console.error('Error loading listing images:', error)
               })
             setListings(listings)
           })
-          .catch((error) => alert("Error loading listings data: ", error))
+          .catch((error) => alert('Error loading listings data: ', error))
       } catch (err) {
         console.log(err)
-        alert("Error loading admin and listings data: ", err)
+        alert('Error loading admin and listings data: ', err)
       }
     }
     setUpdateListing(false)
@@ -155,9 +156,14 @@ export default function AdminListings() {
   }, [updateListing])
 
   return (
-    <>
+    <div
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+    >
       <Nav />
-      <div className="container-fluid">
+      <div
+        className="container-fluid"
+        style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
+      >
         <div className="d-flex w-100 mb-3">
           <div className="container tenantsContainer">
             <div className="d-flex align-items-center justify-content-start">
@@ -169,7 +175,7 @@ export default function AdminListings() {
                     onChange={handleCheckBoxChange}
                   />
                   <p className="m-2 mb-0 publicShow">
-                    Show only public listings{" "}
+                    Show only public listings{' '}
                   </p>
                 </label>
               </div>
@@ -224,7 +230,7 @@ export default function AdminListings() {
                             src={listing.image}
                             alt="Listing image"
                           />
-                          {listing.id.toString().padStart(6, "0")}
+                          {listing.id.toString().padStart(6, '0')}
                         </p>
                       </td>
                       <td className="h p1 td td2">
@@ -235,20 +241,20 @@ export default function AdminListings() {
                       <td className="h p1 td td2">
                         <p className="alignText d-flex align-items-center">
                           {listing.lotSize
-                            ? listing.lotSize.toLocaleString("EN", {
-                                maximumFractionDigits: 0
+                            ? listing.lotSize.toLocaleString('EN', {
+                                maximumFractionDigits: 0,
                               })
-                            : ""}
+                            : ''}
                           &nbsp;&nbsp;Sq. Ft. Per County
                         </p>
                       </td>
                       <td className="h p1 td td2">
                         <p className="alignText d-flex align-items-center">
                           {listing.houseSize
-                            ? listing.houseSize.toLocaleString("EN", {
-                                maximumFractionDigits: 0
+                            ? listing.houseSize.toLocaleString('EN', {
+                                maximumFractionDigits: 0,
                               })
-                            : ""}
+                            : ''}
                           &nbsp;&nbsp;Sq. Ft. Per County
                         </p>
                       </td>
@@ -256,10 +262,10 @@ export default function AdminListings() {
                         <p className="alignText d-flex align-items-center">
                           $
                           {listing.price
-                            ? parseFloat(listing.price).toLocaleString("en", {
-                                useGrouping: true
+                            ? parseFloat(listing.price).toLocaleString('en', {
+                                useGrouping: true,
                               })
-                            : ""}
+                            : ''}
                           / mo
                         </p>
                       </td>
@@ -298,6 +304,7 @@ export default function AdminListings() {
           </div>
         </div>
       </div>
+      <Footer />
 
       <Modal.Root ref={createListingModalRef}>
         <Modal.Body width="90%">
@@ -311,7 +318,7 @@ export default function AdminListings() {
             />
           </Modal.Content>
 
-          <Modal.Footer style={{ justifyContent: "flex-end" }}>
+          <Modal.Footer style={{ justifyContent: 'flex-end' }}>
             <Modal.Action
               disabled={savingListingForm}
               outline
@@ -321,7 +328,7 @@ export default function AdminListings() {
 
             <Modal.Action
               disabled={savingListingForm}
-              text={savingListingForm ? "Saving..." : "Save"}
+              text={savingListingForm ? 'Saving...' : 'Save'}
               action={() => listingFormRef.current?.submit()}
             />
           </Modal.Footer>
@@ -359,6 +366,6 @@ export default function AdminListings() {
         totalEntries={totalListings}
         onPageChange={handlePageChange}
       />
-    </>
+    </div>
   )
 }
