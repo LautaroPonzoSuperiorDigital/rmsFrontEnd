@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
 export const EditInspectionButton = ({
   defaultImage,
@@ -7,18 +7,18 @@ export const EditInspectionButton = ({
   onClick,
   index,
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isDeletingHovered, setIsDeletingHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false)
+  const [isDeletingHovered, setIsDeletingHovered] = useState(false)
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
-    setIsDeletingHovered(true);
-  };
+    setIsHovered(true)
+    setIsDeletingHovered(true)
+  }
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
-    setIsDeletingHovered(false);
-  };
+    setIsHovered(false)
+    setIsDeletingHovered(false)
+  }
 
   return (
     <button
@@ -26,6 +26,7 @@ export const EditInspectionButton = ({
       onClick={() => onClick(index)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      style={{ marginBottom: '5px' }}
     >
       <span className="imageContainer">
         {isHovered ? hoverImage : defaultImage}
@@ -34,26 +35,26 @@ export const EditInspectionButton = ({
         <div className="confirmationBox">Edit This Inspection</div>
       )}
     </button>
-  );
-};
+  )
+}
 
 export const DeleteInspectionButton = ({
   defaultImage,
   hoverImage,
   onClick,
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isDeletingHovered, setIsDeletingHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false)
+  const [isDeletingHovered, setIsDeletingHovered] = useState(false)
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
-    setIsDeletingHovered(true);
-  };
+    setIsHovered(true)
+    setIsDeletingHovered(true)
+  }
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
-    setIsDeletingHovered(false);
-  };
+    setIsHovered(false)
+    setIsDeletingHovered(false)
+  }
 
   return (
     <button
@@ -69,5 +70,5 @@ export const DeleteInspectionButton = ({
         <div className="confirmationBox">Delete This Section</div>
       )}
     </button>
-  );
-};
+  )
+}

@@ -1,44 +1,44 @@
-import { useEffect, useRef, useState } from "react"
-import AdminChatRoom from "./AdminChatRoom/AdminChatRoom"
-import Nav from "../../../components/nav"
-import AdminChatRoomMessages from "./AdminChatRoomMessages"
-import ChatSendMessage from "./ChatSendMessage"
-import { socket } from "../../../components/socketManajer/socket"
-import { api } from "../../../services/api"
-import TicketsInfomartion from "./TicketsInformation/TicketsInfomartion"
-import AdminChatRoomNavBar from "./AdminChatRoomNavBar"
-import TicketsNavBar from "./TicketsNavBar"
-import { useAuth } from "../../../hooks/useAuth"
+import { useEffect, useRef, useState } from 'react'
+import AdminChatRoom from './AdminChatRoom/AdminChatRoom'
+import Nav from '../../../components/nav'
+import AdminChatRoomMessages from './AdminChatRoomMessages'
+import ChatSendMessage from './ChatSendMessage'
+import { socket } from '../../../components/socketManajer/socket'
+import { api } from '../../../services/api'
+import TicketsInfomartion from './TicketsInformation/TicketsInfomartion'
+import AdminChatRoomNavBar from './AdminChatRoomNavBar'
+import TicketsNavBar from './TicketsNavBar'
+import Footer from '../../../components/public/Footer'
 
 const chatRoomStyle = {
-  width: "33%",
+  width: '33%',
 
-  overflowY: "auto",
-  maxHeight: "100vh"
+  overflowY: 'auto',
+  maxHeight: '100vh',
 }
 const chatContaienrStyle = {
-  borderLeft: "1px solid #00000026",
-  borderRight: "1px solid #00000026",
-  height: "100%",
+  borderLeft: '1px solid #00000026',
+  borderRight: '1px solid #00000026',
+  height: '100%',
 
-  overflowY: "auto",
-  width: "33%"
+  overflowY: 'auto',
+  width: '33%',
 }
 
 const AdminChatRoomMessagesStyle = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-end",
-  padding: "10px 0px",
-  height: "64vh",
-  maxHeight: "64vh"
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-end',
+  padding: '0px 10px',
+  height: '64vh',
+  maxHeight: '64vh',
 }
 
 const TicketsInfomartionStyle = {
-  display: "flex",
-  maxHeight: "100vh",
-  padding: "20px 20px",
-  width: "33%"
+  display: 'flex',
+  maxHeight: '100vh',
+  padding: '20px 20px',
+  width: '33%',
 }
 
 const Chats = () => {
@@ -54,7 +54,7 @@ const Chats = () => {
     if (chatContainerRef.current) {
       const lastMessageElement = chatContainerRef.current.lastElementChild
       if (lastMessageElement) {
-        lastMessageElement.scrollIntoView({ behavior: "smooth" })
+        lastMessageElement.scrollIntoView({ behavior: 'smooth' })
       }
     }
   }
@@ -64,8 +64,8 @@ const Chats = () => {
   }, [filterMessages])
   // recieve all incoming messages from server
   useEffect(() => {
-    socket.on("event_message", (data) => {
-      console.log("Received message:", data)
+    socket.on('event_message', (data) => {
+      console.log('Received message:', data)
       // Update the state of the incoming messages variable
       setMessages((prevMessages) => [...prevMessages, data])
     })
@@ -73,7 +73,7 @@ const Chats = () => {
   //filter by chat room id
   useEffect(() => {
     const filterMessage = messages.filter(
-      (message) => message.roomChatId === targetChatRoomId
+      (message) => message.roomChatId === targetChatRoomId,
     )
     setFilterMessages(filterMessage)
   }, [targetChatRoomId, messages])
@@ -81,7 +81,7 @@ const Chats = () => {
   useEffect(() => {
     const getChatRooms = async () => {
       try {
-        const { data } = await api.get("/chat/chat-rooms")
+        const { data } = await api.get('/chat/chat-rooms')
         if (data.length > 0) {
           setChatRooms(data)
           const chatRoomsMessage = data.map((chatRoom) => chatRoom.Chats)
@@ -89,7 +89,7 @@ const Chats = () => {
           setTicketActiveRooms(data)
           setMessages(chatRoomsMessage.flat())
         } else {
-          console.log("adminListings its empty")
+          console.log('adminListings its empty')
           setChatRooms([])
         }
       } catch (err) {
@@ -101,7 +101,10 @@ const Chats = () => {
   }, [targetChatRoomId, key])
 
   return (
-    <div className="vh-100 d-flex flex-column w-100 ">
+    <div
+      className="vh-100 d-flex flex-column w-100 "
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+    >
       <Nav />
       <div className=" flex-grow-1 d-flex p-2  justify-content-center">
         <div style={chatRoomStyle} className="flex-grow-1">
@@ -137,10 +140,11 @@ const Chats = () => {
               <ul
                 ref={chatContainerRef}
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  overflow: "auto",
-                  flexGrow: "1"
+                  display: 'flex',
+                  flexDirection: 'column',
+                  overflow: 'auto',
+                  flexGrow: '1',
+                  padding: '0px 10px',
                 }}
               >
                 {filterMessages.map((message) => (
@@ -172,6 +176,7 @@ const Chats = () => {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
