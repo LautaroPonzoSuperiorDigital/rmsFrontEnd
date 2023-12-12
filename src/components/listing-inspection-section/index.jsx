@@ -1,120 +1,120 @@
-import PropTypes from "prop-types";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useListingInspections } from "../../hooks/useListingInspections";
-import { api } from "../../services/api";
-import { Input } from "../input";
-import { ListingInspectionSectionCategory } from "../listing-inspection-section-category";
+import PropTypes from 'prop-types'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useListingInspections } from '../../hooks/useListingInspections'
+import { api } from '../../services/api'
+import { Input } from '../input'
+import { ListingInspectionSectionCategory } from '../listing-inspection-section-category'
 import {
   CategoryList,
   Header,
   ListingInspectionSectionContainer,
   NewCategory,
-} from "./styles";
-import { formatDate } from "../../services/date";
-import { DateTime } from "luxon";
-import { useModal } from "../modal/context";
-import { useListingDetails } from "../../hooks/useListingDetails";
+} from './styles'
+import { formatDate } from '../../services/date'
+import { DateTime } from 'luxon'
+import { useModal } from '../modal/context'
+import { useListingDetails } from '../../hooks/useListingDetails'
 
 export function ListingInspectionSection({ section }) {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([])
 
-  const modal = useModal();
-  const { listing } = useListingDetails();
-  const { editingInspection, onSectionChanged } = useListingInspections();
-  const [isMobile, setIsMobile] = useState(false);
+  const modal = useModal()
+  const { listing } = useListingDetails()
+  const { editingInspection, onSectionChanged } = useListingInspections()
+  const [isMobile, setIsMobile] = useState(false)
 
-  const noteInputRef = useRef(null);
+  const noteInputRef = useRef(null)
 
   const inspectionTitle = useMemo(() => {
     if (!editingInspection) {
-      return null;
+      return null
     }
 
     const date = formatDate({
       date: editingInspection.date,
       formatOptions: DateTime.DATE_SHORT,
-    });
+    })
 
     return isMobile
       ? `${editingInspection.name}`
-      : `${editingInspection.name} ${date} /`;
-  }, [editingInspection, isMobile]);
+      : `${editingInspection.name} ${date} /`
+  }, [editingInspection, isMobile])
 
   const handleSaveNote = async () => {
     try {
       await api.patch(`/listing/${listing.id}/section/${section.id}`, {
         note: noteInputRef.current.value,
-      });
+      })
 
-      onSectionChanged({ ...section, note: noteInputRef.current.value });
+      onSectionChanged({ ...section, note: noteInputRef.current.value })
     } catch (err) {
-      console.log(err);
-      alert("Error saving note");
+      console.log(err)
+      alert('Error saving note')
     }
-  };
+  }
 
   const handleCreateCategory = async () => {
     try {
       const { data } = await api.post(`/section/${section.id}/category`, {
-        name: "Other",
-      });
+        name: 'Other',
+      })
 
-      setCategories((oldState) => [...oldState, data]);
+      setCategories((oldState) => [...oldState, data])
     } catch (err) {
-      alert("Error creating category");
+      alert('Error creating category')
     }
-  };
+  }
 
   const onCategoryRemoved = useCallback((removedCategoryId) => {
     setCategories((oldState) =>
-      oldState.filter((category) => category.id !== removedCategoryId)
-    );
-  }, []);
+      oldState.filter((category) => category.id !== removedCategoryId),
+    )
+  }, [])
 
   const onCategoryUpdated = useCallback(
     (updatedCategory) => {
-      const _categories = [...categories];
+      const _categories = [...categories]
       const categoryIndex = _categories.findIndex(
-        (category) => category.id === updatedCategory.id
-      );
+        (category) => category.id === updatedCategory.id,
+      )
 
       if (categoryIndex === -1) {
-        return;
+        return
       }
 
-      _categories.splice(categoryIndex, 1, updatedCategory);
-      setCategories(_categories);
+      _categories.splice(categoryIndex, 1, updatedCategory)
+      setCategories(_categories)
     },
-    [categories]
-  );
+    [categories],
+  )
 
   useEffect(() => {
     async function loadCategories() {
       try {
-        const { data } = await api.get(`/section/${section.id}/category`);
+        const { data } = await api.get(`/section/${section.id}/category`)
 
-        setCategories(data);
+        setCategories(data)
       } catch (err) {
-        alert("Error loading categories");
+        alert('Error loading categories')
       }
     }
 
-    loadCategories();
-  }, [section]);
+    loadCategories()
+  }, [section])
 
   useEffect(() => {
     function updateModalWidth() {
-      setIsMobile(window.outerWidth <= 768);
+      setIsMobile(window.outerWidth <= 768)
     }
 
-    updateModalWidth();
+    updateModalWidth()
 
-    window.addEventListener("resize", updateModalWidth);
+    window.addEventListener('resize', updateModalWidth)
 
     return () => {
-      window.removeEventListener("resize", updateModalWidth);
-    };
-  }, []);
+      window.removeEventListener('resize', updateModalWidth)
+    }
+  }, [])
 
   return (
     <ListingInspectionSectionContainer>
@@ -125,19 +125,17 @@ export function ListingInspectionSection({ section }) {
         <h1>{section.name}</h1>
       </Header>
 
-      {!isMobile && (
-        <Input
-          ref={noteInputRef}
-          label="NOTE"
-          defaultValue={section.note}
-          onBlur={handleSaveNote}
-          containerStyle={{
-            marginTop: "2.5rem",
-            alignSelf: "flex-start",
-            width: "35%",
-          }}
-        />
-      )}
+      <Input
+        ref={noteInputRef}
+        label="NOTE"
+        defaultValue={section.note}
+        onBlur={handleSaveNote}
+        containerStyle={{
+          marginTop: '2.5rem',
+          alignSelf: 'flex-start',
+          width: `${isMobile ? '100%' : '50%'}`,
+        }}
+      />
 
       <CategoryList>
         {categories.map((category) => (
@@ -156,9 +154,9 @@ export function ListingInspectionSection({ section }) {
         </NewCategory>
       </CategoryList>
     </ListingInspectionSectionContainer>
-  );
+  )
 }
 
 ListingInspectionSection.propTypes = {
   section: PropTypes.object.isRequired,
-};
+}

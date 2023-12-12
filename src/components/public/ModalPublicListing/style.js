@@ -14,6 +14,7 @@ export const ModalListingContainer = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
     overflow-y: scroll;
+    margin-bottom: 20px;
   }
 `
 export const ModalListingContainer2 = styled.div`
@@ -165,4 +166,12 @@ export const ContentContainer = styled.div`
   justify-content: space-between;
   height: 100%;
   margin-bottom: 20px; /* Add a margin to separate it from the Apply button */
+`
+
+export const FooterContainer = styled.div`
+  margin-top: auto;
+
+  @media (min-width: 900px) {
+    margin-top: 10px;
+  }
 `
