@@ -30,6 +30,7 @@ import DefaultImage from '../../../assets/img/defaultImage.png'
 import Spinner from '../../spinner/Spinner'
 import { BtnBackToSearch } from '../ListingCarousel/styles'
 import Footer from '../Footer'
+import { FooterContainer } from '../styles'
 
 const ModalPublicListings = () => {
   const [showModal, setShowModal] = useState(false)
@@ -237,6 +238,7 @@ const ModalPublicListings = () => {
           />
         )}
       </ModalListingContainer>
+
       <Footer />
     </ModalListingContainer2>
   )

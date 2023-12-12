@@ -1,12 +1,13 @@
-import { styled } from "styled-components"
+import { styled } from 'styled-components'
 
 export const InputContainer = styled.label`
-  max-width: ${({ focused }) => focused ? 'calc(100% - 2px)' : '100%'};
+  max-width: ${({ focused }) => (focused ? 'calc(100% - 2px)' : '100%')};
 
   display: flex;
   align-items: center;
 
-  border-bottom: 2px solid ${({ focused }) => focused ? '#197572' : 'rgba(0, 0, 0, 0.15)'};
+  border-bottom: 2px solid
+    ${({ focused }) => (focused ? '#197572' : 'rgba(0, 0, 0, 0.15)')};
   color: rgba(0, 0, 0, 0.65);
 
   cursor: text;
@@ -39,7 +40,7 @@ export const StyledInput = styled.input`
   }
 
   /* Firefox */
-  &[type=number] {
+  &[type='number'] {
     -moz-appearance: textfield;
   }
 `
