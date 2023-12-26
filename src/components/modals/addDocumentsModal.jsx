@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 import "../../styles/Documents/documents.css";
 import Close from "../../assets/img/close.svg";
 import CloseHover from "../../assets/img/closeHover.svg";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 
-const AddDocs = ({ listingsData, onClose }) => {
+const AddDocs = ({ onClose }) => {
   const { user } = useAuth();
   const [isCloseHovered, setIsCloseHovered] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [documentName, setDocumentName] = useState("");
-  const [base64File, setBase64File] = useState("");
   const [listingId, setListingId] = useState("");
-  // const [currentTenant, setCurrentTenant] = useState(null);
 
-  // Handle file change
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
@@ -24,35 +22,34 @@ const AddDocs = ({ listingsData, onClose }) => {
 
       reader.onload = () => {
         setSelectedFile(file);
-        setBase64File(reader.result);
       };
     }
   };
 
   const handleSaveClick = async () => {
-    if (!selectedFile || !documentName || !listingId) return;
-
     try {
-      const { data: listing } = await api.get(`listing/${listingId}`);
-      const { data: userData } = await api.get(`admin/user/${user.id}`);
+      if (!selectedFile || !documentName || !listingId) return;
+
+      const [listing, userData] = await Promise.all([
+        api.get(`listing/${listingId}`).then((response) => response.data),
+        api.get(`admin/user/${user.id}`).then((response) => response.data),
+      ]);
 
       if (listing.adminId !== userData.Admin.id) {
-        alert(`You are not allowed to attach file to Listing #${listingId}`);
+        alert(`You are not allowed to attach a file to Listing #${listingId}`);
         throw new Error(`Not authorized`);
       }
 
-      await api.post(
-        `/listing/${listingId}/document`,
-        JSON.stringify({
-          name: documentName,
-          file: base64File,
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const formData = new FormData();
+
+      formData.append("name", documentName);
+      formData.append("file", selectedFile);
+
+      await api.post(`/listing/${listingId}/document/form-data`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       onClose();
       window.location.reload();
@@ -60,7 +57,6 @@ const AddDocs = ({ listingsData, onClose }) => {
       console.error("Error saving document:", error);
     }
   };
-  /* sendDoc */
 
   const handleListingIdChange = (event) => {
     setListingId(event.target.value);
@@ -147,6 +143,11 @@ const AddDocs = ({ listingsData, onClose }) => {
       </div>
     </div>
   );
+};
+
+AddDocs.propTypes = {
+  listingsData: PropTypes.array.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default AddDocs;

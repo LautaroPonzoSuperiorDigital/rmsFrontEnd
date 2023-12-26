@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 const AddDocuments = ({ onClick }) => {
   return (
@@ -6,6 +6,10 @@ const AddDocuments = ({ onClick }) => {
       <span>+</span> Add Documents
     </button>
   );
+};
+
+AddDocuments.propTypes = {
+  onClick: PropTypes.func.isRequired,
 };
 
 export default AddDocuments;
