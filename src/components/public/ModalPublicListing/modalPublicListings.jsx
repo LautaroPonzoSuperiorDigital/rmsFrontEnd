@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types'
-import { useEffect, useState } from 'react'
-import '../../../styles/publIcListings/publicListings.css'
-import { api } from '../../../services/api'
-import ListingCarousel from '../ListingCarousel'
-import ApplicationModal from '../ApplicationModal/ApplicationModal'
+import { useEffect, useState } from "react";
+import "../../../styles/publIcListings/publicListings.css";
+import { api } from "../../../services/api";
+import ListingCarousel from "../ListingCarousel";
+import ApplicationModal from "../ApplicationModal/ApplicationModal";
 import {
   ModalListingContainer,
   ModalListingDescription,
@@ -19,69 +18,67 @@ import {
   BtnApply,
   FieldContainer,
   SpinnerContainer,
-  ContentContainer,
   ModalListingContainer2,
-} from './style'
-import { ModalProvider } from '../../modal/context'
-import ChevronLeft from '../../../assets/img/chevron.left (1).svg'
-import { ListingAlbum1 } from './ListingAlbum/ListingAlbum1'
-import { useNavigate, useParams } from 'react-router-dom'
-import DefaultImage from '../../../assets/img/defaultImage.png'
-import Spinner from '../../spinner/Spinner'
-import { BtnBackToSearch } from '../ListingCarousel/styles'
-import Footer from '../Footer'
-import { FooterContainer } from '../styles'
+} from "./style";
+import { ModalProvider } from "../../modal/context";
+import ChevronLeft from "../../../assets/img/chevron.left (1).svg";
+import { ListingAlbum1 } from "./ListingAlbum/ListingAlbum1";
+import { useNavigate, useParams } from "react-router-dom";
+import DefaultImage from "../../../assets/img/defaultImage.png";
+import Spinner from "../../spinner/Spinner";
+import { BtnBackToSearch } from "../ListingCarousel/styles";
+import Footer from "../Footer";
 
 const ModalPublicListings = () => {
-  const [showModal, setShowModal] = useState(false)
-  const [showApplicationModal, setShowApplicationModal] = useState(false)
-  const [images, setImage] = useState([])
-  const [showAlbum, setShowAlbum] = useState(false)
-  const [section, setSection] = useState([])
-  const [listing, setListing] = useState([])
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
-  const { id } = useParams()
+  // const [showModal, setShowModal] = useState(false);
+  const [showApplicationModal, setShowApplicationModal] = useState(false);
+  const [images, setImage] = useState([]);
+  const [showAlbum, setShowAlbum] = useState(false);
+  const [section, setSection] = useState([]);
+  const [listing, setListing] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   const handleBackToSearch = () => {
-    navigate(-1)
-  }
+    navigate(-1);
+  };
 
   const handleGoBack = () => {
-    setShowAlbum(false)
-  }
+    setShowAlbum(false);
+  };
 
   const handleShowAlbum = () => {
-    setShowAlbum(true)
-  }
+    setShowAlbum(true);
+  };
 
   /* Modal Application */
   const handleApply = () => {
-    setShowApplicationModal(true)
-  }
+    setShowApplicationModal(true);
+  };
 
   const handleModalClose = () => {
-    setShowModal(false)
-  }
+    // setShowModal(false);
+  };
 
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        const listing = await api.get(`/listing/${id}`)
-        setListing(listing.data)
-        const response = await api.get(`/listing/${id}/album`)
-        const data = response.data
-        const allImages = []
+        const listing = await api.get(`/listing/${id}`);
+        setListing(listing.data);
+        const response = await api.get(`/listing/${id}/album`);
+        const data = response.data;
+        const allImages = [];
         if (data.Sections && Array.isArray(data.Sections)) {
           data.Sections.forEach((section) => {
             if (section.Images && Array.isArray(section.Images)) {
-              allImages.push(...section.Images)
+              allImages.push(...section.Images);
             }
-          })
+          });
         }
 
-        setImage(allImages)
-        console.log('iamges', allImages)
+        setImage(allImages);
+        console.log("iamges", allImages);
         const sectionsArray = data.Sections.map((section) => ({
           name: section.Images[0]?.AlbumSection.Section.name,
           Album: {
@@ -89,16 +86,16 @@ const ModalPublicListings = () => {
               key: image.key,
             })),
           },
-        }))
-        console.log(sectionsArray)
-        setSection(sectionsArray)
-        setLoading(true)
+        }));
+        console.log(sectionsArray);
+        setSection(sectionsArray);
+        setLoading(true);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
-    fetchImage()
-  }, [])
+    };
+    fetchImage();
+  }, [id]);
 
   return (
     <ModalListingContainer2>
@@ -116,19 +113,19 @@ const ModalPublicListings = () => {
                 handleShowAlbum={handleShowAlbum}
               />
             ) : (
-              <div style={{ width: '100%', height: '100%' }}>
+              <div style={{ width: "100%", height: "100%" }}>
                 <BtnBackToSearch onClick={handleBackToSearch}>
                   <img
                     src={ChevronLeft}
                     alt="ChevronLeft"
-                    style={{ width: '8px', marginRight: '9px' }}
+                    style={{ width: "8px", marginRight: "9px" }}
                   />
                   Back To Search Results
                 </BtnBackToSearch>
                 <img
                   src={DefaultImage}
                   alt="Default"
-                  style={{ width: '100%', height: '100%' }}
+                  style={{ width: "100%", height: "100%" }}
                 />
               </div>
             )}
@@ -137,7 +134,7 @@ const ModalPublicListings = () => {
         <ModalListingDescription>
           <DescriptionContainer>
             <PriceText>
-              {listing.price}${' '}
+              {listing.price}${" "}
               <PriceSpan className="xmonth"> per month</PriceSpan>
             </PriceText>
           </DescriptionContainer>
@@ -174,11 +171,12 @@ const ModalPublicListings = () => {
                   <FieldValue>
                     {listing && listing.bathrooms} Bathrooms
                   </FieldValue>
+                  <FieldValue>{listing && listing.garages} Garages</FieldValue>
                   {listing.Amenities &&
                     listing.Amenities.slice(0, 3).map((amenity) => (
                       <FieldValueLi
                         key={amenity.id}
-                        style={{ marginLeft: '23px' }}
+                        style={{ marginLeft: "23px" }}
                       >
                         {amenity.name}
                       </FieldValueLi>
@@ -191,7 +189,7 @@ const ModalPublicListings = () => {
                     listing.Amenities.slice(3).map((amenity) => (
                       <FieldValueLi
                         key={amenity.id}
-                        style={{ marginLeft: '23px' }}
+                        style={{ marginLeft: "23px" }}
                       >
                         {amenity.name}
                       </FieldValueLi>
@@ -215,7 +213,7 @@ const ModalPublicListings = () => {
           </FieldContainer>
           <div
             className="d-flex align-items-center justify-content-center h-100 "
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
           >
             <BtnApply onClick={handleApply}>Apply</BtnApply>
           </div>
@@ -241,7 +239,7 @@ const ModalPublicListings = () => {
 
       <Footer />
     </ModalListingContainer2>
-  )
-}
+  );
+};
 
-export default ModalPublicListings
+export default ModalPublicListings;
