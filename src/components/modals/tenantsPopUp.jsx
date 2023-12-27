@@ -40,8 +40,9 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   const [inspections, setInspections] = useState([]);
   const [listingData, setListingData] = useState(null);
   const [decodedToken, setDecodedToken] = useState(null);
+  const [templatesData, setTemplatesData] = useState([]);
   const [documentsData, setDocumentsData] = useState([]);
-  const [activeSection, setActiveSection] = useState("DOCUMENTS");
+  const [activeSection, setActiveSection] = useState("TEMPLATES");
   const [imageSrc, setImageSrc] = useState(null);
   const [openApplicantForm, setApplicatonForm] = useState(false);
 
@@ -73,8 +74,36 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     setDecodedToken(jwtDecode(v));
   }
 
-  const handleAddDocsClick = () => {
-    setIsModalOpen(true);
+  // const handleAddDocsClick = () => {
+  //   setIsModalOpen(true);
+  // };
+
+  // const downloadDocument = (documentId) => {
+  //   api
+  //     .get(`/tenant/1/document/${documentId}/download`)
+  //     .then(({ data }) => console.log(data))
+  //     .catch((error) => console.error({ error }));
+  // };
+
+  const downloadDocument = (documentId) => {
+    api
+      .get(`/tenant/1/document/${documentId}/download`, {
+        responseType: "arraybuffer",
+      })
+      .then(({ data }) => {
+        const blob = new Blob([data], { type: "application/pdf" });
+        const link = document.createElement("a");
+
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `document_${documentId}.pdf`;
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+      })
+      .catch((error) => console.error({ error }));
   };
 
   async function getAdminData() {
@@ -169,11 +198,23 @@ const TenantModal = ({ selectedTenant, onClose }) => {
       });
   }
 
-  async function loadDocuments() {
+  async function loadTemplates() {
     try {
       const { data } = await api.get(
         `/tenant/${selectedTenant.id}/document-template`
       );
+
+      if (!data) throw new Error("Network data was not ok");
+
+      setTemplatesData(data.results);
+    } catch (err) {
+      alert("Error fetching documents data:", err);
+    }
+  }
+
+  async function loadDocuments() {
+    try {
+      const { data } = await api.get(`/tenant/${selectedTenant.id}/document`);
 
       if (!data) throw new Error("Network data was not ok");
 
@@ -206,14 +247,14 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   };
 
   useEffect(() => {
-    if (!decodedToken) getTokenFromLocalStorage();
-    if (decodedToken) {
-      getAdminData();
-      getTenantData();
-      fetchListings();
-      loadDocuments();
-      loadInspections();
-    }
+    if (!decodedToken) return getTokenFromLocalStorage();
+
+    getAdminData();
+    getTenantData();
+    fetchListings();
+    loadTemplates();
+    loadDocuments();
+    loadInspections();
   }, [decodedToken]);
 
   useEffect(() => {
@@ -231,7 +272,82 @@ const TenantModal = ({ selectedTenant, onClose }) => {
 
   const renderSectionContent = (section) => {
     switch (section) {
-      case "DOCUMENTS":
+      case "TEMPLATES": {
+        function chunkArray(array, chunkSize) {
+          const chunks = [];
+          if (array.length < 1) return chunks;
+          for (let i = 0; i < array.length; i += chunkSize) {
+            chunks.push(array.slice(i, i + chunkSize));
+          }
+          return chunks;
+        }
+
+        const templateChunks = chunkArray(templatesData, 4);
+
+        return (
+          <div className="renderBoxsOrder d-flex align-items-start justify-content-start gap-5">
+            {templateChunks.map((templateSubset, index) => (
+              <div
+                key={`boxInfoOrderCreate_${index}`}
+                className="boxInfoOrderCreate"
+              >
+                {templateSubset.map((template, templateIndex) => (
+                  <div className=" d-flex" key={template.id}>
+                    <BoxDocuments>
+                      <div
+                        className="flex flex-column"
+                        style={{ width: "100%" }}
+                      >
+                        <TitleDocuments className="">
+                          {template.name}
+                        </TitleDocuments>
+                        <DateTextDocuments>
+                          {new Date(template.dateCreated).toDateString()}
+                        </DateTextDocuments>
+                      </div>
+                      <div className="d-flex justify-content-end">
+                        {hoveredDocumentIndex === templateIndex ? (
+                          <img
+                            src={SendTemplateIconHover}
+                            alt="SendTemplateIconHover"
+                            className="imgBtnDocs delBox"
+                            onMouseLeave={() => handleDocumentHover(null)}
+                            onClick={() =>
+                              handleSendPandadocClick(
+                                template.id,
+                                false,
+                                adminData
+                              )
+                            }
+                          />
+                        ) : (
+                          <img
+                            src={SendTemplateIcon}
+                            alt="SendTemplateIcon"
+                            className="imgBtnDocs delBox"
+                            onMouseEnter={() =>
+                              handleDocumentHover(templateIndex)
+                            }
+                            onClick={() =>
+                              handleSendPandadocClick(
+                                template.id,
+                                true,
+                                adminData
+                              )
+                            }
+                          />
+                        )}
+                      </div>
+                    </BoxDocuments>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        );
+      }
+
+      case "DOCUMENTS": {
         function chunkArray(array, chunkSize) {
           const chunks = [];
           if (array.length < 1) return chunks;
@@ -250,8 +366,13 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                 key={`boxInfoOrderCreate_${index}`}
                 className="boxInfoOrderCreate"
               >
-                {documentSubset.map((document, documentIndex) => (
-                  <div className=" d-flex" key={document.id}>
+                {documentSubset.map((document) => (
+                  <div
+                    className="d-flex"
+                    key={document.id}
+                    onClick={() => downloadDocument(document.id)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <BoxDocuments>
                       <div
                         className="flex flex-column"
@@ -264,39 +385,6 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                           {new Date(document.dateCreated).toDateString()}
                         </DateTextDocuments>
                       </div>
-                      <div className="d-flex justify-content-end">
-                        {hoveredDocumentIndex === documentIndex ? (
-                          <img
-                            src={SendTemplateIconHover}
-                            alt="SendTemplateIconHover"
-                            className="imgBtnDocs delBox"
-                            onMouseLeave={() => handleDocumentHover(null)}
-                            onClick={() =>
-                              handleSendPandadocClick(
-                                document.id,
-                                false,
-                                adminData
-                              )
-                            }
-                          />
-                        ) : (
-                          <img
-                            src={SendTemplateIcon}
-                            alt="SendTemplateIcon"
-                            className="imgBtnDocs delBox"
-                            onMouseEnter={() =>
-                              handleDocumentHover(documentIndex)
-                            }
-                            onClick={() =>
-                              handleSendPandadocClick(
-                                document.id,
-                                true,
-                                adminData
-                              )
-                            }
-                          />
-                        )}
-                      </div>
                     </BoxDocuments>
                   </div>
                 ))}
@@ -304,6 +392,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
             ))}
           </div>
         );
+      }
 
       case "PAYMENT HISTORY":
         return <></>;
@@ -465,6 +554,13 @@ const TenantModal = ({ selectedTenant, onClose }) => {
               <div className="navegableSect d-flex">
                 <div
                   onClick={() =>
+                    handleHover(true, setActiveSection, "TEMPLATES")
+                  }
+                >
+                  <p> Templates</p>
+                </div>
+                <div
+                  onClick={() =>
                     handleHover(true, setActiveSection, "DOCUMENTS")
                   }
                 >
@@ -496,11 +592,11 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                   <p>Application Form</p>
                 </div>
               </div>
-              <div className="docFile d-flex align-items-start justify-content-end">
+              {/* <div className="docFile d-flex align-items-start justify-content-end">
                 <button className="addDocBtnPopUp" onClick={handleAddDocsClick}>
                   + Add Document
                 </button>
-              </div>
+              </div> */}
             </div>
             <div className="renderPopUpSection">
               {renderSectionContent(activeSection)}
