@@ -1,15 +1,16 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react"
-import { DeleteButton } from "../../../components/buttonApplicants"
-import Delete from "../../../assets/img/delete.svg"
-import DeleteIconHover from "../../../assets/img/deleteIconHover.svg"
-import TableSelect from "./TableSelect"
-import ButtonTenant from "./ButtonTenant"
-import { api } from "../../../services/api"
-import { useAuth } from "../../../hooks/useAuth"
-import ApplicantModal from "./ApplicantsModal/Applicant-modal/Applicant-modal"
+import { useEffect, useState } from 'react'
+import { DeleteButton } from '../../../components/buttonApplicants'
+import Delete from '../../../assets/img/delete.svg'
+import DeleteIconHover from '../../../assets/img/deleteIconHover.svg'
+import TableSelect from './TableSelect'
+import ButtonTenant from './ButtonTenant'
+import { api } from '../../../services/api'
+import { useAuth } from '../../../hooks/useAuth'
+import ApplicantModal from './ApplicantsModal/Applicant-modal/Applicant-modal'
+import DeleteListing from './../../../assets/img/deleteListings.svg'
 const tBodyStyle = {
-  height: "50px"
+  height: '50px'
 }
 
 const Table = ({
@@ -17,7 +18,8 @@ const Table = ({
   setNewTanant,
   setApplicants,
   setTableApplicants,
-  setDeleteTenant
+  setDeleteTenant,
+  setDeleteListing
 }) => {
   const [moveToTenant, setMoveToTenant] = useState([])
   const [applicant, setApplicant] = useState([])
@@ -41,72 +43,106 @@ const Table = ({
       setDeleteTenant(true)
     } catch (err) {
       console.log(err)
+    }
+  }
+
+  const deleteScreening = async (e, id) => {
+    e.stopPropagation()
+    try {
+      const res = await api.delete(`/application-screening/${id}`)
+      console.log(res)
+      setDeleteListing(true)
+    } catch (err) {
       console.log(err)
     }
   }
 
   useEffect(() => {
-    console.log(applicants)
     setApplicant(applicants)
+    console.log(applicants)
   }, [applicants])
 
   return (
     <>
-      {" "}
-      <table className="table table-responsive-lg">
-        <thead className="tables">
-          <td className=" NAME1">
-            <p className="mb-2 g" style={{ width: "150px", margin: 0 }}>
+      {' '}
+      <table className='table table-responsive-lg'>
+        <thead className='tables'>
+          <td className=' NAME1'>
+            <p className='mb-2 g' style={{ width: '150px', margin: 0 }}>
               NAME
             </p>
           </td>
-          <td className="bor LISTING1">
-            <p className="mb-2 g">LISTINGS</p>
+          <td className='bor LISTING1'>
+            <p className='mb-2 g'>LISTINGS</p>
           </td>
-          <td className="bor">
-            <p className="mb-2 ms-5 g">APPROVAL STATUS</p>
+          <td className='bor'>
+            <p className='mb-2 ms-5 g'>APPROVAL STATUS</p>
           </td>
-          <td className="bor EMAIL1">
-            <p className="mb-2 g">EMAIL</p>
+          <td className='bor EMAIL1'>
+            <p className='mb-2 g'>EMAIL</p>
           </td>
-          <td className="bor">
-            <p className="mb-2 g">PHONE</p>
+          <td className='bor'>
+            <p className='mb-2 g'>PHONE</p>
           </td>
-          <td className="bor whiteSpace"></td>
-          <td className="bor">
-            <p className="deleteText g">DELETE</p>
+          <td className='bor whiteSpace'></td>
+          <td className='bor'>
+            <p className='deleteText g'>DELETE</p>
           </td>
         </thead>
 
         <tbody style={tBodyStyle}>
           {applicant.map((item) =>
-            item.length === 0 ||
-            item.User.ApplicationScreening.length == 0 ? null : (
+            item.length === 0 || item == 0 ? null : (
               <>
                 <tr
-                  className="tr-hover"
+                  className='tr-hover'
                   key={item.id}
                   onClick={(event) => {
                     handleOpenApplicantModal(item.id)
                   }}
                 >
-                  <td className="bor1">
+                  <td className='bor1'>
                     <div
-                      className="mt-3   Person"
-                      style={{ width: "150px", margin: 0 }}
+                      className='mt-3   Person'
+                      style={{ width: '150px', margin: 0 }}
                     >
                       <p>{item.User.name}</p>
                     </div>
                   </td>
-                  <td className="bor1">
-                    <div className="mt-3 ms-2" style={{ width: "250px" }}>
-                      <p key={item.id} style={{ margin: "0px" }}>
-                        {item.User?.ApplicationScreening[0]?.Listing?.location}
+                  <td className='bor1'>
+                    <div className='mt-3 ms-2' style={{ width: '250px' }}>
+                      {item.User?.ApplicationScreening.map(
+                        (applicationItem, index) => (
+                          <div
+                            className='d-flex w-100 justify-content-between'
+                            key={index}
+                          >
+                            <p
+                              key={applicationItem.id}
+                              style={{ margin: '0px' }}
+                            >
+                              {applicationItem.Listing?.location}
+                            </p>
+
+                            {item.User?.ApplicationScreening.length > 1 && (
+                              <img
+                                src={DeleteListing}
+                                alt='DeleteListing'
+                                onClick={(e) =>
+                                  deleteScreening(e, applicationItem.id)
+                                }
+                              />
+                            )}
+                          </div>
+                        )
+                      )}
+                      <p key={item.id} style={{ margin: '0px' }}>
+                        {/* {item.User?.ApplicationScreening[0]?.Listing?.location} */}
                       </p>
                     </div>
                   </td>
-                  <td className="bor1">
-                    <div className="mt-3 ms-5">
+                  <td className='bor1'>
+                    <div className='mt-3 ms-5'>
                       {item.approvalStatus && (
                         <TableSelect
                           approbalStatus={item.approvalStatus}
@@ -118,19 +154,19 @@ const Table = ({
                       )}
                     </div>
                   </td>
-                  <td className="bor1">
-                    <div className="mt-3" style={{ width: "100px" }}>
-                      <p style={{ margin: "0px" }}>{item.User.email}</p>
+                  <td className='bor1'>
+                    <div className='mt-3' style={{ width: '100px' }}>
+                      <p style={{ margin: '0px' }}>{item.User.email}</p>
                     </div>
                   </td>
-                  <td className="bor1">
-                    <div className="mt-3 ms-1">
+                  <td className='bor1'>
+                    <div className='mt-3 ms-1'>
                       <p>{item.phoneNumber}</p>
                     </div>
                   </td>
-                  <td className="bor1">
-                    <div className="mtt">
-                      {item.approvalStatus === "LEASE_AGREEMENT_SIGNED" && (
+                  <td className='bor1'>
+                    <div className='mtt'>
+                      {item.approvalStatus === 'LEASE_AGREEMENT_SIGNED' && (
                         <ButtonTenant
                           key={item.id}
                           applicantionScreening={item.User.ApplicationScreening}
@@ -141,14 +177,14 @@ const Table = ({
                       )}
                     </div>
                   </td>
-                  <td className="bor1">
-                    <div className="deleteBtn1">
+                  <td className='bor1'>
+                    <div className='deleteBtn1'>
                       <DeleteButton
-                        info={"Tenant"}
+                        info={'Tenant'}
                         onClick={(e) => HandleDelete(item.id, e)}
-                        defaultImage={<img src={Delete} alt="Delete" />}
+                        defaultImage={<img src={Delete} alt='Delete' />}
                         hoverImage={
-                          <img src={DeleteIconHover} alt="DeleteIconHover" />
+                          <img src={DeleteIconHover} alt='DeleteIconHover' />
                         }
                       />
                     </div>
