@@ -258,7 +258,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
 
                   {myselectedListing && (
                     <FieldValue>
-                      {myselectedListing.id.toString().padStart(6, '0')}
+                      {myselectedListing?.id?.toString().padStart(6, '0')}
                     </FieldValue>
                   )}
                 </div>
@@ -286,10 +286,10 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                   <FieldText>City</FieldText>
                   {myselectedListing && (
                     <FieldValue>
-                      {myselectedListing.location
-                        .split(', ')
-                        .slice(-2)
-                        .join(', ')}
+                      {myselectedListing?.location
+                        ?.split(', ')
+                        ?.slice(-2)
+                        ?.join(', ')}
                     </FieldValue>
                   )}
                 </div>

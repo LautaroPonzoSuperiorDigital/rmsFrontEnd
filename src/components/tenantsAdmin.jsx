@@ -1,132 +1,132 @@
-import React from 'react'
-import Nav from './nav'
-import { useState, useEffect } from 'react'
-import '../styles/tenants.css'
-import Edit from '../assets/img/Edit.svg'
-import EditHover from '../assets/img/EditHover.svg'
-import Delete from '../assets/img/delete.svg'
-import DeleteIconHover from '../assets/img/deleteIconHover.svg'
-import CheckMark from '../assets/img/checkMark.svg'
-import { EditButton, DeleteButton } from './Buttons'
-import EditModal from './modals'
-import CheckBoxLog from './checkBox'
-import Search from './search'
-import Pagination from './paginations'
-import '../styles/modal.css'
-import TenantModal from './modals/tenantsPopUp'
-import { api } from '../services/api'
-import { useAuth } from '../hooks/useAuth'
-import Footer from './public/Footer'
+// import React from "react";
+import Nav from "./nav";
+import { useState, useEffect } from "react";
+import "../styles/tenants.css";
+import Edit from "../assets/img/Edit.svg";
+import EditHover from "../assets/img/EditHover.svg";
+import Delete from "../assets/img/delete.svg";
+import DeleteIconHover from "../assets/img/deleteIconHover.svg";
+import CheckMark from "../assets/img/checkMark.svg";
+import { EditButton, DeleteButton } from "./Buttons";
+import EditModal from "./modals";
+import CheckBoxLog from "./checkBox";
+import Search from "./search";
+import Pagination from "./paginations";
+import "../styles/modal.css";
+import TenantModal from "./modals/tenantsPopUp";
+import { api } from "../services/api";
+// import { useAuth } from "../hooks/useAuth";
+import Footer from "./public/Footer";
 
 const TenantsAdmin = () => {
-  const { user } = useAuth()
-  const [isEditOpen, setIsEditOpen] = useState(false)
-  const [editTenant, setEditTenant] = useState(null)
-  const [tenants, setTenants] = useState([])
-  const [showMissedPayment, setShowMissedPayment] = useState(false)
-  const [selectedTenant, setSelectedTenant] = useState(null)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [selectedTenantId, setSelectedTenantId] = useState(null)
-  const [selectedField, setSelectedField] = useState(null)
-  const [editedTenant, setEditedTenant] = useState(null)
-  const [selectedListingId, setSelectedListingId] = useState(null)
+  // const { user } = useAuth();
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editTenant, setEditTenant] = useState(null);
+  const [tenants, setTenants] = useState([]);
+  const [showMissedPayment, setShowMissedPayment] = useState(false);
+  const [selectedTenant, setSelectedTenant] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [selectedTenantId, setSelectedTenantId] = useState(null);
+  const [selectedField, setSelectedField] = useState(null);
+  const [editedTenant, setEditedTenant] = useState(null);
+  // const [selectedListingId, setSelectedListingId] = useState(null);
 
-  const PAGE_SIZE = 10
-  const totalTenants = tenants.length
-  const totalPages = Math.ceil(totalTenants / PAGE_SIZE)
+  const PAGE_SIZE = 10;
+  const totalTenants = tenants.length;
+  const totalPages = Math.ceil(totalTenants / PAGE_SIZE);
 
   const filteredTenants = showMissedPayment
     ? tenants.filter(
         (tenant) =>
           tenant.approvalStatus &&
-          tenant.approvalStatus.includes('Missed Payment'),
+          tenant.approvalStatus.includes("Missed Payment")
       )
-    : tenants
+    : tenants;
 
   const countMissedPaymentTenants = () =>
     tenants.filter(
       (tenant) =>
         tenant.approvalStatus &&
-        tenant.approvalStatus.includes('Missed Payment'),
-    ).length
+        tenant.approvalStatus.includes("Missed Payment")
+    ).length;
 
   const tenantsPerPage = filteredTenants.slice(
     (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE,
-  )
+    currentPage * PAGE_SIZE
+  );
 
   /* popUp */
   const handleCellClick = (tenant, field, event) => {
-    if (!event.currentTarget.classList.contains('buttonsNoMod')) {
-      setSelectedTenant(tenant)
-      setSelectedField(field)
+    if (!event.currentTarget.classList.contains("buttonsNoMod")) {
+      setSelectedTenant(tenant);
+      setSelectedField(field);
     }
-  }
+  };
   /* popUp */
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber)
-  }
+    setCurrentPage(pageNumber);
+  };
 
   const handleDeleteTenant = (tenantId) => {
-    const updatedTenants = tenants.filter((tenant) => tenant.id !== tenantId)
-    setTenants(updatedTenants)
+    const updatedTenants = tenants.filter((tenant) => tenant.id !== tenantId);
+    setTenants(updatedTenants);
     api
       .delete(`/tenant/${tenantId}`)
       .then((response) => {
-        console.log('Tenant deleted:', response.data)
+        console.log("Tenant deleted:", response.data);
       })
       .catch((error) => {
-        console.error('Error deleting tenant:', error)
-        setTenants(tenants)
-      })
-  }
+        console.error("Error deleting tenant:", error);
+        setTenants(tenants);
+      });
+  };
 
   const handleCheckBoxChange = (value) => {
-    setShowMissedPayment(value)
-  }
+    setShowMissedPayment(value);
+  };
 
   const handleSearch = (searchResults) => {
-    setTenants(searchResults)
-  }
+    setTenants(searchResults);
+  };
 
   const handleEditClick = (tenant) => {
-    setEditedTenant(tenant)
-    setIsEditOpen(true)
-  }
+    setEditedTenant(tenant);
+    setIsEditOpen(true);
+  };
 
   const handleCloseEditModal = () => {
-    setIsEditOpen(false)
-    setEditTenant(null)
-  }
+    setIsEditOpen(false);
+    setEditTenant(null);
+  };
 
   const handleSaveModal = (updatedTenant) => {
     const updatedTenants = tenants.map((tenant) =>
-      tenant.id === updatedTenant.id ? updatedTenant : tenant,
-    )
-    setTenants(updatedTenants)
-    setIsEditOpen(false)
-    setEditedTenant(null)
-  }
+      tenant.id === updatedTenant.id ? updatedTenant : tenant
+    );
+    setTenants(updatedTenants);
+    setIsEditOpen(false);
+    setEditedTenant(null);
+  };
 
   useEffect(() => {
     api.get(`/listing`).then(({ data: listings }) => {
       listings.map((listing, index) => {
-        console.log(listing, index)
+        console.log(listing, index);
         api.get(`/listing/${listing.id}/current-tenant`).then(({ data }) => {
           const tenantObj = {
-            ...data['Tenant'],
+            ...data["Tenant"],
             listingId: listing.id,
-          }
+          };
 
-          setTenants((prevTenants) => [...prevTenants, tenantObj])
-        })
-      })
-    })
-  }, [])
+          setTenants((prevTenants) => [...prevTenants, tenantObj]);
+        });
+      });
+    });
+  }, []);
 
   return (
     <div
-      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
     >
       <Nav />
       <div className="container-fluid p-0">
@@ -149,7 +149,7 @@ const TenantsAdmin = () => {
                     onChange={handleCheckBoxChange}
                   />
                   <p className="m-2 mb-0 tenantShow">
-                    Show only tenants with missed payment{' '}
+                    Show only tenants with missed payment{" "}
                     <span className="filterMissedPayment">
                       {showMissedPayment ? countMissedPaymentTenants() : 0}
                     </span>
@@ -199,48 +199,48 @@ const TenantsAdmin = () => {
                 </thead>
                 <tbody>
                   {tenantsPerPage
-                    .filter((tenant) => tenant.approvalStatus === 'APPROVED')
+                    .filter((tenant) => tenant.approvalStatus === "APPROVED")
                     .map((tenant) => {
                       if (
                         showMissedPayment &&
-                        !tenant.approvalStatus.includes('Missed Payment')
+                        !tenant.approvalStatus.includes("Missed Payment")
                       ) {
-                        return null
+                        return null;
                       }
                       return (
                         <tr key={`tenant-${tenant.id}`} className="tr-hover">
                           <td
                             onClick={(event) =>
-                              handleCellClick(tenant, 'name', event)
+                              handleCellClick(tenant, "name", event)
                             }
                             className="p-0"
-                            style={{ width: '150px !important', margin: 0 }}
+                            style={{ width: "150px !important", margin: 0 }}
                           >
                             <p className=" h">{tenant.User.name}</p>
                           </td>
                           <td
                             onClick={(event) =>
-                              handleCellClick(tenant, 'listings', event)
+                              handleCellClick(tenant, "listings", event)
                             }
                           >
                             {
                               <p className="p1 h">
-                                {String(tenant.listingId).padStart(6, '0')}
+                                {String(tenant.listingId).padStart(6, "0")}
                               </p>
                             }
                           </td>
                           <td
                             onClick={(event) =>
-                              handleCellClick(tenant, 'status', event)
+                              handleCellClick(tenant, "status", event)
                             }
                           >
                             <p
                               className={`p1 h ${
                                 tenant &&
                                 tenant.approvalStatus &&
-                                tenant.approvalStatus.includes('Missed Payment')
-                                  ? 'missed'
-                                  : ''
+                                tenant.approvalStatus.includes("Missed Payment")
+                                  ? "missed"
+                                  : ""
                               }`}
                             >
                               {tenant && tenant.approvalStatus}
@@ -248,31 +248,31 @@ const TenantsAdmin = () => {
                           </td>
                           <td
                             onClick={(event) =>
-                              handleCellClick(tenant, 'status', event)
+                              handleCellClick(tenant, "status", event)
                             }
                           >
                             <p className="p1 h">{tenant.User.email}</p>
                           </td>
                           <td
                             onClick={(event) =>
-                              handleCellClick(tenant, 'status', event)
+                              handleCellClick(tenant, "status", event)
                             }
                           >
                             <p className="p1 h">{tenant.phoneNumber}</p>
                           </td>
                           <td
                             onClick={(event) =>
-                              handleCellClick(tenant, 'status', event)
+                              handleCellClick(tenant, "status", event)
                             }
                           >
                             <p className="p1 h">{tenant.contract}</p>
                           </td>
                           <td
                             onClick={(event) =>
-                              handleCellClick(tenant, 'status', event)
+                              handleCellClick(tenant, "status", event)
                             }
                           >
-                            {tenant.backgroundCheck === 'check' ? (
+                            {tenant.backgroundCheck === "check" ? (
                               <img
                                 className="checkMark"
                                 src={CheckMark}
@@ -301,7 +301,7 @@ const TenantsAdmin = () => {
                             />
                           </td>
                         </tr>
-                      )
+                      );
                     })}
                 </tbody>
               </table>
@@ -326,7 +326,7 @@ const TenantsAdmin = () => {
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default TenantsAdmin
+export default TenantsAdmin;

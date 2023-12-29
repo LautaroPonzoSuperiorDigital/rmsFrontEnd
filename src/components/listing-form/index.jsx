@@ -40,6 +40,7 @@ const formFields = [
   { field: "isPublic", path: "checked" },
   { field: "bedrooms", path: "value" },
   { field: "bathrooms", path: "value" },
+  { field: "garages", path: "value" },
   { field: "amenities", path: "value", multiLines: true },
   { field: "requirements", path: "value", multiLines: true },
 ];
@@ -65,9 +66,7 @@ function ListingFormWithRef(
     async (listingFormData) => {
       const album = listingAlbumRef.current?.getAlbum();
 
-      if (!album) {
-        return;
-      }
+      if (!album) return;
 
       const method = isUpdating ? "patch" : "post";
 
@@ -101,20 +100,16 @@ function ListingFormWithRef(
 
       return { ...savedListing, image };
     },
-    [user, adminId]
+    [isUpdating, adminId]
   );
 
   const saveListing = useCallback(
     async (listingFormData) => {
-      if (!listing) {
-        return;
-      }
+      if (!listing) return;
 
       const album = listingAlbumRef.current?.getAlbum();
 
-      if (!album) {
-        return;
-      }
+      if (!album) return;
 
       const { data: savedListing } = await api.patch(`/listing/${listing.id}`, {
         ...listingFormData,
@@ -331,6 +326,13 @@ function ListingFormWithRef(
                 name="bathrooms"
                 label="BATHROOMS"
                 defaultValue={listing?.bathrooms}
+                disabled={isSaving}
+              />
+
+              <Input
+                name="garages"
+                label="GARAGES"
+                defaultValue={listing?.garages}
                 disabled={isSaving}
               />
             </ExtraDetail>

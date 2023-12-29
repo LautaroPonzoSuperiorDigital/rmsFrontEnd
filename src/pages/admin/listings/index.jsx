@@ -1,129 +1,121 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-
-import CheckMarkListing from '../../../assets/img/checkMark.svg'
-import Edit from '../../../assets/img/Edit.svg'
-import EditHover from '../../../assets/img/EditHover.svg'
-import Delete from '../../../assets/img/delete.svg'
-import DeleteIconHover from '../../../assets/img/deleteIconHover.svg'
-
-import { api } from '../../../services/api'
-
-import Nav from '../../../components/nav'
-import CheckBoxLog from '../../../components/checkBox'
-import SearchListings from '../../../components/searchListings'
-import { EditButton, DeleteButton } from '../../../components/buttonListings'
-import Pagination from '../../../components/paginations'
-import AddListings from '../../../components/addListing'
-import { Modal } from '../../../components/modal'
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import CheckMarkListing from "../../../assets/img/checkMark.svg";
+import Edit from "../../../assets/img/Edit.svg";
+import EditHover from "../../../assets/img/EditHover.svg";
+import Delete from "../../../assets/img/delete.svg";
+import DeleteIconHover from "../../../assets/img/deleteIconHover.svg";
+import { api } from "../../../services/api";
+import Nav from "../../../components/nav";
+import CheckBoxLog from "../../../components/checkBox";
+import SearchListings from "../../../components/searchListings";
+import { EditButton, DeleteButton } from "../../../components/buttonListings";
+import Pagination from "../../../components/paginations";
+import AddListings from "../../../components/addListing";
+import { Modal } from "../../../components/modal";
 import {
   ListingDetailsContext,
   ListingDetailsProvider,
   ListingDetailsTabs,
-} from '../../../context/listingDetailsContext'
-import { ListingForm } from '../../../components/listing-form'
-import { ListingDetails } from '../../../components/listing-details'
-import { createListingImage } from '../../../services/listing'
-import { useAuth } from '../../../hooks/useAuth'
-import Footer from '../../../components/public/Footer'
+} from "../../../context/listingDetailsContext";
+import { ListingForm } from "../../../components/listing-form";
+import { ListingDetails } from "../../../components/listing-details";
+import { createListingImage } from "../../../services/listing";
+import Footer from "../../../components/public/Footer";
 
-const PAGE_SIZE = 10
+const PAGE_SIZE = 10;
 
 export default function AdminListings() {
-  const { user } = useAuth()
-
-  const [listings, setListings] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false)
-  const [searchId, setSearchId] = useState('')
-  const [searchResults, setSearchResults] = useState([])
-  const [listingDetails, setListingDetails] = useState(null)
-  const [savingListingForm, setSavingListingForm] = useState(false)
-  const [isEditingListing, setIsEditingListing] = useState(false)
-  const [updateListing, setUpdateListing] = useState(false)
-
-  const createListingModalRef = useRef(null)
-  const listingFormRef = useRef(null)
-  const listingDetailsModalRef = useRef(null)
-
-  const totalListings = listings.length
-  const totalPages = Math.ceil(totalListings / PAGE_SIZE)
+  const [listings, setListings] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showOnlyPublicListings, setShowOnlyPublicListings] = useState(false);
+  const [searchId, setSearchId] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [listingDetails, setListingDetails] = useState(null);
+  const [savingListingForm, setSavingListingForm] = useState(false);
+  const [isEditingListing, setIsEditingListing] = useState(false);
+  const [updateListing, setUpdateListing] = useState(false);
+  const createListingModalRef = useRef(null);
+  const listingFormRef = useRef(null);
+  const listingDetailsModalRef = useRef(null);
+  const totalListings = listings.length;
+  const totalPages = Math.ceil(totalListings / PAGE_SIZE);
 
   const filteredListings = useMemo(() => {
     if (searchId) {
-      return searchResults
+      return searchResults;
     }
 
     if (showOnlyPublicListings) {
-      return listings.filter((listing) => listing.isPublic)
+      return listings.filter((listing) => listing.isPublic);
     }
 
-    return listings
-  }, [searchId, searchResults, listings, showOnlyPublicListings])
+    return listings;
+  }, [searchId, searchResults, listings, showOnlyPublicListings]);
 
   const onListingSaved = useCallback((savedListing) => {
-    setListings((oldState) => [...oldState, savedListing])
-  }, [])
+    setListings((oldState) => [...oldState, savedListing]);
+  }, []);
 
   const handleSearch = (searchValue) => {
-    setSearchId(searchValue)
+    setSearchId(searchValue);
 
-    if (searchValue === '') {
-      setSearchResults([])
-      return
+    if (searchValue === "") {
+      setSearchResults([]);
+      return;
     }
 
     const filteredListings = listings.filter((listing) => {
-      const paddedId = listing.id.toString().padStart(6, '0')
+      const paddedId = listing.id.toString().padStart(6, "0");
       return (
         paddedId === searchValue ||
         listing.location.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    })
+      );
+    });
 
-    setSearchResults(filteredListings)
-  }
+    setSearchResults(filteredListings);
+  };
 
   const handleAddListing = () => {
-    createListingModalRef.current.open()
-  }
+    createListingModalRef.current.open();
+  };
 
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber)
-  }
+    setCurrentPage(pageNumber);
+  };
 
   const handleUpdateListing = () => {
-    setIsEditingListing(true)
-  }
+    setIsEditingListing(true);
+  };
 
   const handleDeleteListing = async (listingId) => {
     const shouldRemove = confirm(
-      'Are you sure you want to remove this listing? This action cannot be undone.',
-    )
+      "Are you sure you want to remove this listing? This action cannot be undone."
+    );
 
     if (!shouldRemove) {
-      return
+      return;
     }
 
     try {
-      await api.delete(`/listing/${listingId}`)
+      await api.delete(`/listing/${listingId}`);
 
       const updatedListing = listings.filter(
-        (listing) => listing.id !== listingId,
-      )
-      setListings(updatedListing)
+        (listing) => listing.id !== listingId
+      );
+      setListings(updatedListing);
     } catch (err) {
-      alert('Failed to delete listing')
+      alert("Failed to delete listing");
     }
-  }
+  };
 
   const handleCheckBoxChange = () => {
-    setShowOnlyPublicListings(!showOnlyPublicListings)
-  }
+    setShowOnlyPublicListings(!showOnlyPublicListings);
+  };
 
   const handleOpenListingDetails = (listing) => {
-    setListingDetails(listing)
-    listingDetailsModalRef.current?.open()
-  }
+    setListingDetails(listing);
+    listingDetailsModalRef.current?.open();
+  };
 
   useEffect(() => {
     function loadAdminDataAndListings() {
@@ -137,32 +129,32 @@ export default function AdminListings() {
                   listings.map((listing, index) => ({
                     ...listing,
                     image: imageUrls[index],
-                  })),
-                )
+                  }))
+                );
               })
               .catch((error) => {
-                console.error('Error loading listing images:', error)
-              })
-            setListings(listings)
+                console.error("Error loading listing images:", error);
+              });
+            setListings(listings);
           })
-          .catch((error) => alert('Error loading listings data: ', error))
+          .catch((error) => alert("Error loading listings data: ", error));
       } catch (err) {
-        console.log(err)
-        alert('Error loading admin and listings data: ', err)
+        console.log(err);
+        alert("Error loading admin and listings data: ", err);
       }
     }
-    setUpdateListing(false)
-    loadAdminDataAndListings()
-  }, [updateListing])
+    setUpdateListing(false);
+    loadAdminDataAndListings();
+  }, [updateListing]);
 
   return (
     <div
-      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
     >
       <Nav />
       <div
         className="container-fluid"
-        style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
+        style={{ display: "flex", flexDirection: "column", flex: 1 }}
       >
         <div className="d-flex w-100 mb-3">
           <div className="container tenantsContainer">
@@ -175,7 +167,7 @@ export default function AdminListings() {
                     onChange={handleCheckBoxChange}
                   />
                   <p className="m-2 mb-0 publicShow">
-                    Show only public listings{' '}
+                    Show only public listings{" "}
                   </p>
                 </label>
               </div>
@@ -230,7 +222,7 @@ export default function AdminListings() {
                             src={listing.image}
                             alt="Listing image"
                           />
-                          {listing.id.toString().padStart(6, '0')}
+                          {listing.id.toString().padStart(6, "0")}
                         </p>
                       </td>
                       <td className="h p1 td td2">
@@ -241,20 +233,20 @@ export default function AdminListings() {
                       <td className="h p1 td td2">
                         <p className="alignText d-flex align-items-center">
                           {listing.lotSize
-                            ? listing.lotSize.toLocaleString('EN', {
+                            ? listing.lotSize.toLocaleString("EN", {
                                 maximumFractionDigits: 0,
                               })
-                            : ''}
+                            : ""}
                           &nbsp;&nbsp;Sq. Ft. Per County
                         </p>
                       </td>
                       <td className="h p1 td td2">
                         <p className="alignText d-flex align-items-center">
                           {listing.houseSize
-                            ? listing.houseSize.toLocaleString('EN', {
+                            ? listing.houseSize.toLocaleString("EN", {
                                 maximumFractionDigits: 0,
                               })
-                            : ''}
+                            : ""}
                           &nbsp;&nbsp;Sq. Ft. Per County
                         </p>
                       </td>
@@ -262,10 +254,10 @@ export default function AdminListings() {
                         <p className="alignText d-flex align-items-center">
                           $
                           {listing.price
-                            ? parseFloat(listing.price).toLocaleString('en', {
+                            ? parseFloat(listing.price).toLocaleString("en", {
                                 useGrouping: true,
                               })
-                            : ''}
+                            : ""}
                           / mo
                         </p>
                       </td>
@@ -318,7 +310,7 @@ export default function AdminListings() {
             />
           </Modal.Content>
 
-          <Modal.Footer style={{ justifyContent: 'flex-end' }}>
+          <Modal.Footer style={{ justifyContent: "flex-end" }}>
             <Modal.Action
               disabled={savingListingForm}
               outline
@@ -328,7 +320,7 @@ export default function AdminListings() {
 
             <Modal.Action
               disabled={savingListingForm}
-              text={savingListingForm ? 'Saving...' : 'Save'}
+              text={savingListingForm ? "Saving..." : "Save"}
               action={() => listingFormRef.current?.submit()}
             />
           </Modal.Footer>
@@ -367,5 +359,5 @@ export default function AdminListings() {
         onPageChange={handlePageChange}
       />
     </div>
-  )
+  );
 }

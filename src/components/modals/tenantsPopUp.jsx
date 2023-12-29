@@ -1,104 +1,135 @@
-import "../../styles/PopUp.css"
-import React, { useState, useEffect } from "react"
-import closeListing2 from "../../assets/img/close.svg"
-import closeHover from "../../assets/img/closeHover.svg"
-import SendTemplateIcon from "../../assets/img/SendTemplateIconHover.svg"
-import SendTemplateIconHover from "../../assets/img/SendTemplateIconHover.svg"
-import AddDocs from "./addDocumentsModal"
-import { api } from "../../services/api"
-import jwtDecode from "jwt-decode"
-import { ListingAlbumPreview } from "../listing-album-preview"
-import { ListingInspectionHistoryCard } from "../listing-inspection-history/styles"
-import { formatDate } from "../../services/date"
-import { DateTime } from "luxon"
-import { createListingImage } from "../../services/listing"
-import ApplicantsModal from "../../pages/admin/applicants/ApplicantsModal/ApplicantsModal"
+/* eslint-disable react/prop-types */
+/* eslint-disable no-inner-declarations */
+/* eslint-disable no-case-declarations */
+import "../../styles/PopUp.css";
+import { useState, useEffect } from "react";
+import closeListing2 from "../../assets/img/close.svg";
+import closeHover from "../../assets/img/closeHover.svg";
+import SendTemplateIcon from "../../assets/img/SendTemplateIconHover.svg";
+import SendTemplateIconHover from "../../assets/img/SendTemplateIconHover.svg";
+import AddDocs from "./addDocumentsModal";
+import { api } from "../../services/api";
+import jwtDecode from "jwt-decode";
+import { ListingInspectionHistoryCard } from "../listing-inspection-history/styles";
+import { formatDate } from "../../services/date";
+import { DateTime } from "luxon";
+import { createListingImage } from "../../services/listing";
 import {
   ApplicationContainer,
   BoxDocuments,
   DateTextDocuments,
   ModalContainer,
   ModalOverlayTenant,
-  TitleDocuments
-} from "./style"
-import EmergencyContactaApplicant from "../../pages/admin/applicants/ApplicantsModal/EmergencyContactaApplicant"
-import IncomeApplicants from "../../pages/admin/applicants/ApplicantsModal/IncomeApplicants"
-import RentalHistoryApplicant from "../../pages/admin/applicants/ApplicantsModal/RentalHistory"
-import RoommatesApplicant from "../../pages/admin/applicants/ApplicantsModal/RoommatesApplicant"
-import VehiclesApplicant from "../../pages/admin/applicants/ApplicantsModal/VehiclesApplicant"
-import OtherInformationApplicant from "../../pages/admin/applicants/OtherInformation Applicant"
+  TitleDocuments,
+} from "./style";
+import EmergencyContactaApplicant from "../../pages/admin/applicants/ApplicantsModal/EmergencyContactaApplicant";
+import IncomeApplicants from "../../pages/admin/applicants/ApplicantsModal/IncomeApplicants";
+import RentalHistoryApplicant from "../../pages/admin/applicants/ApplicantsModal/RentalHistory";
+import RoommatesApplicant from "../../pages/admin/applicants/ApplicantsModal/RoommatesApplicant";
+import VehiclesApplicant from "../../pages/admin/applicants/ApplicantsModal/VehiclesApplicant";
+import OtherInformationApplicant from "../../pages/admin/applicants/OtherInformation Applicant";
 
 const TenantModal = ({ selectedTenant, onClose }) => {
-  const [isHovered, setIsHovered] = useState(false)
-  const [isHoveredEdit, setIsHoveredEdit] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [hoveredDocuments, setHoveredDocuments] = useState({})
-  const [hoveredDocumentIndex, setHoveredDocumentIndex] = useState(null)
-  const [adminData, setAdminData] = useState({})
-  const [tenantData, setTenantData] = useState({})
-  const [inspections, setInspections] = useState([])
-  const [listingData, setListingData] = useState(null)
-  const [token, setToken] = useState("")
-  const [decodedToken, setDecodedToken] = useState(null)
-  const [documentsData, setDocumentsData] = useState([])
-  const [activeSection, setActiveSection] = useState("DOCUMENTS")
-  const [imageSrc, setImageSrc] = useState(null)
-  const [openApplicantForm, setApplicatonForm] = useState(false)
+  const [isHovered, setIsHovered] = useState(false);
+  // const [isHoveredEdit, setIsHoveredEdit] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hoveredDocuments, setHoveredDocuments] = useState({});
+  const [hoveredDocumentIndex, setHoveredDocumentIndex] = useState(null);
+  const [adminData, setAdminData] = useState({});
+  const [tenantData, setTenantData] = useState({});
+  const [inspections, setInspections] = useState([]);
+  const [listingData, setListingData] = useState(null);
+  const [decodedToken, setDecodedToken] = useState(null);
+  const [templatesData, setTemplatesData] = useState([]);
+  const [documentsData, setDocumentsData] = useState([]);
+  const [activeSection, setActiveSection] = useState("TEMPLATES");
+  const [imageSrc, setImageSrc] = useState(null);
+  const [openApplicantForm, setApplicatonForm] = useState(false);
 
   const handleHover = (isHovered, setIsHovered, sectionName) => {
-    setIsHovered(isHovered)
-    setActiveSection(sectionName)
-  }
+    setIsHovered(isHovered);
+    setActiveSection(sectionName);
+  };
+
   const handleApplicationForm = (isHovered, setIsHovered, sectionName) => {
-    setIsHovered(isHovered)
-    setActiveSection(sectionName)
-    setApplicatonForm(true)
-  }
-  const handleCloseApplicantModal = () => {
-    setApplicatonForm(false)
-  }
+    setIsHovered(isHovered);
+    setActiveSection(sectionName);
+    setApplicatonForm(true);
+  };
+
+  // const handleCloseApplicantModal = () => {
+  //   setApplicatonForm(false);
+  // };
+
   const handleDocumentHover = (documentId, isHovered) => {
     setHoveredDocuments((prevHoveredDocuments) => ({
       ...prevHoveredDocuments,
-      [documentId]: isHovered
-    }))
-  }
+      [documentId]: isHovered,
+    }));
+  };
 
   function getTokenFromLocalStorage() {
-    const v = localStorage.getItem("certifymyrent.token")
-    if (!v) throw new Error("Could not get token")
-    setToken(v)
-    setDecodedToken(jwtDecode(v))
+    const v = localStorage.getItem("certifymyrent.token");
+    if (!v) throw new Error("Could not get token");
+    setDecodedToken(jwtDecode(v));
   }
 
-  const handleAddDocsClick = () => {
-    setIsModalOpen(true)
-  }
+  // const handleAddDocsClick = () => {
+  //   setIsModalOpen(true);
+  // };
+
+  // const downloadDocument = (documentId) => {
+  //   api
+  //     .get(`/tenant/1/document/${documentId}/download`)
+  //     .then(({ data }) => console.log(data))
+  //     .catch((error) => console.error({ error }));
+  // };
+
+  const downloadDocument = (documentId) => {
+    api
+      .get(`/tenant/1/document/${documentId}/download`, {
+        responseType: "arraybuffer",
+      })
+      .then(({ data }) => {
+        const blob = new Blob([data], { type: "application/pdf" });
+        const link = document.createElement("a");
+
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `document_${documentId}.pdf`;
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+      })
+      .catch((error) => console.error({ error }));
+  };
 
   async function getAdminData() {
     await api
       .get(`/admin/user/${decodedToken.sub}`)
       .then((request) => {
-        setAdminData(request.data)
-        return request.data
+        setAdminData(request.data);
+        return request.data;
       })
       .catch((e) => {
-        console.error(e)
-      })
+        console.error(e);
+      });
   }
 
   async function getTenantData() {
     await api
       .get(`/tenant/${selectedTenant.id}`)
       .then((response) => {
-        setTenantData(response.data)
+        setTenantData(response.data);
 
-        return response.data
+        return response.data;
       })
 
       .catch((e) => {
-        console.error(e)
-      })
+        console.error(e);
+      });
   }
 
   async function handleSendPandadocClick(
@@ -106,10 +137,10 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     isHovered,
     localAdminData
   ) {
-    let responseDocumentId
-    let name_split = String(localAdminData.name).split(" ")
-    let f_name = name_split[0]
-    let l_name = name_split.slice(1).join(" ")
+    let responseDocumentId;
+    let name_split = String(localAdminData.name).split(" ");
+    let f_name = name_split[0];
+    let l_name = name_split.slice(1).join(" ");
     let requestCreateData = {
       templateUuid: documentId,
       name: `California S. R. L. Agreement - ${localAdminData.name} and ${tenantData.User.name}`,
@@ -118,19 +149,19 @@ const TenantModal = ({ selectedTenant, onClose }) => {
           email: localAdminData.email,
           first_name: f_name,
           last_name: l_name,
-          role: "ADMIN"
+          role: "ADMIN",
         },
         {
           email: tenantData.User.email,
           first_name: String(tenantData.User.name).split(" ")[0],
           last_name: String(tenantData.User.name).split(" ")[1] || null,
-          role: "TENANT"
-        }
+          role: "TENANT",
+        },
       ],
-      tags: ["rms-frontend"]
-    }
+      tags: ["rms-frontend"],
+    };
     if (!requestCreateData.recipients[0].email) {
-      throw new Error("Bad Admin Data.")
+      throw new Error("Bad Admin Data.");
     }
 
     await api
@@ -139,45 +170,57 @@ const TenantModal = ({ selectedTenant, onClose }) => {
         requestCreateData
       )
       .then((response) => {
-        if (response.status > 201) throw new Error("Could not create document")
-        responseDocumentId = response.data.id
+        if (response.status > 201) throw new Error("Could not create document");
+        responseDocumentId = response.data.id;
       })
       .catch((e) => {
-        throw new Error(e)
-      })
+        throw new Error(e);
+      });
 
-    // don't delete this timing line, it's for pandadoc API send template
-    await new Promise((resolve) => setTimeout(resolve, 5000))
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     const requestSendData = {
       subject: "Listing document sign",
       message: "You were invited to sign the following document:",
-      silent: false
-    }
+      silent: false,
+    };
+
     await api
       .post(
         `/tenant/${selectedTenant.id}/document/${responseDocumentId}/send`,
         requestSendData
       )
       .then((response) => {
-        if (response.status > 201) throw new Error("Could not create document")
+        if (response.status > 201) throw new Error("Could not create document");
       })
       .catch((e) => {
-        throw new Error(e)
-      })
+        throw new Error(e);
+      });
+  }
+
+  async function loadTemplates() {
+    try {
+      const { data } = await api.get(
+        `/tenant/${selectedTenant.id}/document-template`
+      );
+
+      if (!data) throw new Error("Network data was not ok");
+
+      setTemplatesData(data.results);
+    } catch (err) {
+      alert("Error fetching documents data:", err);
+    }
   }
 
   async function loadDocuments() {
     try {
-      const { data } = await api.get(
-        `/tenant/${selectedTenant.id}/document-template`
-      )
-      if (!data) {
-        throw new Error("Network data was not ok")
-      }
-      setDocumentsData(data.results)
+      const { data } = await api.get(`/tenant/${selectedTenant.id}/document`);
+
+      if (!data) throw new Error("Network data was not ok");
+
+      setDocumentsData(data.results);
     } catch (err) {
-      alert("Error fetching documents data:", err)
+      alert("Error fetching documents data:", err);
     }
   }
 
@@ -185,85 +228,85 @@ const TenantModal = ({ selectedTenant, onClose }) => {
     try {
       const response = api.get(
         `/listing/${selectedTenant.listingId}/inspection`
-      )
+      );
 
-      setInspections((await response).data)
+      setInspections((await response).data);
     } catch (err) {
-      alert("Error fetching inspections", err)
+      alert("Error fetching inspections", err);
     }
   }
 
   const fetchListings = async () => {
     try {
-      const response = await api.get(`/listing/${selectedTenant.listingId}`)
-      const listingData = response.data
-      setListingData(listingData)
+      const response = await api.get(`/listing/${selectedTenant.listingId}`);
+      const listingData = response.data;
+      setListingData(listingData);
     } catch (error) {
-      console.error("Error fetching listing data:", error)
+      console.error("Error fetching listing data:", error);
     }
-  }
+  };
 
   useEffect(() => {
-    if (!decodedToken) getTokenFromLocalStorage()
-    if (decodedToken) {
-      getAdminData()
-      getTenantData()
-      fetchListings()
-      loadDocuments()
-      loadInspections()
-    }
-  }, [decodedToken])
+    if (!decodedToken) return getTokenFromLocalStorage();
+
+    getAdminData();
+    getTenantData();
+    fetchListings();
+    loadTemplates();
+    loadDocuments();
+    loadInspections();
+  }, [decodedToken]);
 
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        const src = await createListingImage(listingData)
-        setImageSrc(src)
+        const src = await createListingImage(listingData);
+        setImageSrc(src);
       } catch (error) {
-        console.error("Error fetching image:", error)
+        console.error("Error fetching image:", error);
       }
-    }
+    };
 
-    fetchImage()
-  }, [listingData])
+    fetchImage();
+  }, [listingData]);
 
   const renderSectionContent = (section) => {
     switch (section) {
-      case "DOCUMENTS":
+      case "TEMPLATES": {
         function chunkArray(array, chunkSize) {
-          const chunks = []
-          if (array.length < 1) return chunks
+          const chunks = [];
+          if (array.length < 1) return chunks;
           for (let i = 0; i < array.length; i += chunkSize) {
-            chunks.push(array.slice(i, i + chunkSize))
+            chunks.push(array.slice(i, i + chunkSize));
           }
-          return chunks
+          return chunks;
         }
 
-        const documentChunks = chunkArray(documentsData, 4)
+        const templateChunks = chunkArray(templatesData, 4);
 
         return (
           <div className="renderBoxsOrder d-flex align-items-start justify-content-start gap-5">
-            {documentChunks.map((documentSubset, index) => (
+            {templateChunks.map((templateSubset, index) => (
               <div
                 key={`boxInfoOrderCreate_${index}`}
                 className="boxInfoOrderCreate"
               >
-                {documentSubset.map((document, documentIndex) => (
-                  <div className=" d-flex" key={document.id}>
+                {templateSubset.map((template, templateIndex) => (
+                  <div className=" d-flex" key={template.id}>
                     <BoxDocuments>
                       <div
                         className="flex flex-column"
                         style={{ width: "100%" }}
                       >
                         <TitleDocuments className="">
-                          {document.name}
+                          {template.name}
                         </TitleDocuments>
                         <DateTextDocuments>
-                          {new Date(document.dateCreated).toDateString()}
+                          {new Date(template.dateCreated).toDateString()}
                         </DateTextDocuments>
                       </div>
                       <div className="d-flex justify-content-end">
-                        {hoveredDocumentIndex === documentIndex ? (
+                        {hoveredDocumentIndex === templateIndex ? (
                           <img
                             src={SendTemplateIconHover}
                             alt="SendTemplateIconHover"
@@ -271,7 +314,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                             onMouseLeave={() => handleDocumentHover(null)}
                             onClick={() =>
                               handleSendPandadocClick(
-                                document.id,
+                                template.id,
                                 false,
                                 adminData
                               )
@@ -283,11 +326,11 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                             alt="SendTemplateIcon"
                             className="imgBtnDocs delBox"
                             onMouseEnter={() =>
-                              handleDocumentHover(documentIndex)
+                              handleDocumentHover(templateIndex)
                             }
                             onClick={() =>
                               handleSendPandadocClick(
-                                document.id,
+                                template.id,
                                 true,
                                 adminData
                               )
@@ -301,10 +344,58 @@ const TenantModal = ({ selectedTenant, onClose }) => {
               </div>
             ))}
           </div>
-        )
+        );
+      }
+
+      case "DOCUMENTS": {
+        function chunkArray(array, chunkSize) {
+          const chunks = [];
+          if (array.length < 1) return chunks;
+          for (let i = 0; i < array.length; i += chunkSize) {
+            chunks.push(array.slice(i, i + chunkSize));
+          }
+          return chunks;
+        }
+
+        const documentChunks = chunkArray(documentsData, 4);
+
+        return (
+          <div className="renderBoxsOrder d-flex align-items-start justify-content-start gap-5">
+            {documentChunks.map((documentSubset, index) => (
+              <div
+                key={`boxInfoOrderCreate_${index}`}
+                className="boxInfoOrderCreate"
+              >
+                {documentSubset.map((document) => (
+                  <div
+                    className="d-flex"
+                    key={document.id}
+                    onClick={() => downloadDocument(document.id)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <BoxDocuments>
+                      <div
+                        className="flex flex-column"
+                        style={{ width: "100%" }}
+                      >
+                        <TitleDocuments className="">
+                          {document.name}
+                        </TitleDocuments>
+                        <DateTextDocuments>
+                          {new Date(document.dateCreated).toDateString()}
+                        </DateTextDocuments>
+                      </div>
+                    </BoxDocuments>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        );
+      }
 
       case "PAYMENT HISTORY":
-        return <></>
+        return <></>;
       case "INSPECTION HISTORY":
         return (
           <ListingInspectionHistoryCard className="mx-5 my-4">
@@ -316,7 +407,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                     <span>
                       {formatDate({
                         date: inspection.date,
-                        formatOptions: DateTime.DATE_MED
+                        formatOptions: DateTime.DATE_MED,
                       })}
                     </span>
                   </div>
@@ -324,7 +415,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
               ))}
             </div>
           </ListingInspectionHistoryCard>
-        )
+        );
       case "APPLICATION FORM":
         return (
           <ApplicationContainer>
@@ -340,11 +431,11 @@ const TenantModal = ({ selectedTenant, onClose }) => {
             <VehiclesApplicant vehicles={tenantData.Vehicles} />
             <OtherInformationApplicant otherInfo={tenantData.AdditionalInfos} />
           </ApplicationContainer>
-        )
+        );
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <ModalOverlayTenant>
@@ -389,7 +480,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                     height: "120px",
                     width: "120px",
                     objectFit: "cover",
-                    aspectRatio: "1 / 1"
+                    aspectRatio: "1 / 1",
                   }}
                 />
               </div>
@@ -463,6 +554,13 @@ const TenantModal = ({ selectedTenant, onClose }) => {
               <div className="navegableSect d-flex">
                 <div
                   onClick={() =>
+                    handleHover(true, setActiveSection, "TEMPLATES")
+                  }
+                >
+                  <p> Templates</p>
+                </div>
+                <div
+                  onClick={() =>
                     handleHover(true, setActiveSection, "DOCUMENTS")
                   }
                 >
@@ -494,11 +592,11 @@ const TenantModal = ({ selectedTenant, onClose }) => {
                   <p>Application Form</p>
                 </div>
               </div>
-              <div className="docFile d-flex align-items-start justify-content-end">
+              {/* <div className="docFile d-flex align-items-start justify-content-end">
                 <button className="addDocBtnPopUp" onClick={handleAddDocsClick}>
                   + Add Document
                 </button>
-              </div>
+              </div> */}
             </div>
             <div className="renderPopUpSection">
               {renderSectionContent(activeSection)}
@@ -509,7 +607,7 @@ const TenantModal = ({ selectedTenant, onClose }) => {
       </ModalContainer>
       {isModalOpen && <AddDocs onClose={() => setIsModalOpen(false)} />}
     </ModalOverlayTenant>
-  )
-}
+  );
+};
 
-export default TenantModal
+export default TenantModal;
