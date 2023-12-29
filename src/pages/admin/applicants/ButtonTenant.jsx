@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useRef, useState } from "react"
-import { api } from "../../../services/api"
+import { useEffect, useRef, useState } from 'react'
+import { api } from '../../../services/api'
 
 const ButtonTenant = ({
   moveToTenant,
@@ -14,6 +14,11 @@ const ButtonTenant = ({
 
   const handleMoveToTenant = async (e) => {
     e.stopPropagation()
+    if (applicantionScreening.length > 1) {
+      alert('Please select only one listing')
+      return
+    }
+
     try {
       const tenant = await api.patch(
         `/tenant/${tenantId}/listing/${listingId}/approved`
@@ -28,11 +33,11 @@ const ButtonTenant = ({
   useEffect(() => {}, [moveToTenant])
 
   return (
-    <div className="mb-1 ">
-      <button className="mttContainer" onClick={(e) => handleMoveToTenant(e)}>
+    <div className='mb-1 '>
+      <button className='mttContainer' onClick={(e) => handleMoveToTenant(e)}>
         Move To Tenants
       </button>
-      {message && <p className="text-danger">{message}</p>}
+      {message && <p className='text-danger'>{message}</p>}
     </div>
   )
 }

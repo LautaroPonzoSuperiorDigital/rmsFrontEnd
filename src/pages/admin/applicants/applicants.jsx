@@ -15,6 +15,7 @@ const Applicants = () => {
   const [tabelApplicants, setTableApplicants] = useState([])
   const [newTanant, setNewTanant] = useState(false)
   const [deleteTenant, setDeleteTenant] = useState(false)
+  const [deleteListing, setDeleteListing] = useState(false)
   const animationContainerRef = useRef(null)
 
   useEffect(() => {
@@ -26,12 +27,13 @@ const Applicants = () => {
         setTableApplicants(applicants.data)
         setNewTanant(false)
         setDeleteTenant(false)
+        setDeleteListing(false)
       } catch (err) {
         console.log(err)
       }
     }
     fetchApplicants()
-  }, [newTanant, deleteTenant])
+  }, [newTanant, deleteTenant, deleteListing])
 
   useEffect(() => {
     if (showAnimation) {
@@ -40,7 +42,7 @@ const Applicants = () => {
         renderer: 'svg',
         loop: false,
         autoplay: true,
-        animationData: Animation,
+        animationData: Animation
       })
       animation.addEventListener('complete', () => {
         setShowAnimation(false)
@@ -56,17 +58,17 @@ const Applicants = () => {
       style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
     >
       <Nav />
-      <div className="container-fluid">
-        <div className="d-flex w-100 mb-3">
-          <div className="container tenantsContainer">
-            <div className="d-flex align-items-center justify-content-start">
-              <h2 className="tenantsText">Applicants</h2>
-              <div className="form-check ms-3 mb-1"></div>
+      <div className='container-fluid'>
+        <div className='d-flex w-100 mb-3'>
+          <div className='container tenantsContainer'>
+            <div className='d-flex align-items-center justify-content-start'>
+              <h2 className='tenantsText'>Applicants</h2>
+              <div className='form-check ms-3 mb-1'></div>
             </div>
           </div>
-          <div className="container-fluid ListingContainer d-flex justify-content-end bttonContainer">
+          <div className='container-fluid ListingContainer d-flex justify-content-end bttonContainer'>
             <SearchListings
-              className="searchApplicants"
+              className='searchApplicants'
               applicants={applicants}
               setTableApplicants={setTableApplicants}
             />
@@ -78,6 +80,7 @@ const Applicants = () => {
           setApplicants={setApplicants}
           setTableApplicants={setTableApplicants}
           setDeleteTenant={setDeleteTenant}
+          setDeleteListing={setDeleteListing}
         />
       </div>
       <Footer />
