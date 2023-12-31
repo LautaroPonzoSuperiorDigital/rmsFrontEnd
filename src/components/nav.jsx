@@ -9,12 +9,9 @@ import "../styles/nav.css";
 import { useAuth } from "../hooks/useAuth";
 
 const Nav = () => {
-  const navigate = useNavigate()
-  const { user, onSignedOut } = useAuth()
-
-  const handleSignOut = () => [
-    onSignedOut()
-  ]
+  const navigate = useNavigate();
+  const { user, onSignedOut } = useAuth();
+  const handleSignOut = () => [onSignedOut()];
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white">
@@ -29,50 +26,32 @@ const Nav = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <NavLink
-                className="nav-link custom-item"
-                to="/admin/listings"
-              >
+              <NavLink className="nav-link custom-item" to="/admin/listings">
                 LISTINGS
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink
-                className="nav-link custom-item"
-                to="/admin/tenants"
-              >
+              <NavLink className="nav-link custom-item" to="/admin/tenants">
                 TENANTS
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink
-                className="nav-link custom-item"
-                to="/admin/applicants"
-              >
+              <NavLink className="nav-link custom-item" to="/admin/applicants">
                 APPLICANTS
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink
-                className="nav-link custom-item"
-                to="/admin/documents"
-              >
+              <NavLink className="nav-link custom-item" to="/admin/documents">
                 DOCUMENTS
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink
-                className="nav-link custom-item"
-                to="/admin/sub-admins"
-              >
+              <NavLink className="nav-link custom-item" to="/admin/sub-admins">
                 SUB ADMINS
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink
-                className="nav-link chat"
-                to="/admin/chats"
-              >
+              <NavLink className="nav-link chat" to="/admin/chats">
                 CHATS
                 <img className="Search" src={SearchIcon} alt="Search" />
               </NavLink>
@@ -81,7 +60,7 @@ const Nav = () => {
         </div>
         <ul className="navbar-nav ms-auto username">
           <li className="nav-item d-flex align-items-center">
-            <NavLink className="nav-link user" to="/profile">
+            <NavLink className="nav-link user" to="/admin/profile">
               <span className="username-text">{user?.name}</span>
             </NavLink>
             <button className="nav-link logout" onClick={handleSignOut}>
