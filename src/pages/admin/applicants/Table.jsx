@@ -114,7 +114,7 @@ const Table = ({
                       {item.User?.ApplicationScreening.map(
                         (applicationItem, index) => (
                           <div
-                            className='d-flex w-100 justify-content-between'
+                            className='d-flex w-100 justify-content-between mb-4'
                             key={index}
                           >
                             <p
