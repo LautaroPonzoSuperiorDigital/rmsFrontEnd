@@ -21,7 +21,8 @@ import {
   Ulcontainers,
   Li,
   LogoImg,
-  LogoContainer
+  LogoContainer,
+  StyledFotterContainer
 } from './styles.js'
 import DescriptionMobileNav from './DescriptionMobileNav'
 import Roomates from './RegistratationForms/Roomates'
@@ -498,20 +499,12 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
             </div>
           </div>
         </ApplicationContainer>
-        <div
-          style={{
-            width: '100vw',
-            position: 'absolute',
-            left: '50%',
-            right: '50%',
-            marginLeft: '-50vw',
-            marginRight: '-50vw'
-          }}
-        >
-          {activeSection !== 'rentalHistory' && activeSection !== 'income' && (
+
+        {activeSection !== 'income' && (
+          <StyledFotterContainer>
             <Footer />
-          )}
-        </div>
+          </StyledFotterContainer>
+        )}
       </div>
     </>
   )

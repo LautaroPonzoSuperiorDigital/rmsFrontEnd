@@ -1,78 +1,78 @@
 /* eslint-disable react/prop-types */
 
-import { useEffect, useState } from "react";
-import ActiveComplainTickets from "./ActiveComplainTickets";
-import ActiveRepairTickets from "./ActiveRepairTickets";
-import CloseComplainTickets from "./CloseComplainTickets";
-import CloseRepairTickets from "./CloseRepairTickets";
-import Files from "./Files";
-import { api } from "../../../../services/api";
-import Spinner from "../../../../components/spinner/Spinner";
+import { useEffect, useState } from 'react'
+import ActiveComplainTickets from './ActiveComplainTickets'
+import ActiveRepairTickets from './ActiveRepairTickets'
+import CloseComplainTickets from './CloseComplainTickets'
+import CloseRepairTickets from './CloseRepairTickets'
+import Files from './Files'
+import { api } from '../../../../services/api'
+import Spinner from '../../../../components/spinner/Spinner'
 
 const ticketsContainerStyle = {
-  maxHeight: "100vh",
-  overflowY: "auto",
-  overflowX: "hidden",
-  flex: 1,
-};
+  maxHeight: '100vh',
+  overflowY: 'auto',
+  overflowX: 'hidden',
+  flex: 1
+}
 
 const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
-  const [loading, setLoading] = useState(true);
-  const [activeTickets, setActiveTickets] = useState([]);
-  const [closedTickets, setClosedTickets] = useState([]);
-  const [tickets, setTickets] = useState([]);
-  const [files, setFiles] = useState([]);
-  const [tenantId, setTenantId] = useState([]);
+  const [loading, setLoading] = useState(true)
+  const [activeTickets, setActiveTickets] = useState([])
+  const [closedTickets, setClosedTickets] = useState([])
+  const [tickets, setTickets] = useState([])
+  const [files, setFiles] = useState([])
+  const [tenantId, setTenantId] = useState([])
 
   useEffect(() => {
     const matchedChatRoom = chatRooms.find(
       (chatRoom) => chatRoom.id === chatRoomId
-    );
+    )
     const fetchTickets = async () => {
       try {
         const tickets = await api.get(
           `tenants/ticket-repair/${matchedChatRoom.listingId}`
-        );
+        )
         const tickets2 = await api.get(
           `tenants/ticket-complain/${matchedChatRoom.listingId}`
-        );
+        )
         const filesData = await api.get(
           `tenant/${matchedChatRoom.tenantId}/document`
-        );
+        )
 
-        setTenantId(matchedChatRoom.tenantId);
+        setTenantId(matchedChatRoom.tenantId)
 
-        const ticketsData = [...tickets.data, ...tickets2.data];
+        const ticketsData = [...tickets.data, ...tickets2.data]
         const filterActiveTickets = ticketsData.filter(
-          (ticket) => ticket.status === "OPEN"
-        );
+          (ticket) => ticket.status === 'OPEN'
+        )
         const filterClosedTickets = ticketsData.filter(
-          (ticket) => ticket.status === "CLOSED"
-        );
-        setActiveTickets(filterActiveTickets);
-        setClosedTickets(filterClosedTickets);
-        setFiles(filesData.data.results);
-        setLoading(false);
+          (ticket) => ticket.status === 'CLOSED'
+        )
+        setActiveTickets(filterActiveTickets)
+        setClosedTickets(filterClosedTickets)
+        setFiles(filesData.data.results)
+        setLoading(false)
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
-    };
-    fetchTickets();
-  }, [chatRoomId, tickets]);
+    }
+    fetchTickets()
+  }, [chatRoomId, tickets])
 
   return (
     <div
-      className="d-flex flex-column justify-content-between "
+      className='d-flex flex-column justify-content-between '
       style={ticketsContainerStyle}
     >
       <div
-        className="d-flex flex-column"
-        style={{ flexFlow: 1, overflowY: "auto" }}
+        className='d-flex flex-column'
+        style={{ flexFlow: 1, overflowY: 'auto', minHeight: '25vh' }}
       >
-        <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
+        <p style={{ padding: 10, color: '#00000073', fontSize: '16px' }}>
           ACTIVE TICKETS ({activeTickets.length})
         </p>
-        <div className="w-100 d-flex justify-content-center">
+        <div className='w-100 d-flex justify-content-center'>
           {loading && <Spinner />}
         </div>
 
@@ -94,11 +94,11 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
           )
         )}
       </div>
-      <div style={{ flexFlow: 1, overflowY: "auto" }}>
-        <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
+      <div style={{ flexFlow: 1, overflowY: 'auto', minHeight: '25vh' }}>
+        <p style={{ padding: 10, color: '#00000073', fontSize: '16px' }}>
           TICKETS ARCHIVE ({closedTickets.length})
         </p>
-        <div className="w-100 d-flex justify-content-center">
+        <div className='w-100 d-flex justify-content-center'>
           {loading && <Spinner />}
         </div>
 
@@ -110,11 +110,11 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
           )
         )}
       </div>
-      <div style={{ flexFlow: 1, overflowY: "auto" }}>
-        <p style={{ padding: 10, color: "#00000073", fontSize: "16px" }}>
+      <div style={{ flexFlow: 1, overflowY: 'auto' }}>
+        <p style={{ padding: 10, color: '#00000073', fontSize: '16px' }}>
           FILES
         </p>
-        <div className="w-100 d-flex justify-content-center">
+        <div className='w-100 d-flex justify-content-center'>
           {loading && <Spinner />}
         </div>
 
@@ -123,7 +123,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TicketsInfomartion;
+export default TicketsInfomartion

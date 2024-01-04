@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 
 export const NavContainer = styled.div`
   border-bottom: 1px solid rgba(128, 128, 128, 0.533);
@@ -119,7 +119,7 @@ export const Text = styled.p`
 
 export const FieldText = styled(Text)`
   color: #000000a5;
-  font-family: "proxima-nova", sans-serif;
+  font-family: 'proxima-nova', sans-serif;
   font-weight: lighter;
   font-size: 16px;
   font-weight: 400;
@@ -134,7 +134,7 @@ export const FieldValue = styled(Text)`
   font-weight: bold;
   line-height: 0rem;
   overflow-wrap: break-word;
-  font-family: "proxima-nova", sans-serif;
+  font-family: 'proxima-nova', sans-serif;
 
   @media (max-width: 768px) {
     font-size: 16px;
@@ -190,7 +190,7 @@ export const NavTextContainer = styled.div`
 export const ScreeningText = styled.p`
   font-size: 35px;
   font-weight: 600;
-  font-family: "proxima-nova", sans-serif;
+  font-family: 'proxima-nova', sans-serif;
   font-weight: lighter;
 `
 
@@ -200,12 +200,21 @@ export const RedDot = styled.div`
   height: 3px;
   border-radius: 50%;
   display: inline-block;
-  margin-top: ${(props) => (props.marginTop ? props.marginTop : "30px")};
+  margin-top: ${(props) => (props.marginTop ? props.marginTop : '30px')};
   margin-left: 2px; 
 `
 
 export const StyledTitle = styled.div`
-  font-family: "proxima-nova";
-  font-weight: "regular";
-  font-size: "35px";
+  font-family: 'proxima-nova';
+  font-weight: 'regular';
+  font-size: '35px';
+`
+export const StyledFotterContainer = styled.div`
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 60vh;
+  @media (max-width: 1024px) {
+    min-height: 20vh;
+  }
 `
