@@ -311,18 +311,19 @@ const RentalHistory = ({ tenantId, setActiveSection }) => {
           </button>
         </div>
       </form>
-      <div
+      {/* <div
         style={{
           width: '100vw',
           position: 'absolute',
           left: '50%',
           right: '50%',
           marginLeft: '-50vw',
-          marginRight: '-50vw'
+          marginRight: '-50vw',
+          minheight: '30vh'
         }}
       >
         <Footer />
-      </div>
+      </div> */}
     </div>
   )
 }
