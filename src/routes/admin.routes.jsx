@@ -1,48 +1,53 @@
-import TenantsAdmin from '../components/tenantsAdmin'
-import Applicants from '../pages/admin/applicants/applicants'
+import TenantsAdmin from "../components/tenantsAdmin";
+import Applicants from "../pages/admin/applicants/applicants";
 
-import Documents from '../components/documents'
-import SubAdmins from '../pages/admin/sub-admins/subAdmins'
-import { Navigate, createBrowserRouter } from 'react-router-dom'
-import AdminListings from '../pages/admin/listings'
-import Chats from '../pages/admin/ChatRoom/chats'
+import Documents from "../components/documents";
+import SubAdmins from "../pages/admin/sub-admins/subAdmins";
+import { Navigate, createBrowserRouter } from "react-router-dom";
+import AdminListings from "../pages/admin/listings";
+import Chats from "../pages/admin/ChatRoom/chats";
+import AdminProfile from "../components/admin-profile/AdminProfile";
 
 const adminRoutes = [
   {
-    path: 'listings',
+    path: "listings",
     element: <AdminListings />,
   },
   {
-    path: 'tenants',
+    path: "tenants",
     element: <TenantsAdmin />,
   },
   {
-    path: 'applicants',
+    path: "applicants",
     element: <Applicants />,
   },
   {
-    path: 'chats',
+    path: "chats",
     element: <Chats />,
   },
   {
-    path: 'documents',
+    path: "documents",
     element: <Documents />,
   },
   {
-    path: 'sub-admins',
+    path: "sub-admins",
     element: <SubAdmins />,
   },
-]
+  {
+    path: "profile",
+    element: <AdminProfile />,
+  },
+];
 
 const adminRouter = createBrowserRouter([
   {
-    path: '/admin',
+    path: "/admin",
     children: adminRoutes,
   },
   {
-    path: '*',
+    path: "*",
     element: <Navigate to="/admin/listings" replace />,
   },
-])
+]);
 
-export const createAdminRouter = () => adminRouter
+export const createAdminRouter = () => adminRouter;

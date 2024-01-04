@@ -22,6 +22,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
   const [closedTickets, setClosedTickets] = useState([])
   const [tickets, setTickets] = useState([])
   const [files, setFiles] = useState([])
+  const [tenantId, setTenantId] = useState([])
 
   useEffect(() => {
     const matchedChatRoom = chatRooms.find(
@@ -38,6 +39,8 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         const filesData = await api.get(
           `tenant/${matchedChatRoom.tenantId}/document`
         )
+
+        setTenantId(matchedChatRoom.tenantId)
 
         const ticketsData = [...tickets.data, ...tickets2.data]
         const filterActiveTickets = ticketsData.filter(
@@ -116,7 +119,7 @@ const TicketsInfomartion = ({ chatRoomId, chatRooms }) => {
         </div>
 
         {files.map((file) => (
-          <Files key={file.id} file={file} />
+          <Files key={file.id} file={file} tenantId={tenantId} />
         ))}
       </div>
     </div>

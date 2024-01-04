@@ -78,16 +78,9 @@ const TenantModal = ({ selectedTenant, onClose }) => {
   //   setIsModalOpen(true);
   // };
 
-  // const downloadDocument = (documentId) => {
-  //   api
-  //     .get(`/tenant/1/document/${documentId}/download`)
-  //     .then(({ data }) => console.log(data))
-  //     .catch((error) => console.error({ error }));
-  // };
-
   const downloadDocument = (documentId) => {
     api
-      .get(`/tenant/1/document/${documentId}/download`, {
+      .get(`/tenant/${selectedTenant.id}/document/${documentId}/download`, {
         responseType: "arraybuffer",
       })
       .then(({ data }) => {
