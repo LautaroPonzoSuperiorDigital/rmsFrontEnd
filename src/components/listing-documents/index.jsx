@@ -21,8 +21,7 @@ export function ListingDocuments() {
     api
       .get(`/listing/${listing.id}/tenants`)
       .then((response) => {
-        const tenantsData = response.data;
-        const _tenant = tenantsData.map((tenant) => tenant.Listings[0])[0];
+        const _tenant = response.data[response.data.length - 1];
         setTenant(_tenant);
 
         return api.get(`/tenant/${_tenant.id}/document-template`);
