@@ -381,7 +381,7 @@ const ApplicationModal = ({ myselectedListing, onClose }) => {
                       Registration
                     </h2>
                     <p className='text-center'>
-                      * If you already have an account, only you email is
+                      * If you already have an account, only your email is
                       required
                     </p>
                     <form className='resetForm' onSubmit={submitRegistration}>
